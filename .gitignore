@@ -59,7 +59,6 @@ spec/javascripts/UtilitySpec.js
 spec/javascripts/BackboneRailsSpec.js
 *.swn
 uploads/
-bin/
 lib/daemons/log
 log/
 .sass-cache/
