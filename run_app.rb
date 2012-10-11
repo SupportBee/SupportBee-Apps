@@ -7,7 +7,22 @@ class RunApp < Sinatra::Base
 
   def self.setup(app_class)
     get "/#{app_class.slug}" do
-      app_class.name
+      config = app_class.configuration
+      response = {:name => config['name'], :slug => config['slug'], :description => config['description']}
+      content_type :json
+      {app_class.slug => response}.to_json
+    end
+
+    get "/#{app_class.slug}/schema" do
+      response = app_class.schema
+      content_type :json
+      {app_class.slug => response}.to_json
+    end
+
+    get "/#{app_class.slug}/config" do
+      response = app_class.configuration
+      content_type :json
+      {app_class.slug => response}.to_json
     end
 
     post "/#{app_class.slug}/event/:event" do

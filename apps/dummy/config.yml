@@ -1,5 +1,7 @@
 name: Dummy
 slug: dummy
+access: public
+description: This is to test and a boilerplate app.
 action:
   button:
     screens: 
