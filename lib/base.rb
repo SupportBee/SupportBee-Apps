@@ -90,6 +90,10 @@ module SupportBeeApp
       	add_to_schema :boolean, name, options
     	end
 
+      def token(name, options={})
+        add_to_schema :token, name, options
+      end
+
       def event_methods
         event_handler ? event_handler.instance_methods : []
       end
