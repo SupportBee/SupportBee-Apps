@@ -26,14 +26,16 @@ class RunApp < Sinatra::Base
     end
 
     post "/#{app_class.slug}/event/:event" do
-      event, data, payload = parse_request
+      data, payload = parse_request
+      event = params[:event]
       if app = app_class.trigger_event(event, data, payload)
         "OK"
       end
     end
 
     post "/#{app_class.slug}/action/:action" do
-      event, data, payload = parse_request
+      data, payload = parse_request
+      action = params[:action]
       if app = app_class.trigger_action(action, data, payload)
         "OK"
       end
@@ -54,7 +56,7 @@ class RunApp < Sinatra::Base
 
   def parse_json_request
     req = JSON.parse(request.body.read)
-    [params[:event], req['data'], req['payload']]
+    [req['data'], req['payload']]
   end
 
   run! if app_file == $0
