@@ -136,14 +136,18 @@ module SupportBeeApp
 
     attr_reader :data
 		attr_reader :payload
-    attr_reader :supportbee
+    attr_reader :auth
+    attr_reader :settings
 
     attr_writer :ca_file
 
 		def initialize(data = {}, payload = nil)
-    	@data = data || {}
-    	@payload = payload || {}
-      @supportbee = SupportBee::Client.new(data)
+    	@data = Hashie::Mash.new(data) || {}
+      @auth = @data[:auth] || {}
+      @settings = @data[:settings] || {}
+
+    	payload = payload || {}
+      @payload = pre_process_payload(payload)
   	end
 
     def trigger_event(event)
@@ -162,6 +166,16 @@ module SupportBeeApp
 
     private
     
+    def pre_process_payload(raw)
+      raw = Hashie::Mash.new(raw)
+      result = Hashie::Mash.new({:raw => raw})
+      result[:ticket]  = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
+      result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
+      result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
+      result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
+      result
+    end
+
     def to_method(string)
       string.gsub('.','_').underscore
     end

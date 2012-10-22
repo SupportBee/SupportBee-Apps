@@ -66,10 +66,10 @@ module SupportBee
     
     def initialize(data={}, payload={})
       raise NotImplementedError.new('SupportBee::Base is an abstract class.  You should perform actions on its subclasses (Ticket, Reply, etc.)') if self.class == SupportBee::Base
-      @params = data
+      @params = Hashie::Mash.new(data)
       raise InvalidAuthToken if @params[:auth_token].blank?
       raise InvalidSubDomain if @params[:subdomain].blank?
-      load_attributes(payload)
+      load_attributes(Hashie::Mash.new(payload))
     end
 
     def api_endpoint
@@ -81,7 +81,7 @@ module SupportBee
     end
 
     def auth
-      { :auth_token => @params[:auth_token], :subdomain => @params[:subdomain] }
+      @auth ||= Hashie::Mash.new({ :auth_token => @params[:auth_token], :subdomain => @params[:subdomain] })
     end
 
     def default_headers
