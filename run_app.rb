@@ -47,7 +47,13 @@ class RunApp < Sinatra::Base
   end
 
   get "/" do
-    "OK"
+    apps = {}
+    SupportBeeApp::Base.apps.each do |app|
+      config = app.configuration
+      apps[app.slug] = {:name => config['name'], :slug => config['slug'], :description => config['description']}
+    end
+    content_type :json
+    {:apps => apps}.to_json
   end
 
   def parse_request
