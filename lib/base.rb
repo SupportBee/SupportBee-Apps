@@ -104,12 +104,12 @@ module SupportBeeApp
 
     	def trigger_event(event, data, payload = nil)
     		app = new(data,payload)
-        app.receive_event(event)
+        app.trigger_event(event)
     	end
 
       def trigger_action(action, data, payload = nil)
     		app = new(data,payload)
-        app.receive_action(action)
+        app.trigger_action(action)
     	end
 
       def event_handler
