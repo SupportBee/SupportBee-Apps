@@ -5,12 +5,18 @@
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/bootstrap.css'}
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/bootstrap-responsive.css'}
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/console.css'}
-      
+    %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/sticky.css'}
+
+    %script{:type=>'text/javascript',:src => '/javascripts/jquery.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/jquery.formparams.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/sb.sample.payload.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/sticky.js'}
+
   %body
     .container
       %h3 SupportBee Apps Console: #{@app_name}
       %hr
-      %form
+      %form{:id=>:app_form}
         .row
 
           .span4
@@ -47,16 +53,48 @@
             .section
               %h4 Trigger Event
               .controls
-                %select{:name=>:event}
+                %select{:name=>:event_selector}
                   %option{:value => 'ticket.created'} Ticket Created
                   %option{:value => 'agent.reply.created'} Agent Reply Created
                   %option{:value => 'customer.reply.created'} Customer Reply Created
                   %option{:value => 'comment.created'} Comment Created
                 %input{:id=>'event-submit', :type=>:submit, :class=>'btn btn-primary', :value => 'Go'}
 
-            -if @config['action'] and @config['action']['button']
-              .section
-                %h4 Trigger Action Button
-                %input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
+            //-if @config['action'] and @config['action']['button']
+            //  .section
+            //    %h4 Trigger Action Button
+            //    %input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
               
-        
+    :javascript
+      $(document).ready(function(){
+        $('#event-submit').click(function(){
+          post_data = $('#app_form').formParams();
+          selected_event = post_data.event_selector;
+          delete post_data['event_selector'];
+          post_data.payload = SamplePayload[selected_event];
+          post_url = "/#{@app_slug}/event/" + selected_event;
+          $.ajax({
+            type: 'POST',
+            url: post_url,
+            data: JSON.stringify(post_data),
+            success: event_submit_success,
+            beforeSend: event_submit_before_send,
+            error: event_submit_error,
+            dataType: 'json'
+          });
+          return false;
+        });
+
+       function event_submit_success(data, textStatus, jqXHR){
+          $.sticky('<b class="green">Event Posted</b>');
+       }
+
+       function event_submit_before_send(jqXHR, settings){
+          console.log(settings);
+          $.sticky('<b>Posting event</b>');
+       }
+
+       function event_submit_error(data, textStatus, errorThrown){
+          $.sticky('<b class="red">Event Failed</b>');
+       }
+      });

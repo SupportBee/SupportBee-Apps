@@ -44,6 +44,7 @@ class RunApp < Sinatra::Base
     unless PLATFORM_ENV == 'production'
       get "/#{app_class.slug}/console" do
         @app_name = app_class.name
+        @app_slug = app_class.slug
         @schema = app_class.schema
         @config = app_class.configuration
         haml :console
