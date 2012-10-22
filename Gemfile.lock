@@ -14,6 +14,7 @@ GEM
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
     flexmock (0.9.0)
+    haml (3.1.7)
     hashie (1.2.0)
     http_parser.rb (0.5.3)
     i18n (0.6.1)
@@ -69,6 +70,7 @@ DEPENDENCIES
   faraday
   faraday_middleware
   flexmock
+  haml
   hashie
   rack-test
   rake

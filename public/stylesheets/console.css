@@ -1,0 +1,11 @@
+.container{
+  margin: 0px auto;
+}
+
+.section{
+  margin-bottom: 10px;
+}
+
+#event-submit{
+  margin-top:-10px;
+}

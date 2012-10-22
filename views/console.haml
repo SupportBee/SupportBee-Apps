@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+%html{:lang=>:en}
+  %head
+    %title #{@app_name} Console
+    %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/bootstrap.css'}
+    %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/bootstrap-responsive.css'}
+    %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/console.css'}
+      
+  %body
+    .container
+      %h3 SupportBee Apps Console: #{@app_name}
+      %hr
+      %form
+        .row
+
+          .span4
+            %h4 Settings
+            - @schema.each_pair do |param, options|
+              - input_options = {}
+              - input_options[:label] = options['label'] ? options['label'] : param.humanize
+              - input_options[:as] = :checkbox if options['type'] == 'boolean'
+              - input_options[:as] = :password if options['type'] == 'password'
+              - input_options[:as] = :text if input_options[:as].nil?
+
+              - name = "data[settings][#{param}]"
+
+              %label{:for => name} #{input_options[:label]}
+              %input{:type => input_options[:as], :value => input_options[:default], :name => name } 
+
+          .span4
+            %h4 Auth
+            %p
+              These values are used by the app platform to make API calls to the SupportBee. This is disabled in development/test mode.
+            %p
+              %b SupportBee Test Subdomain:
+              %br
+              %input{:type => :hidden, :value => :test, :name => "data[auth][subdomain]"}
+              test
+
+            %p
+              %b SupportBee Auth Token:
+              %br
+              %input{:type => :hidden, :value => :abc, :name => "data[auth][auth_token]"}
+              ***********
+
+          .span4
+            .section
+              %h4 Trigger Event
+              .controls
+                %select{:name=>:event}
+                  %option{:value => 'ticket.created'} Ticket Created
+                  %option{:value => 'agent.reply.created'} Agent Reply Created
+                  %option{:value => 'customer.reply.created'} Customer Reply Created
+                  %option{:value => 'comment.created'} Comment Created
+                %input{:id=>'event-submit', :type=>:submit, :class=>'btn btn-primary', :value => 'Go'}
+
+            -if @config['action'] and @config['action']['button']
+              .section
+                %h4 Trigger Action Button
+                %input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
+              
+        

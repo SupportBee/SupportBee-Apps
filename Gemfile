@@ -9,6 +9,7 @@ gem 'addressable'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'hashie'
+gem 'haml'
 
 # App Gems
 gem 'tinder'

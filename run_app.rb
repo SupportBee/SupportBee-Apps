@@ -40,6 +40,15 @@ class RunApp < Sinatra::Base
         "OK"
       end
     end
+
+    unless PLATFORM_ENV == 'production'
+      get "/#{app_class.slug}/console" do
+        @app_name = app_class.name
+        @schema = app_class.schema
+        @config = app_class.configuration
+        haml :console
+      end
+    end
   end
 
   SupportBeeApp::Base.apps.each do |app|
