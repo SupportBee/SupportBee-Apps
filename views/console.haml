@@ -6,13 +6,21 @@
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/bootstrap-responsive.css'}
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/console.css'}
     %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/sticky.css'}
+    %link{:rel=>:stylesheet, :type=>'text/css', :href=>'/stylesheets/facebox.css'}
 
     %script{:type=>'text/javascript',:src => '/javascripts/jquery.js'}
     %script{:type=>'text/javascript',:src => '/javascripts/jquery.formparams.js'}
     %script{:type=>'text/javascript',:src => '/javascripts/sb.sample.payload.js'}
     %script{:type=>'text/javascript',:src => '/javascripts/sticky.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/facebox.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/handlebars.js'}
+    %script{:type=>'text/javascript',:src => '/javascripts/sb.apps.js'}
 
   %body
+    #facebox_overlay{:style=>'display:none;'}
+      %form{:id=>:facebox_form}
+        %input{:type=>:submit, :value=> 'Go',:id => :facebox_form_submit, :class=>'btn btn-primary'}
+
     .container
       %h3 SupportBee Apps Console: #{@app_name}
       %hr
@@ -60,12 +68,15 @@
                   %option{:value => 'comment.created'} Comment Created
                 %input{:id=>'event-submit', :type=>:submit, :class=>'btn btn-primary', :value => 'Go'}
 
-            //-if @config['action'] and @config['action']['button']
-            //  .section
-            //    %h4 Trigger Action Button
-            //    %input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
+            -if @config['action'] and @config['action']['button']
+              .section
+                %h4 Trigger Action Button
+                %p Soon you can trigger Action Button from here
+                //%input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
               
     :javascript
+      SB.CurrentApp = '#{@app_slug}';
+
       $(document).ready(function(){
         $('#event-submit').click(function(){
           post_data = $('#app_form').formParams();
@@ -88,7 +99,6 @@
        function event_submit_success(data, textStatus, jqXHR){
           $.sticky('<b class="green">Event Posted</b>');
        }
-
        function event_submit_before_send(jqXHR, settings){
           console.log(settings);
           $.sticky('<b>Posting event</b>');
@@ -97,4 +107,18 @@
        function event_submit_error(data, textStatus, errorThrown){
           $.sticky('<b class="red">Event Failed</b>');
        }
+
+       $('#action-button-submit').click(function(){
+          var current = SB.Apps[SB.CurrentApp];
+          var hasOverlay = true;
+          if(typeof(current.overlay) === 'undefined'){
+            hasOverlay = false;
+          }
+          if(hasOverlay){
+            var html = current.overlay({});
+            $('#facebox_form').prepend(html);
+            $.facebox({div: '#facebox_overlay'});
+          }
+          return false;   
+       });
       });
