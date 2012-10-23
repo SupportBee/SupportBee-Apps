@@ -25,6 +25,18 @@ We will go more into this later.
 
 ### Writing an App
 
+Checkout the App platform from github  
+``git clone git://github.com/SupportBee/SupportBee-Apps.git``
+
+Create a new branch with app\_name as its name  
+``git branch campfire``
+
+Bundle install and run the server locally using shotgun
+``bundle install``  
+``shotgun``
+
+Unfortunately, server requires a restart every time you change the app.
+
 An App resides in the ``/apps`` folder of the App Platform. Each app has the following structure:
 
 ```
@@ -207,8 +219,12 @@ All action methods have access to the same information as events. In addition to
 {{/ifTicketsCountZero}}
 ```
 
+### Testing/Development Console
+We have created a simple console to easily trigger your Apps with sample payloads. Right now it only supports _Events_. Soon you will be able to trigger actions also. To access the console of your app go to ``/{app_slug}/console`` when running the platform locally.
+
+![The Console]()
+
 ### More Docs to come:
 #### SupportBee Objects
 #### Event and Action Payloads
 #### List of Apps to be developed
-#### Testing/Development Console
