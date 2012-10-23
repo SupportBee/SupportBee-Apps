@@ -15,6 +15,7 @@ _Events_ are triggered by SupportBee during various times of the lifecycle of a 
 * Agent Reply Created
 * Customer Reply Created
 * Comment Created  
+
 An App can consume one, many or all events. For example an App can send an SMS to a cell when the event "Ticket Created" is triggered.
 
 _Actions_ are triggered by the user of SupportBee helpdesk from the User Interface. Currently the platform supports a single action called _Button_. If an App defines a Button action, a UI component is rendered for Ticket Listings in the SupportBee UI as shown below
@@ -31,7 +32,7 @@ Checkout the App platform from github
 Create a new branch with app\_name as its name  
 ``git branch campfire``
 
-Bundle install and run the server locally using shotgun
+Bundle install and run the server locally using shotgun  
 ``bundle install``  
 ``shotgun``
 
