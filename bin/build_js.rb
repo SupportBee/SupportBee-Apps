@@ -14,8 +14,25 @@ end
 js = StringIO.new
 
 init_js = 'if(typeof SB === "undefined") { SB = {};} SB.Apps = {};'
-
 js << init_js
+js << "\n\n"
+
+js << 'Handlebars.registerHelper(\'ifTicketsCountZero\', function(tickets) {
+  return tickets.length === 0;
+});'
+
+js << "\n"
+
+js << 'Handlebars.registerHelper(\'ifTicketsCountOne\', function(tickets) {
+  return tickets.length === 1;
+});'
+
+js << "\n"
+
+js << 'Handlebars.registerHelper(\'ifTicketsCountMany\', function(tickets) {
+  return tickets.length > 1;
+});'
+
 js << "\n"
 
 SupportBeeApp::Base.apps.each do |app|
@@ -30,6 +47,6 @@ SupportBeeApp::Base.apps.each do |app|
   js << "\n"
 end
 
-output = File.new(OUTPUT_PATH, 'w')
+output = File.open(OUTPUT_PATH, 'w')
 output.write(js.string)
 output.close

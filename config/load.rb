@@ -16,4 +16,5 @@ Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
 APP_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/sb_config.yml")[PLATFORM_ENV]['app_platform']
 
 require "#{PLATFORM_ROOT}/config/environments/#{PLATFORM_ENV}"
+
 require "#{PLATFORM_ROOT}/run_app"
