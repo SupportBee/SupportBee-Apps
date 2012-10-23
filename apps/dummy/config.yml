@@ -2,6 +2,11 @@ name: Dummy
 slug: dummy
 access: public
 description: This is to test and a boilerplate app.
+developer: 
+  name: SupportBee
+  email: SupportBee
+  twitter: @supportbee
+  github: SupportBee
 action:
   button:
     screens: 
@@ -9,4 +14,4 @@ action:
     - unassigned
     listing: 
     - all
-    label: Send To Pivotal
+    label: Send To Dummy
