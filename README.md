@@ -167,7 +167,7 @@ module ActionHandler
   def all_actions
   end
 end
-``
+```
 
 **Button Action**
 
