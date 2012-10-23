@@ -23,7 +23,7 @@ _Actions_ are triggered by the user of SupportBee helpdesk from the User Interfa
 
 We will go more into this later.
 
-### Parts of an App
+### Writing an App
 
 An App resides in the ``/apps`` folder of the App Platform. Each app has the following structure:
 
@@ -63,7 +63,7 @@ action:
 The ``slug`` should be unique across the platform.
 
 
-#### _slug_.rb
+#### {slug}.rb
 The app logic is defined in this file. The whole app can be defined in this single file or can be spread across multiple files which are required here. The basic structure is as follows:
 
 ```
@@ -98,3 +98,60 @@ module Dummy
   end
 end
 ```
+
+#### Define Settings
+An app can specify the settings required by it in the ``Base`` class. These settings are accepted when the app is added to a SupportBee helpdesk. 
+
+```
+module Dummy
+  class Base < SupportBeeApp::Base
+    string :name, :required => true
+    password :key, :required => true, :label => 'Token'
+    boolean :active, :default => true
+  end
+end
+```
+
+An app can define a ``string``, ``password`` or a ``boolean`` type of setting. Each setting accepts a ``name`` of the settings and a set of options
+
+* :label; if not defined, the name is humanized and rendered as the label
+* :required
+* :default
+
+![The Setting]()
+
+#### Consume Events
+An App can consume events by defining methods in the ``EventHandler`` module.
+
+```
+module Dummy
+  module EventHandler
+    def ticket_created; end
+    def ticket_updated; end
+
+    def reply_created; end
+    def reply_updated; end
+
+    def all_events; end
+  end
+end
+```
+
+The event ``ticket.created`` triggers the method ``ticket_created`` and so on. The method ``all_events`` if defined is triggered for all events.
+
+All the methods have access to the following information:
+* **auth**: This is required to get SupportBee API access for the helpdesk which triggered the App. 
+* **settings**: This contains the values of the settings defined by the app for the helpdesk which triggered the App.
+* **payload**: This contains the event/action relavent data. This changes depending on the type of event or action.
+
+Here is an example of a Campfire App posting to campfire on ticket creation.
+
+```
+def ticket_created
+  campfire = Tinder::Campfire.new settings.subdomain, :token => settings.token
+  room = campfire.find_room_by_name(settings.room)
+  room.speak "New Ticket: #{payload.ticket.subject}"
+end
+```
+
+#### Respond To Actions
