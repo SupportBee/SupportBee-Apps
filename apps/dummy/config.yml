@@ -12,6 +12,4 @@ action:
     screens: 
     - all
     - unassigned
-    listing: 
-    - all
     label: Send To Dummy

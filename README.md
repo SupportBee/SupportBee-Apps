@@ -14,7 +14,7 @@ _Events_ are triggered by SupportBee during various times of the lifecycle of a 
 * Ticket Created
 * Agent Reply Created
 * Customer Reply Created
-* Comment Created
+* Comment Created  
 An App can consume one, many or all events. For example an App can send an SMS to a cell when the event "Ticket Created" is triggered.
 
 _Actions_ are triggered by the user of SupportBee helpdesk from the User Interface. Currently the platform supports a single action called _Button_. If an App defines a Button action, a UI component is rendered for Ticket Listings in the SupportBee UI as shown below
@@ -121,7 +121,7 @@ An app can define a ``string``, ``password`` or a ``boolean`` type of setting. E
 ![The Setting]()
 
 #### Consume Events
-An App can consume events by defining methods in the ``EventHandler`` module.
+An App can consume events by defining methods in ``EventHandler`` module.
 
 ```
 module Dummy
@@ -155,3 +155,56 @@ end
 ```
 
 #### Respond To Actions
+An App can respond to actions by defining methods in ``ActionHandler``. Currently only one action is allowed; _button_.
+
+```
+module ActionHandler
+  def button
+    # Handle Action here
+    [200, "Success"]
+  end
+
+  def all_actions
+  end
+end
+``
+
+**Button Action**
+
+For a button action to work; you need to configure it in ``config.yml``
+
+```
+action:
+  button:
+    screens:
+    - all
+    - unassigned
+    label: Send To Dummy
+```
+
+This renders a ``Send To Dummy`` action in the SupportBee UI for ``Unassigned`` and ``All``. When this action is triggered in the UI the method ``button`` is triggered.All actions must return a status and a optional message.  
+``[200, "Successfully sent to Dummy"]``
+
+All action methods have access to the same information as events. In addition to these a list of ticket ids selected in the listing at the time of the trigger is also provided. A button action can also define an overlay which can be used to accept more information. [Handlebars](http://handlebarsjs.com/) templating language is used to specify the overlay. The template is defined in ``APP_ROOT/assets/views/button/overlay.hbs``. When the button action is triggered this overlay will receive the list of ticket ids selected. A boilerplate of the handlebars code is as follows:
+
+```
+{{#ifTicketsCountZero tickets}}
+  Do Something
+{{/ifTicketsCountZero}}
+
+{{#ifTicketsCountOne tickets}}
+  Iterate over one ticket
+  {{#each tickets}}
+    {{subject}}
+  {{/each}}
+{{/ifTicketsCountZero}}
+
+{{#ifTicketsCountZero tickets}}
+  Iterate over many tickets
+  {{#each tickets}}
+    {{subject}}
+  {{/each}}
+{{/ifTicketsCountZero}}
+```
+
+

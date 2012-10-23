@@ -12,8 +12,9 @@ end
 
 module Dummy
   module ActionHandler
-    def action_button
+    def button
      # Handle Action here
+     [200, "Success"]
     end
 
     def all_actions

@@ -36,8 +36,12 @@ class RunApp < Sinatra::Base
     post "/#{app_class.slug}/action/:action" do
       data, payload = parse_request
       action = params[:action]
-      if app = app_class.trigger_action(action, data, payload)
-        "OK"
+      begin 
+        result = app_class.trigger_action(action, data, payload)
+        status result[0]
+        body result[1] if result[1]
+      rescue
+        status 500
       end
     end
 
