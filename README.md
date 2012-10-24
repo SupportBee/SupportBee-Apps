@@ -20,7 +20,7 @@ An App can consume one, many or all events. For example an App can send an SMS t
 
 _Actions_ are triggered by the user of SupportBee helpdesk from the User Interface. Currently the platform supports a single action called _Button_. If an App defines a Button action, a UI component is rendered for Ticket Listings in the SupportBee UI as shown below
 
-![The Button](https://www.evernote.com/shard/s202/sh/596bd69b-f386-48c8-9720-81d01d763027/737063645661b073b85ef2ac0136f09b/res/f340e722-b703-4967-9f2a-531abf7eecc1/skitch.png)
+![The Button](http://i.imgur.com/1KURN.png)
 
 We will go more into this later.
 
@@ -131,7 +131,7 @@ An app can define a ``string``, ``password`` or a ``boolean`` type of setting. E
 * :required
 * :default
 
-![The Setting](https://www.evernote.com/shard/s202/sh/9a3622e2-699c-4ff7-a185-14e82ec39e72/ae6c0ed23e9b47ad530be2e3e6888b4f/res/26234e3a-056c-4c0a-9616-fca1963c6b13/skitch.png)
+![The Setting](http://i.imgur.com/B1Re6.png)
 
 #### Consume Events
 An App can consume events by defining methods in ``EventHandler`` module.
@@ -223,7 +223,7 @@ All action methods have access to the same information as events. In addition to
 ### Testing/Development Console
 We have created a simple console to easily trigger your Apps with sample payloads. Right now it only supports _Events_. Soon you will be able to trigger actions also. To access the console of your app go to ``/{app_slug}/console`` when running the platform locally.
 
-![The Console](https://www.evernote.com/shard/s202/sh/a5aaedda-9dfb-4ed2-8f8c-a9e646c6eca9/20fed142fecbe031dbb4886b617046f1/res/41a5732e-2606-470c-9de5-c1901b091db8/skitch.png)
+![The Console](http://i.imgur.com/35VpD.png)
 
 ### More Docs to come:
 #### SupportBee Objects
