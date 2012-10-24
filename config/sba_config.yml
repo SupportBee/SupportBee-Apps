@@ -1,0 +1,11 @@
+development:
+  app_platform:
+    core_app_base_domain: supportbee.com
+    core_app_port:
+    core_app_protocol: https
+
+test:
+  app_platform:
+    core_app_base_domain: supportbee.com
+    core_app_port:
+    core_app_protocol: https

@@ -13,7 +13,17 @@ Dir["#{PLATFORM_ROOT}/lib/helpers/**/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/lib/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
 
-APP_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/sb_config.yml")[PLATFORM_ENV]['app_platform']
+app_config = YAML.load_file("#{PLATFORM_ROOT}/config/sba_config.yml")[PLATFORM_ENV]['app_platform']
+SECRET_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/secret_config.yml")[PLATFORM_ENV]['app_platform']
+
+# Override the config of core app to local server if super user
+if ENV['SU']
+  app_config['core_app_base_domain'] = 'lvh.me'
+  app_config['core_app_port'] = 3000
+  app_config['core_app_protocol'] =  'http'
+end
+
+APP_CONFIG = app_config
 
 require "#{PLATFORM_ROOT}/config/environments/#{PLATFORM_ENV}"
 
