@@ -17,4 +17,16 @@ APP_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/sb_config.yml")[PLATFORM_EN
 
 require "#{PLATFORM_ROOT}/config/environments/#{PLATFORM_ENV}"
 
+unless PLATFORM_ENV == 'development'
+  log_dir = "#{PLATFORM_ROOT}/log"
+  log_filename = "#{PLATFORM_ENV}.log"
+  log_url = "#{log_dir}/#{log_filename}"
+  FileUtils.mkdir(log_dir) unless File.exists?(log_dir)
+  log_file = File.new(log_url, 'a')
+  $stdout.reopen(log_file)
+  $stderr.reopen(log_file)    
+  $stdout.sync=true
+  $stderr.sync=true
+end
+
 require "#{PLATFORM_ROOT}/run_app"

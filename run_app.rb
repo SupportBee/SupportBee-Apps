@@ -5,6 +5,10 @@ class RunApp < Sinatra::Base
   
   register Sinatra::Initializers
 
+  enable :logging
+  enable :dump_errors
+  enable :show_exceptions 
+
   def self.setup(app_class)
     get "/#{app_class.slug}" do
       config = app_class.configuration

@@ -14,7 +14,7 @@ gem 'haml'
 # App Gems
 gem 'tinder'
 
-gem 'shotgun', :group => :development
+gem 'guard-shotgun', :git =>'git://github.com/rchampourlier/guard-shotgun.git', :group => :development
 gem 'execjs', :group => :development
 gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test

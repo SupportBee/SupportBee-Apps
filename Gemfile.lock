@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/rchampourlier/guard-shotgun.git
+  revision: 99da0f11d5901cfa8844e6bd8b77bcd6dc9b3ea6
+  specs:
+    guard-shotgun (0.0.5)
+      ffi
+      guard
+      spoon
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -5,6 +14,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
+    coderay (1.0.8)
     diff-lcs (1.1.3)
     eventmachine (1.0.0)
     execjs (1.4.0)
@@ -13,15 +23,28 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
+    ffi (1.1.5)
     flexmock (0.9.0)
+    guard (1.5.0)
+      listen (>= 0.4.2)
+      lumberjack (>= 1.0.2)
+      pry (>= 0.9.10)
+      thor (>= 0.14.6)
     haml (3.1.7)
     hashie (1.2.0)
     http_parser.rb (0.5.3)
     i18n (0.6.1)
     json (1.7.5)
+    listen (0.5.3)
+    lumberjack (1.0.2)
+    method_source (0.8.1)
     mime-types (1.19)
     multi_json (1.3.6)
     multipart-post (1.1.5)
+    pry (0.9.10)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
     rack (1.4.1)
     rack-protection (1.2.0)
       rack
@@ -36,14 +59,15 @@ GEM
     rspec-expectations (2.5.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.5.0)
-    shotgun (0.9)
-      rack (>= 1.0)
     simple_oauth (0.1.9)
     sinatra (1.3.2)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
     sinatra-initializers (0.1.4)
+    slop (3.3.3)
+    spoon (0.0.1)
+    thor (0.16.0)
     tilt (1.3.3)
     tinder (1.9.1)
       eventmachine (>= 0.12.0, < 2)
@@ -70,12 +94,12 @@ DEPENDENCIES
   faraday
   faraday_middleware
   flexmock
+  guard-shotgun!
   haml
   hashie
   rack-test
   rake
   rspec
-  shotgun
   sinatra
   sinatra-initializers
   tinder
