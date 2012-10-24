@@ -1,12 +1,21 @@
 name: Dummy
 slug: dummy
-access: public
-description: This is to test and a boilerplate app.
+access: test
+
+description: "This is to test and a boilerplate app.
+Accepts newline"
+
+category: Integration
+
+tags: 
+- dummy
+
 developer: 
   name: SupportBee
   email: SupportBee
   twitter: "@supportbee"
   github: SupportBee
+
 action:
   button:
     screens: 

@@ -1,0 +1,30 @@
+name: Pivotal
+slug: pivotal
+access: public
+
+description: "
+Creates a story on Pivotal Tracker!
+
+This app can create a story on Pivotal Tracker on creation of a Ticket.
+Alternatively an agent can selectively create a story on Pivotal for a particular ticket in SupportBee Ticket screen.
+"
+
+category: integration
+
+tags:
+- pivotal
+- project management
+
+developer: 
+  name: SupportBee
+  email: SupportBee
+  twitter: "@supportbee"
+  github: SupportBee
+
+action:
+  button:
+    overlay: false
+    screens:
+    - ticket
+    label: Send To Pivotal
+

@@ -11,8 +11,8 @@ class RunApp < Sinatra::Base
 
   def self.setup(app_class)
     get "/#{app_class.slug}" do
-      config = app_class.configuration
-      response = {:name => config['name'], :slug => config['slug'], :description => config['description']}
+      response = app_class.configuration
+      ['action'].each{|key| response.delete(key)}
       content_type :json
       {app_class.slug => response}.to_json
     end
@@ -68,7 +68,9 @@ class RunApp < Sinatra::Base
     apps = {}
     SupportBeeApp::Base.apps.each do |app|
       config = app.configuration
-      apps[app.slug] = {:name => config['name'], :slug => config['slug'], :description => config['description']}
+      next if config['access'] == 'test'
+      ['action'].each{|key| config.delete(key)}
+      apps[app.slug] = config
     end
     content_type :json
     {:apps => apps}.to_json
