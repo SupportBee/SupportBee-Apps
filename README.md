@@ -32,9 +32,9 @@ Checkout the App platform from github
 Create a new branch with app\_name as its name  
 ``git branch campfire``
 
-Bundle install and run the server locally using shotgun  
+Bundle install and run the server locally using rackup 
 ``bundle install``  
-``shotgun``
+``rackup``
 
 Unfortunately, server requires a restart every time you change the app.
 

@@ -44,18 +44,23 @@
           .span4
             %h4 Auth
             %p
-              These values are used by the app platform to make API calls to the SupportBee. This is disabled in development/test mode.
+              These values are used by the app platform to make API calls to the SupportBee. If your app is dependent on making API calls to SupportBee server, then create an account
+              %a{:href => "https://app.supportbee.com"}
+              %br
+              If you dont fill these feilds, we will send dummy values to you app which cant be used to make API calls.
+
             %p
               %b SupportBee Test Subdomain:
               %br
-              %input{:type => :hidden, :value => :test, :name => "data[auth][subdomain]"}
-              test
+              %input{:type => :text, :value => :test, :name => "data[auth][subdomain]"}
 
             %p
-              %b SupportBee Auth Token:
+              %b 
+                SupportBee Auth Token:
               %br
-              %input{:type => :hidden, :value => :abc, :name => "data[auth][auth_token]"}
-              ***********
+              (You can find this Account > API Token; You need to be an Admin)
+              %br
+              %input{:type => :text, :value => :abc, :name => "data[auth][auth_token]"}
 
           .span4
             .section
@@ -75,7 +80,7 @@
                 //%input{:id=>'action-button-submit', :type=>:submit, :class=>'btn btn-primary', :value => @config['action']['button']['label']}
               
     :javascript
-      SB.CurrentApp = '#{@app_slug}';
+      SB.CurrentApp = '#{@app_slug}'; 
 
       $(document).ready(function(){
         $('#event-submit').click(function(){
