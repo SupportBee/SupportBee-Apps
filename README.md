@@ -6,6 +6,11 @@ SupportBee Apps are the easiest, yet powerful way of extending/customizing Suppo
 
 If you are new to SupportBee, please have a look at how it works [here](https://supportbee.com)
 
+### Motivation
+
+We wrote about this on our blog  
+[https://supportbee.com/devblog/2012/10/23/app-platforms-and-not-apis/](https://supportbee.com/devblog/2012/10/23/app-platforms-and-not-apis/)
+
 ### How does the App Platform Work?
 
 An **App** is deeply integrated with SupportBee helpdesk. It can receive **Events** from SupportBee. It can also define **Actions**.  
