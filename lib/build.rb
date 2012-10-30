@@ -40,6 +40,24 @@ module SupportBeeApp
           js << "\n"
         end
 
+        screen_hash = {}
+        SupportBeeApp::Base.apps.each do |app|
+          app_hash = app.configuration
+          next unless app_hash['action'] and app_hash['action']['button']
+          button_config = app_hash['action']['button']
+          next if button_config['screens'].blank?
+          button_config['screens'].each do |screen|
+            if screen_hash[screen]
+              screen_hash[screen] << app_hash['slug']
+            else
+              screen_hash[screen] = [app_hash['slug']]
+            end
+          end
+        end
+        button_map = JSON.pretty_generate(screen_hash)
+        button_map = "\n\n SB.Apps.ButtonMap = #{button_map}\n"
+        js << button_map
+
         output = File.open(output_path, 'w')
         output.write(js.string)
         output.close
