@@ -15,9 +15,17 @@ task :console do
   system("irb -r ./config/load.rb")
 end
 
+desc "Build SB.Apps javascript file"
+task :build_js do
+  puts "Building sb.apps.js..."
+  require './config/load'
+  SupportBeeApp::Build.build_js
+end
+
 desc "Show help menu"
 task :help do
   puts "Available rake tasks: "
   puts "rake console - Run a IRB console with all enviroment loaded"
   puts "rake spec - Run specs and calculate coverage"
+  puts "rake build_js - Build SB.Apps javascript file"
 end
