@@ -167,8 +167,12 @@ module SupportBeeApp
     private
     
     def pre_process_payload(raw)
-      raw = Hashie::Mash.new(raw)
+      raw = Hashie::Mash.new(raw).payload
       result = Hashie::Mash.new({:raw => raw})
+      if raw[:tickets]
+        result[:tickets] = []
+        raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, raw[:ticket]) }
+      end
       result[:ticket]  = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
       result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
