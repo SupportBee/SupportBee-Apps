@@ -7,7 +7,13 @@ class RunApp < Sinatra::Base
 
   enable :logging
   enable :dump_errors
-  enable :show_exceptions 
+  enable :show_exceptions
+
+  before do
+    x_supportbee_key = request['X-SupportBee-Key'] ? request['X-SupportBee-Key'] : ''
+    return if x_supportbee_key == SECRET_CONFIG['key'] 
+    halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
+  end 
 
   def self.setup(app_class)
     get "/#{app_class.slug}" do
