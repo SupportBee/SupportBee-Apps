@@ -31,7 +31,6 @@ action:
   button:
     overlay: false
     screens:
-    - all
-    - unassigned
+    - ticket
     label: Send To Campfire
 
