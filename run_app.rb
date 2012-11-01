@@ -45,12 +45,15 @@ class RunApp < Sinatra::Base
 
     post "/#{app_class.slug}/action/:action" do
       data, payload = parse_request
+      #logger.info "data: #{data}"
+      #logger.info "payload: #{payload}"
       action = params[:action]
       begin 
         result = app_class.trigger_action(action, data, payload)
         status result[0]
         body result[1] if result[1]
-      rescue
+      rescue Exception => e
+        puts "#{e.message} \n #{e.backtrace}"
         status 500
       end
     end

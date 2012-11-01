@@ -160,8 +160,9 @@ module SupportBeeApp
     def trigger_action(action)
       @action = action
       method = to_method(action)
-      self.send method if self.respond_to?(method)
+      result = self.send method if self.respond_to?(method)
       all_actions if self.respond_to?(:all_actions)
+      result
     end 
 
     private
@@ -171,7 +172,7 @@ module SupportBeeApp
       result = Hashie::Mash.new({:raw => raw})
       if raw[:tickets]
         result[:tickets] = []
-        raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, raw[:ticket]) }
+        raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
       end
       result[:ticket]  = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
       result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]

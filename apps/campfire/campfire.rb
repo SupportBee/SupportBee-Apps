@@ -1,9 +1,8 @@
 module Campfire
   module EventHandler
     def ticket_created
-      puts "##########{settings.inspect}"
-      return unless settings.notify_ticket_created == 1
-      #notify_ticket(payload.ticket)
+      return unless settings.notify_ticket_created == '1'
+      notify_ticket(payload.ticket)
     end
   end
 
@@ -11,8 +10,9 @@ module Campfire
     def button
       return [200, ''] unless payload.tickets
       payload.tickets.each do |ticket|
-        notify_ticket(ticket)
+        notify_ticket(ticket, "Ticket")
       end
+      [200, '']
     end
   end
 end
@@ -26,10 +26,10 @@ module Campfire
 
     private 
 
-    def notify_ticket(ticket)
+    def notify_ticket(ticket, header = "New Ticket")
       campfire = Tinder::Campfire.new settings.subdomain, :token => settings.token
       room = campfire.find_room_by_name(settings.room)
-      room.speak "New Ticket: #{ticket.subject}"
+      room.speak "[#{header}] #{ticket.subject} - #{ticket.requester.name}"
     end
   end
 end
