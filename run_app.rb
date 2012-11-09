@@ -19,6 +19,8 @@ class RunApp < Sinatra::Base
     get "/#{app_class.slug}" do
       response = app_class.configuration
       ['action'].each{|key| response.delete(key)}
+      response[:icon] = "/public/images/#{app_slug}/icon.png"
+      response[:screenshots] = ["/public/images/#{app_slug}/screenshot.png"]
       content_type :json
       {app_class.slug => response}.to_json
     end
@@ -79,6 +81,8 @@ class RunApp < Sinatra::Base
       config = app.configuration
       next if config['access'] == 'test'
       ['action'].each{|key| config.delete(key)}
+      config[:icon] = "/public/images/#{app_slug}/icon.png"
+      config[:screenshots] = ["/public/images/#{app_slug}/screenshot.png"]
       apps[app.slug] = config
     end
     content_type :json
