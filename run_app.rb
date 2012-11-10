@@ -10,7 +10,7 @@ class RunApp < Sinatra::Base
   enable :show_exceptions
 
   before do
-    x_supportbee_key = request['X-SupportBee-Key'] ? request['X-SupportBee-Key'] : ''
+    x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
     return if x_supportbee_key == SECRET_CONFIG['key'] 
     halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
   end 
