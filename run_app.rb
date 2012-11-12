@@ -5,9 +5,11 @@ class RunApp < Sinatra::Base
   
   register Sinatra::Initializers
 
-  enable :logging
-  enable :dump_errors
-  enable :show_exceptions
+  if PLATFORM_ENV == 'development'
+    enable :logging
+    enable :dump_errors
+    enable :show_exceptions
+  end
 
   before do
     x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
@@ -19,8 +21,8 @@ class RunApp < Sinatra::Base
     get "/#{app_class.slug}" do
       response = app_class.configuration
       ['action'].each{|key| response.delete(key)}
-      response[:icon] = "/public/images/#{app_slug}/icon.png"
-      response[:screenshots] = ["/public/images/#{app_slug}/screenshot.png"]
+      response[:icon] = "/public/images/#{app_class.slug}/icon.png"
+      response[:screenshots] = ["/public/images/#{app_class.slug}/screenshot.png"]
       content_type :json
       {app_class.slug => response}.to_json
     end
@@ -47,8 +49,6 @@ class RunApp < Sinatra::Base
 
     post "/#{app_class.slug}/action/:action" do
       data, payload = parse_request
-      #logger.info "data: #{data}"
-      #logger.info "payload: #{payload}"
       action = params[:action]
       begin 
         result = app_class.trigger_action(action, data, payload)
@@ -81,8 +81,8 @@ class RunApp < Sinatra::Base
       config = app.configuration
       next if config['access'] == 'test'
       ['action'].each{|key| config.delete(key)}
-      config[:icon] = "/public/images/#{app_slug}/icon.png"
-      config[:screenshots] = ["/public/images/#{app_slug}/screenshot.png"]
+      config[:icon] = "/public/images/#{app.slug}/icon.png"
+      config[:screenshots] = ["/public/images/#{app.slug}/screenshot.png"]
       apps[app.slug] = config
     end
     content_type :json
@@ -96,6 +96,14 @@ class RunApp < Sinatra::Base
   def parse_json_request
     req = JSON.parse(request.body.read)
     [req['data'], req['payload']]
+  end
+
+  def self.logger
+    LOGGER
+  end
+
+  def logger
+    self.class.logger
   end
 
   run! if app_file == $0

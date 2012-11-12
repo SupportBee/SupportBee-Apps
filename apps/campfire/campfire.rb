@@ -24,6 +24,8 @@ module Campfire
     string :room, :required => true, :label => 'Room'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
 
+    white_list :subdomain, :room, :notify_ticket_created
+
     private 
 
     def notify_ticket(ticket, header = "New Ticket")

@@ -35,17 +35,11 @@ puts "Loading envirnoments.."
 require "#{PLATFORM_ROOT}/config/environments/#{PLATFORM_ENV}"
 
 puts "Preparing Logs... "
-unless PLATFORM_ENV == 'development' 
-  log_dir = "#{PLATFORM_ROOT}/log"
-  log_filename = "#{PLATFORM_ENV}.log"
-  log_url = "#{log_dir}/#{log_filename}"
-  FileUtils.mkdir(log_dir) unless File.exists?(log_dir)
-  log_file = File.new(log_url, 'a')
-  $stdout.reopen(log_file)
-  $stderr.reopen(log_file)    
-  $stdout.sync=true
-  $stderr.sync=true
-end
+log_dir = "#{PLATFORM_ROOT}/log"
+log_filename = "#{PLATFORM_ENV}.log"
+log_url = "#{log_dir}/#{log_filename}"
+FileUtils.mkdir(log_dir) unless File.exists?(log_dir)
+LOGGER = Logger.new(log_url)
 
 puts "Loading Sinatra app"
 require "#{PLATFORM_ROOT}/run_app"
