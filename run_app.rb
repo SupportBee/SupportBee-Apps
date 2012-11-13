@@ -21,8 +21,8 @@ class RunApp < Sinatra::Base
     get "/#{app_class.slug}" do
       response = app_class.configuration
       ['action'].each{|key| response.delete(key)}
-      response[:icon] = "/public/images/#{app_class.slug}/icon.png"
-      response[:screenshots] = ["/public/images/#{app_class.slug}/screenshot.png"]
+      response[:icon] = image_url(app_class.slug, 'icon.png')
+      response[:screenshots] = [image_url(app_class.slug, 'screenshot.png')]
       content_type :json
       {app_class.slug => response}.to_json
     end
@@ -81,8 +81,8 @@ class RunApp < Sinatra::Base
       config = app.configuration
       next if config['access'] == 'test'
       ['action'].each{|key| config.delete(key)}
-      config[:icon] = "/public/images/#{app.slug}/icon.png"
-      config[:screenshots] = ["/public/images/#{app.slug}/screenshot.png"]
+      config[:icon] = image_url(app_class.slug, 'icon.png')
+      config[:screenshots] = [image_url(app_class.slug, 'screenshot.png')]
       apps[app.slug] = config
     end
     content_type :json
@@ -107,4 +107,15 @@ class RunApp < Sinatra::Base
   end
 
   run! if app_file == $0
+
+  private
+
+  def self.image_url(app_slug, filename)
+    Pathname(APP_CONFIG['cloudfront_base_url']).join('images', app_slug, filename).to_s
+  end
+
+  def image_url(app_slug, filename)
+    self.class.image_url(app_slug, filename)
+  end
+
 end
