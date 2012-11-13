@@ -13,6 +13,13 @@ task :build_js do
   SupportBeeApp::Build.build_js
 end
 
+desc "Move app image assets to public folder"
+task :move_assets do
+  puts "Moving app image assets to public folder..."
+  require './config/load'
+  SupportBeeApp::Build.move_assets
+end
+
 desc "Show help menu"
 task :help do
   puts "Available rake tasks: "
