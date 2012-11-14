@@ -53,30 +53,34 @@ describe SupportBeeApp::Base do
   end
 
   describe "Instance" do
+    def create_dummy_instance
+      Dummy::Base.new({auth:{subdomain: 'subdomain'}})
+    end
+
     it "should have all event handler methods" do
-      Dummy::Base.new.should respond_to('ticket_created')
+      create_dummy_instance.should respond_to('ticket_created')
     end
 
     it "should have all action handler methods" do
-      Dummy::Base.new.should respond_to('action_button')
+      create_dummy_instance.should respond_to('button')
     end
 
     describe "Receive" do
       context "Event" do
         it "should trigger an event" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           flexmock(dummy).should_receive(:ticket_created).once
           dummy.trigger_event('ticket.created')
         end
 
         it "should trigger all_events for any event" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           flexmock(dummy).should_receive(:all_events).once
           dummy.trigger_event('ticket.created')
         end
 
         it "should silently fail if the app does not handle the event" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           lambda{
             dummy.trigger_event('blah')
           }.should_not raise_error
@@ -84,19 +88,19 @@ describe SupportBeeApp::Base do
       end
       context "Action" do 
         it "should trigger a action" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           flexmock(dummy).should_receive(:action_button).once
           dummy.trigger_action('action_button')
         end
 
         it "should trigger all_actions for any action" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           flexmock(dummy).should_receive(:all_actions).once
           dummy.trigger_action('action_button')
         end
 
         it "should silently fail if the app does not handle an action" do
-          dummy = Dummy::Base.new
+          dummy = create_dummy_instance
           lambda{
             dummy.trigger_action('blah')
           }.should_not raise_error

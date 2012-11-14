@@ -163,12 +163,10 @@ module SupportBeeApp
 
     attr_writer :ca_file
 
-		def initialize(data = {}, payload = nil)
+		def initialize(data = {}, payload = {})
     	@data = Hashie::Mash.new(data) || {}
       @auth = @data[:auth] || {}
       @settings = @data[:settings] || {}
-
-    	payload = payload || {}
       @payload = pre_process_payload(payload)
   	end
 
@@ -202,7 +200,7 @@ module SupportBeeApp
     end
 
     def log_message(trigger, message ='')
-      "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), settings.subdomain, message]
+      "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
     end
 
     def log_event_message(message='')
@@ -250,6 +248,7 @@ module SupportBeeApp
     
     def pre_process_payload(raw)
       raw = Hashie::Mash.new(raw).payload
+      return {} unless raw
       result = Hashie::Mash.new({:raw => raw})
       if raw[:tickets]
         result[:tickets] = []
