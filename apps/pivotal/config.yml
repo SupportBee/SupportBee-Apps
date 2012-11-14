@@ -16,15 +16,14 @@ tags:
 - project management
 
 developer: 
-  name: SupportBee
-  email: SupportBee
-  twitter: "@supportbee"
-  github: SupportBee
+  name: Prateek Dayal
+  email: prateek@supportbee.com
+  twitter: "@prateekdayal"
+  github: prateekdayal
 
 action:
   button:
-    overlay: false
+    overlay: true
     screens:
     - ticket
     label: Send To Pivotal
-
