@@ -67,6 +67,18 @@ module SupportBeeApp
         }
       end
 
+      def api_hash
+        result = configuration.dup
+        ['action'].each{|key| result.delete(key)}
+        result['icon'] = image_url('icon.png')
+        result['screenshots'] = [image_url('screenshot.png')]
+        result
+      end
+
+      def access
+        configuration['access']
+      end
+
       def white_listed
         @white_listed ||= []
       end
@@ -201,6 +213,16 @@ module SupportBeeApp
       log_message(@action, message)
     end
 
+    private
+
+    def self.image_url(filename)
+      Pathname(APP_CONFIG['cloudfront_base_url']).join('images', slug, filename).to_s
+    end
+
+    def image_url(filename)
+      self.class.image_url(filename)
+    end
+
     def log_data
       self.class.white_listed.inject({}) do |hash, key|
         if value = settings[key]
@@ -225,7 +247,6 @@ module SupportBeeApp
       string
     end
 
-    private
     
     def pre_process_payload(raw)
       raw = Hashie::Mash.new(raw).payload
