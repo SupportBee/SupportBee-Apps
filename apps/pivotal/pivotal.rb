@@ -3,7 +3,7 @@ module Pivotal
     def button
 
       begin
-        create_story(payload.overlay.name, payload.overlay.description)
+        create_story(payload.overlay.title, payload.overlay.description)
       rescue Exception => e
         return [500, e.message]
       end
