@@ -8,11 +8,12 @@ Post to campfire!
 This app can post to campfire on:
 
 1) Ticket Creation
-2) Agent Reply Creation
-3) Customer Reply Creation
-4) Comment Creation
 
-Also an agent can manually post to campfire from the SupportBee Ticket Screen
+2) Agent Reply Creation
+
+3) Customer Reply Creation
+
+4) Comment Creation
 "
 
 category: integration
@@ -22,15 +23,7 @@ tags:
 - chat
 
 developer: 
-  name: SupportBee
-  email: SupportBee
-  twitter: "@supportbee"
-  github: SupportBee
-
-action:
-  button:
-    overlay: false
-    screens:
-    - ticket
-    label: Send To Campfire
-
+  name: Avinasha
+  email: me@avinasha.com
+  twitter: "@avishastry"
+  github: avinasha

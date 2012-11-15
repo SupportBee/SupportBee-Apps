@@ -5,16 +5,6 @@ module Campfire
       notify_ticket(payload.ticket)
     end
   end
-
-  module ActionHandler
-    def button
-      return [200, ''] unless payload.tickets
-      payload.tickets.each do |ticket|
-        notify_ticket(ticket, "Ticket")
-      end
-      [200, '']
-    end
-  end
 end
 
 module Campfire
@@ -31,8 +21,7 @@ module Campfire
     def notify_ticket(ticket, header = "New Ticket")
       campfire = Tinder::Campfire.new settings.subdomain, :token => settings.token
       room = campfire.find_room_by_name(settings.room)
-      room.speak "[#{header}] #{ticket.subject} from #{ticket.requester.name}"
-      room.paste "#{ticket.summary}"
+      room.speak "[#{header}] #{ticket.subject} from #{ticket.requester.name} (https://#{auth.subdomain}.supportbee.com/#{ticket.id})"
     end
   end
 end
