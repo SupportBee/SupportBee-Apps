@@ -37,9 +37,11 @@
               - input_options[:as] = :text if input_options[:as].nil?
 
               - name = "data[settings][#{param}]"
+              - value = options['default']
+              - value = options['default'] ? 1 : 0 if options['type'] == 'boolean'
 
               %label{:for => name} #{input_options[:label]}
-              %input{:type => input_options[:as], :value => input_options[:default], :name => name } 
+              %input{:type => input_options[:as], :value => value, :name => name } 
 
           .span4
             %h4 Auth

@@ -67,6 +67,28 @@ module SupportBeeApp
         }
       end
 
+      def api_hash
+        result = configuration.dup
+        ['action'].each{|key| result.delete(key)}
+        result['icon'] = image_url('icon.png')
+        result['screenshots'] = [image_url('screenshot.png')]
+        result
+      end
+
+      def access
+        configuration['access']
+      end
+
+      def white_listed
+        @white_listed ||= []
+      end
+
+      def white_list(*attrs)
+        attrs.each do |attr|
+          white_listed << attr.to_s
+        end
+      end
+
 			def add_to_schema(type,name,options={})
         type = type.to_s
         name = name.to_s
@@ -141,35 +163,94 @@ module SupportBeeApp
 
     attr_writer :ca_file
 
-		def initialize(data = {}, payload = nil)
+		def initialize(data = {}, payload = {})
     	@data = Hashie::Mash.new(data) || {}
       @auth = @data[:auth] || {}
       @settings = @data[:settings] || {}
-
-    	payload = payload || {}
       @payload = pre_process_payload(payload)
   	end
 
     def trigger_event(event)
       @event = event
       method = to_method(event)
-      self.send method if self.respond_to?(method)
-      all_events if self.respond_to?(:all_events)
+      begin
+        self.send method if self.respond_to?(method)
+        all_events if self.respond_to?(:all_events)
+        LOGGER.info log_event_message
+      rescue Exception => e
+        LOGGER.error log_event_message("#{e.message} \n #{e.backtrace}")
+      end
     end
 
     def trigger_action(action)
       @action = action
       method = to_method(action)
-      result = self.send method if self.respond_to?(method)
-      all_actions if self.respond_to?(:all_actions)
+      result = []
+
+      begin
+        result = self.send method if self.respond_to?(method)
+        all_actions if self.respond_to?(:all_actions)
+        LOGGER.info log_action_message
+      rescue Exception => e
+        LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
+        result = [500, e.message]
+      end
+
       result
-    end 
+    end
+
+    def log_message(trigger, message ='')
+      "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
+    end
+
+    def log_event_message(message='')
+      log_message(@event, message)
+    end
+
+    def log_action_message(message='')
+      log_message(@action, message)
+    end
 
     private
+
+    def self.image_url(filename)
+      Pathname(APP_CONFIG['cloudfront_base_url']).join('images', slug, filename).to_s
+    end
+
+    def image_url(filename)
+      self.class.image_url(filename)
+    end
+
+    def log_data
+      self.class.white_listed.inject({}) do |hash, key|
+        if value = settings[key]
+          hash.update key => sanitize_log_value(value)
+        else
+          hash
+        end
+      end
+    end
+
+    def sanitize_log_value(value)
+      string = value.to_s
+      string.strip!
+      if string =~ /^[a-z]+\:\/\//
+        uri = Addressable::URI.parse(string)
+        uri.password = "*" * uri.password.size if uri.password
+        uri.to_s
+      else
+        string
+      end
+    rescue Addressable::URI::InvalidURIError
+      string
+    end
+
     
     def pre_process_payload(raw)
-      raw = Hashie::Mash.new(raw).payload
-      result = Hashie::Mash.new({:raw => raw})
+      result = Hashie::Mash.new(raw)
+      raw = result.delete(:payload)
+      return result unless raw
+
       if raw[:tickets]
         result[:tickets] = []
         raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }

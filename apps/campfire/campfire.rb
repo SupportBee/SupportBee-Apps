@@ -1,7 +1,7 @@
 module Campfire
   module EventHandler
     def ticket_created
-      return unless settings.notify_ticket_created == '1'
+      return unless settings.notify_ticket_created.to_s == '1'
       notify_ticket(payload.ticket)
     end
   end
@@ -23,6 +23,8 @@ module Campfire
     string :token, :required => true, :label => 'Token'
     string :room, :required => true, :label => 'Room'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
+
+    white_list :subdomain, :room, :notify_ticket_created
 
     private 
 

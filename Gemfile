@@ -10,6 +10,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'hashie'
 gem 'haml'
+gem 'mail'
 
 # App Gems
 gem 'tinder'

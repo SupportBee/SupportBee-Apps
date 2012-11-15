@@ -5,23 +5,22 @@ class RunApp < Sinatra::Base
   
   register Sinatra::Initializers
 
-  enable :logging
-  enable :dump_errors
-  enable :show_exceptions
+  if PLATFORM_ENV == 'development'
+    enable :logging
+    enable :dump_errors
+    enable :show_exceptions
+  end
 
   before do
-    return if PLATFORM_ENV=='development'
-    x_supportbee_key = request['X-SupportBee-Key'] ? request['X-SupportBee-Key'] : ''
+    x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
     return if x_supportbee_key == SECRET_CONFIG['key'] 
     halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
   end 
 
   def self.setup(app_class)
     get "/#{app_class.slug}" do
-      response = app_class.configuration
-      ['action'].each{|key| response.delete(key)}
       content_type :json
-      {app_class.slug => response}.to_json
+      {app_class.slug => app_class.api_hash}.to_json
     end
 
     get "/#{app_class.slug}/schema" do
@@ -46,8 +45,6 @@ class RunApp < Sinatra::Base
 
     post "/#{app_class.slug}/action/:action" do
       data, payload = parse_request
-      #logger.info "data: #{data}"
-      #logger.info "payload: #{payload}"
       action = params[:action]
       begin 
         result = app_class.trigger_action(action, data, payload)
@@ -77,10 +74,8 @@ class RunApp < Sinatra::Base
   get "/" do
     apps = {}
     SupportBeeApp::Base.apps.each do |app|
-      config = app.configuration
-      next if config['access'] == 'test'
-      ['action'].each{|key| config.delete(key)}
-      apps[app.slug] = config
+      next if app.access == 'test'
+      apps[app.slug] = app.api_hash
     end
     content_type :json
     {:apps => apps}.to_json
@@ -95,5 +90,14 @@ class RunApp < Sinatra::Base
     [req['data'], req['payload']]
   end
 
+  def self.logger
+    LOGGER
+  end
+
+  def logger
+    self.class.logger
+  end
+
   run! if app_file == $0
+
 end
