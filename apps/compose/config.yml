@@ -1,0 +1,25 @@
+name: Compose
+slug: compose
+access: public
+
+description: "
+Initiate conversations with your customer right from inside SupportBee.
+"
+
+category: Feature
+
+tags: 
+- compose
+
+developer: 
+  name: Avinasha S
+  email: me@avinasha.com
+  twitter: "@avishastry"
+  github: avinasha
+
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    label: Compose
