@@ -4,13 +4,13 @@
     <ol>
       <li>
         <label for="title">Story Title</label>
-        <input name="title" valplaceholder="Enter story title">
+        <input name="title" value="{{subject}}">
       </li>
       <li>
         <label for="description">Story Description</label>
-        <textarea name="description" placeholder="Enter story description">
-          {{content.text}} \n
-          https://test.supportbee.com/tickets/{{id}}
+        <textarea name="description">
+{{content.text}} \n
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         </textarea>
       </li>
     </ol>
