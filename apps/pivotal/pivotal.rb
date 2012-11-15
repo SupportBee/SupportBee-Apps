@@ -1,8 +1,15 @@
 module Pivotal
   module ActionHandler
     def button
-      create_story(payload.overlay.name, payload.overlay.description)
-      [200, "Success"]
+
+      begin
+        create_story(payload.overlay.name, payload.overlay.description)
+      rescue Exception => e
+        return [500, e.message]
+      end
+
+      [200, "Ticket sent to Pivotal Tracker"]
+
     end
   end
 end
