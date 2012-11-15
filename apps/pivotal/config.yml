@@ -23,8 +23,7 @@ developer:
 
 action:
   button:
-    overlay: false
+    overlay: true
     screens:
     - ticket
     label: Send To Pivotal
-

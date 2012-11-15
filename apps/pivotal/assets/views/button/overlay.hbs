@@ -1,7 +1,19 @@
 <h3>Edit the Story Details</h3>
-  {{#each tickets}}
-    {{#ticket}}
-      subject: {{subject}}
-    {{/ticket}}
-  {{/each}}
+{{#each tickets}}
+  {{#ticket}}
+    <ol>
+      <li>
+        <label for="title">Story Title</label>
+        <input name="title" valplaceholder="Enter story title">
+      </li>
+      <li>
+        <label for="description">Story Description</label>
+        <textarea name="description" placeholder="Enter story description">
+          {{content.text}} \n
+          https://test.supportbee.com/tickets/{{id}}
+        </textarea>
+      </li>
+    </ol>
+  {{/ticket}}
+{{/each}}
 
