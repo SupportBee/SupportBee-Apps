@@ -51,8 +51,13 @@ module Compose
 
     private
 
+    def email_regex(options={:strict_mode => false})
+      name_validation = options[:strict_mode] ? "-a-z0-9+._" : "^@\\s"
+      /^\s*([#{name_validation}]{1,64})@((?:[-a-z0-9]+\.)+[a-z]{2,})\s*$/i
+    end
+
     def valid_email?(email)
-      true
+      not((email_regex =~ email).nil?) 
     end
   end
 end
