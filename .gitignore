@@ -35,6 +35,7 @@ public/javascripts/backbone-rails.js
 public/javascripts/payments.js
 public/javascripts/widget/script_coffee.js
 public/javascripts/app_error_handler.js
+public/javascripts/sb.apps.js
 public/stylesheets/admin/ie.css
 public/stylesheets/admin/ie6.css
 public/stylesheets/admin/print.css

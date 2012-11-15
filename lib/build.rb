@@ -37,6 +37,7 @@ module SupportBeeApp
         js << "\n"
 
         js << 'Handlebars.registerHelper(\'ifTicketsCountOne\', function(tickets) {
+          console.log(tickets);
           return tickets.length === 1;
         });'
 
