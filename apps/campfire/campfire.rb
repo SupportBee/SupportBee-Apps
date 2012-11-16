@@ -21,7 +21,7 @@ module Campfire
     def notify_ticket(ticket, header = "New Ticket")
       campfire = Tinder::Campfire.new settings.subdomain, :token => settings.token
       room = campfire.find_room_by_name(settings.room)
-      room.speak "[#{header}] #{ticket.subject} from #{ticket.requester.name} (https://#{auth.subdomain}.supportbee.com/#{ticket.id})"
+      room.speak "[#{header}] #{ticket.subject} from #{ticket.requester.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
     end
   end
 end
