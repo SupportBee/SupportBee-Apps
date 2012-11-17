@@ -1,12 +1,12 @@
-subject: Pivotal
-name: Pivotal
+subject: Pivotal Tracker 
+name: Pivotal Tracker
 slug: pivotal
 access: public
 
 description: "
 Create a story on Pivotal Tracker!
 
-This app allows an agent to selectively create a story on Pivotal for a particular ticket in SupportBee Ticket screen.
+This app allows an agent to selectively create a story in Pivotal Tracker for a particular ticket in SupportBee.
 "
 
 category: integration
