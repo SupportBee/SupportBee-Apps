@@ -1,0 +1,30 @@
+name: Hipchat
+slug: hipchat
+access: public
+
+description: "
+Posts to Hipchat!
+
+This app can post to hipchat on:
+
+1) Ticket Creation
+
+2) Agent Reply Creation
+
+3) Customer Reply Creation
+
+4) Comment Creation
+"
+
+category: notification
+
+tags:
+- hipchat
+- chat
+- notification
+
+developer: 
+  name: Prateek
+  email: prateek@supportbee.com
+  twitter: "@prateekdayal"
+  github: prateekdayal
