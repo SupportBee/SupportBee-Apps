@@ -25,7 +25,6 @@ module Hipchat
 
     def comment_created
       return unless settings.notify_comment_created.to_s == '1'
-      puts payload
       ticket = payload.ticket
       comment = payload.comment
       send_to_hipchat "[Comment]: On #{ticket.subject} from #{comment.commenter.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
@@ -56,7 +55,6 @@ module Hipchat
     end
 
     def get_room
-      puts settings
       @client ||= HipChat::Client.new(settings.token)
       @client[settings.room]
     end
