@@ -9,7 +9,7 @@ Create a story on Pivotal Tracker!
 This app allows an agent to selectively create a story in Pivotal Tracker for a particular ticket in SupportBee.
 "
 
-category: integration
+category: project-management 
 
 tags:
 - pivotal
