@@ -1,0 +1,27 @@
+name: Github Issues 
+slug: github-issues
+access: public
+
+description: "
+Create an issue on Github Issues!
+
+An agent can create an issue on Github for a particular ticket in SupportBee Ticket screen.
+"
+
+category: workflow
+
+tags:
+- github issues 
+
+developer: 
+  name: Anh Do
+  email: anh@supportbee.com
+  twitter: "@anhnk"
+  github: anhnk
+
+action:
+  button:
+    overlay: true
+    screens:
+    - ticket
+    label: Send To Github
