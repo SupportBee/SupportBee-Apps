@@ -114,10 +114,7 @@ DEPENDENCIES
   haml
   hashie
   hipchat
-<<<<<<< HEAD
-=======
   jammit-s3
->>>>>>> 54261e5... Merge remote-tracking branch 'public/master'
   mail
   rack-test
   rake
