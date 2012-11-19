@@ -3,11 +3,11 @@ development:
     core_app_base_domain: supportbee.com
     core_app_port:
     core_app_protocol: https
-    cloudfront_base_url: http://example.com
+    cloudfront_base_url: http://localhost:9292
 
 test:
   app_platform:
     core_app_base_domain: supportbee.com
     core_app_port:
     core_app_protocol: https
-    cloudfront_base_url: http://example.com
+    cloudfront_base_url: http://localhost:9292
