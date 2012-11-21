@@ -14,8 +14,6 @@ module Github
   end
 end
 
-
-
 module Github
   require 'json'
 
@@ -34,4 +32,3 @@ module Github
 
   end
 end
-
