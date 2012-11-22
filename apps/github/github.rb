@@ -14,9 +14,9 @@ module Github
   end
 end
 
-
-
 module Github
+  require 'json'
+
   class Base < SupportBeeApp::Base
     string :owner, :required => true, :label => 'Owner'
     string :repo, :required => true, :label => 'Repository'
@@ -26,10 +26,9 @@ module Github
 
     def create_issue(issue_title, description)
       response = http_post "https://api.github.com/repos/#{settings.owner}/#{settings.repo}/issues?access_token=#{settings.token}" do |req|
-        req.body = "{ \"title\": \"#{issue_title}\", \"body\": \"#{description.gsub(/\r?\n/, '<br>')}\"}"
+        req.body = {:title => issue_title, :body => description}.to_json
       end
     end
 
   end
 end
-

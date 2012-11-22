@@ -1,0 +1,28 @@
+name: Asana
+slug: asana
+access: public
+
+description: "
+Create a task on Asana!
+
+An agent can create a task on Asana for a particular ticket in SupportBee Ticket screen.
+"
+
+category: project-management
+
+tags:
+- asana
+- project management
+
+developer: 
+  name: Anh Do
+  email: anh@supportbee.com
+  twitter: "@anhnk"
+  github: anhnk
+
+action:
+  button:
+    overlay: true
+    screens:
+    - ticket
+    label: Send To Asana

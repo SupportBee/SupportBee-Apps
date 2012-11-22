@@ -1,0 +1,18 @@
+<h3>Edit the Task Details</h3>
+{{#each tickets}}
+  {{#ticket}}
+    <ol>
+      <li>
+        <label for="title">Task Name</label>
+        <input name="title" value="{{subject}}">
+      </li>
+      <li>
+        <label for="notes">Notes</label>
+        <textarea name="notes">
+{{content.text}} \n
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </li>
+    </ol>
+  {{/ticket}}
+{{/each}}
