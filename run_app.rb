@@ -12,6 +12,7 @@ class RunApp < Sinatra::Base
   end
 
   before do
+    return if PLATFORM_ENV == 'development'
     x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
     return if x_supportbee_key == SECRET_CONFIG['key'] 
     halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
