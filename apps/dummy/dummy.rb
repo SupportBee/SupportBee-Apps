@@ -24,7 +24,7 @@ end
 
 module Dummy
   class Base < SupportBeeApp::Base
-    string :name, :required => true
+    string :name, :required => true, :hint => 'A Dummy Name'
     password :key, :required => true, :label => 'Token'
     boolean :active, :default => true
   end

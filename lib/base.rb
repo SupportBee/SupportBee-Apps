@@ -92,11 +92,16 @@ module SupportBeeApp
 			def add_to_schema(type,name,options={})
         type = type.to_s
         name = name.to_s
+
         required = options.delete(:required) ? true : false
-        default = options.delete(:default)
         label = options.delete(:label) || name.humanize
+
+        default = options.delete(:default)
+        hint = options.delete(:hint)
+
         schema[name] = { 'type' => type, 'required' => required, 'label' => label }
         schema[name]['default'] = default if default
+        schema[name]['hint'] = hint if hint
         schema
     	end
 

@@ -44,7 +44,7 @@ describe SupportBeeApp::Base do
     describe "Schema" do
       it "should have the right schema" do
         Dummy::Base.schema.should == {
-          'name' => {'type' => 'string', 'label' => 'Name', 'required' => true},
+          'name' => {'type' => 'string', 'label' => 'Name', 'required' => true, 'hint' => 'A Dummy Name'},
           'key' => {'type' => 'password', 'label' => 'Token', 'required' => true},
           'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true }
         }
