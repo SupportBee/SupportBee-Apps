@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require_relative '../config/load'
+
+SupportBeeApp::Command.start

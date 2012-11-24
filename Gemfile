@@ -11,6 +11,7 @@ gem 'faraday_middleware'
 gem 'hashie'
 gem 'haml'
 gem 'mail'
+gem 'thor'
 
 # App Gems
 gem 'tinder'

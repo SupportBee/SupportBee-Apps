@@ -119,4 +119,5 @@ DEPENDENCIES
   rspec
   sinatra
   sinatra-initializers
+  thor
   tinder
