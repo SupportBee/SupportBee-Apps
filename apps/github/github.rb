@@ -20,7 +20,7 @@ module Github
   class Base < SupportBeeApp::Base
     string :owner, :required => true, :label => 'Owner'
     string :repo, :required => true, :label => 'Repository'
-    string :token, :required => true, :label => 'Token'
+    string :token, :required => true, :label => 'Token', :hint => 'You can get the API Token following the instructions here - https://help.github.com/articles/creating-an-oauth-token-for-command-line-use'
 
     private
 
