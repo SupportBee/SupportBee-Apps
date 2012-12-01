@@ -5,7 +5,7 @@ class RunApp < Sinatra::Base
   
   register Sinatra::Initializers
 
-  if PLATFORM_ENV == 'development'
+  unless PLATFORM_ENV == 'production'
     enable :logging
     enable :dump_errors
     enable :show_exceptions
