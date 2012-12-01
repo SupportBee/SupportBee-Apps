@@ -16,6 +16,7 @@ gem 'thor'
 # App Gems
 gem 'tinder'
 gem 'hipchat'
+gem 'evernote-thrift'
 
 gem 'guard-shotgun', :git =>'git://github.com/rchampourlier/guard-shotgun.git', :group => :development
 gem 'execjs', :group => :development
