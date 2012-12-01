@@ -3,7 +3,8 @@ module Asana
     def button
 
       begin
-        create_task(payload.overlay.title, payload.overlay.notes)
+        response = create_task(payload.overlay.title, payload.overlay.notes)
+        return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
       rescue Exception => e
         return [500, e.message]
       end
@@ -15,10 +16,8 @@ module Asana
 end
 
 module Asana
-  require 'json'
-
   class Base < SupportBeeApp::Base
-    string :workspace_id, :required => true, :label => 'Workspace ID'
+    string :workspace_id, :required => true, :label => 'Workspace ID', :hint => 'Get Workspace ID by opening terminal and pasting the following command "curl -u <API-Token>: https://app.asana.com/api/1.0/workspaces"'
     string :token, :required => true, :label => 'Token'
 
     private
