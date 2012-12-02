@@ -4,25 +4,30 @@ module Evernote
   module EventHandler
     # Handle 'ticket.created' event
     def ticket_created
-      puts "ticket created"
-      post_to_evernote(payload.ticket)
-      return true
+      post_ticket(payload.ticket)
+      true
     end
 
-    # Handle all events
-    #def all_events
-      #return true
-    #end
+    def agent_reply_created
+      post_reply(payload.reply, payload.ticket)
+      true
+    end
+
+    def customer_reply_created
+      post_reply(payload.reply, payload.ticket)
+      true
+    end
+
   end
 end
 
 module Evernote
   class Base < SupportBeeApp::Base
     # Define Settings
-    string :auth_token, :required => true, :hint => 'Get your auth token at https://www.evernote.com/Login.action?targetUrl=%2Fapi%2FDeveloperToken.action'
+    string :auth_token, :required => true, :hint => 'Get your auth token at https://www.evernote.com/api/DeveloperToken.action'
     string :notebook_name, :required => false, :label => 'Name of the Notebook', :hint => 'Leave blank for default notebook'
     # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
+    boolean :send_replies, :default => true, :label => 'Send Replies to Evernote?'
 
     # White list settings for logging
     # white_list :name, :username
@@ -32,10 +37,8 @@ module Evernote
     
     private
 
-    def post_to_evernote(ticket)
-
-      puts "Post to evernote"
-      evernoteHost = "sandbox.evernote.com"
+    def get_notestore
+      evernoteHost = "www.evernote.com"
       userStoreUrl = "https://#{evernoteHost}/edam/user"
 
       userStoreTransport = Thrift::HTTPClientTransport.new(userStoreUrl)
@@ -50,26 +53,52 @@ module Evernote
 
       # List all of the notebooks in the user's account
       notebooks = noteStore.listNotebooks(settings.auth_token)
-      puts "Found #{notebooks.size} notebooks:"
       defaultNotebook = notebooks.first
-      puts notebooks.inspect
 
       unless settings.notebook_name.blank?
         notebooks.each do |notebook|
-          the_notebook = notebook if settings.notebook_name.casecmp(notebook.name) == 0 
+          if settings.notebook_name.casecmp(notebook.name) == 0 
+            defaultNotebook = noteStore.getNotebook(settings.auth_token, notebook.guid)
+          end
         end
       end
 
-      the_notebook ||= defaultNotebook
-
       note = Evernote::EDAM::Type::Note.new
+      note.notebookGuid = defaultNotebook.guid 
+      [noteStore, note]
+    end
+
+    def post_reply(reply,ticket)
+      return unless settings.send_replies.to_s == '1'
+      noteStore, note = get_notestore
+
+      note.title = "RE: #{ticket.subject} from #{reply.replier.name} (#{reply.replier.email})"
+
+note.content = <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+<en-note>
+  #{reply.content.text.gsub('\n','<br/>')}
+  <br/>
+  https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}
+</en-note>
+EOF
+
+      createdNote = noteStore.createNote(settings.auth_token, note)
+
+    end
+
+    def post_ticket(ticket)
+
+      noteStore, note = get_notestore
+
       note.title = "#{ticket.subject} from #{ticket.requester.name} (#{ticket.requester.email})"
 
 note.content = <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
 <en-note>
-  #{ticket.content.body}
+  #{ticket.content.text.gsub('\n','<br/>')}
   <br/>
   https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}
 </en-note>
