@@ -8,10 +8,11 @@ Create an issue on Github Issues!
 An agent can create an issue on Github for a particular ticket in SupportBee Ticket screen.
 "
 
-category: workflow
+category: project-management
 
 tags:
-- github issues 
+- github
+- issue tracking 
 
 developer: 
   name: Anh Do
