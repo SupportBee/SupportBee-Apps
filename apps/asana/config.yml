@@ -1,6 +1,6 @@
 name: Asana
 slug: asana
-access: public
+access: test
 
 description: "
 Create a task on Asana!
