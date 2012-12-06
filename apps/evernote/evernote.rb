@@ -71,41 +71,49 @@ module Evernote
     def post_reply(reply,ticket)
       return unless settings.send_replies.to_s == '1'
       noteStore, note = get_notestore
-
       note.title = "RE: #{ticket.subject} from #{reply.replier.name} (#{reply.replier.email})"
-
-note.content = <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
-<en-note>
-  #{reply.content.text.gsub('\n','<br/>')}
-  <br/>
-  https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}
-</en-note>
-EOF
-
+      content = reply.content.text
+      ticket_url = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note.content = generate_note_xml(content, ticket_url)
       createdNote = noteStore.createNote(settings.auth_token, note)
-
     end
 
     def post_ticket(ticket)
-
       noteStore, note = get_notestore
-
       note.title = "#{ticket.subject} from #{ticket.requester.name} (#{ticket.requester.email})"
+      content = ticket.content.text
+      ticket_url = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note.content = generate_note_xml(content, ticket_url)
+      createdNote = noteStore.createNote(settings.auth_token, note)
+    end
 
-note.content = <<EOF
+    private
+
+    def generate_note_xml(content, ticket_url)
+      content = "#{content}\n\nSupportBee Ticket URL:\n#{ticket_url}"
+      #user nokogiri to sanitize XML; Adds splitter nodes
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.send(:"x-evernote-splitter", content)
+      end
+      #remove splitter nodes and other headers
+      sanitized_content = builder.to_xml.split('<x-evernote-splitter>')[1].split('</x-evernote-splitter>').first
+
+      sanitized_content = sanitized_content.split("\n").map! do |c| 
+        if c.blank?
+          "<div><br/></div>"
+        else
+          "<div>#{c}</div>"
+        end
+      end.join("\n")
+
+      xml = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
 <en-note>
-  #{ticket.content.text.gsub('\n','<br/>')}
-  <br/>
-  https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}
+  #{sanitized_content}
 </en-note>
 EOF
-
-      createdNote = noteStore.createNote(settings.auth_token, note)
-
+      xml
     end
   end
 

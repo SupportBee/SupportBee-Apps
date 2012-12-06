@@ -112,9 +112,21 @@ module SupportBee
 
     def load_attributes(hash)
       @attributes = Hashie::Mash.new(hash)
-      hash.keys.each do |key|
+
+      if @attributes[:content]
+        pre_process_content(@attributes[:content])
+      end
+
+      hash.keys.each do |key|          
         self.class.create_method(key) { @attributes.send(key) }
         self.class.create_method("#{key}=") { |value| @attributes.send("#{key}=", value) }
+      end
+    end
+
+    def pre_process_content(content_hash)
+      if content_hash.is_a?(Hash) and content_hash.has_key?(:text) and content_hash.has_key?(:html)
+        content_hash.text = CGI::unescapeHTML(content_hash.text)
+        content_hash.html = CGI::unescapeHTML(content_hash.html) unless content_hash.html.blank?
       end
     end
   end

@@ -12,6 +12,8 @@ gem 'hashie'
 gem 'haml'
 gem 'mail'
 gem 'thor'
+gem 'nokogiri'
+gem 'htmlentities'
 
 # App Gems
 gem 'tinder'
