@@ -51,7 +51,7 @@ module Hipchat
     end
 
     def paste_in_hipchat(text)
-      get_room.send('SupportBee', text, :message_format => 'text')
+      get_room.send('SupportBee', text.slice(0,140), :message_format => 'text')
     end
 
     def get_room
