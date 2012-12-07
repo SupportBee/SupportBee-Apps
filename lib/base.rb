@@ -179,11 +179,18 @@ module SupportBeeApp
       @event = event
       method = to_method(event)
       begin
-        self.send method if self.respond_to?(method)
         all_events if self.respond_to?(:all_events)
-        LOGGER.info log_event_message
+        response = self.send method if self.respond_to?(method)
+        if response 
+          LOGGER.info log_event_message
+        else
+          LOGGER.warn log_event_message
+        end
+
+        return response
       rescue Exception => e
         LOGGER.error log_event_message("#{e.message} \n #{e.backtrace}")
+        return false
       end
     end
 

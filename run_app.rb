@@ -39,8 +39,10 @@ class RunApp < Sinatra::Base
     post "/#{app_class.slug}/event/:event" do
       data, payload = parse_request
       event = params[:event]
-      if app = app_class.trigger_event(event, data, payload)
-        "OK"
+      if app_class.trigger_event(event, data, payload)
+        status 204
+      else
+        status 500
       end
     end
 
