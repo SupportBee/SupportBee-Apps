@@ -3,17 +3,9 @@ slug: campfire
 access: public
 
 description: "
-Post to campfire!
 
-This app can post to campfire on:
+Use this app to post new tickets to campfire!
 
-1) Ticket Creation
-
-2) Agent Reply Creation
-
-3) Customer Reply Creation
-
-4) Comment Creation
 "
 
 category: notification 

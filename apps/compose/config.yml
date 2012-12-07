@@ -3,7 +3,7 @@ slug: compose
 access: public
 
 description: "
-Initiate conversations with your customer right from inside SupportBee.
+Send a new email from within SupportBee. This app uses your SMTP server to relay the emails
 "
 
 category: email 

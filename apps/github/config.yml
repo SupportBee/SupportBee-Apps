@@ -5,7 +5,7 @@ access: public
 description: "
 Create an issue on Github Issues!
 
-An agent can create an issue on Github for a particular ticket in SupportBee Ticket screen.
+An agent can create an issue on Github for a particular ticket in SupportBee. You can customize the title/description before creating the issue.
 "
 
 category: project-management
