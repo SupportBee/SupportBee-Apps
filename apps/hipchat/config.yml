@@ -2,19 +2,7 @@ name: HipChat
 slug: hipchat
 access: public
 
-description: "
-Posts to Hipchat!
-
-This app can post to hipchat on:
-
-1) Ticket Creation
-
-2) Agent Reply Creation
-
-3) Customer Reply Creation
-
-4) Comment Creation
-"
+description: "This app can notify you of new tickets, customer replies, agent replies and comments on HipChat."
 
 category: notification
 
