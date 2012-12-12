@@ -3,7 +3,9 @@ module Hipchat
     def ticket_created
       return unless settings.notify_ticket_created.to_s == '1'
       ticket = payload.ticket
-      send_to_hipchat "#{ticket.subject} from #{ticket.requester.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
+      puts ticket.inspect
+      puts ticket.requester.inspect
+      send_to_hipchat "[New Ticket] <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{ticket.requester.name}"
       paste_in_hipchat ticket.summary
     end
 
@@ -11,7 +13,7 @@ module Hipchat
       return unless settings.notify_agent_reply_created.to_s == '1'
       ticket = payload.ticket
       reply = payload.reply
-      send_to_hipchat "[Agent Reply]: On #{ticket.subject} from #{reply.replier.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
+      send_to_hipchat "[Agent Reply] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{reply.replier.name}"
       paste_in_hipchat reply.content.text
     end
 
@@ -19,7 +21,7 @@ module Hipchat
       return unless settings.notify_customer_reply_created.to_s == '1'
       ticket = payload.ticket
       reply = payload.reply
-      send_to_hipchat "[Customer Reply]: On #{ticket.subject} from #{reply.replier.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
+      send_to_hipchat "[Customer Reply] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{reply.replier.name}"
       paste_in_hipchat reply.content.text
     end
 
@@ -27,7 +29,7 @@ module Hipchat
       return unless settings.notify_comment_created.to_s == '1'
       ticket = payload.ticket
       comment = payload.comment
-      send_to_hipchat "[Comment]: On #{ticket.subject} from #{comment.commenter.name} (https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id})"
+      send_to_hipchat "[Comment] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{comment.commenter.name}"
       paste_in_hipchat comment.content.text
     end
   end
