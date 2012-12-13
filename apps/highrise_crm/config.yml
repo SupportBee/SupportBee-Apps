@@ -1,0 +1,32 @@
+name: Highrise
+slug: highrise
+access: public
+
+description: "Pulls customer information from Highrise and post it as a comment on the ticket with a link to Highrise page.
+The app can also update the customer information in Highrise whenever there is a new ticket."
+
+category: Integration
+
+tags: 
+- crm
+- highrise
+
+developer: 
+  name: Prateek
+  email: prateekdayal
+  twitter: "prateekdayal"
+  github: prateekdayal
+
+# The following config keys are used by Action Handlers
+# Set button 'overlay' to true, if you want to have an overlay
+# The valid values for screens are [ticket, all, unassigned, my, groups]
+# Remove the following section if you do not want to define Action Handlers
+ 
+action:
+  button:
+    overlay: false
+    screens: 
+    - ticket
+    - all
+    - unassigned
+    label: Send To Highrise
