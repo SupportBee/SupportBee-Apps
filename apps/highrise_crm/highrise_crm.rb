@@ -3,28 +3,29 @@ module HighriseCRM
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
-      puts "trying to find the person #{ticket.requester.email}"
-      person = find_person(ticket.requester.email)
-      puts "person #{person.inspect}"
+      requester = ticket.requester
+      setup_highrise
+      person = find_person(requester)
       if person
-        # Post info as a comment
+        puts "posting a comment"
         ticket.comment(:html => person_info_html(person))
+      else
+        puts "creating a person"
+        if person = create_person(requester)
+          ticket.comment(:html => new_person_info_html(person))
+        end
       end
-    end
 
-    # Handle all events
-    def all_events
+      if person
+        puts "creating a note"
+        # Create a note in highrise
+        note = Highrise::Note.new(:subject_id => person.id, :subject_type => 'Person', :body => "[New Ticket] <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>")
+        note.save
+        puts note.errors.inspect
+      end
       return true
     end
-  end
-end
 
-module Highrise
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
   end
 end
 
@@ -33,18 +34,26 @@ module HighriseCRM
     # Define Settings
     string :auth_token, :required => true, :hint => 'Highrise Auth Token'
     string :subdomain, :required => true, :label => 'Highrise Subdomain'
-    # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
+    boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Highrise if one does not exist'
 
     # White list settings for logging
-    white_list :subdomain
+    white_list :subdomain, :should_create_person
 
-    # Define public and private methods here which will be available
-    # in the EventHandler and ActionHandler modules
-    def find_person(email)
-      setup_highrise
-      people = Highrise::Person.search(:email => email)
+    def find_person(requester)
+      people = Highrise::Person.search(:email => requester.email)
       people.length > 0 ? people.first : nil
+    end
+
+    def create_person(requester)
+      return unless settings.should_create_person.to_s == '1'
+      first_name, last_name = requester.name.split
+      person = Highrise::Person.new(:contact_data => {:email => requester.email},
+                                    :first_name => first_name,
+                                    :last_name => last_name) 
+      if person.save
+        return person
+      end
+      return nil
     end
 
     def setup_highrise
@@ -59,8 +68,18 @@ module HighriseCRM
       html << "#{person.title} " if person.title
       html << "#{person.company_name}" if person.company_name
       html << "<br/>"
-      html << "<a href='https://#{settings.subdomain}.highrisehq.com/people/#{person.id}'>View #{person.first_name}'s profile on Highrise</a>"
+      html << person_link(person)
       html
+    end
+
+    def new_person_info_html(person)
+      html = "Added <b> #{person.name} </b> to Highrise - " 
+      html << person_link(person)
+      html
+    end
+
+    def person_link(person)
+      "<a href='https://#{settings.subdomain}.highrisehq.com/people/#{person.id}'>View #{person.first_name}'s profile on Highrise</a>"
     end
   end
 end
