@@ -3,34 +3,32 @@ module Hipchat
     def ticket_created
       return unless settings.notify_ticket_created.to_s == '1'
       ticket = payload.ticket
-      puts ticket.inspect
-      puts ticket.requester.inspect
-      send_to_hipchat "[New Ticket] <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{ticket.requester.name}"
-      paste_in_hipchat ticket.summary
+      send_to_hipchat "<b>New Ticket</b> from #{ticket.requester.name}: <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      #paste_in_hipchat ticket.summary
     end
 
     def agent_reply_created
       return unless settings.notify_agent_reply_created.to_s == '1'
       ticket = payload.ticket
       reply = payload.reply
-      send_to_hipchat "[Agent Reply] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{reply.replier.name}"
-      paste_in_hipchat reply.content.text
+      send_to_hipchat "<b>Agent Reply</b> from #{reply.replier.name} in <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      #paste_in_hipchat reply.content.text
     end
 
     def customer_reply_created
       return unless settings.notify_customer_reply_created.to_s == '1'
       ticket = payload.ticket
       reply = payload.reply
-      send_to_hipchat "[Customer Reply] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{reply.replier.name}"
-      paste_in_hipchat reply.content.text
+      send_to_hipchat "<b>Customer Reply</b> from #{reply.replier.name} in <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      #paste_in_hipchat reply.content.text
     end
 
     def comment_created
       return unless settings.notify_comment_created.to_s == '1'
       ticket = payload.ticket
       comment = payload.comment
-      send_to_hipchat "[Comment] On <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a> from #{comment.commenter.name}"
-      paste_in_hipchat comment.content.text
+      send_to_hipchat "<b>Comment</b> from #{comment.commenter.name} on <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      #paste_in_hipchat comment.content.text
     end
   end
 end
