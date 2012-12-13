@@ -2,10 +2,10 @@ name: Highrise
 slug: highrise
 access: public
 
-description: "Pulls customer information from Highrise and post it as a comment on the ticket with a link to Highrise page.
+description: "Pull customer information from Highrise and see it as a comment on the ticket with a link to the Highrise page.
 The app can also update the customer information in Highrise whenever there is a new ticket."
 
-category: Integration
+category: crm
 
 tags: 
 - crm
