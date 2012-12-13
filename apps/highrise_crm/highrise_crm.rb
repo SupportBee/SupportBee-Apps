@@ -8,7 +8,7 @@ module HighriseCRM
       puts "person #{person.inspect}"
       if person
         # Post info as a comment
-        ticket.comment(:html => "#{person.id}")
+        ticket.comment(:html => person_info_html(person))
       end
     end
 
@@ -51,6 +51,16 @@ module HighriseCRM
       Highrise::Base.site = "https://#{settings.subdomain}.highrisehq.com"
       Highrise::Base.user = settings.auth_token
       Highrise::Base.format = :xml
+    end
+
+    def person_info_html(person)
+      html = ""
+      html << "<b> #{person.name} </b><br/>" 
+      html << "#{person.title} " if person.title
+      html << "#{person.company_name}" if person.company_name
+      html << "<br/>"
+      html << "<a href='https://#{settings.subdomain}.highrisehq.com/people/#{person.id}'>View #{person.first_name}'s profile on Highrise</a>"
+      html
     end
   end
 end
