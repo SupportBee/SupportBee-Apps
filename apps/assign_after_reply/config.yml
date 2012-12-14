@@ -16,16 +16,3 @@ developer:
   twitter: prateekdayal
   github: prateekdayal
 
-# The following config keys are used by Action Handlers
-# Set button 'overlay' to true, if you want to have an overlay
-# The valid values for screens are [ticket, all, unassigned, my, groups]
-# Remove the following section if you do not want to define Action Handlers
- 
-action:
-  button:
-    overlay: false
-    screens: 
-    - ticket
-    - all
-    - unassigned
-    label: Send To Assign_after_reply
