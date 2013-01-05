@@ -1,0 +1,18 @@
+name: Highrise
+slug: highrise
+access: public
+
+description: "Pull customer information from Highrise and see it as a comment on the ticket with a link to the Highrise page.
+The app can also update the customer information in Highrise whenever there is a new ticket."
+
+category: crm
+
+tags: 
+- crm
+- highrise
+
+developer: 
+  name: Prateek
+  email: prateekdayal
+  twitter: prateekdayal
+  github: prateekdayal
