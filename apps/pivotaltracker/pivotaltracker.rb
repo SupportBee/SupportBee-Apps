@@ -1,4 +1,4 @@
-module Pivotal
+module Pivotaltracker
   module ActionHandler
     def button
 
@@ -16,7 +16,7 @@ end
 
 
 
-module Pivotal
+module Pivotaltracker
   class Base < SupportBeeApp::Base
     string :token, :required => true, :label => 'Token'
     string :project_id, :required => true, :label => 'Project ID'
