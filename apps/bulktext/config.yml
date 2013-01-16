@@ -2,7 +2,7 @@ name: Bulk SMS
 slug: bulktext
 access: public
 
-description: "Get notifications for ticket/reply/comments on via SMS. You will need a bulksms account that you can signup for by visiting http://www.bulksms.com/"
+description: "Get SMS notifications for new tickets and customer replies via BulkSMS' gateway. You will need a bulksms account that you can signup for by visiting http://www.bulksms.com/"
 
 category: notification
 
