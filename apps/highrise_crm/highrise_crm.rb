@@ -7,21 +7,17 @@ module HighriseCRM
       setup_highrise
       person = find_person(requester)
       if person
-        puts "posting a comment"
         ticket.comment(:html => person_info_html(person))
       else
-        puts "creating a person"
         if person = create_person(requester)
           ticket.comment(:html => new_person_info_html(person))
         end
       end
 
       if person
-        puts "creating a note"
         # Create a note in highrise
         note = Highrise::Note.new(:subject_id => person.id, :subject_type => 'Person', :body => "[New Ticket] <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>")
         note.save
-        puts note.errors.inspect
       end
       return true
     end
@@ -46,12 +42,18 @@ module HighriseCRM
 
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
-      first_name, last_name = requester.name.split
-      person = Highrise::Person.new(:contact_data => {:email => requester.email},
-                                    :first_name => first_name,
-                                    :last_name => last_name) 
+      first_name, last_name = requester.name ? requester.name.split : [requester.email,'']
+      person = Highrise::Person.new(:first_name => first_name,
+                                    :last_name => last_name,
+                                    :contact_data => {
+                                      :email_addresses => [
+                                        :email_address => {:address => requester.email}
+                                      ]
+                                    })
       if person.save
         return person
+      else
+        # Cannot do anything
       end
       return nil
     end
