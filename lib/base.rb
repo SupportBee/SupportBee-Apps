@@ -121,6 +121,10 @@ module SupportBeeApp
         add_to_schema :token, name, options
       end
 
+      def oauth(name, options={})
+        add_to_schema :oauth, name, options
+      end
+
       def event_methods
         event_handler ? event_handler.instance_methods : []
       end

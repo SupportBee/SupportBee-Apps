@@ -18,14 +18,15 @@ module Github
   require 'json'
 
   class Base < SupportBeeApp::Base
+    oauth :github, :required => true
     string :owner, :required => true, :label => 'Owner'
     string :repo, :required => true, :label => 'Repository'
-    string :token, :required => true, :label => 'Token', :hint => 'You can get the API Token following the instructions here - https://help.github.com/articles/creating-an-oauth-token-for-command-line-use'
 
     private
 
     def create_issue(issue_title, description)
-      response = http_post "https://api.github.com/repos/#{settings.owner}/#{settings.repo}/issues?access_token=#{settings.token}" do |req|
+      token = settings.oauth_token || settings.token
+      response = http_post "https://api.github.com/repos/#{settings.owner}/#{settings.repo}/issues?access_token=#{token}" do |req|
         req.body = {:title => issue_title, :body => description}.to_json
       end
     end
