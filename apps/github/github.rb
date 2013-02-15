@@ -18,7 +18,7 @@ module Github
   require 'json'
 
   class Base < SupportBeeApp::Base
-    oauth :github, :required => true
+    oauth  :github, :required => true, :oauth_options => {:scope => "user,repo,gist"}
     string :owner, :required => true, :label => 'Owner'
     string :repo, :required => true, :label => 'Repository'
 

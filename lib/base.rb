@@ -98,10 +98,12 @@ module SupportBeeApp
 
         default = options.delete(:default)
         hint = options.delete(:hint)
+        oauth_options = options.delete(:oauth_options)
 
         schema[name] = { 'type' => type, 'required' => required, 'label' => label }
         schema[name]['default'] = default if default
         schema[name]['hint'] = hint if hint
+        schema[name]['oauth_options'] = oauth_options if type == "oauth" and oauth_options
         schema
     	end
 
