@@ -21,8 +21,7 @@ module SupportBee
         ticket_attributes[:content_attributes][:body_html] = params.delete(:html) if params[:html]
        
         post_body = {:ticket => ticket_attributes}
-        params[:body] = post_body
-        response = api_post(url,auth,params)
+        response = api_post(url,auth,{body: post_body})
         self.new(auth,response.body['ticket'])
       end
   
@@ -43,6 +42,18 @@ module SupportBee
         result.tickets = tickets
         result
       end
+    end
+
+    def update(params={})
+      ticket_attributes = {}
+      if params[:requester_email]
+        ticket_attributes[:requester_email] = params.delete(:requester_email)
+        ticket_attributes[:requester_name] = params.delete(:requester_name)
+      end 
+      ticket_attributes[:subject] = params.delete(:subject) unless params[:subject].blank?
+      put_body = {ticket: ticket_attributes}
+      api_put(url, {body: put_body})
+      refresh
     end
 
     def archive

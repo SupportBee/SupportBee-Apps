@@ -1,0 +1,18 @@
+name: Show Ticket Number
+slug: show_ticket_number
+access: public
+
+description: "We are not big fans of ticket numbers at SupportBee. Especially sending them to customers. But some businesses absolutely need to send out ticket numbers to their customers. If that's the case with your business, use this app. This app edits the subject line and prepends a ticket number (Need help becomes #123123 Need Help). All your replies to the customer will carry the ticket number in the subject of the email once you add this app"
+
+category: Workflow
+
+tags: 
+- number
+- case_id
+- id
+
+developer: 
+  name: Avinasha Shastry
+  email: avinasha@supportbee.com
+  twitter: avishastry
+  github: avishastry

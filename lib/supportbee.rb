@@ -1,6 +1,7 @@
 module SupportBee
    class InvalidAuthToken < ::StandardError; end
    class InvalidSubDomain < ::StandardError; end
+   class InvalidRequestError < ::StandardError; end
 
   class Base
     
