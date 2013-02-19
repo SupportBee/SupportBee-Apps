@@ -1,27 +1,13 @@
-module TicketNumber
+module ShowTicketNumber
   module EventHandler
-    # Handle 'ticket.created' event
     def ticket_created
-      return true
-    end
-
-    # Handle all events
-    def all_events
-      return true
+      ticket = payload.ticket
+      ticket.update(subject: "##{ticket.id} #{ticket.subject}")
     end
   end
 end
 
-module TicketNumber
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
-  end
-end
-
-module TicketNumber
+module ShowTicketNumber
   class Base < SupportBeeApp::Base
     # Define Settings
     # string :name, :required => true, :hint => 'Tell me your name'
