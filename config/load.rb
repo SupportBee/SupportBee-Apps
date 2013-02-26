@@ -17,6 +17,7 @@ Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
 
 app_config = YAML.load_file("#{PLATFORM_ROOT}/config/sba_config.yml")[PLATFORM_ENV]['app_platform']
 SECRET_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/secret_config.yml")[PLATFORM_ENV]
+OMNIAUTH_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/omniauth.yml")[PLATFORM_ENV]
 
 # Override the config of core app to local server if super user
 if ENV['SU']

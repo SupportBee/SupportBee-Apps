@@ -1,0 +1,23 @@
+name: Trello
+slug: trello
+access: public
+
+description: "Send your issues to trello"
+
+category: Integration
+
+tags:
+- trello
+
+developer:
+  name: Stratos Voukelatos
+  email: stratosvoukel@gmail.com
+  twitter: "<Your Twitter Handle>"
+  github: <Your Github Handle>
+
+action:
+  button:
+    overlay: true
+    screens:
+    - ticket
+    label: Send To Trello
