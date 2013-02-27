@@ -15,11 +15,11 @@ module Trello
     string :list, :required => true , :hint => 'Name of Trello list'
 
     def create_card(card_title, description)
-      setup_client
+      @client = setup_client
       board_id = find_board
-      return false unless board
+      return false unless board_id
       list_id = find_or_create_list(board_id)
-      client.create(:card, 'name' => cart_title, 'desc' => description, 'idList' => list_id)
+      @client.create(:card, 'name' => cart_title, 'desc' => description, 'idList' => list_id)
     end
 
     def setup_client
@@ -38,7 +38,7 @@ module Trello
 
     def find_or_create_list(board_id)
       list = (JSON.parse @client.get("/boards/#{board_id}/lists")).select{|b| b.name == settings.list}.first
-      list = @client.create(:list, 'name' => settings.list, 'idBoard' => board.id) unless list
+      list = @client.create(:list, 'name' => settings.list, 'idBoard' => board_id) unless list
       list['id']
     end
 
