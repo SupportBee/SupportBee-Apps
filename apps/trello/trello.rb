@@ -32,12 +32,12 @@ module Trello
     end
 
     def find_board
-      board = (JSON.parse @client.get('/members/me/boards')).select{|b| b['name'] == settings.board}.first
+      board = (JSON.parse @client.get('/members/me/boards')).select{|board| board['name'] == settings.board}.first
       board["id"]
     end
 
     def find_or_create_list(board_id)
-      list = (JSON.parse @client.get("/boards/#{board_id}/lists")).select{|b| b.name == settings.list}.first
+      list = (JSON.parse @client.get("/boards/#{board_id}/lists")).select{|list| list['name'] == settings.list}.first
       list = @client.create(:list, 'name' => settings.list, 'idBoard' => board_id) unless list
       list['id']
     end
