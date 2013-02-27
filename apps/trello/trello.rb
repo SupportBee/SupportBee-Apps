@@ -19,7 +19,7 @@ module Trello
       board_id = find_board
       return false unless board_id
       list_id = find_or_create_list(board_id)
-      @client.create(:card, 'name' => cart_title, 'desc' => description, 'idList' => list_id)
+      @client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => list_id)
     end
 
     def setup_client
