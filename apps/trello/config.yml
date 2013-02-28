@@ -4,7 +4,7 @@ access: public
 
 description: "Send your issues to trello"
 
-category: Integration
+category: project-management 
 
 tags:
 - trello
@@ -12,6 +12,8 @@ tags:
 developer:
   name: Stratos Voukelatos
   email: stratosvoukel@gmail.com
+  twitter: "supportbee"
+  github: binaryactivist
 
 action:
   button:
