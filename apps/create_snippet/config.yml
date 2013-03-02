@@ -1,0 +1,28 @@
+name: Create Snippet
+slug: create_snippet
+access: public
+
+description: 'Allows agents to create snippets from the web app. When adding this app to your help desk, please make sure the field "Acts Behalf of" is set to an admin'
+
+category: workflow
+
+tags: 
+- workflow
+
+developer: 
+  name: Avinasha Shastry
+  email: me@avinasha.com
+  twitter: "@AviShastry"
+  github: avinasha
+
+# The following config keys are used by Action Handlers
+# Set button 'overlay' to true, if you want to have an overlay
+# The valid values for screens are [ticket, all, unassigned, my, groups]
+# Remove the following section if you do not want to define Action Handlers
+ 
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    label: Create a Snippet
