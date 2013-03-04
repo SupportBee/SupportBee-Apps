@@ -6,6 +6,8 @@ module Asana
         response = create_task(payload.overlay.title, payload.overlay.notes)
         return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
       rescue Exception => e
+        puts e.message
+        puts e.backtrace
         return [500, e.message]
       end
 
@@ -25,6 +27,12 @@ module Asana
   class ProjectNotFound < ::StandardError
     def message
       "Cannot find Project"
+    end
+  end
+
+  class Unauthorized < ::StandardError
+    def message
+      "Unauthorized. Please check if you have provided the right token in the app's settings page."
     end
   end
 
@@ -52,6 +60,7 @@ module Asana
 
     def fetch_workspace
       response = http_get "https://app.asana.com/api/1.0/workspaces"
+      raise Unauthorized if response.status == 401
       workspace = response.body['data'].select {|workspace| workspace['name'] == settings.workspace.strip}
       raise WorkspaceNotFound if workspace.empty?
       workspace.first['id']
