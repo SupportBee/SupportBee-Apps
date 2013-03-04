@@ -6,8 +6,6 @@ module Asana
         response = create_task(payload.overlay.title, payload.overlay.notes)
         return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
       rescue Exception => e
-        puts e.message
-        puts e.backtrace
         return [500, e.message]
       end
 
