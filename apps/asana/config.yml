@@ -1,6 +1,6 @@
 name: Asana
 slug: asana
-access: test
+access: public
 
 description: "
 Create a task on Asana!
@@ -15,10 +15,10 @@ tags:
 - project management
 
 developer: 
-  name: Anh Do
-  email: anh@supportbee.com
-  twitter: "@anhnk"
-  github: anhnk
+  name: Avinasha S
+  email: avinasha@supportbee.com
+  twitter: "@AviShastry"
+  github: avinasha
 
 action:
   button:
