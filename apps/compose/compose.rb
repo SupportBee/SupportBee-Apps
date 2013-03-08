@@ -22,7 +22,6 @@ module Compose
         port: settings.server_port.to_i,
         user_name: settings.username,
         password: settings.password,
-        authentication: 'plain',
         enable_starttls_auto: true,
         ssl: ssl
       })
