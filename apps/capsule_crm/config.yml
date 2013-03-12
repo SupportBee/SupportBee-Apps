@@ -12,21 +12,6 @@ tags:
 - tag2
 
 developer: 
-  name: <Your Name>
-  email: <Your Email>
-  twitter: "<Your Twitter Handle>"
+  name: Bopanna D.C
+  email: bops.91@gmail.com
   github: <Your Github Handle>
-
-# The following config keys are used by Action Handlers
-# Set button 'overlay' to true, if you want to have an overlay
-# The valid values for screens are [ticket, all, unassigned, my, groups]
-# Remove the following section if you do not want to define Action Handlers
- 
-action:
-  button:
-    overlay: false
-    screens: 
-    - ticket
-    - all
-    - unassigned
-    label: Send To Capsule_crm
