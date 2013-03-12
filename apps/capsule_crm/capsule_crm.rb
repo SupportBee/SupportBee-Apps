@@ -70,7 +70,7 @@ module CapsuleCrm
       person_id = person['id']
       http_post('https://supportbee.capsulecrm.com/api/party/#{person_id}/history') do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {historyItem:{note:'https://#{auth.account_name}.supportbee.com/tickets/#{ticket.id}'}.to_json
+        req.body = {historyItem:{note:'https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'}.to_json
       end
       return
     end
@@ -78,7 +78,7 @@ module CapsuleCrm
     def note_to_new_person(location)
       http_post "#{location}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {historyItem:{note:'Hello from SupportBee!!!'}}.to_json
+        req.body = {historyItem:{note:'https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'}}.to_json
       end
     end
 
