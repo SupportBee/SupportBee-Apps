@@ -2,20 +2,20 @@ module CapsuleCrm
   module EventHandler
     # Handle 'ticket.created' event
     def ticket_created
-	  ticket = payload.ticket
-	  requester = ticket.requester
-	  http.basic_auth(settings.api_token, "")
-          person = find_person(requester)  
-          unless person
-            person =  create_new_person(requester)
-            html = new_person_info_html(person)
-            #comment_in_ticket(html)
-	  else
-	    html = person_info_html(person)
-            send_note(person)
-            #comment_in_ticket(html)
-	  end
-	  [200, "Ticket sent to Capsulecrm"]
+      ticket = payload.ticket
+      requester = ticket.requester 
+      http.basic_auth(settings.api_token, "")
+      person = find_person(requester)  
+      unless person
+        person =  create_new_person(requester)
+        html = new_person_info_html(person)
+        #comment_in_ticket(html)
+      else
+        html = person_info_html(person)
+        send_note(person)
+        #comment_in_ticket(html)
+      end
+      [200, "Ticket sent to Capsulecrm"]
     end
   end
 end
@@ -70,7 +70,7 @@ module CapsuleCrm
       person_id = person['id']
       http_post('https://supportbee.capsulecrm.com/api/party/#{person_id}/history') do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {historyItem:{note:'Hello from SupportBee!!!'}}.to_json
+        req.body = {historyItem:{note:'https://#{auth.account_name}.supportbee.com/tickets/#{ticket.id}'}.to_json
       end
       return
     end
