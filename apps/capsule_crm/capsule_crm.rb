@@ -9,11 +9,11 @@ module CapsuleCrm
       unless person
         person =  create_new_person(requester)
         html = new_person_info_html(person)
-        #comment_in_ticket(html)
+        #comment_on_ticket(html)
       else
         html = person_info_html(person)
         send_note(person)
-        #comment_in_ticket(html)
+        #comment_on_ticket(html)
       end
       [200, "Ticket sent to Capsulecrm"]
     end
@@ -115,7 +115,7 @@ module CapsuleCrm
       "<a href='https://#{settings.account_name}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
     end
    
-    def comment_in_ticket(html)
+    def comment_on_ticket(html)
       ticket.comment(:html => html)
     end
      
