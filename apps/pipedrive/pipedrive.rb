@@ -30,7 +30,7 @@ end
 
 module Pipedrive
   class Base < SupportBeeApp::Base
-    string :api_token, :required => true, :label => 'Capsule Auth Token'
+    string :api_token, :required => true, :label => 'Pipedrive Auth Token'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person'
 
     white_list :should_create_person
