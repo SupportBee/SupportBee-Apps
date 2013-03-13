@@ -4,7 +4,6 @@ module Pipedrive
     def ticket_created
       ticket = payload.ticket
       requester = ticket.requester
-      http.basic_auth(settings.api_token, "")
       person = find_person(requester)
       if person
         update_note(person)
