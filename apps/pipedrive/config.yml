@@ -1,0 +1,17 @@
+name: Pipedrive
+slug: pipedrive
+access: public
+
+description: "This is to test and a boilerplate app.
+Accepts newline"
+
+category: Integration
+
+tags: 
+- tag1
+- tag2
+
+developer: 
+  name: Bopanna D.C
+  email: bops.91@gmail.com
+  github: gagan-bopannae
