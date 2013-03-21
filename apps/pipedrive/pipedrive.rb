@@ -6,13 +6,13 @@ module Pipedrive
       requester = ticket.requester
       person = find_person(requester)
       if person
-        update_note(person)
-        #comment_on_ticket(person)
+        html = existing_person_info(person)
       else
         person = create_person(requester)
-        update_note(person)
-        #comment_on_ticket(person)
+        html = created_person_info(person) 
       end
+      update_note(person, ticket)
+      comment_on_ticket(html, ticket)
       [200, "Ticket sent"]
     end
   end
@@ -67,15 +67,15 @@ module Pipedrive
       return first_name
     end
    
-    def update_note(person) 
+    def update_note(person, ticket) 
       http_post('http://api.pipedrive.com/v1/notes') do |req|
       req.headers['Content-Type'] = 'application/json'
       req.params['api_token'] = settings.api_token
-      req.body = {person_id:person['id'],content:'hi'}.to_json
+      req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
       end
     end
 
-    def comment_on_ticket(html)
+    def comment_on_ticket(html, ticket)
       ticket.comment(:html => html)
     end
  
@@ -96,6 +96,10 @@ module Pipedrive
     
     def person_link(person)
       "<a href='https://app.pipedrive.com/person/details/#{person['id']}'>View #{person['name']}'s profile on Pipedrive</a>"
+    end
+   
+    def generate_note_content(ticket)
+      note = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
   end
