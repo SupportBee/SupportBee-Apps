@@ -7,14 +7,13 @@ module CapsuleCrm
       http.basic_auth(settings.api_token, "")
       person = find_person(requester)  
       unless person
-        person =  create_new_person(requester)
+        person =  create_new_person(ticket, requester)
         html = new_person_info_html(person)
-        #comment_on_ticket(html)
       else
         html = person_info_html(person)
-        send_note(person)
-        #comment_on_ticket(html)
+        send_note(ticket, person)
       end
+      comment_on_ticket(ticket, html)
       [200, "Ticket sent to Capsulecrm"]
     end
   end
@@ -45,20 +44,20 @@ module CapsuleCrm
       people = response.body['parties']['person']
       if response.body['parties']==first_name
         person =  people.select{|pe| pe['firstName'] == 'first_name'}.first
+      else
+        return nil
       end
-      return nil
     end
  
-    def create_new_person(requester)
+    def create_new_person(ticket, requester)
       location = create_person(requester)
-      note_to_new_person(location)
+      note_to_new_person(location, ticket)
       person = get_person(location)
     end
 
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
       first_name = split_name(requester)
-      puts first_name
       response = http_post('https://supportbee.capsulecrm.com/api/person') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {person:{firstName:first_name}}.to_json
@@ -66,24 +65,22 @@ module CapsuleCrm
       location = response['location']
     end
 
-    def send_note(person)
+    def send_note( ticket, person)
       person_id = person['id']
       http_post('https://supportbee.capsulecrm.com/api/party/#{person_id}/history') do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {historyItem:{note:'https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'}.to_json
+        req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
-      return
     end
     
-    def note_to_new_person(location)
+    def note_to_new_person(location, ticket)
       http_post "#{location}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {historyItem:{note:'https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'}}.to_json
+        req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
     end
 
     def split_name(requester)
-      puts requester.name
       first_name, last_name = requester.name ? requester.name.split : [requester.email,'']
       return first_name
     end
@@ -115,10 +112,14 @@ module CapsuleCrm
       "<a href='https://#{settings.account_name}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
     end
    
-    def comment_on_ticket(html)
-      ticket.comment(:html => html)
+    def comment_on_ticket(ticket, html)
+        ticket.comment(:html => html)
+    end
+   
+    def generate_note_content(ticket)
+      note = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
      
-
   end
  end
+
