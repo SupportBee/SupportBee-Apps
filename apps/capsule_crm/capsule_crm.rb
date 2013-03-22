@@ -38,12 +38,14 @@ module CapsuleCrm
 
     def find_person(requester)
       first_name = split_name(requester)
-      response = http_get('https://supportbee.capsulecrm.com/api/party') do |req|
+      response = http_get "https://#{settings.account_name}.capsulecrm.com/api/party" do |req|
         req.headers['Accept'] = 'application/json'
+        req.params['email'] = requester.email
       end
-      people = response.body['parties']['person']
-      if response.body['parties']==first_name
-        person =  people.select{|pe| pe['firstName'] == 'first_name'}.first
+      body = response.body
+      person = body['parties']['person']
+      if person
+        return person
       else
         return nil
       end
@@ -58,16 +60,16 @@ module CapsuleCrm
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
       first_name = split_name(requester)
-      response = http_post('https://supportbee.capsulecrm.com/api/person') do |req|
+      response = http_post "https://#{settings.account_name}.capsulecrm.com/api/person" do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {person:{firstName:first_name}}.to_json
       end
       location = response['location']
     end
 
-    def send_note( ticket, person)
+    def send_note(ticket, person)
       person_id = person['id']
-      http_post('https://supportbee.capsulecrm.com/api/party/#{person_id}/history') do |req|
+      http_post "https://#{settings.account_name}.capsulecrm.com/api/party/#{person_id}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
@@ -93,11 +95,6 @@ module CapsuleCrm
     end
       
     def person_info_html(person)
-      html = ""
-      html << "<br/>"
-      html << "#{person['firstName']}"
-      html << "#{person['contact']} " if person['contact']
-      html << "<br/>"
       html << person_link(person)
       html
     end
