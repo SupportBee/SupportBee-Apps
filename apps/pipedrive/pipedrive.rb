@@ -44,7 +44,6 @@ module Pipedrive
       body = response.body['data']
       person = body.select{|pe| pe['email'] == requester.email}.first
       if person
-        puts person
         return person
       else 
         return nil
