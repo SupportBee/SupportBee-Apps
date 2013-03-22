@@ -36,14 +36,16 @@ module Pipedrive
 
     def find_person(requester)
       first_name = split_name(requester)
-      person = http_get('http://api.pipedrive.com/v1/persons/find') do |req|
+      response = http_get('http://api.pipedrive.com/v1/persons/find') do |req|
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.params['term'] = 'goli'
+        req.params['term'] = first_name
       end 
- 
-      if person.body['data']
-        return person.body['data'].first
+      body = response.body['data']
+      person = body.select{|pe| pe['email'] == requester.email}.first
+      if person
+        puts person
+        return person
       else 
         return nil
       end
@@ -52,7 +54,6 @@ module Pipedrive
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
       first_name = split_name(requester)
-      puts first_name
       person = http_post('http://api.pipedrive.com/v1/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
@@ -62,7 +63,6 @@ module Pipedrive
     end
 
     def split_name(requester)
-      puts requester.name
       first_name, last_name = requester.name ? requester.name.split : [requester.email,'']
       return first_name
     end
@@ -81,9 +81,6 @@ module Pipedrive
  
     def existing_person_info(person)
       html = ""
-      html << "<b> #{person['name']} </b><br/>" 
-      html << "#{person['email']} " if person['email']
-      html << "<br/>"
       html << person_link(person)
       html
     end
