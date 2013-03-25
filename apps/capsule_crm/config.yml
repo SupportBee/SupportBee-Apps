@@ -1,6 +1,6 @@
 name: Capsule_crm
 slug: capsule_crm
-access: public
+access: test
 
 description: "This is to test and a boilerplate app.
 Accepts newline"
