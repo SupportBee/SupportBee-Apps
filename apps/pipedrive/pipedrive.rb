@@ -1,36 +1,36 @@
 module Pipedrive
   module EventHandler
-    # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
       requester = ticket.requester
-      person = find_person(requester)
-      if person
-        html = existing_person_info(person)
-      else
-        person = create_person(requester)
-        html = created_person_info(person) 
+      begin
+        person = find_person(requester)
+        html = ''
+        
+        if person
+          html = existing_person_info(person)
+        else
+          person = create_person(requester)
+          html = created_person_info(person) if person
+        end
+
+        if person
+          update_note(person, ticket)
+          comment_on_ticket(html, ticket)
+        end
+      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
+        [500, e.message]
       end
-      update_note(person, ticket)
-      comment_on_ticket(html, ticket)
       [200, "Ticket sent"]
     end
   end
 end
 
 module Pipedrive
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
-  end
-end
-
-module Pipedrive
   class Base < SupportBeeApp::Base
-    string :api_token, :required => true, :label => 'Pipedrive Auth Token'
-    boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person'
+    string  :api_token, :required => true, :label => 'Pipedrive Auth Token'
+    boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
 
     white_list :should_create_person
 
@@ -42,12 +42,8 @@ module Pipedrive
         req.params['term'] = first_name
       end 
       body = response.body['data']
-      person = body.select{|pe| pe['email'] == requester.email}.first
-      if person
-        return person
-      else 
-        return nil
-      end
+      person = body.select{|pe| pe['email'] == requester.email}.first if body
+      person ? person : nil
     end
     
     def create_person(requester)
@@ -56,21 +52,21 @@ module Pipedrive
       person = http_post('http://api.pipedrive.com/v1/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.body = {name:first_name}.to_json
+        req.body = {name:first_name, email:[requester.email]}.to_json
       end
       return person.body['data']
     end
 
     def split_name(requester)
-      first_name, last_name = requester.name ? requester.name.split : [requester.email,'']
+      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email,'']
       return first_name
     end
    
     def update_note(person, ticket) 
       http_post('http://api.pipedrive.com/v1/notes') do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.params['api_token'] = settings.api_token
-      req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
+        req.headers['Content-Type'] = 'application/json'
+        req.params['api_token'] = settings.api_token
+        req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
       end
     end
 
@@ -85,7 +81,7 @@ module Pipedrive
     end
 
     def created_person_info(person)
-      html = "Added <b> #{person['name']} </b> to Pipedrive... " 
+      html = "Added <b> #{person['name']} </b> to Pipedrive...<br/> " 
       html << person_link(person)
       html
     end
