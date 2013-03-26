@@ -6,6 +6,8 @@ module CapsuleCrm
       requester = ticket.requester 
       http.basic_auth(settings.api_token, "")
       person = find_person(requester)  
+       
+      begin
       unless person
         person =  create_new_person(ticket, requester)
         html = new_person_info_html(person)
@@ -13,6 +15,11 @@ module CapsuleCrm
         html = person_info_html(person)
         send_note(ticket, person)
       end
+      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
+        [500, e.message]
+      end
+      
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Capsulecrm"]
     end
@@ -32,9 +39,9 @@ module CapsuleCrm
   class Base < SupportBeeApp::Base
     string :api_token, :required => true, :label => 'Capsule Auth Token'
     string :account_name, :required => true, :label => 'Capsule Account Name'
-    boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person'
+    boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
 	
-    white_list :account_name, :should_create_person
+    white_list :should_create_person
 
     def find_person(requester)
       first_name = split_name(requester)
@@ -43,12 +50,8 @@ module CapsuleCrm
         req.params['email'] = requester.email
       end
       body = response.body
-      person = body['parties']['person']
-      if person
-        return person
-      else
-        return nil
-      end
+      person = body['parties']['person'] if body
+      person ? person : nil
     end
  
     def create_new_person(ticket, requester)
@@ -83,7 +86,7 @@ module CapsuleCrm
     end
 
     def split_name(requester)
-      first_name, last_name = requester.name ? requester.name.split : [requester.email,'']
+      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email,'']
       return first_name
     end
 
@@ -95,12 +98,16 @@ module CapsuleCrm
     end
       
     def person_info_html(person)
+      html = ""
+      html << "<b> #{person['name']} </b><br/>" 
+      html << "#{person['title']} " if person['title']
+      html << "<br/>
       html << person_link(person)
       html
     end
 
     def new_person_info_html(person)
-      html = "Added #{person['firstName']} to Capsule - "
+      html = "Added #{person['firstName']} to Capsule...<br/> "
       html << person_link(person)
       html
     end
