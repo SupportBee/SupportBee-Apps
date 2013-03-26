@@ -101,7 +101,7 @@ module CapsuleCrm
       html = ""
       html << "<b> #{person['firstName']} </b><br/>" 
       html << "#{person['title']} " if person['title']
-      html << "<br/>
+      html << "<br/>"
       html << person_link(person)
       html
     end
