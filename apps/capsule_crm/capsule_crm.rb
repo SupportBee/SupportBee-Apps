@@ -65,7 +65,7 @@ module CapsuleCrm
       first_name = split_name(requester)
       response = http_post "https://#{settings.account_name}.capsulecrm.com/api/person" do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {person:{firstName:first_name}}.to_json
+        req.body = {person:{firstName:first_name, contacts:{email:{emaiAddress:requester.email}}}}.to_json
       end
       location = response['location']
     end
@@ -99,7 +99,7 @@ module CapsuleCrm
       
     def person_info_html(person)
       html = ""
-      html << "<b> #{person['name']} </b><br/>" 
+      html << "<b> #{person['firstName']} </b><br/>" 
       html << "#{person['title']} " if person['title']
       html << "<br/>
       html << person_link(person)
