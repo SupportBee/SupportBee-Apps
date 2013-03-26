@@ -76,6 +76,8 @@ module Pipedrive
  
     def existing_person_info(person)
       html = ""
+      html << "<b> #{person['name']} </b><br/>" 
+      html << "<br/>"
       html << person_link(person)
       html
     end
