@@ -65,7 +65,7 @@ module CapsuleCrm
       first_name = split_name(requester)
       response = http_post "https://#{settings.account_name}.capsulecrm.com/api/person" do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {person:{firstName:first_name, contacts:{email:{emaiAddress:requester.email}}}}.to_json
+        req.body = {person:{firstName:first_name, contacts:{email:{emailAddress:requester.email}}}}.to_json
       end
       location = response['location']
     end
@@ -121,7 +121,7 @@ module CapsuleCrm
     end
    
     def generate_note_content(ticket)
-      note = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
      
   end
