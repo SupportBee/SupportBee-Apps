@@ -1,0 +1,17 @@
+name: Flowdock
+slug: flowdock
+access: public
+
+description: "Send new ticket, reply and comment notifications to Flowdock"
+
+category: notification
+
+tags: 
+- flowdock
+- chat
+
+developer: 
+  name: Prateek
+  email: prateek@supportbee.com
+  twitter: "@prateekdayal"
+  github: prateekdayal
