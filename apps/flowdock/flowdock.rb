@@ -70,7 +70,7 @@ module Flowdock
     end
 
     def get_room(poster)
-      @client = Flowdock::Flow.new(:api_token => settings.token,
+      @client = Flowdock::Flow.new(:api_token => settings.token.strip,
         :source => "SupportBee", :from => {:name => poster.name, :address => poster.email})
     end
   end
