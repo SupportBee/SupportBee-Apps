@@ -5,16 +5,17 @@ module CapsuleCrm
       ticket = payload.ticket
       requester = ticket.requester 
       http.basic_auth(settings.api_token, "")
-      person = find_person(requester)  
-       
+
       begin
-      unless person
-        person =  create_new_person(ticket, requester)
-        html = new_person_info_html(person)
-      else
-        html = person_info_html(person)
-        send_note(ticket, person)
-      end
+        person = find_person(requester)  
+        unless person
+          return [200, 'Contact creation deisabled'] unless settings.should_create_person.to_s == '1'
+          person =  create_new_person(ticket, requester)
+          html = new_person_info_html(person)
+        else
+          html = person_info_html(person)
+          send_note(ticket, person)
+        end
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
@@ -27,25 +28,16 @@ module CapsuleCrm
 end
 
 module CapsuleCrm
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
-  end
-end
-
-module CapsuleCrm
   class Base < SupportBeeApp::Base
     string :api_token, :required => true, :label => 'Capsule Auth Token'
-    string :account_name, :required => true, :label => 'Capsule Account Name'
+    string :subdomain, :required => true
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
 	
-    white_list :should_create_person
+    white_list :should_create_person, :subdomain
 
     def find_person(requester)
       first_name = split_name(requester)
-      response = http_get "https://#{settings.account_name}.capsulecrm.com/api/party" do |req|
+      response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/party" do |req|
         req.headers['Accept'] = 'application/json'
         req.params['email'] = requester.email
       end
@@ -57,13 +49,13 @@ module CapsuleCrm
     def create_new_person(ticket, requester)
       location = create_person(requester)
       note_to_new_person(location, ticket)
-      person = get_person(location)
+      get_person(location)
     end
 
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
       first_name = split_name(requester)
-      response = http_post "https://#{settings.account_name}.capsulecrm.com/api/person" do |req|
+      response = http_post "https://#{settings.subdomain}.capsulecrm.com/api/person" do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {person:{firstName:first_name, contacts:{email:{emailAddress:requester.email}}}}.to_json
       end
@@ -72,7 +64,7 @@ module CapsuleCrm
 
     def send_note(ticket, person)
       person_id = person['id']
-      http_post "https://#{settings.account_name}.capsulecrm.com/api/party/#{person_id}/history" do |req|
+      http_post "https://#{settings.subdomain}.capsulecrm.com/api/party/#{person_id}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
@@ -113,7 +105,7 @@ module CapsuleCrm
     end
 
     def person_link(person)
-      "<a href='https://#{settings.account_name}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
+      "<a href='https://#{settings.subdomain}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
     end
    
     def comment_on_ticket(ticket, html)
