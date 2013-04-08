@@ -33,6 +33,9 @@ GEM
       faraday (>= 0.7.4, < 0.9)
     ffi (1.1.5)
     flexmock (0.9.0)
+    flowdock (0.3.0)
+      httparty (~> 0.7)
+      multi_json
     guard (1.5.0)
       listen (>= 0.4.2)
       lumberjack (>= 1.0.2)
@@ -133,6 +136,7 @@ DEPENDENCIES
   faraday
   faraday_middleware
   flexmock
+  flowdock
   guard-shotgun!
   haml
   hashie
