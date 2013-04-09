@@ -42,16 +42,7 @@ module CapsuleCrm
         req.params['email'] = requester.email
       end
       body = response.body
-      party = body['parties']['person'] if body
-      puts party
-
-      if party.is_a?(Array)
-        person = extract_person(party, first_name)
-        puts person
-      else
-        person = party
-      end
-
+      person = body['parties']['person'] if body
       person ? person : nil
     end
  
@@ -69,11 +60,6 @@ module CapsuleCrm
         req.body = {person:{firstName:first_name, contacts:{email:{emailAddress:requester.email}}}}.to_json
       end
       location = response['location']
-    end
-
-    def extract_person(party, first_name)
-      person = party.select{|pe| pe['firstName'] == first_name}.first
-      person ? person : party.first
     end
 
     def send_note(ticket, person)
@@ -106,6 +92,7 @@ module CapsuleCrm
     def person_info_html(person)
       html = ""
       html << "<b> #{person['firstName']} </b><br/>" 
+      html << "#{person['title']} " if person['title']
       html << "<br/>"
       html << person_link(person)
       html
