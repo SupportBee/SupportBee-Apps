@@ -1,0 +1,26 @@
+name: Jira
+slug: jira
+access: public
+
+description: "This is to test and a boilerplate app.
+Accepts newline"
+
+category: project-management
+
+tags:
+- jira
+- project management
+
+developer: 
+  name: Bopanna D.C
+  email: bops.91@gmail.com
+  github: bopanna
+ 
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    - all
+    - unassigned
+    label: Send To Jira

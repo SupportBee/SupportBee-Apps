@@ -1,0 +1,18 @@
+<h3>Edit the Issue Details</h3>
+{{#each tickets}}
+  {{#ticket}}
+    <ol>
+      <li>
+        <label for="title">Issue Summary</label>
+        <input name="title" value="{{subject}}">
+      </li>
+      <li>
+        <label for="description">Issue Description</label>
+        <textarea name="description">
+{{content.text}} \n
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </li>
+    </ol>
+  {{/ticket}}
+{{/each}}
