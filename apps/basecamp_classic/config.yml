@@ -1,9 +1,8 @@
-name: Basecamp_classic
+name: Basecamp Classic
 slug: basecamp_classic
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "Send ticket details to an Basecamp Classic project. The ticket is saved as a message on Basecamp"
 
 category: project-management
 
@@ -22,4 +21,4 @@ action:
     screens: 
     - ticket
     - unassigned
-    label: Send To Basecamp_classic
+    label: Send To Basecamp Classic
