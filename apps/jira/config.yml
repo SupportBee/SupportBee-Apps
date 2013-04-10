@@ -1,9 +1,8 @@
-name: Jira
+name: JIRA
 slug: jira
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "Send ticket details to a JIRA project. The ticket is saved as an issue type you specify on JIRA"
 
 category: project-management
 
@@ -23,4 +22,4 @@ action:
     - ticket
     - all
     - unassigned
-    label: Send To Jira
+    label: Send To JIRA
