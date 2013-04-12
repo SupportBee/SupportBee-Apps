@@ -14,6 +14,8 @@ gem 'mail'
 gem 'thor'
 gem 'nokogiri'
 gem 'htmlentities'
+gem 'redis'
+gem 'redis-namespace'
 
 # App Gems
 gem 'tinder'
@@ -29,3 +31,4 @@ gem 'execjs', :group => :development
 gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test
 gem 'flexmock', :group => :test
+gem 'mock_redis', :group => :test

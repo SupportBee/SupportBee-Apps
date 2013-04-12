@@ -171,6 +171,7 @@ module SupportBeeApp
 		attr_reader :payload
     attr_reader :auth
     attr_reader :settings
+    attr_reader :store
 
     attr_writer :ca_file
 
@@ -179,6 +180,7 @@ module SupportBeeApp
       @auth = @data[:auth] || {}
       @settings = @data[:settings] || {}
       @payload = pre_process_payload(payload)
+      @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
   	end
 
     def trigger_event(event)
@@ -227,6 +229,10 @@ module SupportBeeApp
 
     def log_action_message(message='')
       log_message(@action, message)
+    end
+
+    def redis_key_prefix
+      "#{self.class.slug}:#{auth.subdomain}"
     end
 
     private

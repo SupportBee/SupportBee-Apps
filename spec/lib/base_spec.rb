@@ -65,6 +65,12 @@ describe SupportBeeApp::Base do
       create_dummy_instance.should respond_to('button')
     end
 
+    it "should have a store" do
+      app = create_dummy_instance 
+      app.store.should be_kind_of(SupportBeeApp::Store)
+      app.store.redis_key_prefix.should == "#{app.class.slug}:#{app.auth.subdomain}"
+    end
+
     describe "Receive" do
       context "Event" do
         it "should trigger an event" do

@@ -4,6 +4,9 @@ development:
     core_app_port:
     core_app_protocol: https
     cloudfront_base_url: http://localhost:9292
+    redis:
+      host: '127.0.0.1'
+      db: 1
 
 test:
   app_platform:
@@ -11,3 +14,6 @@ test:
     core_app_port:
     core_app_protocol: https
     cloudfront_base_url: http://localhost:9292
+    redis:
+      host: '127.0.0.1'
+      db: 2

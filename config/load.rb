@@ -34,4 +34,15 @@ log_url = "#{log_dir}/#{log_filename}"
 FileUtils.mkdir(log_dir) unless File.exists?(log_dir)
 LOGGER = Logger.new(log_url)
 
+redis_options = APP_CONFIG['redis']
+redis = nil
+if PLATFORM_ENV == 'test'
+  require 'mock_redis'
+  redis = MockRedis.new(db: redis_options['db'])
+else
+  redis = Redis.new(host: redis_options['host'], db: redis_options['db'])
+  redis = Redis::Namespace.new(:ap, redis: redis)
+end
+REDIS = redis
+
 require "#{PLATFORM_ROOT}/run_app"
