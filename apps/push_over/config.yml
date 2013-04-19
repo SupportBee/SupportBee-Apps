@@ -1,0 +1,17 @@
+name: PushOver
+slug: push_over
+access: public
+
+description: "Get Push notifications on your iPhone for new tickets and customer replies via Pushover."
+
+category: notification
+
+tags: 
+- iphone
+- notification
+
+developer: 
+  name: Sravan Reddy
+  email: sravfeyn@gmail.com
+  twitter: "@sravfeyn"
+  github: <@sravfeyn>
