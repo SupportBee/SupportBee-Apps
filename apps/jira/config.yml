@@ -2,7 +2,7 @@ name: "JIRA OnDemand"
 slug: jira
 access: public
 
-description: "Send ticket details to a JIRA project. The ticket is saved as an issue type you specify on JIRA"
+description: "Send ticket details to a JIRA OnDemand project. The ticket is saved as an issue type you specify on JIRA"
 
 category: project-management
 

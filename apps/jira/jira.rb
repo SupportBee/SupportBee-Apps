@@ -27,7 +27,7 @@ module Jira
 	      req.headers['Content-Type'] = 'application/json'
         req.body = {fields:{project:{key:settings.project_key}, summary:summary, description:description, issuetype:{name:settings.issue_type}}}.to_json
       end
-      puts "#########{response.body}"
+
       if response.status == 201
         result = [200, "Ticket sent to JIRA"] if response.status == 201
       elsif response.status == 403
@@ -35,6 +35,7 @@ module Jira
       else
         result = [500, "Error: #{response.body['errors'].first.last}"]
       end
+
       result
     end
   end
