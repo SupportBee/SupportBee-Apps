@@ -16,6 +16,7 @@ gem 'nokogiri'
 gem 'htmlentities'
 gem 'redis'
 gem 'redis-namespace'
+gem 'savon', "~> 2.1.0"
 
 # App Gems
 gem 'tinder'
