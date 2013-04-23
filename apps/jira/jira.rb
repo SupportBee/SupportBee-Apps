@@ -23,15 +23,22 @@ module Jira
     private
 
     def create_issue(summary, description)
-      response = http_post "https://#{settings.subdomain}.atlassian.net/rest/api/2/issue" do |req|
-	      req.headers['Content-Type'] = 'application/json'
-        req.body = {fields:{project:{key:settings.project_key}, summary:summary, description:description, issuetype:{name:settings.issue_type}}}.to_json
+
+      begin
+        response = http_post "https://#{settings.subdomain}.atlassian.net/rest/api/2/issue" do |req|
+          req.headers['Content-Type'] = 'application/json'
+          req.body = {fields:{project:{key:settings.project_key}, summary:summary, description:description, issuetype:{name:settings.issue_type}}}.to_json
+        end
+      rescue Faraday::Error::ConnectionFailed => e
+        return [500, "Cannot connect to your JIRA account. Please check the 'Subdomain' setting"]
       end
 
       if response.status == 201
         result = [200, "Ticket sent to JIRA"] if response.status == 201
+      elsif response.status == 401
+        result = [500, "Unauthorized. Please check JIRA username"]
       elsif response.status == 403
-        result = [500, "Forbidden. Please check username/password"]
+        result = [500, "Forbidden. Please check JIRA password"]
       else
         result = [500, "Error: #{response.body['errors'].first.last}"]
       end
