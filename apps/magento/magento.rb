@@ -28,15 +28,6 @@ module Magento
 end
 
 module Magento
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
-  end
-end
-
-module Magento
   class Base < SupportBeeApp::Base
     string :subdomain, :required => true, :label => 'Enter Subdomain'
     string :username, :required => true, :label => 'Enter API User Name'
@@ -67,7 +58,7 @@ module Magento
     end
  
     def generate_comment(ticket)
-      "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      "[Support Ticket] https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
     def order_info_html(order, client, session_id)
@@ -75,7 +66,9 @@ module Magento
       html = ""
       html = "Ordered Items:"
       html << "<br/>"
-      order_items.select{|p| html << p[:name] + "<br/>"} if order_items
+      html << "<ul>"
+      order_items.select{|p| html << "<li>" + p[:name] + "</li>"} if order_items
+      html << "</ul>"
       html << order_info_link(order)
       html
     end
