@@ -32,6 +32,8 @@ module Magento
     string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your Magento URL is "https://something.gostorego.com" then your Subdomain value is "something"'
     string :username, :required => true, :label => 'Enter API User Name', :hint => 'See how to create an api user and key in "http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/api_user/index"'
     string :api_key, :required => true, :label => 'Enter API Key'
+
+    white_list :subdomain
  
     def get_client
       client = Savon.client(wsdl: "http://#{settings.subdomain}.gostorego.com/api/v2_soap?wsdl=1", ssl_ca_cert_file: "./config/cacert.pem")
