@@ -29,13 +29,10 @@ end
 
 module Magento
   class Base < SupportBeeApp::Base
-    string :subdomain, :required => true, :label => 'Enter Subdomain'
-    string :username, :required => true, :label => 'Enter API User Name'
-    string :api_key, :required => true, :label => 'Capsule Auth Token'
+    string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your Magento URL is "https://something.gostorego.com" then your Subdomain value is "something"'
+    string :username, :required => true, :label => 'Enter API User Name', :hint => 'See how to create an api user and key in "http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/api_user/index"'
+    string :api_key, :required => true, :label => 'Enter API Key'
  
-    # White list settings for logging
-    # white_list :name, :username
-    
     def get_client
       client = Savon.client(wsdl: "http://#{settings.subdomain}.gostorego.com/api/v2_soap?wsdl=1", ssl_ca_cert_file: "./config/cacert.pem")
     end
@@ -50,7 +47,7 @@ module Magento
     def get_order(client, session_id, requester)
         result = client.call(:sales_order_list){message(:sessionId => session_id, :resourcePath => 'sales_order.list')}
         order_list = result.body[:sales_order_list_response][:result][:item] if result
-        order = order_list.select{|order| order[:customer_email] == requester.email}.first if order_list
+        order = order_list.select{|order| order[:customer_email] == requester.email}.last if order_list
     end
    
     def send_new_comment(client, session_id, ticket, order)
@@ -64,11 +61,23 @@ module Magento
     def order_info_html(order, client, session_id)
       order_items = get_ordered_items(order, client, session_id)
       html = ""
-      html = "Ordered Items:"
+      html << "Order Details"
+      html << "<br/>Status:"
+      html << "<br/>#{order[:status]}"
+      html << "<br/>Ordered Items:"
       html << "<br/>"
       html << "<ul>"
       order_items.select{|p| html << "<li>" + p[:name] + "</li>"} if order_items
       html << "</ul>"
+      html << "Subtotal:"
+      html << "<br/>#{order[:subtotal]}"
+      html << "<br/>Total:"
+      html << "<br/>#{order[:grand_total]}"
+      html << "<br/>Date Created:"
+      html << "<br/>#{order[:created_at]}"
+      html << "<br/><br/>" 
+      html << "Order Link"
+      html << "<br/>"
       html << order_info_link(order)
       html
     end
