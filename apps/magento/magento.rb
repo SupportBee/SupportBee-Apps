@@ -6,16 +6,16 @@ module Magento
 
       begin
         client = get_client
-        session_id = get_session_id(client)
-
+        response = perform_client_login(client)
+        session_id = get_session_id(response)
         if session_id
-	  order = get_order(client, session_id, requester)
-          html = order_info_html(order, client, session_id)
-          send_new_comment(client, session_id, ticket, order)
+	  orders = get_order(client, session_id, requester)
+          html = order_info_html(orders, client, session_id)
+          send_new_comment(client, session_id, ticket, orders)
         else
-          return [500, "Ticket not sent. Unable to create new session"]
+          puts response
+          return response
         end
-
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
@@ -32,27 +32,43 @@ module Magento
     string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your Magento URL is "https://something.gostorego.com" then your Subdomain value is "something"'
     string :username, :required => true, :label => 'Enter API User Name', :hint => 'See how to create an api user and key in "http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/api_user/index"'
     string :api_key, :required => true, :label => 'Enter API Key'
-
-    white_list :subdomain
- 
+    
     def get_client
       client = Savon.client(wsdl: "http://#{settings.subdomain}.gostorego.com/api/v2_soap?wsdl=1", ssl_ca_cert_file: "./config/cacert.pem")
     end
 
-    def get_session_id(client)
+    def perform_client_login(client)
       username = settings.username.to_s
       api_key  = settings.api_key.to_s
+
+      begin
       response = client.call(:login){message(username: username, apiKey: api_key)}
-      session_id = response.body[:login_response][:login_return]
+      rescue Wasabi::Resolver::HTTPError => e
+        return [500, "Request to get the wsdl document failed."]
+      rescue Savon::SOAPFault => e
+        return [500, "Access Denied. Entered API key or user name is invalid"]
+      end
+
+    end
+  
+    def get_session_id(response)
+
+      begin
+      session_id = response.body[:login_response][:login_return] if response
+      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
+      end
+        
     end
 
     def get_order(client, session_id, requester)
         result = client.call(:sales_order_list){message(:sessionId => session_id, :resourcePath => 'sales_order.list')}
         order_list = result.body[:sales_order_list_response][:result][:item] if result
-        order = order_list.select{|order| order[:customer_email] == requester.email}.last if order_list
+        orders = order_list.select{|order| order[:customer_email] == requester.email} if order_list
     end
    
-    def send_new_comment(client, session_id, ticket, order)
+    def send_new_comment(client, session_id, ticket, orders)
+      order = orders.last
       client.call(:sales_order_add_comment){message(:sessionId => session_id, :orderIncrementId => order[:increment_id], :resourcePath => 'sales_order.addComment', :comment => generate_comment(ticket), :status => 'pending')}
     end
  
@@ -60,31 +76,34 @@ module Magento
       "[Support Ticket] https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
-    def order_info_html(order, client, session_id)
-      order_items = get_ordered_items(order, client, session_id)
+    def order_info_html(orders, client, session_id)
+      order_items = get_ordered_items(orders, client, session_id)
+      order = orders.last
+      date = DateTime.parse(order[:created_at])
+      formatted_date = date.strftime('%a %b %d %H:%M:%S')
       html = ""
-      html << "Order Details"
-      html << "<br/>Status:"
-      html << "<br/>#{order[:status]}"
-      html << "<br/>Ordered Items:"
-      html << "<br/>"
-      html << "<ul>"
-      order_items.select{|p| html << "<li>" + p[:name] + "</li>"} if order_items
-      html << "</ul>"
-      html << "Subtotal:"
-      html << "<br/>#{order[:subtotal]}"
-      html << "<br/>Total:"
-      html << "<br/>#{order[:grand_total]}"
-      html << "<br/>Date Created:"
-      html << "<br/>#{order[:created_at]}"
-      html << "<br/><br/>" 
-      html << "Order Link"
-      html << "<br/>"
-      html << order_info_link(order)
+      html << "<h2>Order Details<p>"
+      html << "<p>Order Count: #{orders.count}" 
+      html << "<p>Ordered Items:"
+      order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">&nbsp;#{item[:name]}"} if order_items
+      html << "<p><p><table>"
+      html << "<tr><th><h5>Status:"
+      html << "</th><th><h5>Subtotal:"
+      html << "</th><th><h5>Total:"
+      html << "</th><th><h5>Date Created:"
+      html << "</th></tr><tr><td>#{order[:status]}"
+      html << "</td><td>#{order[:subtotal].to_f}"
+      html << "</td><td>#{order[:grand_total].to_f}"
+      html << "</td><td>#{formatted_date}"
+      html << "</td></tr>"
+      html << "</table>"
+      html << "<p>"
+      html << ">>" + order_info_link(order)
       html
     end
 
-    def get_ordered_items(order, client, session_id)
+    def get_ordered_items(orders, client, session_id)
+      order = orders.last
       result = client.call(:sales_order_info){message(:sessionId => session_id, :orderIncrementId => order[:increment_id], :resourcePath => 'sales_order.info')}
       order_items = result.body[:sales_order_info_response][:result][:items][:item] if result
     end
