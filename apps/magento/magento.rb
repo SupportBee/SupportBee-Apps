@@ -13,7 +13,6 @@ module Magento
           html = order_info_html(orders, client, session_id)
           send_new_comment(client, session_id, ticket, orders)
         else
-          puts response
           return response
         end
       rescue Exception => e
@@ -42,7 +41,7 @@ module Magento
       api_key  = settings.api_key.to_s
 
       begin
-      response = client.call(:login){message(username: username, apiKey: api_key)}
+        response = client.call(:login){message(username: username, apiKey: api_key)}
       rescue Wasabi::Resolver::HTTPError => e
         return [500, "Request to get the wsdl document failed."]
       rescue Savon::SOAPFault => e
@@ -54,7 +53,7 @@ module Magento
     def get_session_id(response)
 
       begin
-      session_id = response.body[:login_response][:login_return] if response
+        session_id = response.body[:login_response][:login_return] if response
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
       end
@@ -62,9 +61,9 @@ module Magento
     end
 
     def get_order(client, session_id, requester)
-        result = client.call(:sales_order_list){message(:sessionId => session_id, :resourcePath => 'sales_order.list')}
-        order_list = result.body[:sales_order_list_response][:result][:item] if result
-        orders = order_list.select{|order| order[:customer_email] == requester.email} if order_list
+      result = client.call(:sales_order_list){message(:sessionId => session_id, :resourcePath => 'sales_order.list')}
+      order_list = result.body[:sales_order_list_response][:result][:item] if result
+      orders = order_list.select{|order| order[:customer_email] == requester.email} if order_list
     end
    
     def send_new_comment(client, session_id, ticket, orders)
@@ -82,10 +81,10 @@ module Magento
       date = DateTime.parse(order[:created_at])
       formatted_date = date.strftime('%a %b %d %H:%M:%S')
       html = ""
-      html << "<h2>Order Details<p>"
+      html << "<h3>Order Details<p>"
       html << "<p>Order Count: #{orders.count}" 
       html << "<p>Ordered Items:"
-      order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">&nbsp;#{item[:name]}"} if order_items
+      order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item[:name]}"} if order_items
       html << "<p><p><table>"
       html << "<tr><th><h5>Status:"
       html << "</th><th><h5>Subtotal:"
@@ -117,4 +116,3 @@ module Magento
     end
   end
 end
-
