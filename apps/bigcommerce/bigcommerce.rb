@@ -32,7 +32,9 @@ module Bigcommerce
     string :username, :required => true, :label => 'Enter User Name', :hint => 'See how to create an api user and get the token in "https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F"'
     string :api_token, :required => true, :hint => 'Enter Api Token'
     string :shop_url, :required => true, :label => 'Enter Shop URL', :hint => 'You get the shop url when you create your bigcommerce account Ex:"https://store-bwvr466.mybigcommerce.com/api/v2/"'
-, 
+     
+    white_list :shop_url
+
     def connect_to_bigcommerce
       api = Bigcommerce::Api.new({
       :store_url => settings.shop_url,
