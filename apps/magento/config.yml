@@ -2,14 +2,13 @@ name: Magento
 slug: magento
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "Pulls in order information of the support ticket requester automatically and posts it as a comment on the SupportBee ticket. Also, it adds a note to the corresponding order in Magento. The note has a link to the support ticket on SupportBee."
 
-category: Integration
+category: Ecommerce
 
 tags: 
-- tag1
-- tag2
+- ecommerce
+- magento
 
 developer: 
   name: Bopanna D.C
