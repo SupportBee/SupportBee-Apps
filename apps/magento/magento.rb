@@ -78,13 +78,14 @@ module Magento
     def order_info_html(orders, client, session_id)
       order_items = get_ordered_items(orders, client, session_id)
       order = orders.last
+      items_html = order_items_html(order_items)
       date = DateTime.parse(order[:created_at])
       formatted_date = date.strftime('%a %b %d %H:%M:%S')
       html = ""
       html << "<h3>Order Details<p>"
       html << "<p>Order Count: #{orders.count}" 
       html << "<p>Ordered Items:"
-      order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item[:name]}"} if order_items
+      html << items_html
       html << "<p><p><table>"
       html << "<tr><th><h5>Status:"
       html << "</th><th><h5>Subtotal:"
@@ -109,6 +110,16 @@ module Magento
 
     def order_info_link(order)
       "<a href= 'https://#{settings.subdomain}.gostorego.com/index.php/admin/sales_order/view/order_id/#{order[:order_id]}'>View Order Info</a>"
+    end
+
+    def order_items_html(order_items)
+      html = ""
+      if order_items.kind_of?(Array)
+        order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item[:name]}"} 
+      else 
+        html << "<br/><h5 style=\"font-weight:normal\">#{order_items[:name]}" if order_items
+      end
+      return html
     end
 
     def comment_on_ticket(ticket, html)
