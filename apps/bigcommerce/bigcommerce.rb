@@ -46,7 +46,7 @@ module Bigcommerce
     def get_orders(api)
       begin
         orders = api.get_orders
-      rescue 
+      rescue RuntimeError => e
         puts "#{e.message}\n#{e.backtrace}"
       end
     end
