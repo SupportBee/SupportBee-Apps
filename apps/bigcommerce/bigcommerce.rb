@@ -31,9 +31,9 @@ module Bigcommerce
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Enter User Name', :hint => 'See how to create an api user and get the token in "https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F"'
     string :api_token, :required => true, :label => 'Enter Api Token'
-    string :shop_url, :required => true, :label => 'Enter Shop URL', :hint => 'You get the shop url when you create your bigcommerce account Ex:"https://store-bwvr466.mybigcommerce.com/api/v2/"'
+    string :subdomain, :required => true, :label => 'Enter Shop URL',  :hint => 'If your Shop URL is "https://store-bwvr466.mybigcommerce.com/api/v2/" then your Subdomain value is "store-bwvr466"'
      
-    white_list :shop_url
+    white_list :subdomain
 
     def connect_to_bigcommerce
       api = Bigcommerce::Api.new({
@@ -53,8 +53,7 @@ module Bigcommerce
 
     def sent_note_to_customer(ticket, orders)
       order = orders.last
-      url = settings.shop_url.split("/api").first
-      http.put "#{url}/api/v2/customers/#{order['customer_id']}.json" do |req|
+      http.put "https://#{settings.subdomain}.mybigcommerce.com/api/v2/customers/#{order['customer_id']}.json" do |req|
         req.headers['Content-Type'] = "application/json"
         req.body= {notes:generate_note(ticket)}.to_json
       end
@@ -91,8 +90,7 @@ module Bigcommerce
     end
 
     def order_info_link(order)
-      url = settings.shop_url.split("/api").first
-      "<a href='#{url}/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
+      "<a href='https://#{settings.subdomain}.mybigcommerce.com/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
     end
 
     def get_ordered_items(order)
