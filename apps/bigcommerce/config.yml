@@ -4,10 +4,11 @@ access: public
 
 description: "Pulls in the order information of the customer (based on the email address of the ticket sender) and posts it as a comment on the SupportBee ticket. The app also posts a note on customer's profile in Bigcommerce. The note has a link to the support ticket in SupportBee."
 
-category: ecommerce
+category: Ecommerce
 
 tags: 
 - bigcommerce
+- ecommerce
 
 developer: 
   name: Bopanna
