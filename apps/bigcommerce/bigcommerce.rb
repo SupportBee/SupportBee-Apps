@@ -53,7 +53,8 @@ module Bigcommerce
 
     def sent_note_to_customer(ticket, orders)
       order = orders.last
-      http.put "https://store-fjjj0va0.mybigcommerce.com/api/v2/customers/#{order['customer_id']}.json" do |req|
+      url = settings.shop_url.split("/api").first
+      http.put "#{url}/api/v2/customers/#{order['customer_id']}.json" do |req|
         req.headers['Content-Type'] = "application/json"
         req.body= {notes:generate_note(ticket)}.to_json
       end
