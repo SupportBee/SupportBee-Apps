@@ -31,7 +31,7 @@ module Bigcommerce
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Enter User Name', :hint => 'See how to create an api user and get the token in "https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F"'
     string :api_token, :required => true, :label => 'Enter Api Token'
-    string :subdomain, :required => true, :label => 'Enter Shop URL',  :hint => 'If your Shop URL is "https://store-bwvr466.mybigcommerce.com/api/v2/" then your Subdomain value is "store-bwvr466"'
+    string :subdomain, :required => true, :label => 'Enter Subdomain',  :hint => 'If your Shop URL is "https://store-bwvr466.mybigcommerce.com/api/v2/" then your Subdomain value is "store-bwvr466"'
      
     white_list :subdomain
 
