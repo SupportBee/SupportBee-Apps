@@ -2,14 +2,12 @@ name: Bigcommerce
 slug: bigcommerce
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "Pulls in the order information of the customer (based on the email address of the ticket sender) and posts it as a comment on the SupportBee ticket. The app also posts a note on customer's profile in Bigcommerce. The note has a link to the support ticket in SupportBee."
 
-category: Integration
+category: ecommerce
 
 tags: 
-- tag1
-- tag2
+- bigcommerce
 
 developer: 
   name: Bopanna
