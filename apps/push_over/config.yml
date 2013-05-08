@@ -2,7 +2,7 @@ name: PushOver
 slug: push_over
 access: public
 
-description: "Get Push notifications on your iPhone for new tickets and customer replies via Pushover."
+description: "Get Push notifications on your iPhone. A Pushover notification is sent every time there is a new ticket or new replies."
 
 category: notification
 
