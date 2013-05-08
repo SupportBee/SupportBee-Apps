@@ -1,6 +1,6 @@
 name: PushOver
 slug: push_over
-access: test
+access: public
 
 description: "Get Push notifications on your iPhone for new tickets and customer replies via Pushover."
 
