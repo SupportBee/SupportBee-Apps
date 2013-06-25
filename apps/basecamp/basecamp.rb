@@ -20,12 +20,14 @@ end
 module Basecamp
   class Base < SupportBeeApp::Base
     oauth  :"basecamp", :oauth_options => {:expiration => :never, :scope => "read,write"}
+    string :app_id, :required => true, :label => 'Enter App ID', :hint => 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
+    string :project_id, :required => true, :label => 'Enter Project ID', :hint => 'When you go to a project, if the URL is "https://basecamp.com/9999999/projects/8888888-explore-basecamp" enter "8888888"'
   
     private
  
     def create_message(subject, content)
       token = settings.oauth_token || settings.token
-      response = http.post "https://basecamp.com/2213136/api/v1/projects/2479153/messages.json" do |req|
+      response = http.post "https://basecamp.com/#{settings.app_id}/api/v1/projects/#{settings.project_id}/messages.json" do |req|
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['Content-Type'] = 'application/json'
         req.body = {subject:subject, content:content}.to_json 
