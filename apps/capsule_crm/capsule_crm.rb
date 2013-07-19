@@ -32,6 +32,7 @@ module CapsuleCrm
     string :api_token, :required => true, :label => 'Capsule Auth Token'
     string :subdomain, :required => true
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
+    boolean :return_ticket_content, :required => false, :label => 'Send ticket content to Capsule'
 	
     white_list :should_create_person, :subdomain
 
@@ -113,7 +114,9 @@ module CapsuleCrm
     end
    
     def generate_note_content(ticket)
-      "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note = ""
+      note << ticket.summary + "\n" if settings.return_ticket_content.to_s == '1'
+      note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
      
   end

@@ -16,7 +16,7 @@ module HighriseCRM
 
       if person
         # Create a note in highrise
-        note = Highrise::Note.new(:subject_id => person.id, :subject_type => 'Person', :body => "[New Ticket] <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>")
+        note = Highrise::Note.new(:subject_id => person.id, :subject_type => 'Person', :body => generate_note_content(ticket))
         note.save
       end
       return true
@@ -31,6 +31,7 @@ module HighriseCRM
     string :auth_token, :required => true, :hint => 'Highrise Auth Token'
     string :subdomain, :required => true, :label => 'Highrise Subdomain'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Highrise if one does not exist'
+    boolean :return_ticket_content, :required => false, :label => 'Send ticket content to Highrise'
 
     # White list settings for logging
     white_list :subdomain, :should_create_person
@@ -78,6 +79,12 @@ module HighriseCRM
       html = "Added <b> #{person.name} </b> to Highrise - " 
       html << person_link(person)
       html
+    end
+
+    def generate_note_content(ticket)
+      note = ""
+      note << ticket.summary + "<br/>" if settings.return_ticket_content.to_s == '1'
+      note << "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}</a>"
     end
 
     def person_link(person)

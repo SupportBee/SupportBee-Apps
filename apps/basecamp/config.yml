@@ -1,0 +1,25 @@
+name: "New Basecamp"
+slug: basecamp
+access: public
+
+description: "Send ticket details to a project created in the New Basecamp. The ticket is saved as a message on Basecamp"
+
+category: project-management
+
+tags: 
+- project management
+- basecamp
+
+developer:  
+  name: Bopanna D.C
+  email: bops.91@gmail.com
+  twitter: "@gagan_bopanna"
+  github: bopanna
+ 
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    - unassigned
+    label: Send To New Basecamp
