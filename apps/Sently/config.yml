@@ -1,0 +1,17 @@
+name: Smsway
+slug: smsway
+access: public
+
+description: "Send an Sms via Sent.ly but for that you an account that you can signup from http://www.sent.ly"
+
+category: Sms
+
+tags: 
+- Sently
+
+developer: 
+  name: Shaikh Imran
+  email: imranshaikh818@gmail.com
+  twitter: "@imranshaikh_me"
+  github: Imranshaikh
+
