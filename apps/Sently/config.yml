@@ -1,5 +1,5 @@
-name: Smsway
-slug: smsway
+name: Sently
+slug: sently
 access: public
 
 description: "Send an Sms via Sent.ly but for that you an account that you can signup from http://www.sent.ly"

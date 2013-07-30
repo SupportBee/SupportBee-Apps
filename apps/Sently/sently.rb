@@ -1,4 +1,4 @@
-module Smsway
+module Sently
   module EventHandler
     def ticket_created
       return true unless settings.notify_ticket_created.to_s == '1'
@@ -26,7 +26,7 @@ module Smsway
   end
 end
 
-module Smsway
+module Sently
   module ActionHandler
     def button
       #Handle button 
@@ -35,7 +35,7 @@ module Smsway
   end
 end
 
-module Smsway
+module Sently
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Sent.ly Username', :hint => "Signup for a Sent.ly account at https://sent.ly/"
     password :password, :required => true, :label => 'Sent.ly Password', :hint => "Sent.ly password"
@@ -47,7 +47,7 @@ module Smsway
 
     white_list :notify_ticket_created
 
-    def send_ticket_sms(message)
+    def send_sms(message)
       http_post "http://sent.ly/command/sendsms" do |req|
         req.params[:username] = settings.username
         req.params[:password] = settings.password
