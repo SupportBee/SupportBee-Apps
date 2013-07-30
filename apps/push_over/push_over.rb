@@ -46,7 +46,7 @@ module PushOver
           req.params[:token] = OMNIAUTH_CONFIG['push_over']['apikey']
           req.params[:user] = user_key
           req.params[:title] =  "RE: #{ticket.subject} from Customer #{reply.replier.name} (#{reply.replier.email})"
-          req.params[:message] = ticket.content.text[0..512]
+          req.params[:message] = reply.content.text[0..512]
           req.params[:url] = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
         end 
       }
@@ -59,7 +59,7 @@ module PushOver
           req.params[:token] = OMNIAUTH_CONFIG['push_over']['apikey']
           req.params[:user] = user_key
           req.params[:title] =  "RE: #{ticket.subject} from Agent #{reply.replier.name} (#{reply.replier.email})"
-          req.params[:message] = ticket.content.text[0..10000]
+          req.params[:message] = reply.content.text[0..10000]
           req.params[:url] = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
         end
       }
