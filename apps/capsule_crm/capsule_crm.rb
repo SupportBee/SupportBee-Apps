@@ -29,7 +29,7 @@ end
 
 module CapsuleCrm
   class Base < SupportBeeApp::Base
-    string :api_token, :required => true, :label => 'Capsule Auth Token'
+    string :api_token, :required => true, :label => 'Capsule Auth Token', :hint => 'Login to your Capsule account, go to My Preferences (in the User Menu) > API Authentication Token'
     string :subdomain, :required => true
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
     boolean :return_ticket_content, :required => false, :label => 'Send ticket content to Capsule'
