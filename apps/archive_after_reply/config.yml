@@ -4,7 +4,7 @@ access: public
 
 description: "SupportBee's classic mode. Archive a ticket automatically after replying to it. Once you reply, the ticket is automatically taken off the screen without any extra step"
 
-category: Integration
+category: workflow
 
 tags: 
 - archived
