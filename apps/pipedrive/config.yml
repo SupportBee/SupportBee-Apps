@@ -2,9 +2,45 @@ name: Pipedrive
 slug: pipedrive
 access: public
 
-description: "Pipedrive: Pipeline software that gets you organized!
-Pull customer information from Pipedrive and see it as a comment on the ticket with a link to the Pipedrive page.
-The app can also update the customer information in Pipedrive whenever there is a new ticket."
+description: "
+
+Pipedrive is a sales pipeline software that helps you get organized. For more details please visit www.pipedrive.com
+
+## Sync Customer Information between Pipedrive & SupportBee
+
+Use SupportBee's Pipedrive app to share information about a customer between Pipedrive and SupportBee - automatically on every new ticket! By installing the app you can
+
+
+*  Fetch a customer's information from Pipedrive and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Capsule.  
+
+*  Update the customer information in Pipedrive whenever the customer sends a new ticket. Keep your sales team in the loop.
+
+
+## Adding the Pipedrive App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+
+### Pipdrive Auth Token
+
+To get an auth token, login to your Pipedrive account, go to Settings (on the home page under your account)  > API 
+
+### Create a New Person in Pipedrive if one does not exist
+
+Check this option if you want us to create a new contact in Pipedrive if we can't find one based on the email address of the customer. 
+
+### Subdomain
+
+There is no subdomain for Pipedrive. Please leave this blank. 
+
+### Send ticket content to Pipedrive
+
+By default we only add a link to the SupportBee ticket. If you want the full content of the ticket to be posted to Pipedrive, please check this option.
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Pipedrive and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
+
+"
 
 category: crm
 
