@@ -19,7 +19,7 @@ Use SupportBee's Highrise app to seamlessly synch information between Highrise a
 
 To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
 
-## Auth Token
+### Auth Token
 
 To get an auth token, login to your Highrise account, go to My info under Accounts & Settings > API Authentication Token
 
