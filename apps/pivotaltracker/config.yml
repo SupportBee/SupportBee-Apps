@@ -4,9 +4,34 @@ slug: pivotaltracker
 access: public
 
 description: "
-Create a story on Pivotal Tracker!
 
-This app allows an agent to selectively create a story in Pivotal Tracker for a particular ticket in SupportBee. You can customize the title/description before creating the story.
+Pivotal Tracker is an award winning agile project management tool which not only helps in collaboration but also to get continuous feedback from the customers. For more information visit http://www.pivotaltracker.com/
+
+## Use customer feedback from SupportBee into Pivotal Tracker directly
+
+** Feedback from customers can be used to selectively create tasks known as "Story" in Pivotal Tracker 
+** Customize the title/description before creating the story
+
+## Adding the Pivotal Tracker App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+
+###Token
+
+Find the token under Profile (in the user menu) > API Token. You would have to click "Create New Token"
+
+### Project Id
+
+Find Project Id under Access which you can reach via Project > Edit Settings
+
+### Access SupportBee on behalf of
+
+Choose the name of the user from the drop down menu
+
+## Using the App
+
+Click on Save Settings and you are ready to use the Pivotal Tracker App
+
 "
 
 category: project-management 
