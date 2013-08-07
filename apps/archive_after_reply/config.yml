@@ -1,10 +1,10 @@
 name: Archive_after_reply
 slug: archive_after_reply
-access: test
+access: public
 
-description: "This app will help the user to automatically archive answered tickets"
+description: "SupportBee's classic mode. Archive a ticket automatically after replying to it. Once you reply, the ticket is automatically taken off the screen without any extra step"
 
-category: Integration
+category: workflow
 
 tags: 
 - archived
