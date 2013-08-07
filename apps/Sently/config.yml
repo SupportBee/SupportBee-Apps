@@ -2,9 +2,9 @@ name: Sently
 slug: sently
 access: public
 
-description: "Send an Sms via Sent.ly but for that you an account that you can signup from http://www.sent.ly"
+description: "Send SMS notifications for new tickets and replies via Sent.ly. Signup for an account at [http://www.sent.ly](http://www.sent.ly)"
 
-category: Sms
+category: notification
 
 tags: 
 - Sently

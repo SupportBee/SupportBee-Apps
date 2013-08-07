@@ -4,7 +4,7 @@ access: public
 
 description: "
 
-Pipedrive is a sales pipeline software that helps you get organized. For more details please visit www.pipedrive.com
+Pipedrive is a sales pipeline software that helps you get organized. For more details please visit [www.pipedrive.com](http://pipedrive.com)
 
 ## Sync Customer Information between Pipedrive & SupportBee
 
@@ -28,14 +28,6 @@ To get an auth token, login to your Pipedrive account, go to Settings (on the ho
 
 Check this option if you want us to create a new contact in Pipedrive if we can't find one based on the email address of the customer. 
 
-### Subdomain
-
-There is no subdomain for Pipedrive. Please leave this blank. 
-
-### Send ticket content to Pipedrive
-
-By default we only add a link to the SupportBee ticket. If you want the full content of the ticket to be posted to Pipedrive, please check this option.
-
 ## Using the App
 
 Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Pipedrive and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
@@ -51,4 +43,5 @@ tags:
 developer: 
   name: Bopanna D.C
   email: bops.91@gmail.com
+  twitter: "@gagan_bopanna"
   github: bopanna
