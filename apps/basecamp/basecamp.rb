@@ -3,7 +3,14 @@ module Basecamp
     def button
 
       begin
-        result = create_message(payload.overlay.title, payload.overlay.description)
+        puts payload.overlay.inspect
+        result = 
+          case payload.overlay.type
+            when 'todo_list'
+              create_todo_list(payload.overlay.title, payload.overlay.description)
+            when 'message'
+              create_message(payload.overlay.title, payload.overlay.description)
+            end
         if result
           return [200, "Ticket sent to Basecamp"]
         else
@@ -31,6 +38,16 @@ module Basecamp
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['Content-Type'] = 'application/json'
         req.body = {subject:subject, content:content}.to_json 
+      end
+      response.status == 201 ? true : false
+    end
+    
+    def create_todo_list(subject, content)
+      token = settings.oauth_token || settings.token
+      response = http.post "https://basecamp.com/#{settings.app_id}/api/v1/projects/#{settings.project_id}/todolists.json" do |req|
+        req.headers['Authorization'] = 'Bearer ' + token
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {name:subject, description:content}.to_json 
       end
       response.status == 201 ? true : false
     end
