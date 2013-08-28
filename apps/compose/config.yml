@@ -3,6 +3,9 @@ slug: compose
 access: public
 
 description: "
+This app is now deprecated. You can send an email to a customer for new tickets without an app. Please see our [blog post announcing this feature](https://blog.supportbee.com/2013/08/28/send-emails-new-tickets/).
+
+## Send Emails to Customers without creating Tickets
 Send a new email from within SupportBee. This app uses your SMTP server to relay the emails
 "
 
