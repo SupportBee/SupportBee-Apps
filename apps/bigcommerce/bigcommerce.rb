@@ -8,8 +8,16 @@ module Bigcommerce
       begin
         api = connect_to_bigcommerce
         
-        orders = get_orders(api)
+        email = ticket.requester.email
+
+        customers = get_customers(api, email)
+        puts customers.inspect, email
+        return if customers.empty?
+
+        customer = customers.first
+        orders = get_orders(api, customer)
         return if orders.empty?
+        
         order_html = order_info_html(orders)
         sent_note_to_customer(api, orders)
         ticket.comment(:html => order_html)
@@ -39,8 +47,19 @@ module Bigcommerce
       })
     end
 
-    def get_orders(api)
-      orders = api.get_orders
+    def get_customers(api, email)
+      begin
+        api.get_customers :email => email
+      rescue
+        # Somehow the API throws 
+        # Failed to parse Bigcommerce response: A JSON text must at least contain two octets!
+        # if a record cannot be found!
+        []
+      end
+    end
+
+    def get_orders(api, customer)
+      orders = api.get_orders :customer_id => customer['id']
     end
 
     def sent_note_to_customer(api, orders)
