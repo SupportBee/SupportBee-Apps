@@ -2,7 +2,36 @@ name: Bigcommerce
 slug: bigcommerce
 access: public
 
-description: "Pulls in the order information of the customer (based on the email address of the ticket sender) and posts it as a comment on the SupportBee ticket. The app also posts a note on customer's profile in Bigcommerce. The note has a link to the support ticket in SupportBee."
+description: "
+
+[Bigcommerce](http://www.bigcommerce.com/) is an e-commerce platform for fast-growth businesses, enabling them to easily launch professional online stores in hours, not weeks or months.
+
+
+## See a Customer's Last Order Details Automatically
+
+SupportBee's Bigcommerce App pulls in the order information of the customer (based on the email address of the ticket sender) and posts it as a comment on the SupportBee ticket. The app also posts a note on customer's profile in Bigcommerce. The note has a link to the support ticket in SupportBee.
+
+## Adding the Bigcommerce App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+
+### Username
+
+You can use an existing user or create a new API user in Bigcommerce. Make sure that you have enabled API access for the user (by editing the user). For more information, see this [help guide](https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F) on Bigcommerce. 
+
+### API Token
+
+API token of the user that you entered above. It can be found on the edit user screen
+
+### Shop URL
+
+This is the API URL. You will see it when you are copying the API Token on Bigcommerce.
+
+## Using the App
+
+Once you have setup the app, everything works in auto-pilot. For every new ticket, we check Bigcommerce for a customer record and post the order details as a comment on the ticket (if an order exists). The app will also post a note in Bigcommerce with a link to the ticket.
+
+"
 
 category: Ecommerce
 
