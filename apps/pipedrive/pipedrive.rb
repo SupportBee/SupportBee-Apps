@@ -35,15 +35,13 @@ module Pipedrive
     white_list :should_create_person
 
     def find_person(requester)
-      first_name = split_name(requester)
       response = http_get('http://api.pipedrive.com/v1/persons/find') do |req|
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.params['term'] = first_name
+        req.params['term'] = requester.email
       end 
       body = response.body['data']
-      person = body.select{|pe| pe['email'] == requester.email}.first if body
-      person ? person : nil
+      body ? body.first : nil
     end
     
     def create_person(requester)
