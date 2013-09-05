@@ -136,7 +136,7 @@ module SupportBeeApp
       end
 
     	def trigger_event(event, data, payload = nil)
-    		app = new(data,payload)
+    	  app = new(data,payload)
         app.trigger_event(event)
     	end
 
@@ -271,10 +271,11 @@ module SupportBeeApp
 
     
     def pre_process_payload(raw)
-      result = Hashie::Mash.new(raw)
-      raw = result.delete(:payload)
-      return result unless raw
+      original_raw = Hashie::Mash.new(raw)
+      raw = original_raw[:payload]
+      return original_raw unless raw
 
+      result = raw.dup
       if raw[:tickets]
         result[:tickets] = []
         raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
@@ -283,6 +284,7 @@ module SupportBeeApp
       result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
       result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
+      result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
       result
     end
 

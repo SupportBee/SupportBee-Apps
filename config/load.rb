@@ -45,4 +45,8 @@ else
 end
 REDIS = redis
 
+if PLATFORM_ENV == 'development'
+  require 'pry'
+end
+
 require "#{PLATFORM_ROOT}/run_app"

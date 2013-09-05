@@ -175,6 +175,7 @@ DEPENDENCIES
   mail
   mock_redis
   nokogiri
+  pry
   rack-test
   rake
   redis
