@@ -1,0 +1,18 @@
+name: ZohoCRM
+slug: zoho_crm
+access: public
+
+description: "Pull customer information from Zoho and see it as a comment on the ticket with a link to the Zoho page."
+
+category: Integration
+
+tags: 
+- crm
+- zoho
+
+developer: 
+  name: Shobhit Bakliwal
+  email: shobhit@batnotesapp.com
+  twitter: "@shobhitic"
+  github: shobhitic@gmail.com
+
