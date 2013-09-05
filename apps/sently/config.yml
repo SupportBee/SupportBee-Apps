@@ -1,0 +1,17 @@
+name: Sently
+slug: sently
+access: public
+
+description: "Send SMS notifications for new tickets and replies via Sent.ly. Signup for an account at [http://www.sent.ly](http://www.sent.ly)"
+
+category: notification
+
+tags: 
+- Sently
+
+developer: 
+  name: Shaikh Imran
+  email: imranshaikh818@gmail.com
+  twitter: "@imranshaikh_me"
+  github: Imranshaikh
+

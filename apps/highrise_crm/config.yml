@@ -2,8 +2,44 @@ name: Highrise
 slug: highrise
 access: public
 
-description: "Pull customer information from Highrise and see it as a comment on the ticket with a link to the Highrise page.
-The app can also update the customer information in Highrise whenever there is a new ticket."
+description: " 
+Highrise is a web based contact manager that helps businesses save and organize notes, keep track and get reminders. For more information visit http://highrisehq.com
+
+## Manage Customer Information between Highrise & SupportBee
+
+Use SupportBee's Highrise app to seamlessly synch information between Highrise and SupportBee
+
+
+* Pull customer information from Highrise and see it as a comment on the ticket with a link to the Highrise page.
+
+* Update the customer information in Highrise whenever there is a new ticket.
+
+
+## Adding the Highrise App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+
+### Auth Token
+
+To get an auth token, login to your Highrise account, go to My info under Accounts & Settings > API Authentication Token
+
+### Subdomain
+
+This is your Highrise subdomain i.e. if you login to Highrise at mycompany.highrisehq.com, enter mycompany
+
+### Create a New Person in Highrise if one does not exist
+
+Check this option if you want us to create a new contact in Highrise if we can't find one based on the email address of the customer. 
+
+### Send ticket content to Highrise
+
+By default we only add a link to the SupportBee ticket. If you want the full content of the ticket to be posted to Highrise, please check this option.
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Highrise and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
+
+"
 
 category: crm
 

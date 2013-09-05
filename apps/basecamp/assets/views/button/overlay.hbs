@@ -13,6 +13,13 @@
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         </textarea>
       </li>
+      <li>
+        <label for="type">Send Ticket as a</label>
+        <select name="type">
+          <option value="todo_list">ToDo List</option>
+          <option value="message">Message</option>
+        </select>
+      </li>
     </ol>
   {{/ticket}}
 {{/each}}

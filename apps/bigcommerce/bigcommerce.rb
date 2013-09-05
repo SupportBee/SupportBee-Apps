@@ -8,20 +8,24 @@ module Bigcommerce
       begin
         api = connect_to_bigcommerce
         
-        if api
-          orders = get_orders(api)
-          html = order_info_html(orders)
-          sent_note_to_customer(ticket, orders)
-        else
-          return [500, "Ticket not sent. Unable to connect to Bigcommerce"]
-        end
+        email = ticket.requester.email
 
+        customers = get_customers(api, email)
+        puts customers.inspect, email
+        return if customers.empty?
+
+        customer = customers.first
+        orders = get_orders(api, customer)
+        return if orders.empty?
+        
+        order_html = order_info_html(orders)
+        sent_note_to_customer(api, orders)
+        ticket.comment(:html => order_html)
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
 
-      comment_on_ticket(ticket, html)
       [200, "Ticket sent to Bigcommerce"]
     end
   end
@@ -31,7 +35,7 @@ module Bigcommerce
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Enter User Name', :hint => 'See how to create an api user and get the token in "https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F"'
     string :api_token, :required => true, :label => 'Enter Api Token'
-    string :subdomain, :required => true, :label => 'Enter Subdomain',  :hint => 'If your Shop URL is "https://store-bwvr466.mybigcommerce.com/api/v2/" then your Subdomain value is "store-bwvr466"'
+    string :shop_url, :required => true, :label => 'API URL',  :hint => 'You should see this when enabling API access for this user. Example "https://store-bwvr466.mybigcommerce.com/api/v2/"'
      
     white_list :subdomain
 
@@ -43,24 +47,28 @@ module Bigcommerce
       })
     end
 
-    def get_orders(api)
+    def get_customers(api, email)
       begin
-        orders = api.get_orders
-      rescue RuntimeError => e
-        puts "#{e.message}\n#{e.backtrace}"
+        api.get_customers :email => email
+      rescue
+        # Somehow the API throws 
+        # Failed to parse Bigcommerce response: A JSON text must at least contain two octets!
+        # if a record cannot be found!
+        []
       end
     end
 
-    def sent_note_to_customer(ticket, orders)
+    def get_orders(api, customer)
+      orders = api.get_orders :customer_id => customer['id']
+    end
+
+    def sent_note_to_customer(api, orders)
       order = orders.last
-      http.put "https://#{settings.subdomain}.mybigcommerce.com/api/v2/customers/#{order['customer_id']}.json" do |req|
-        req.headers['Content-Type'] = "application/json"
-        req.body= {notes:generate_note(ticket)}.to_json
-      end
+      api.connection.put "/customers/#{order['customer_id']}", notes: generate_note
     end
 
-    def generate_note(ticket)
-      "[Support Ticket] https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+    def generate_note
+      "[SupportBee] #{payload.ticket.subject} - https://#{auth.subdomain}.supportbee.com/tickets/#{payload.ticket.id}"
     end
 
     def order_info_html(orders)
