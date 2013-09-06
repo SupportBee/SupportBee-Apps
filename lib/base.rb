@@ -275,7 +275,6 @@ module SupportBeeApp
       raw = result.delete(:payload)
       return result unless raw
 
-      result = raw.dup
       if raw[:tickets]
         result[:tickets] = []
         raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
