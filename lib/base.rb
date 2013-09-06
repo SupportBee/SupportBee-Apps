@@ -271,9 +271,9 @@ module SupportBeeApp
 
     
     def pre_process_payload(raw)
-      original_raw = Hashie::Mash.new(raw)
-      raw = original_raw[:payload]
-      return original_raw unless raw
+      result = Hashie::Mash.new(raw)
+      raw = result.delete(:payload)
+      return result unless raw
 
       result = raw.dup
       if raw[:tickets]
