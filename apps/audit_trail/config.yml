@@ -2,7 +2,9 @@ name: Audit Trail
 slug: audit_trail
 access: public
 
-description: "An audit trail is a fancy term for having a log that you can look at to know who did what. For example, if you want to find out who trashed a ticket or marked it as spam you would look at the audit trail. Add this app to record information about Archive, Unarchive, Spam, Unspam, Trash and Untrash events. We show you when something happend (time) and who did it (name/email address of the agent. Once you add the app, this information is added to the ticket as comments."
+description: "An audit trail is a fancy term for having a log that you can look at to know who did what. For example, if you want to find out who trashed a ticket or marked it as spam you would look at the audit trail. Add this app to record information about Archive, Unarchive, Spam, Unspam, Trash and Untrash events. 
+
+We show you when something happened (time) and who did it (name/email address of the agent). Once you add the app, this information is added to the ticket as comments. Everything is recorded automatically with no manual intervention."
 
 category: workflow
 
