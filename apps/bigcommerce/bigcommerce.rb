@@ -63,7 +63,8 @@ module Bigcommerce
 
     def sent_note_to_customer(api, orders)
       order = orders.last
-      api.connection.put "/customers/#{order['customer_id']}", notes: generate_note
+      notes = "#{generate_note}\n#{order['staff_notes']}"
+      api.connection.put "/orders/#{order['id']}", staff_notes: notes
     end
 
     def generate_note
