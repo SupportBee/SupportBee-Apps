@@ -11,14 +11,13 @@ module Bigcommerce
         email = ticket.requester.email
 
         customers = get_customers(api, email)
-        puts customers.inspect, email
         return if customers.empty?
 
         customer = customers.first
         orders = get_orders(api, customer)
         return if orders.empty?
         
-        order_html = order_info_html(orders)
+        order_html = order_info_html(api, orders)
         sent_note_to_customer(api, orders)
         ticket.comment(:html => order_html)
       rescue Exception => e
@@ -71,7 +70,8 @@ module Bigcommerce
       "[SupportBee] #{payload.ticket.subject} - https://#{auth.subdomain}.supportbee.com/tickets/#{payload.ticket.id}"
     end
 
-    def order_info_html(orders)
+    def order_info_html(api, orders)
+      store_id = api.connection.get("/store")['id']
       order = orders.last
       order_items = get_ordered_items(order)
       items_html = order_items_html(order_items)
@@ -80,7 +80,7 @@ module Bigcommerce
       html = ""
       html << "<h3>Order Details"
       html << "<p>Order Count: #{orders.count}"
-      html << "<p>Ordered Items:"
+      html << "<p>Last Order Details:"
       html << items_html
       html << "<p><p><table>"
       html << "<tr><th><h5>Status:"
@@ -93,12 +93,12 @@ module Bigcommerce
       html << "</td><td>#{formatted_date}"
       html << "</td></tr>"
       html << "</table>"
-      html << ">>" + order_info_link(order)
+      html << order_info_link(order, store_id) + " &raquo;"
       html
     end
 
-    def order_info_link(order)
-      "<a href='https://#{settings.subdomain}.mybigcommerce.com/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
+    def order_info_link(order, store_id)
+      "<a href='https://store-#{store_id}.mybigcommerce.com/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
     end
 
     def get_ordered_items(order)
