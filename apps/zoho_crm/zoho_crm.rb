@@ -1,13 +1,12 @@
 module ZohoCrm
   module EventHandler
     def ticket_created
-    	setup_zoho
-			ticket = payload.ticket
-      requester = ticket.requester 
-      contact = find_contact requester
-      ticket.comment(:html => person_info_html(person)) if person
 
       begin
+       	setup_zoho
+  			ticket = payload.ticket
+        requester = ticket.requester 
+ 
         contact = find_contact(requester)  
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
@@ -31,19 +30,18 @@ end
 
 module ZohoCrm
   class Base < SupportBeeApp::Base
-    string :api_token, :required => true, :label => 'ZohoCRM Auth Token', :hint => 'Login to your Capsule account, go to My Setup (in the User Menu) > API Authentication Token'
+    string :api_token, :required => true, :label => 'ZohoCRM Auth Token', :hint => 'Login to your ZohoCRM account, go to Setup -> Developer Space -> click on Browser Mode link'
     boolean :should_create_contact, :default => true, :required => false, :label => 'Create a New Contact in ZohoCRM if one does not exist'
     
+    require 'ruby_zoho'
     def setup_zoho
       RubyZoho.configure do |config|
-        config.api_key = settings.api_token
-        config.crm_modules = ['Accounts', 'Contacts', 'Leads', 'Potentials'] # Defaults to free edition if not set
+        config.api_key = settings.api_token   
       end
     end
 
     def create_new_contact(requester)
-      contact = create_contact(requester)
-      get_contact(contact)
+      contact =  create_contact(requester)
     end
   
     def create_contact(requester)
@@ -56,8 +54,7 @@ module ZohoCrm
                     :email => requester.email
                   )
      created_contact = new_contact.save
-     find_contact(created_contact)
-    
+     
     end
 
     def split_name(requester)
@@ -71,10 +68,7 @@ module ZohoCrm
 		
     def contact_info_html(contact)
       html = ""
-      html << "<b> #{contact['first_name']} </b><br/>" 
-      html << "#{contact['title']} " if contact['title']
-      html << "<br/>"
-      html << "#{contact['department']} " if contact['department']
+      html << "<b> #{contact['first_name']} #{contact['last_name']}" 
       html
     end
 
@@ -83,7 +77,11 @@ module ZohoCrm
       html << "Added #{contact['first_name']} to ZohoCRM... "
       html
     end
-
+    
+     def comment_on_ticket(ticket, html)
+        ticket.comment(:html => html)
+    end
+  
   end
 end
 
