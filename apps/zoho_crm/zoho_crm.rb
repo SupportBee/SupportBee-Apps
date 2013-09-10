@@ -21,9 +21,7 @@ module ZohoCrm
       end
       
       comment_on_ticket(ticket, html)
-      [200, "Ticket sent to ZohoCRM"]
-
-
+      [200, "Ticket sent to Zohocrm"]
     end
   end
 end
@@ -31,12 +29,16 @@ end
 module ZohoCrm
   class Base < SupportBeeApp::Base
     string :api_token, :required => true, :label => 'ZohoCRM Auth Token', :hint => 'Login to your ZohoCRM account, go to Setup -> Developer Space -> click on Browser Mode link'
-    boolean :should_create_contact, :default => true, :required => false, :label => 'Create a New Contact in ZohoCRM if one does not exist'
-    
+    boolean :should_create_contact, :default => true, :required => false, :label => 'Create a New Contact in Zoho CRM if one does not exist'
+
+    white_list :should_create_contact
+
     require 'ruby_zoho'
+
     def setup_zoho
       RubyZoho.configure do |config|
-        config.api_key = settings.api_token   
+        config.api_key = settings.api_token
+        config.crm_modules = ['Accounts', 'Contacts', 'Leads', 'Potentials']    
       end
     end
 
@@ -68,13 +70,13 @@ module ZohoCrm
 		
     def contact_info_html(contact)
       html = ""
-      html << "<b> #{contact['first_name']} #{contact['last_name']}" 
+      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b>" 
       html
     end
 
     def new_contact_info_html(contact)
       html = ""
-      html << "Added #{contact['first_name']} to ZohoCRM... "
+      html << "Added #{contact.first_name} #{contact.last_name} to ZohoCRM... "
       html
     end
     
