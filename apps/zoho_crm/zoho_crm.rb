@@ -19,7 +19,7 @@ module ZohoCrm
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
-      
+        
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Zohocrm"]
     end
@@ -61,7 +61,6 @@ module ZohoCrm
     
     def contact_url(contact)
       "<a href='https://crm.zoho.com/crm/ShowEntityInfo.do?id=#{contact.contactid}&module=Contacts&isload=true'>View #{contact.first_name}'s profile on ZohoCrm</a>"
-
     end
 
     def split_name(requester)
@@ -75,7 +74,8 @@ module ZohoCrm
 		
     def contact_info_html(contact)
       html = ""
-      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b>"
+      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b><br/>"
+      html << contact.first.department
       html << "<br/>"
       html << contact_url(contact.first)
       html
