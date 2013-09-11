@@ -56,7 +56,12 @@ module ZohoCrm
                     :email => requester.email
                   )
      created_contact = new_contact.save
-     
+     find_contact(created_contact)
+    end
+    
+    def contact_url(contact)
+      "<a href='https://crm.zoho.com/crm/ShowEntityInfo.do?id=#{contact.contactid}&module=Contacts&isload=true'>View #{contact.first_name}'s profile on ZohoCrm</a>"
+
     end
 
     def split_name(requester)
@@ -70,13 +75,16 @@ module ZohoCrm
 		
     def contact_info_html(contact)
       html = ""
-      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b>" 
+      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b>"
+      html << "<br/>"
+      html << contact_url(contact.first)
       html
     end
 
     def new_contact_info_html(contact)
       html = ""
-      html << "Added #{contact.first_name} #{contact.last_name} to ZohoCRM... "
+      html << "Added #{contact.first.first_name} #{contact.first.last_name} to ZohoCRM... "
+      html << contact_url(contact.first)
       html
     end
     
