@@ -8,6 +8,7 @@ module ZohoCrm
         requester = ticket.requester 
  
         contact = find_contact(requester)  
+        
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
           contact =  create_new_contact(requester)
@@ -19,7 +20,8 @@ module ZohoCrm
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
-        
+      
+      send_note(ticket, contact)
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Zohocrm"]
     end
@@ -75,8 +77,7 @@ module ZohoCrm
     def contact_info_html(contact)
       html = ""
       html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b><br/>"
-      html << contact.first.department
-      html << "<br/>"
+      html << "#{contact.first.department} <br/>" if contact.first.department
       html << contact_url(contact.first)
       html
     end
@@ -91,7 +92,23 @@ module ZohoCrm
      def comment_on_ticket(ticket, html)
         ticket.comment(:html => html)
     end
-  
+    
+    def send_note(ticket, contact)
+      contactid = contact.first.contactid
+      ownerid = contact.first.smownerid
+
+      http_post "https://crm.zoho.com/crm/private/xml/Notes/insertRecords" do |req|
+        req.params[:newFormat] = "1"
+        req.params[:authtoken] = "#{settings.api_token}"
+        req.params[:scope] = "crmapi"
+        req.headers['Content-Type'] = "application/xml"
+        req.body = %Q(<Notes><row no="1"><FL val="entityId">#{contactid}</FL><FL val="SMOWNERID">#{ownerid}</FL><FL val="Note Title">#{ticket.summary}</FL><FL val="Note Content">"https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"</FL></row> </Notes>)
+        req.params[:xmlData] = req.body
+      end
+     
+    end
+ 
   end
 end
+
 
