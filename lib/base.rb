@@ -172,6 +172,7 @@ module SupportBeeApp
     attr_reader :auth
     attr_reader :settings
     attr_reader :store
+    attr_accessor :errors
 
     attr_writer :ca_file
 
@@ -181,7 +182,13 @@ module SupportBeeApp
       @settings = @data[:settings] || {}
       @payload = pre_process_payload(payload)
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
+      @errors = {}
   	end
+
+    def valid?
+      return true unless self.respond_to?(:validate)
+      validate
+    end
 
     def trigger_event(event)
       @event = event

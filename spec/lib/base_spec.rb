@@ -71,6 +71,26 @@ describe SupportBeeApp::Base do
       app.store.redis_key_prefix.should == "#{app.class.slug}:#{app.auth.subdomain}"
     end
 
+    describe "Validation" do
+      describe "#valid?" do
+        context "does not respond to validate" do
+          it "returns true" do
+            dummy = create_dummy_instance
+            dummy.should be_valid
+          end
+        end
+
+        context "responds to validate" do
+          it "calls the validate method" do
+            dummy = create_dummy_instance
+            def dummy.validate; end;
+            flexmock(dummy).should_receive(:validate).and_return(true).once
+            dummy.valid?
+          end
+        end
+      end
+    end
+
     describe "Receive" do
       context "Event" do
         it "should trigger an event" do

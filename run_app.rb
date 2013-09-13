@@ -36,6 +36,20 @@ class RunApp < Sinatra::Base
       {app_class.slug => response}.to_json
     end
 
+    post "/#{app_class.slug}/valid" do
+      data, payload = parse_request
+      response = {}
+      app = app_class.new(data, payload)
+      if app.valid?
+        status 200
+      else
+        status 400
+        response = app.errors
+      end
+      content_type :json
+      response.to_json
+    end
+
     post "/#{app_class.slug}/event/:event" do
       data, payload = parse_request
       event = params[:event]
