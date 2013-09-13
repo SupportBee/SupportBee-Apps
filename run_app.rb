@@ -47,7 +47,7 @@ class RunApp < Sinatra::Base
         response = app.errors
       end
       content_type :json
-      response.to_json
+      { errors: response }.to_json
     end
 
     post "/#{app_class.slug}/event/:event" do
