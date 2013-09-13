@@ -6,9 +6,7 @@ module ZohoCrm
        	setup_zoho
   			ticket = payload.ticket
         requester = ticket.requester 
- 
         contact = find_contact(requester)  
-        
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
           contact =  create_new_contact(requester)
@@ -20,8 +18,10 @@ module ZohoCrm
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
-      
-      send_note(ticket, contact)
+
+      if contact
+        send_note(ticket, contact)
+      end
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Zohocrm"]
     end
@@ -70,22 +70,21 @@ module ZohoCrm
     end
      
     def find_contact(requester)
-      contact = RubyZoho::Crm::Contact.find_by_email(requester.email)
-      contact ? contact :nil
+      RubyZoho::Crm::Contact.find_by_email(requester.email).first rescue nil
     end
 		
     def contact_info_html(contact)
       html = ""
-      html << "<b> #{contact.first.first_name} #{contact.first.last_name}</b><br/>"
-      html << "#{contact.first.department} <br/>" if contact.first.department
-      html << contact_url(contact.first)
+      html << "<b> #{contact.first_name} #{contact.last_name}</b><br/>"
+      html << "#{contact.department} <br/>" if contact.respond_to?(:department) 
+      html << contact_url(contact)
       html
     end
 
     def new_contact_info_html(contact)
       html = ""
-      html << "Added #{contact.first.first_name} #{contact.first.last_name} to ZohoCRM... "
-      html << contact_url(contact.first)
+      html << "Added #{contact.first_name} #{contact.last_name} to ZohoCRM... "
+      html << contact_url(contact)
       html
     end
     
@@ -94,18 +93,24 @@ module ZohoCrm
     end
     
     def send_note(ticket, contact)
-      contactid = contact.first.contactid
-      ownerid = contact.first.smownerid
-
+      requestid = contact.id
+      ownerid = contact.smownerid
       http_post "https://crm.zoho.com/crm/private/xml/Notes/insertRecords" do |req|
         req.params[:newFormat] = "1"
         req.params[:authtoken] = "#{settings.api_token}"
         req.params[:scope] = "crmapi"
         req.headers['Content-Type'] = "application/xml"
-        req.body = %Q(<Notes><row no="1"><FL val="entityId">#{contactid}</FL><FL val="SMOWNERID">#{ownerid}</FL><FL val="Note Title">#{ticket.summary}</FL><FL val="Note Content">"https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"</FL></row> </Notes>)
+        req.body = %Q(<Notes><row no="1"><FL val="entityId">#{requestid}</FL><FL val="SMOWNERID">#{ownerid}</FL><FL val="Note Title">New Ticket</FL><FL val="Note Content">#{generate_note_content(ticket)}</FL></row> </Notes>)
         req.params[:xmlData] = req.body
       end
      
+    end
+
+    def generate_note_content(ticket)
+      note = ""
+      note << ticket.summary + "\n"
+      note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note
     end
  
   end
