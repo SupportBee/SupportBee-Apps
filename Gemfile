@@ -27,6 +27,7 @@ gem 'jaconda'
 gem 'ruby-trello', :require => 'trello'
 gem 'flowdock'
 gem 'bigcommerce', "~> 0.8.2"
+gem 'rubyzoho'
 
 gem 'guard-shotgun', :git =>'git://github.com/rchampourlier/guard-shotgun.git', :group => :development
 gem 'execjs', :group => :development
