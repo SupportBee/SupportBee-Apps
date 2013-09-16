@@ -180,7 +180,10 @@ module SupportBeeApp
     	@data = Hashie::Mash.new(data) || {}
       @auth = @data[:auth] || {}
       @settings = @data[:settings] || {}
+
+      payload = {} if payload.blank?
       @payload = pre_process_payload(payload)
+
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
       @errors = {}
   	end
