@@ -4,7 +4,7 @@ module Github
       ticket = payload.tickets.first
       begin
         response = create_issue(payload.overlay.title, payload.overlay.description)
-        html = issue_url(response)
+        html = comment_html(response)
         comment_on_ticket(ticket, html)
       rescue Exception => e
         return [500, e.message]
@@ -31,11 +31,8 @@ module Github
       end
     end
 
-    def issue_url(response)
-      html = ""
-      html << "Github Issue created!\n"
-      html << "<a href=#{response.body['html_url']}>#{response.body['title']}</a>"
-      html
+    def comment_html(response)
+      "Github Issue created!\n <a href=#{response.body['html_url']}>#{response.body['title']}</a>"
     end
 
     def comment_on_ticket(ticket, html)
