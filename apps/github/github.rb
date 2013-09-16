@@ -5,12 +5,11 @@ module Github
       begin
         response = create_issue(payload.overlay.title, payload.overlay.description)
         html = issue_url(response)
+        comment_on_ticket(ticket, html)
       rescue Exception => e
         return [500, e.message]
       end
-      comment_on_ticket(ticket, html)
       [200, "Ticket sent to Github Issues"]
-
     end
   end
 end
