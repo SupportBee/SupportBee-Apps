@@ -7,7 +7,6 @@ module Github
       rescue Exception => e
         return [500, e.message]
       end
-
       html = issue_url(response)
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Github Issues"]
@@ -29,7 +28,7 @@ module Github
     def create_issue(issue_title, description)
       token = settings.oauth_token || settings.token
       response = http_post "https://api.github.com/repos/#{settings.owner}/#{settings.repo}/issues?access_token=#{token}" do |req|
-        req.body = {:title => issue_title, :body => description}.to_json
+        req.body = {:title => issue_title, :body => description, :labels => ['supportbee']}.to_json
       end
     end
 
