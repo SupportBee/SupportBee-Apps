@@ -2,15 +2,18 @@ module Basecamp
   module ActionHandler
     def button
       ticket = payload.tickets.first
+      html = ''
       begin
         result = 
           case payload.overlay.type
           when 'todo_list'
             response = create_todo_list(payload.overlay.title, payload.overlay.description)
-            html = todo_html_comment(response)
+            html = todo_html_comment(response) if response
+            response
           when 'message'
             response = create_message(payload.overlay.title, payload.overlay.description)
-            html = message_html_comment(response)
+            html = message_html_comment(response) if response
+            response
           end
         
         return [500, "Ticket not sent. Please check the settings of the app"] unless result 
