@@ -2,6 +2,7 @@ config/secret_config.yml
 .sass-cache/
 .bundle
 public/javascripts/app_error_handler.js
+config/omniauth.platform.yml
 supportbeeapp_production.sql
 solr/data
 db/*.qlite3
@@ -24,6 +25,7 @@ doc/app
 schema.rb
 .tags
 emails/*
+public/images/
 public/uploads/*
 public/images/twitter_auth.png
 public/assets
