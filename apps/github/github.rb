@@ -22,6 +22,11 @@ module Github
     string :owner, :required => true, :label => 'Owner'
     string :repo, :required => true, :label => 'Repository'
 
+    def validate
+      errors[:flash] = ["Please fill in all the required fields"] if settings.owner.blank? or settings.repo.blank?
+      errors.empty? ? true : false
+    end
+
     private
 
     def create_issue(issue_title, description)
