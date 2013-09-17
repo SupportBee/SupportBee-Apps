@@ -3,7 +3,8 @@ module Basecamp
     def button
       ticket = payload.tickets.first
       begin
-        case payload.overlay.type
+        result = 
+          case payload.overlay.type
           when 'todo_list'
             response = create_todo_list(payload.overlay.title, payload.overlay.description)
             html = todo_html_comment(response)
@@ -11,11 +12,12 @@ module Basecamp
             response = create_message(payload.overlay.title, payload.overlay.description)
             html = message_html_comment(response)
           end
+        
+        return [500, "Ticket not sent. Please check the settings of the app"] unless result 
         comment_on_ticket(ticket, html)
       rescue Exception => e
         return [500, e.message]
       end
-
     end
   end
 end
@@ -35,6 +37,7 @@ module Basecamp
         req.headers['Content-Type'] = 'application/json'
         req.body = {subject:subject, content:content}.to_json 
       end   
+      response.status == 201 ? response : false
     end
     
     def create_todo_list(subject, content)
@@ -44,6 +47,7 @@ module Basecamp
         req.headers['Content-Type'] = 'application/json'
         req.body = {name:subject, description:content}.to_json 
       end
+      response.status == 201 ? response : false
     end
 
     def todo_html_comment(response)
