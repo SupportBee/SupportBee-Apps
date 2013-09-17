@@ -1,21 +1,17 @@
 module Basecamp
   module ActionHandler
     def button
-
+      ticket = payload.tickets.first
       begin
-        puts payload.overlay.inspect
-        result = 
-          case payload.overlay.type
-            when 'todo_list'
-              create_todo_list(payload.overlay.title, payload.overlay.description)
-            when 'message'
-              create_message(payload.overlay.title, payload.overlay.description)
-            end
-        if result
-          return [200, "Ticket sent to Basecamp"]
-        else
-          return [500, "Ticket not sent. Please check the settings of the app"]
-        end
+        case payload.overlay.type
+          when 'todo_list'
+            response = create_todo_list(payload.overlay.title, payload.overlay.description)
+            html = todo_html_comment(response)
+          when 'message'
+            response = create_message(payload.overlay.title, payload.overlay.description)
+            html = message_html_comment(response)
+          end
+        comment_on_ticket(ticket, html)
       rescue Exception => e
         return [500, e.message]
       end
@@ -38,8 +34,7 @@ module Basecamp
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['Content-Type'] = 'application/json'
         req.body = {subject:subject, content:content}.to_json 
-      end
-      response.status == 201 ? true : false
+      end   
     end
     
     def create_todo_list(subject, content)
@@ -49,7 +44,18 @@ module Basecamp
         req.headers['Content-Type'] = 'application/json'
         req.body = {name:subject, description:content}.to_json 
       end
-      response.status == 201 ? true : false
+    end
+
+    def todo_html_comment(response)
+      "Basecamp todo created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{settings.project_id}/todolists/#{response.body['id']}'>#{response.body['name']}</a>"
+    end
+    
+    def message_html_comment(response)
+      "Basecamp message created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{settings.project_id}/messages/#{response.body['id']}'>#{response.body['subject']}</a>"
+    end
+   
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
     end
   end
 end
