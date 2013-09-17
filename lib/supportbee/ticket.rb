@@ -61,9 +61,21 @@ module SupportBee
       api_post(archive_url)
       refresh
     end
-
+    
     def unarchive
       archive_url = "#{url}/archive"
+      api_delete(archive_url)
+      refresh
+    end
+    
+    def mark_answered
+      archive_url = "#{url}/answered"
+      api_post(archive_url)
+      refresh
+    end
+    
+    def mark_unanswered
+      archive_url = "#{url}/answered"
       api_delete(archive_url)
       refresh
     end
