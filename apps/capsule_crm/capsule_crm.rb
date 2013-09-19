@@ -30,7 +30,7 @@ end
 module CapsuleCrm
   class Base < SupportBeeApp::Base
     string :api_token, :required => true, :label => 'Capsule Auth Token', :hint => 'Login to your Capsule account, go to My Preferences (in the User Menu) > API Authentication Token'
-    string :subdomain, :required => true
+    string :subdomain, :required => true, :hint => 'If your Capsule Crm URL is "https://something.capsulecrm.com" then your Subdomain value is "something'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
     boolean :return_ticket_content, :required => false, :label => 'Send ticket content to Capsule'
 	
@@ -42,7 +42,7 @@ module CapsuleCrm
         req.headers['Accept'] = 'application/json'
         req.params['email'] = requester.email
       end
-      body = response.body
+      body = response.body if response.status == 200
       person = body['parties']['person'] if body
       person ? person : nil
     end
