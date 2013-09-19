@@ -184,6 +184,7 @@ module SupportBeeApp
       payload = {} if payload.blank?
       @payload = pre_process_payload(payload)
 
+      binding.pry
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
       @errors = {}
   	end
@@ -294,6 +295,7 @@ module SupportBeeApp
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
       result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
+      result[:assignment] = SupportBee::Assignment.new(auth, raw[:assignment]) if raw[:assignment]
       result
     end
 
