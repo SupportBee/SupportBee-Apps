@@ -55,7 +55,6 @@ module Asana
         req.headers['Content-Type'] = 'application/json'
         req.body = {:data => {:workspace => workspace_id, :name => task_name, :notes => notes, :assignee => 'me'}}.to_json
       end
-      binding.pry
       response.body['data']['id']
     end
 
