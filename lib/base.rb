@@ -184,7 +184,6 @@ module SupportBeeApp
       payload = {} if payload.blank?
       @payload = pre_process_payload(payload)
 
-      binding.pry
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
       @errors = {}
   	end
