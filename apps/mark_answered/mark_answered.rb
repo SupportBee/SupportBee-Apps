@@ -10,7 +10,9 @@ module MarkAnswered
       tickets = payload.tickets
       tickets.each do |ticket|
         ticket.mark_answered
-        ticket.comment :text => comment unless comment.empty?
+        comment_html = "#{payload.agent.name} (#{payload.agent.email}) marked this tickat as answered"
+        comment_html << " and left a comment:\n\n#{comment}" unless comment.empty?
+        ticket.comment :text => comment_html
       end
       [200, "Marked Answered: Updating Screen ..."]
     end
