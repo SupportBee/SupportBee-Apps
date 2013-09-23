@@ -2,30 +2,42 @@ module AuditTrail
   module EventHandler
     
     def ticket_archived
-      log_string(:action_type => 'Archived')
+      log_string(action_type: 'Archived')
     end
 
     def ticket_unarchived
-      log_string(:action_type => 'Unarchived')
+      log_string(action_type: 'Unarchived')
     end
 
     def ticket_spammed
-      log_string(:action_type => 'Spammed')
+      log_string(action_type: 'Spammed')
     end
     
     def ticket_unspammed
-      log_string(:action_type => 'Unspammed')
+      log_string(action_type: 'Unspammed')
     end
 
-
     def ticket_trashed
-      log_string(:action_type => 'Trashed')
+      log_string(action_type: 'Trashed')
     end
     
     def ticket_untrashed
-      log_string(:action_type => 'Untrashed')
+      log_string(action_type: 'Untrashed')
     end
 
+    def ticket_assigned_to_agent
+      assignee = payload.assignment.assignee.user
+      log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
+    end
+
+    def ticket_assigned_to_group
+      assignee = payload.assignment.assignee.group
+      log_string(action_type: "Assigned to \"#{assignee.name}\" group")
+    end
+
+    def ticket_unassigned
+      log_string(action_type: 'Unassigned')
+    end
   end
 end
 

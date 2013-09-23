@@ -9,7 +9,7 @@ module AssignAfterReply
       
       # Archive the ticket unless asked not to
       return if settings.keep_unanswered.to_s == '1'
-      ticket.archive
+      ticket.mark_answered
     end
   end
 end
