@@ -1,13 +1,18 @@
 module Pivotaltracker
   module ActionHandler
     def button
-
+      ticket = payload.tickets.first
       begin
-        create_story(payload.overlay.title, payload.overlay.description)
+       response =  create_story(payload.overlay.title, payload.overlay.description) 
+       return [500, "Unauthorized. Please check the Project ID and Token"] unless response
+
+       html = comment_html(response, payload.overlay.title)
+       comment_on_ticket(ticket, html)
       rescue Exception => e
         return [500, e.message]
       end
-
+      
+      [200, "Ticket sent to Pivotal Tracker"]
     end
   end
 end
@@ -27,14 +32,16 @@ module Pivotaltracker
         req.headers['Content-Type'] = 'application/xml'
         req.body = "<story><story_type>feature</story_type><name><![CDATA[#{story_name}]]></name><description><![CDATA[#{description}]]></description></story>"
       end
-   
-      if response.status == 200
-        result = [200, "Ticket sent to Pivotal Tracker"] if response.status == 200
-      elsif response.status == 401
-        result = [500, "Unauthorized. Please check the Project ID and Token"]
-      end
-     
+      response if response.status == 200
+    end
+    
+    def comment_html(response, title)
+      hash_response = Hash.from_xml(response.body)
+      "Pivotal Tracker Story Created! \n <a href='https://www.pivotaltracker.com/s/projects/#{hash_response['story']['project_id']}/stories/#{hash_response['story']['id']}'>#{title}</a>"
     end
 
+    def comment_on_ticket(ticket, html)
+       ticket.comment(:html => html)
+    end
   end
 end
