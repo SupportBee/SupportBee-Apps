@@ -49,5 +49,3 @@ action:
     - ticket
     - unassigned
     label: Send To Basecamp
-	
-
