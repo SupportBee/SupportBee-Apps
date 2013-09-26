@@ -1,11 +1,21 @@
 module Salesforce
   module EventHandler
     def ticket_created
-      @client = setup_saleforce
-      ticket = payload.ticket
-      requester = ticket.requester
-      create_new_contact(requester)
+      begin
+        @client = setup_client
+        ticket = payload.ticket
+        requester = ticket.requester
+        contact = find_email(requester.email)
+        unless contact
+          return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
+          contact = create_new_contact(requester)
+        end
 
+      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
+        [500, e.message]
+      end
+      [200, "Ticket sent to Salesforce"]
     end
   end
 end
@@ -13,25 +23,18 @@ end
 module Salesforce
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Email'
-    string :password, :required => true, :label => 'Password', :hint => 'Password'
+    string :password, :required => true, :label => 'Password'
     string :security_token, :required => true, :label => 'Security Token', :hint => 'If you clicked Setup, select My Personal Information | Reset My Security Token.'
     boolean :should_create_contact, :default => true, :required => false, :label => 'Create a New Contact in Salesforce if one does not exist'
 
     white_list :should_create_contact
 
     def setup_client
-      begin
-        Restforce.new
-          :username => settings.username,
-          :password => settings.password,
-          :security_token => settings.security_token,
-          :client_id => OMNIAUTH_CONFIG['salesforce']['key']
-          :client_secret => OMNIAUTH_CONFIG['salesforce']['secret']
-       
-      rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
-        [500, e.message]
-      end
+      Restforce.new :username => settings.username,
+        :password => settings.password,
+        :security_token => settings.security_token,
+        :client_id => OMNIAUTH_CONFIG['salesforce']['key'],
+        :client_secret => OMNIAUTH_CONFIG['salesforce']['secret']
     end
     
     def create_new_contact(requester)
@@ -40,15 +43,25 @@ module Salesforce
     
     def create_contact(requester)
       return unless settings.should_create_contact.to_s == '1'
-      new_contact = @client.create('Contact', { :LastName => requester, :Email => requester.email } )
-      find_contact(new_contact)
+      firstname = split_name(requester).first
+      lastname = split_name(requester).last
+      new_contact_id = @client.create('Contact', { :LastName => lastname, :Email => requester.email } )
+      find_contact_by_id(new_contact_id)
     end
 
-    def find_contact(contact)
-      @client.find('Contact', contact)
+    def find_contact_by_id(id)
+      @client.find('Contact', id)
     end
     
+    def split_name(requester)
+      requester.name ? requester.name.split(' ') : [requester.email,'']
+    end
     
+    def find_email(email)
+      email_id = @client.search("FIND {#{email}}")
+      find_contact_by_id(email_id[0]['Id']) rescue nil
+    end
+
   end
 end
 
