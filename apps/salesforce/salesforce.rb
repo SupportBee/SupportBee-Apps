@@ -9,12 +9,17 @@ module Salesforce
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
           contact = create_new_contact(requester)
+          html = new_contact_info_html(contact)
+        else
+          html = contact_info_html(contact)
         end
 
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
+      
+      comment_on_ticket(ticket, html)
       [200, "Ticket sent to Salesforce"]
     end
   end
@@ -56,10 +61,30 @@ module Salesforce
     def split_name(requester)
       requester.name ? requester.name.split(' ') : [requester.email,'']
     end
-    
+   
+    def new_contact_info_html(contact)
+      "Added #{contact.Name} to Salesforce... \n #{contact_url(contact)}"
+    end
+
+    def contact_info_html(contact)
+      html = ""
+      html << "#{contact.Name} \n"
+      html << "#{contact.Department} \n" if contact.respond_to?(:Department)
+      html << contact_url(contact)
+      html
+    end
+
     def find_email(email)
       email_id = @client.search("FIND {#{email}}")
       find_contact_by_id(email_id[0]['Id']) rescue nil
+    end
+    
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
+    end
+    
+    def contact_url(contact)
+      "<a href='#{@client.instance_url}/#{contact.Id}'>View #{contact.Name}'s profile on Salesforce</a>"
     end
 
   end
