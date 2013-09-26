@@ -50,7 +50,7 @@ module Salesforce
       return unless settings.should_create_contact.to_s == '1'
       firstname = split_name(requester).first
       lastname = split_name(requester).last
-      new_contact_id = @client.create('Contact', { :LastName => lastname, :Email => requester.email } )
+      new_contact_id = @client.create('Contact', { :FirstName => firstname, :LastName => lastname, :Email => requester.email } )
       find_contact_by_id(new_contact_id)
     end
 
@@ -76,6 +76,7 @@ module Salesforce
 
     def find_email(email)
       email_id = @client.search("FIND {#{email}}")
+      binding.pry
       find_contact_by_id(email_id[0]['Id']) rescue nil
     end
     
@@ -85,6 +86,18 @@ module Salesforce
     
     def contact_url(contact)
       "<a href='#{@client.instance_url}/#{contact.Id}'>View #{contact.Name}'s profile on Salesforce</a>"
+    end
+    
+    def send_note(ticket, contact)
+      @client.create('Note', { :Body => generate_note_content(ticket), :ParentId => contact.Id, :Title => ticket.summary })
+
+    end
+
+    def generate_note_content(ticket)
+      note = ""
+      note << ticket.summary + "\n"
+      note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note
     end
 
   end
