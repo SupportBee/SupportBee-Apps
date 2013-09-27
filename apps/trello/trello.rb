@@ -1,9 +1,12 @@
-
 module Trello
   module ActionHandler
     def button
-      create_card(payload.overlay.title, payload.overlay.description)
-     [200, "Success"]
+      ticket = payload.tickets.first
+      card = create_card(payload.overlay.title, payload.overlay.description)
+      html = card_info_html(ticket, card)
+      
+      comment_on_ticket(ticket, html)
+      [200, "Success"]
     end
   end
 end
@@ -41,7 +44,14 @@ module Trello
       list = @client.create(:list, 'name' => settings.list, 'idBoard' => board_id) unless list
       list['id']
     end
+    
+    def card_info_html(ticket, card)
+      "Trello Card Created!\n <a href='#{card.url}'>#{ticket.subject}</a>"      
+    end
 
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
+    end
   end
 end
 
