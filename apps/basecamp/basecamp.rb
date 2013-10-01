@@ -18,6 +18,7 @@ module Basecamp
         
         return [500, "Ticket not sent. Please check the settings of the app"] unless result 
         comment_on_ticket(ticket, html)
+        return [200, "Ticket sent to Basecamp"]
       rescue Exception => e
         return [500, e.message]
       end
