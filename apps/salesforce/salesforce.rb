@@ -32,7 +32,7 @@ module Salesforce
   class Base < SupportBeeApp::Base
     string :username, :required => true, :label => 'Email'
     string :password, :required => true, :label => 'Password'
-    string :security_token, :required => true, :label => 'Security Token', :hint => 'If you clicked Setup, select My Personal Information | Reset My Security Token.'
+    string :security_token, :required => true, :label => 'Security Token', :hint => "Login to your SalesForce Account. Navigate to 'Setup > My Personal Information > Reset My Security Token'"
     boolean :should_create_contact, :default => true, :required => false, :label => 'Create a New Contact in Salesforce if one does not exist'
 
     white_list :should_create_contact

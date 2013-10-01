@@ -2,9 +2,8 @@ name: Salesforce
 slug: salesforce
 access: public
 
-description: "Pull customer information from Saleforce and see it as a comment on the ticket with a link to the Saleforce page."
-
-category: Crm
+description: "Pull customer information from Saleforce and posts it as a comment on the ticket. It also adds a note with the ticket URL for the SalesForce contact."
+category: crm
 
 tags: 
 - crm
