@@ -14,15 +14,14 @@ module Salesforce
           html = contact_info_html(contact)
         end
 
+        if contact
+          send_note(ticket, contact)
+        end
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
       
-      if contact
-        send_note(ticket, contact)
-      end
-
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Salesforce"]
     end
