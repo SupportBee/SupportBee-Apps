@@ -17,12 +17,12 @@ module Salesforce
         if contact
           send_note(ticket, contact)
         end
+        comment_on_ticket(ticket, html)
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
       
-      comment_on_ticket(ticket, html)
       [200, "Ticket sent to Salesforce"]
     end
   end
