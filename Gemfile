@@ -17,6 +17,7 @@ gem 'htmlentities'
 gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
+gem 'therubyracer'
 
 # App Gems
 gem 'tinder'
