@@ -7,73 +7,14 @@ description: "
 Trello is used to manage projects in a very easy-to-follow task completion flow, usually with three lists; \"To Do\", \"Doing\", and \"Done\".  
 Within SupportBee, you can send specific tickets to Trello lists as a card.  If you wish to know more, please head over to [ Trello. ](https://trello.com/)
 
-### Setting Up Trello:
-
-+ Click on the [Trello App Link] (https://supportbee.com/apps/project-management/trello)
-
-+ Click on \"Add to My SupportBee\"
-
-+ Sign into your account if necessary
-
-+ Fill in the Trello settings (Note: names are case sensitive, please ensure you copy directly from your Trello Board and List names and paste them here.)
-<br />
-<br />
-
-![Imgur](http://i.imgur.com/8iQpBRQ.png)
-
-<br />
-<br />
-
-+  Click \"Save Settings\"
-
-+  If this is your first time, you will see Trello's Authorization Request, simply choose \"Allow\"
-
-<br />
-<br />
-
-![Imgur](http://i.imgur.com/3JN1sG9.png)
-
-<br />
-<br />
-              
-
-### How to Use with Trello:
-
-+ Click on a ticket
-
-+ Top menu, click on \"Apps\", click on \"Send To Trello\"
-
-<br />
-<br />
-
-![Imgur](http://i.imgur.com/iBOFKXq.png)
-
-<br />
-<br />
-
-+ Scroll down to see the comment, and click on the link.
-
-<br/>
-<br/>
-
-![Imgur](http://i.imgur.com/DoU94I4.png)  
-
-<br/>
-<br/>
-
-This will open a tab and redirect you to the Trello card.
-
-<br/>
-<br/>
-
-![Imgur](http://i.imgur.com/p1wUcm9.png)  
-
 "
 
 category: project-management 
 
 tags:
 - trello
+
+video: https://vimeo.com/77641246
 
 developer:
   name: Stratos Voukelatos
