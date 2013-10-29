@@ -2,12 +2,19 @@ name: Trello
 slug: trello
 access: public
 
-description: "Send your issues to trello"
+description: "
+
+Trello is used to manage projects in a very easy-to-follow task completion flow, usually with three lists; \"To Do\", \"Doing\", and \"Done\".  
+Within SupportBee, you can send specific tickets to Trello lists as a card.  If you wish to know more, please head over to [ Trello. ](https://trello.com/)
+
+"
 
 category: project-management 
 
 tags:
 - trello
+
+video: https://vimeo.com/77641246
 
 developer:
   name: Stratos Voukelatos
