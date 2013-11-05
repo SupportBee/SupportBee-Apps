@@ -1,0 +1,27 @@
+name: Bugherd
+slug: bugherd
+access: public
+
+description: "This is to test and a boilerplate app.
+Accepts newline"
+
+category: Integration
+
+tags: 
+- tag1
+- tag2
+
+developer: 
+  name: Shaikh Imran
+  email: imranshaikh818@gmail.com
+  twitter: "@imranshaikh_me"
+  github: Imranshaikh
+ 
+action:
+  button:
+    overlay: false
+    screens: 
+    - ticket
+    - all
+    - unassigned
+    label: Send To Bugherd
