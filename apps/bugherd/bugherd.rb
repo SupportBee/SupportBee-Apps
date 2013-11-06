@@ -1,39 +1,44 @@
 module Bugherd
-  module EventHandler
-    # Handle 'ticket.created' event
-    def ticket_created
-      return true
-    end
-
-    # Handle all events
-    def all_events
-      return true
-    end
-  end
-end
-
-module Bugherd
   module ActionHandler
     def button
-     # Handle Action here
-     [200, "Success"]
+      ticket = payload.ticket.first
+      task = create_task(payload.overlay.description)
+      html = task_info_html(ticket, task)
+
+      comment_on_ticket(ticket, html)
+      [200, "New Task created successfully in Bugherd"]
     end
   end
 end
 
 module Bugherd
+  require 'json'
+  
   class Base < SupportBeeApp::Base
-    # Define Settings
-    # string :name, :required => true, :hint => 'Tell me your name'
-    # string :username, :required => true, :label => 'User Name'
-    # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
+    string :api, :required => true, :label => 'Bugherd Api Key', :hint => 'Login to your Bugherd account, go to Settings > General Settings'
+    string :project, :required => true, :label => 'Project ID' 
 
-    # White list settings for logging
-    # white_list :name, :username
+    def create_task(description)
+      project_id = settings.project
+      response = http_post "https://www.bugherd.com/api_v2/projects/#{project_id}/tasks.json" do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {
+          "task" => {
+            "description" => description,
+            "priority" => "normal",
+            "status" => "backlog"
+          }  
+        }.to_json
+      end      
+    end
 
-    # Define public and private methods here which will be available
-    # in the EventHandler and ActionHandler modules
+    def task_info_html(ticket, task)
+      "Bugherd Task Created!\n <a href=''>#{ticket.subject}</a>"
+    end
+    
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
+    end
   end
 end
 
