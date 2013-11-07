@@ -6,7 +6,7 @@ module Bugherd
       html = task_info_html(ticket, task)
 
       comment_on_ticket(ticket, html)
-      [200, "New Task created successfully in Bugherd"]
+      [200, "New Task created successfully in BugHerd"]
     end
   end
 end
