@@ -5,6 +5,7 @@ module Bugherd
       begin
         ticket = payload.ticket.first
         task = create_task(ticket, payload.overlay.description)
+        return [500, task['error'].capitalize!] if task['error']
         html = task_info_html(ticket, task)
         comment_on_ticket(ticket, html)
       rescue Exception => e
@@ -17,6 +18,12 @@ module Bugherd
 end
 
 module Bugherd
+  class ProjectNotFound < ::StandardError
+    def message
+      "Cannot find Project"
+    end
+  end
+
   class Base < SupportBeeApp::Base
     string :token, :required => true, :label => 'Bugherd Api Key', :hint => 'Login to your Bugherd account, go to Settings > General Settings'
     string :project_id, :required => true, :label => 'Project ID' 
@@ -33,7 +40,8 @@ module Bugherd
           }  
         }.to_json
       end
-      send_comment(ticket, response.body) if response.status == 201 
+      raise ProjectNotFound if response.status == 404
+      send_comment(ticket, response.body) if response.status == 201
       response.body    
     end
 
