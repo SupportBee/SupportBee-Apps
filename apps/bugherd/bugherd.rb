@@ -4,7 +4,7 @@ module Bugherd
       http_basic_auth(settings.token, "")
       begin
         ticket = payload.ticket.first
-        task = create_task(payload.overlay.description)
+        task = create_task(ticket, payload.overlay.description)
         html = task_info_html(ticket, task)
         comment_on_ticket(ticket, html)
       rescue Exception => e
@@ -17,13 +17,12 @@ module Bugherd
 end
 
 module Bugherd
-  require 'json'
   class Base < SupportBeeApp::Base
     string :token, :required => true, :label => 'Bugherd Api Key', :hint => 'Login to your Bugherd account, go to Settings > General Settings'
-    string :project, :required => true, :label => 'Project ID' 
+    string :project_id, :required => true, :label => 'Project ID' 
 
-    def create_task(description)
-      project_id = settings.project
+    def create_task(ticket, description)
+      project_id = settings.project_id
       response = http_post "https://www.bugherd.com/api_v2/projects/#{project_id}/tasks.json" do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {
@@ -33,7 +32,8 @@ module Bugherd
             "status" => "backlog"
           }  
         }.to_json
-      end 
+      end
+      send_comment(ticket, response.body) if response.status == 201 
       response.body    
     end
 
@@ -43,6 +43,23 @@ module Bugherd
     
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
+    end
+
+    def send_comment(ticket, task)
+      task_id = task['task']['id']
+      project_id = task['task']['project_id']
+      http_post "https://www.bugherd.com/api_v2/projects/#{project_id}/tasks/#{task_id}/comments.json" do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {
+          "comment" => {
+            "text" => generate_comment_content(ticket)
+          }
+        }.to_json
+      end
+    end
+
+    def generate_comment_content(ticket)
+      "#{ticket.summary} \n https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
   end
 end
