@@ -1,9 +1,9 @@
 module Bugherd
   module ActionHandler
     def button
-      http_basic_auth(settings.token, "")
+      http.basic_auth(settings.token, "")
       begin
-        ticket = payload.ticket.first
+        ticket = payload.tickets.first
         task = create_task(ticket, payload.overlay.description)
         return [500, task['error'].capitalize!] if task['error']
         html = task_info_html(ticket, task)
