@@ -1,0 +1,18 @@
+name: Email After Archive
+slug: email_after_archive
+access: public
+
+description: "Send an email to a customer after archiving a ticket.
+This app requires a [mailgun](https://mailgun.com) API key"
+
+category: Workflow
+
+tags: 
+- email
+- feedback
+
+developer: 
+  name: Rajat Chowdhary
+  email: rajat188@gmail.com
+  twitter: "technorajat"
+  github: rajat-chowdhary
