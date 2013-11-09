@@ -38,3 +38,7 @@ gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test
 gem 'flexmock', :group => :test
 gem 'mock_redis', :group => :test
+
+# Mail Gems
+gem 'rest-client'
+gem 'multimap'
