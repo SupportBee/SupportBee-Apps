@@ -1,53 +1,29 @@
 module EmailAfterArchive
-  module EventHandler
-    # Handle 'ticket.created' event
-    def ticket_created
-      return true
-    end
+  module EventHandler    
 
-    def ticket_archived
-      recd_user = payload.agent.email
-      RestClient.post "https://api:#{settings.API_KEY}" \
-      "@api.mailgun.net/v2/#{mailgun_domain}/messages",
-      :from => "Excited User <rajat188@gmail.com>",
-      :to => "#{payload.agent.email}",
-      :subject => "#{settings.subject}",
-      :text => "#{settings.email_body}"
-    end
+    def ticket_archived     
+      requester = payload.ticket.requester
+      first_name, last_name = requester.name ? requester.name.split : [requester.email, '']
+      text = settings.email_body.gsub(/{{FIRST_NAME}}/, first_name).gsub(/{{LAST_NAME}}/, last_name)
 
-    # Handle all events
-    def all_events
-      return true
+      RestClient.post "https://api:#{settings.api_key}@api.mailgun.net/v2/#{settings.mailgun_domain}/messages",
+      :from =>  settings.from,
+      :to => requester.email,
+      :subject => settings.subject,
+      :text => text
     end
-  end
-end
-
-module EmailAfterArchive
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
+    
   end
 end
 
 module EmailAfterArchive
   class Base < SupportBeeApp::Base
     # Define Settings
-    string :API_KEY, :required => true, :hint => 'This is the API Key from mailgun console'
-     string  :subject, :required => true, :hint => 'Say Hello to your customers'
-     string :email_body, :required => true, :hint => 'The body of the email'
-     string :mailgun_domain, :required => true, :hint => 'The sub domain available in mailgun'
-    # string :name, :required => true, :hint => 'Tell me your name'
-    # string :username, :required => true, :label => 'User Name'
-    # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
-
-    # White list settings for logging
-    # white_list :name, :username
-
-    # Define public and private methods here which will be available
-    # in the EventHandler and ActionHandler modules
+     string :api_key, :label => "Mailgun API Key", :required => true, :hint => 'This is the API Key from mailgun console'
+     string :mailgun_domain, :label =>"Mailgun Domain", :required => true, :hint => 'Eg: mvhack.mailgun.org'
+     string :from, :required => true, :hint => "The Sender's email"
+     string :subject, :required => true, :hint => 'Say Hello to your customers'
+     string :email_body, :required => true, :hint => 'The body of the email. You can use {{FIRST_NAME}} and {{LAST_NAME}}'        
   end
 end
 

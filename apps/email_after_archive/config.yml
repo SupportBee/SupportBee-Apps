@@ -1,32 +1,18 @@
-name: Email_after_archive
+name: Email After Archive
 slug: email_after_archive
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "Send an email to a customer after archiving a ticket.
+This app requires a [mailgun](https://mailgun.com) API key"
 
-category: Integration
+category: Workflow
 
 tags: 
-- tag1
-- tag2
+- email
+- feedback
 
 developer: 
-  name: <Your Name>
-  email: <Your Email>
-  twitter: "<Your Twitter Handle>"
-  github: <Your Github Handle>
-
-# The following config keys are used by Action Handlers
-# Set button 'overlay' to true, if you want to have an overlay
-# The valid values for screens are [ticket, all, unassigned, my, groups]
-# Remove the following section if you do not want to define Action Handlers
- 
-action:
-  button:
-    overlay: false
-    screens: 
-    - ticket
-    - all
-    - unassigned
-    label: Send To Email_after_archive
+  name: Rajat Chowdhary
+  email: rajat188@gmail.com
+  twitter: "technorajat"
+  github: rajat-chowdhary
