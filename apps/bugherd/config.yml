@@ -1,0 +1,25 @@
+name: Bugherd
+slug: bugherd
+access: public
+
+description: "BugHerd is used to manage projects effortlessly in a very easy-to-follow task completion flow, usually with four list; \"Backlog\", \"To Do\", \"Doing\" and \"Done\".
+  Within SupportBee, you can send specific tickets to BugHerd list as a card. If you wish to know more, please head over to [ BugHerd ](https://www.bugherd.com)"
+
+category: project-management
+
+tags: 
+- bugherd
+
+developer: 
+  name: Shaikh Imran
+  email: imranshaikh818@gmail.com
+  twitter: "@imranshaikh_me"
+  github: Imranshaikh
+ 
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    label: Send To Bugherd
+

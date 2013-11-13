@@ -71,6 +71,7 @@ GEM
     jaconda (2.0.2)
       activeresource (>= 2.3.5)
     json (1.7.5)
+    libv8 (3.16.14.3)
     listen (0.5.3)
     lumberjack (1.0.2)
     mail (2.4.4)
@@ -82,6 +83,7 @@ GEM
     mock_redis (0.6.2)
     multi_json (1.3.6)
     multi_xml (0.5.1)
+    multimap (1.1.2)
     multipart-post (1.1.5)
     nokogiri (1.5.5)
     nori (2.0.4)
@@ -100,6 +102,7 @@ GEM
     redis (3.0.2)
     redis-namespace (1.2.1)
       redis (~> 3.0.0)
+    ref (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     restforce (1.4.2)
@@ -144,6 +147,9 @@ GEM
     sinatra-initializers (0.1.4)
     slop (3.3.3)
     spoon (0.0.1)
+    therubyracer (0.12.0)
+      libv8 (~> 3.16.14.0)
+      ref
     thor (0.16.0)
     tilt (1.3.3)
     tinder (1.9.1)
@@ -189,12 +195,14 @@ DEPENDENCIES
   jaconda
   mail
   mock_redis
+  multimap
   nokogiri
   pry
   rack-test
   rake
   redis
   redis-namespace
+  rest-client
   restforce
   rspec
   ruby-trello
@@ -202,5 +210,6 @@ DEPENDENCIES
   savon (~> 2.1.0)
   sinatra
   sinatra-initializers
+  therubyracer
   thor
   tinder

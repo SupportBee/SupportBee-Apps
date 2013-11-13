@@ -17,6 +17,7 @@ gem 'htmlentities'
 gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
+gem 'therubyracer'
 
 # App Gems
 gem 'tinder'
@@ -37,3 +38,7 @@ gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test
 gem 'flexmock', :group => :test
 gem 'mock_redis', :group => :test
+
+# Mail Gems
+gem 'rest-client'
+gem 'multimap'
