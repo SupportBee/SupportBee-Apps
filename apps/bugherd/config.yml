@@ -1,8 +1,8 @@
-name: Bugherd
+name: BugHerd
 slug: bugherd
 access: public
 
-description: "BugHerd is used to manage projects effortlessly in a very easy-to-follow task completion flow, usually with four list; \"Backlog\", \"To Do\", \"Doing\" and \"Done\".
+description: "BugHerd is used to manage projects effortlessly in a very easy-to-follow task completion flow, usually with four lists; \"Backlog\", \"To Do\", \"Doing\" and \"Done\".
   Within SupportBee, you can send specific tickets to BugHerd list as a card. If you wish to know more, please head over to [ BugHerd ](https://www.bugherd.com)"
 
 category: project-management
