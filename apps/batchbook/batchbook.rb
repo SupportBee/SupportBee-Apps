@@ -24,16 +24,9 @@ end
 module Batchbook
   class Base < SupportBeeApp::Base
     # Define Settings
-    # string :name, :required => true, :hint => 'Tell me your name'
-    # string :username, :required => true, :label => 'User Name'
-    # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
-
-    # White list settings for logging
-    # white_list :name, :username
-
-    # Define public and private methods here which will be available
-    # in the EventHandler and ActionHandler modules
+    string :auth_token, required: true, hint: 'Batchbook Auth Token'
+    string :subdomain, required: true, label: 'Batchbook Subdomain'
+    boolean :should_create_person, label: 'Create a New Person in Batchbook if one does not exist'
+    boolean :return_ticket_content, label: 'Send ticket content to Batchbook'
   end
 end
-
