@@ -192,6 +192,7 @@ DEPENDENCIES
   highrise
   hipchat
   htmlentities
+  httparty
   jaconda
   mail
   mock_redis
