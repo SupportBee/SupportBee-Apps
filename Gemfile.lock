@@ -23,6 +23,7 @@ GEM
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
+    awesome_print (1.2.0)
     bigcommerce (0.8.2)
       activesupport
       json
@@ -179,6 +180,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   addressable
+  awesome_print
   bigcommerce (~> 0.8.2)
   evernote-thrift
   execjs
