@@ -3,8 +3,12 @@ module Batchbook
     # Handle 'ticket.created' event
     def ticket_created
       setup_batchbook
-      ticket = payload.ticket
-      person = find_person(ticket.requester)
+
+      requester = payload.ticket.requester
+      person = find_person(requester)
+      return true if person || !settings.should_create_person?
+
+      create_person(requester)
       true
     end
 
@@ -42,6 +46,26 @@ module Batchbook
       options = { query: default_query_options.merge({ email: requester.email }) }
       response = self.class.get('/api/v1/people.json', options)
       response.parsed_response['people'].first
+    end
+
+    def create_person(requester)
+      first_name, last_name = requester.name ? requester.name.split : [requester.email, '']
+
+      options = {
+        query: default_query_options.merge({
+          person: {
+            first_name: first_name,
+            last_name: last_name,
+            emails: [{
+              address: requester.email,
+              primary: true,
+              label: 'work'
+            }]
+          }
+        })
+      }
+      response = self.class.post('/api/v1/people.json', options)
+      response.parsed_response['person']
     end
 
     def default_query_options
