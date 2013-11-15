@@ -11,11 +11,6 @@ module Batchbook
       create_person(requester)
       true
     end
-
-    # Handle all events
-    def all_events
-      return true
-    end
   end
 end
 
