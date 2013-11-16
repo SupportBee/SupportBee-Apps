@@ -4,11 +4,16 @@ module Batchbook
     def ticket_created
       setup_batchbook
 
-      requester = payload.ticket.requester
+      ticket = payload.ticket
+      requester = ticket.requester
       person = find_person(requester)
-      return true if person || !settings.should_create_person?
+      if person
+        ticket.comment(html: person_details_html(person))
+      elsif settings.should_create_person?
+        person = create_person(requester)
+        ticket.comment(html: new_person_details_html(person))
+      end
 
-      create_person(requester)
       true
     end
   end
