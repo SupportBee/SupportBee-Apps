@@ -12,8 +12,11 @@ module Batchbook
       elsif settings.should_create_person?
         person = create_person(requester)
         ticket.comment(html: new_person_details_html(person))
+      else
+        return true
       end
 
+      create_communication(person) if settings.return_ticket_content?
       true
     end
   end
@@ -71,6 +74,25 @@ module Batchbook
       html << person_link_html(person)
     end
 
+    def create_communication(person)
+      options = {
+        query: default_query_options.merge({
+          communication: {
+            title: payload.ticket.subject,
+            body: communication_body,
+            type: 'email',
+            participants: [{
+              type: 'from',
+              contact_id: person['id'],
+              contact_name: person_name(person)
+            }]
+          }
+        })
+      }
+      response = self.class.post('/api/v1/communications.json', options)
+      response.parsed_response['communication']
+    end
+
     def default_query_options
       { auth_token: settings.auth_token }
     end
@@ -95,6 +117,12 @@ module Batchbook
 
     def person_link_html(person)
       "<a href='https://#{settings.subdomain}.batchbook.com/contacts/#{person['id']}'>View #{person['first_name']}'s profile on Batchbook</a>"
+    end
+
+    def communication_body
+      ticket = payload.ticket
+      html = ticket.summary + '<br />'
+      html << "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}</a>"
     end
   end
 end
