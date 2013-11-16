@@ -20,15 +20,6 @@ module Batchbook
 end
 
 module Batchbook
-  module ActionHandler
-    def button
-     # Handle Action here
-     [200, "Success"]
-    end
-  end
-end
-
-module Batchbook
   class Base < SupportBeeApp::Base
     # Define Settings
     string :auth_token, required: true, hint: 'Batchbook Auth Token'
