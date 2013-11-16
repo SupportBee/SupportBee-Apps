@@ -70,6 +70,11 @@ module Batchbook
       html << person_link_html(person)
     end
 
+    def new_person_details_html(person)
+      html = "Added <b>#{person_name(person)}</b> to Batchbook - "
+      html << person_link_html(person)
+    end
+
     def default_query_options
       { auth_token: settings.auth_token }
     end
