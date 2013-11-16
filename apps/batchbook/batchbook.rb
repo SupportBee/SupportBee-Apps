@@ -63,8 +63,37 @@ module Batchbook
       response.parsed_response['person']
     end
 
+    def person_details_html(person)
+      html = "<b>#{person_name(person)}</b><br />"
+      html << "Phone: #{number}<br />" if number = person_number(person)
+      html << "Address: #{address}<br />" if address = person_address(person)
+      html << person_link_html(person)
+    end
+
     def default_query_options
       { auth_token: settings.auth_token }
+    end
+
+    def person_name(person)
+      "#{person['first_name']} #{person['last_name']}".strip
+    end
+
+    def person_number(person)
+      return unless phone = person['phones'].first
+      phone['number']
+    end
+
+    def person_address(person)
+      return unless address = person['addresses'].first
+      keys = %w(address_1 address_2 city state postal_code country)
+      keys.each_with_object('') do |k, addr|
+        return addr unless address['k']
+        "#{addr}, #{address['k']}"
+      end
+    end
+
+    def person_link_html(person)
+      "<a href='https://#{settings.subdomain}.batchbook.com/contacts/#{person['id']}'>View #{person['first_name']}'s profile on Batchbook</a>"
     end
   end
 end
