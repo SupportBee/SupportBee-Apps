@@ -57,8 +57,10 @@ module Hipchat
     end
 
     def api_validation
-      response = http_get "https://api.hipchat.com/v1/rooms/list?auth_token=#{settings.token}"
+      response = http_get "https://api.hipchat.com/v1/rooms/list?auth_token=#{settings.token}&auth_test=true"
+      binding.pry
       response.body
+
     end
 
     def paste_in_hipchat(text)
