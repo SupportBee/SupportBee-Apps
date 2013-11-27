@@ -35,7 +35,7 @@ end
 
 module Hipchat
   class Base < SupportBeeApp::Base
-    string :token, :required => true, :label => 'API Token', :hint => 'Api Link > https://subdomain.hipchat.com/admin/api'
+    string :token, :required => true, :label => 'API Token', :hint => "Login to your HipChat account, go to Group admin > Api. Create new admin token if one doesn't exist."
     string :room, :required => true, :label => 'Room (Name)'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
@@ -45,8 +45,10 @@ module Hipchat
     white_list :subdomain, :room, :notify_ticket_created, :notify_agent_reply_created, :notify_customer_reply_created, :notify_comment_created
     
     def validate
+      error_message = validate_api_length
       token = api_validation
-      errors[:flash] = ["#{token['error']['message']}"] if token['error']
+      errors[:flash] = ["#{error_message}"] if error_message.present? && token['error']
+      errors[:flash] = ["#{token['error']['message']}"] if token['error'] && error_message.empty?
       errors.empty? ? true : false
     end
 
@@ -60,6 +62,12 @@ module Hipchat
       response = http_get "https://api.hipchat.com/v1/rooms/list?auth_token=#{settings.token}&auth_test=true"
       response.body
     end
+
+    def validate_api_length 
+      token = settings.token
+      message = 'Invalid API Token, please follow the Api token hint' 
+      token.length == 30 ? '' : message
+    end 
 
     def paste_in_hipchat(text)
       get_room.send('SupportBee', text.slice(0,140), :message_format => 'text')
