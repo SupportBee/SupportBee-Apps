@@ -45,10 +45,9 @@ module Hipchat
     white_list :subdomain, :room, :notify_ticket_created, :notify_agent_reply_created, :notify_customer_reply_created, :notify_comment_created
     
     def validate
-      error_message = validate_api_length
+      error_message = validate_token_length
       token = api_validation
-      errors[:flash] = ["#{error_message}"] if error_message.present? && token['error']
-      errors[:flash] = ["#{token['error']['message']}"] if token['error'] && error_message.empty?
+      errors[:flash] = ["#{token['error']['message']} <br/> #{error_message}"] if error_message.present? || token['error']
       errors.empty? ? true : false
     end
 
@@ -63,9 +62,9 @@ module Hipchat
       response.body
     end
 
-    def validate_api_length 
+    def validate_token_length 
       token = settings.token
-      message = 'Invalid API Token, please follow the Api token hint' 
+      message = 'We support version 1 of the API. You might be using the version 2. Please follow the instructions below the token field to find out more' 
       token.length == 30 ? '' : message
     end 
 
