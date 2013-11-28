@@ -45,10 +45,11 @@ module Hipchat
     white_list :subdomain, :room, :notify_ticket_created, :notify_agent_reply_created, :notify_customer_reply_created, :notify_comment_created
     
     def validate
-      error_message = validate_token_length
-      token = api_validation
-      errors[:flash] = ["#{token['error']['message']} <br/> #{error_message}"] if error_message.present? || token['error']
-      errors.empty? ? true : false
+      result = validate_api_token
+      return true unless result['error']
+      errors[:flash] = ["#{result['error']['message']}"]
+      errors[:token] = ["We support version 1 of the API. The token you have provided cannot be used with this version. Please follow the above instructions to get the valid API token."] unless valid_token_length?
+      false
     end
 
     private 
@@ -57,15 +58,13 @@ module Hipchat
       get_room.send('SupportBee', message)
     end
 
-    def api_validation
+    def validate_api_token
       response = http_get "https://api.hipchat.com/v1/rooms/list?auth_token=#{settings.token}&auth_test=true"
       response.body
     end
 
-    def validate_token_length 
-      token = settings.token
-      message = 'We support version 1 of the API. You might be using the version 2. Please follow the instructions below the token field to find out more' 
-      token.length == 30 ? '' : message
+    def valid_token_length? 
+      settings.token.length == 30 ? true : false
     end 
 
     def paste_in_hipchat(text)
