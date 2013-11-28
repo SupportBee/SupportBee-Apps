@@ -48,7 +48,7 @@ module Hipchat
       result = validate_api_token
       return true unless result['error']
       errors[:flash] = ["#{result['error']['message']}"]
-      errors[:token] = ["We support version 1 of the API. The token you have provided cannot be used with this version. Please follow the above instructions to get the valid API token."] unless valid_token_length?
+      errors[:token] = ["We support version 1 of the API. The token you have provided cannot be used with this version. Please follow the instructions below to get the valid API token."] unless valid_token_length?
       false
     end
 
