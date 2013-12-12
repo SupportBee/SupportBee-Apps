@@ -46,18 +46,21 @@ module Pipedrive
     
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
-      first_name = split_name(requester)
       person = http_post('http://api.pipedrive.com/v1/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.body = {name:first_name, email:[requester.email]}.to_json
+        req.body = {name:name(requester), email:[requester.email]}.to_json
       end
       return person.body['data']
     end
 
     def split_name(requester)
-      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email,'']
+      first_name, last_name = name(requester)
       return first_name
+    end
+
+    def name(requester)
+      requester.name ? requester.name.split(' ') : [requester.email,'']
     end
    
     def update_note(person, ticket) 
