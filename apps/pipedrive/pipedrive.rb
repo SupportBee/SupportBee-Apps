@@ -31,6 +31,7 @@ module Pipedrive
   class Base < SupportBeeApp::Base
     string  :api_token, :required => true, :label => 'Pipedrive Auth Token'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
+    boolean :send_ticket_content, :required => false, :label => 'Send Ticket\'s Full Contents to Pipedrive', :default => false
 
     white_list :should_create_person
 
@@ -46,18 +47,21 @@ module Pipedrive
     
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
-      first_name = split_name(requester)
       person = http_post('http://api.pipedrive.com/v1/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.body = {name:first_name, email:[requester.email]}.to_json
+        req.body = {name:name(requester), email:[requester.email]}.to_json
       end
       return person.body['data']
     end
 
     def split_name(requester)
-      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email,'']
+      first_name, last_name = name(requester)
       return first_name
+    end
+
+    def name(requester)
+      requester.name ? requester.name.split(' ') : [requester.email,'']
     end
    
     def update_note(person, ticket) 
@@ -91,7 +95,9 @@ module Pipedrive
     end
    
     def generate_note_content(ticket)
-      note = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
+      note
     end
 
   end
