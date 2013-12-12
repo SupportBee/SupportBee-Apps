@@ -31,6 +31,7 @@ module Pipedrive
   class Base < SupportBeeApp::Base
     string  :api_token, :required => true, :label => 'Pipedrive Auth Token'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
+    boolean :send_ticket_content, :required => false, :label => 'Send Ticket\'s Full Contents to Pipedrive', :default => false
 
     white_list :should_create_person
 
@@ -94,7 +95,9 @@ module Pipedrive
     end
    
     def generate_note_content(ticket)
-      note = "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
+      note
     end
 
   end
