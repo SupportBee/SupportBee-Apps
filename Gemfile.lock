@@ -8,7 +8,7 @@ GIT
       spoon
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     activemodel (3.2.8)
       activesupport (= 3.2.8)
