@@ -216,9 +216,8 @@ module SupportBeeApp
       @action = action
       method = to_method(action)
       result = []
-
       begin
-        result = self.send method if self.respond_to?(method)
+        result = self.respond_to?(method) ? self.send(method) : [400, 'This app does not support the specified action']
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
