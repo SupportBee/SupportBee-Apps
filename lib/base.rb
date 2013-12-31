@@ -69,10 +69,39 @@ module SupportBeeApp
 
       def api_hash
         result = configuration.dup
-        ['action'].each{|key| result.delete(key)}
+        if has_actions?
+          result['actions'] = result.delete('action') 
+          result['actions']['button'] = buttons_hash if has_action?(:button)
+        end
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
         result
+      end
+
+      def has_actions?
+        !!(configuration['action'])
+      end
+
+      def has_action?(action)
+        return unless has_actions?
+        action = action.to_s
+        actions_hash.has_key?(action)
+      end
+
+      def actions_hash
+        configuration['action']
+      end
+
+      def buttons_hash
+        return unless has_action?('button')
+        _hash = actions_hash['button'].dup
+        if _hash['overlay']
+          _button_overlay_path = views_path.join('button', 'overlay.hbs')
+          _hash['overlay'] = {}
+          _hash['overlay']['template'] = File.read(_button_overlay_path)
+          _hash['overlay']['fetch_data'] = action_methods.include?(:dynamic_data) ? true : false
+        end
+        _hash
       end
 
       def access
