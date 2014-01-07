@@ -69,11 +69,11 @@ module SupportBeeApp
 
       def api_hash
         result = configuration.dup
-        result['actions'] = {}
         if has_actions?
           result['actions'] = result.delete('action') 
           result['actions']['button'] = buttons_hash if has_action?(:button)
         end
+        result['actions'] = {} unless result['actions']
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
         result
