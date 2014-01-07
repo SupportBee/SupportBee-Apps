@@ -69,6 +69,7 @@ module SupportBeeApp
 
       def api_hash
         result = configuration.dup
+        result['actions'] = {}
         if has_actions?
           result['actions'] = result.delete('action') 
           result['actions']['button'] = buttons_hash if has_action?(:button)
