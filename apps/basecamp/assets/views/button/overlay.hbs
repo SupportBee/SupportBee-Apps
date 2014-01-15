@@ -3,22 +3,30 @@
   {{#ticket}}
     <ol>
       <li>
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </li>
+      <li>
+        <label for="type">Send Ticket as a</label>
+        <select name="type">
+          <option value="message">Message</option>
+          <option value="todo_list">ToDo List</option>
+        </select>
+      </li>
+      <li class="todo_lists" style="display:none;">
+        <label for="todo_lists">Select Todo List</label>
+        <select name="todo_lists"></select>
+      </li>
+      <li>
         <label for="title">Message Title</label>
         <input name="title" value="{{subject}}">
       </li>
-      <li>
+      <li class="description">
         <label for="description">Message Description</label>
         <textarea name="description">
 {{content.text}} \n
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         </textarea>
-      </li>
-      <li>
-        <label for="type">Send Ticket as a</label>
-        <select name="type">
-          <option value="todo_list">ToDo List</option>
-          <option value="message">Message</option>
-        </select>
       </li>
     </ol>
   {{/ticket}}

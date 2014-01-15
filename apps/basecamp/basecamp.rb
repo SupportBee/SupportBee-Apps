@@ -23,6 +23,16 @@ module Basecamp
         return [500, e.message]
       end
     end
+
+    def projects
+      [200, fetch_projects.to_json]
+    end
+
+  def todo_lists
+[200, 
+      fetch_todo_lists(payload.project_id)
+      ]
+  end
   end
 end
 
@@ -54,6 +64,23 @@ module Basecamp
       response.status == 201 ? response : false
     end
 
+    def fetch_projects
+      token = settings.oauth_token || settings.token
+      response = http.get "https://basecamp.com/#{settings.app_id}/api/v1/projects" do |req|
+       req.headers['Authorization'] = 'Bearer ' + token
+       req.headers['Accept'] = 'application/json'
+      end
+      response.body
+    end
+
+    def fetch_todo_lists(project_id)
+      token = settings.oauth_token || settings.token
+      response = http.get "https://basecamp.com/#{settings.app_id}/api/v1/projects/#{project_id}/todolists.json" do |req|
+       req.headers['Authorization'] = 'Bearer ' + token
+       req.headers['Accept'] = 'application/json'
+      end
+      response.body.to_json
+    end
     def todo_html_comment(response)
       "Basecamp todo created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{settings.project_id}/todolists/#{response.body['id']}'>#{response.body['name']}</a>"
     end
