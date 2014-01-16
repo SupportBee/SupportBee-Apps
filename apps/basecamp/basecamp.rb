@@ -6,13 +6,17 @@ module Basecamp
       begin
         result = 
           case payload.overlay.type
-          when 'todo_list'
-            response = create_todo_list(payload.overlay.title, payload.overlay.description)
-            html = todo_html_comment(response) if response
-            response
           when 'message'
-            response = create_message(payload.overlay.title, payload.overlay.description)
-            html = message_html_comment(response) if response
+            response = create_message
+            html = message_html_comment(response['id'], response['subject']) if response
+            response
+          when 'todo_list'
+            response = create_todo_list
+            html = todolist_html_comment(response['id'], response['name']) if response
+            response
+          when 'todo_item'
+            response = create_todo
+            html = todolist_html_comment(response['todolist_id'], 'Todo item created') if response
             response
           end
         
@@ -29,68 +33,137 @@ module Basecamp
     end
 
     def todo_lists
-      [200, fetch_todo_lists(payload.project_id)]
+      [200, fetch_todo_lists]
+    end
+
+    def project_accesses
+      [200, fetch_project_accesses]
     end
   end
 end
 
 module Basecamp
   class Base < SupportBeeApp::Base
-    oauth  :"basecamp", :oauth_options => {:expiration => :never, :scope => "read,write"}
-    string :app_id, :required => true, :label => 'Enter App ID', :hint => 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
-    string :project_id, :required => true, :label => 'Enter Project ID', :hint => 'When you go to a project, if the URL is "https://basecamp.com/9999999/projects/8888888-explore-basecamp" enter "8888888"'
-  
-    private
+    oauth  :basecamp,
+      oauth_options: {
+        expiration: :never, 
+        scope: "read,write"
+      }
 
-    def basecamp_token
+    string :app_id, 
+      required: true, 
+      label: 'Enter App ID', 
+      hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
+
+
+    def token
       settings.oauth_token || settings.token
     end
+
+    def project_id
+      return payload.project_id if payload.project_id
+      return payload.overlay.projects_select if payload.overlay
+    end
+
+    def todolist_id
+      return payload.todolist_id if payload.todolist_id
+      return payload.overlay.todo_lists if payload.overlay
+    end
+
+    def title
+      payload.overlay.title rescue nil
+    end
+
+    def description
+      payload.overlay.description rescue nil
+    end
+
+    def assignee_id
+      payload.overlay.assignee rescue nil
+    end
+    
+    private
 
     def base_url
       Pathname.new("https://basecamp.com/#{settings.app_id}")
     end
 
+    def base_api_url
+      base_url.join('api','v1')
+    end
+
     def projects_url
-      base_url.join("/api/v1/projects/")
+      base_api_url.join("projects")
     end
 
-    def project_url(project_id)
-      projects_url.join(project_id)
+    def project_url
+      projects_url.join(project_id.to_s)
     end
 
-    def project_messages_url(project_id)
-      project_url(project_id).join('messages.json')
+    def project_accesses_url
+      project_url.join('accesses')
     end
 
-    def project_todolists_url(project_id)
-      project_url(project_id).join('todolists.json')
+    def project_messages_url
+      project_url.join('messages')
+    end
+
+    def project_todolists_url
+      project_url.join('todolists')
+    end
+
+    def project_todolist_todos_url
+      project_todolists_url.join(todolist_id.to_s, 'todos')
     end
 
     def basecamp_post(url, body)
-      http.post url do |req|
-        req.headers['Authorization'] = 'Bearer ' + basecamp_token
+      http.post "#{url.to_s}.json" do |req|
+        req.headers['Authorization'] = 'Bearer ' + token
         req.headers['Content-Type'] = 'application/json'
         req.body = body
       end 
     end
 
     def basecamp_get(url)
-      response = http.get url do |req|
-       req.headers['Authorization'] = 'Bearer ' + basecamp_token
+      response = http.get "#{url.to_s}.json" do |req|
+       req.headers['Authorization'] = 'Bearer ' + token
        req.headers['Accept'] = 'application/json'
       end
     end
 
-    def create_message(subject, content)
-      post_body = {subject:subject, content:content}.to_json 
-      response = basecamp_post(project_messages_url(settings.project_id), post_body)
+    def create_message
+      post_body = {
+        subject: title, 
+        content: description 
+      }.to_json 
+
+      response = basecamp_post(project_messages_url, post_body)
       response.status == 201 ? response : false
     end
     
-    def create_todo_list(subject, content)
-      post_body = {name:subject, description:content}.to_json 
-      response = basecamp_post(project_todolists_url(settings.project_id), post_body)
+    def create_todo_list
+      _description = description.blank? ? '' : description
+
+      post_body = {
+        name: title, 
+        description: _description 
+      }.to_json
+
+      response = basecamp_post(project_todolists_url, post_body)
       response.status == 201 ? response : false
+    end
+
+    def create_todo
+      post_body = {
+        content: title
+      }
+      post_body[:assignee] = {
+        id: assignee_id,
+        type: 'Person'
+      } if assignee_id
+      post_body = post_body.to_json
+
+      response = basecamp_post(project_todolist_todos_url, post_body)
     end
 
     def fetch_projects
@@ -98,17 +171,22 @@ module Basecamp
       response.body.to_json
     end
 
-    def fetch_todo_lists(project_id)
-      response = basecamp_get(project_todolists_url(project_id))
+    def fetch_todo_lists
+      response = basecamp_get(project_todolists_url)
       response.body.to_json
     end
 
-    def todo_html_comment(response)
-      "Basecamp todo created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{settings.project_id}/todolists/#{response.body['id']}'>#{response.body['name']}</a>"
+    def fetch_project_accesses
+      response = basecamp_get(project_accesses_url)
+      response.body.to_json
+    end
+
+    def todolist_html_comment(_todolist_id, name)
+      "Basecamp todo created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{name}</a>"
     end
     
-    def message_html_comment(response)
-      "Basecamp message created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{settings.project_id}/messages/#{response.body['id']}'>#{response.body['subject']}</a>"
+    def message_html_comment(_message_id, subject)
+      "Basecamp message created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
     end
    
     def comment_on_ticket(ticket, html)
