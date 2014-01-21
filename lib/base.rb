@@ -46,6 +46,10 @@ module SupportBeeApp
         root.join('assets')
       end
 
+      def javascripts_path
+        assets_path.join('javascripts')
+      end
+
       def views_path
         assets_path.join('views')
       end
@@ -74,6 +78,7 @@ module SupportBeeApp
           result['actions']['button'] = buttons_hash if has_action?(:button)
         end
         result['actions'] = {} unless result['actions']
+        result['javascript'] = compiled_js if has_javascript?
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
         result
@@ -81,6 +86,32 @@ module SupportBeeApp
 
       def has_actions?
         !!(configuration['action'])
+      end
+
+      def has_javascript?
+        return false unless Dir.exists? javascripts_path
+        return false unless [coffeescript_files, javascript_files].flatten.length > 0
+        true
+      end
+
+      def compiled_js
+        javascripts = ""
+        javascript_files.each do |file|
+          javascripts << File.read(file)
+        end
+        coffeescript_files.each do |file|
+          compiled = CoffeeScript.compile(File.read(file))
+          javascripts << compiled
+        end
+        javascripts
+      end
+
+      def coffeescript_files
+        Dir.glob("#{javascripts_path}/*.coffee")
+      end
+
+      def javascript_files
+        Dir.glob("#{javascripts_path}/*.js")
       end
 
       def has_action?(action)
