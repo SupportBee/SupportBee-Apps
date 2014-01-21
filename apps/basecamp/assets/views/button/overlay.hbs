@@ -35,10 +35,14 @@ https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         </textarea>
       </li>
 
-      <li class="assign" style="display:none;">
-        <label for="assign">Assign To</label>
-        <select name="assign"></select>
-      </li>
+      <div class="assign" style="display:none;">
+        <li >
+          <label for="assign_to">Assign To</label>
+          <select name="assign_to">
+            <option value="none">Don't Assign</option>
+          </select>
+        </li>
+      </div>
 
     </ol>
   {{/ticket}}
