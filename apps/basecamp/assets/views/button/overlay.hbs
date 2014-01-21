@@ -1,49 +1,53 @@
-<h3>Edit the Message Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <ol>
+<form>
+  {{#each tickets}}
+    {{#ticket}}
+      <ol>
 
-      <li>
-        <label for="project">Select Project</label>
-        <select name="projects_select"></select>
-      </li>
+        <li>
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </li>
 
-      <li>
-        <label for="type">Send Ticket as a</label>
-        <select name="type">
-          <option value="message">Message</option>
-          <option value="todo_list">New To-do List</option>
-          <option value="todo_item">To-do Item</option>
-        </select>
-      </li>
-
-      <li class="todo_lists" style="display:none;">
-        <label for="todo_lists">Select Todo List</label>
-        <select name="todo_lists"></select>
-      </li>
-
-      <li class="title">
-        <label for="title">Title</label>
-        <input name="title" value="{{subject}}">
-      </li>
-
-      <li class="description">
-        <label for="description">Description</label>
-        <textarea name="description">
-{{content.text}} \n
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </li>
-
-      <div class="assign" style="display:none;">
-        <li >
-          <label for="assign_to">Assign To</label>
-          <select name="assign_to">
-            <option value="none">Don't Assign</option>
+        <li>
+          <label for="type">Send Ticket as a</label>
+          <select name="type">
+            <option value="message">Message</option>
+            <option value="todo_list">New To-do List</option>
+            <option value="todo_item">To-do Item</option>
           </select>
         </li>
-      </div>
 
-    </ol>
-  {{/ticket}}
-{{/each}}
+        <li class="todo_lists" style="display:none;">
+          <label for="todo_lists">Select Todo List</label>
+          <select name="todo_lists"></select>
+        </li>
+
+        <li class="title">
+          <label for="title">Title</label>
+          <input name="title" value="{{subject}}">
+        </li>
+
+        <li class="description">
+          <label for="description">Description</label>
+          <textarea name="description">
+  {{content.text}} \n
+  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+          </textarea>
+        </li>
+
+        <div class="assign" style="display:none;">
+          <li >
+            <label for="assign_to">Assign To</label>
+            <select name="assign_to">
+              <option value="none">Don't Assign</option>
+            </select>
+          </li>
+        </div>
+        <li>
+          <a class="submit btn btn-primary">Send to Basecamp</a>
+          <a class="cancel btn">Cancel</a>
+        </li>
+      </ol>
+    {{/ticket}}
+  {{/each}}
+</form>

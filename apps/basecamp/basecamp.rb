@@ -5,7 +5,7 @@ module Basecamp
       html = ''
       begin
         result = 
-          case payload.overlay.type
+          case payload.type
           when 'message'
             response = create_message
             html = message_html_comment(response['id'], response['subject']) if response
@@ -22,9 +22,11 @@ module Basecamp
         
         return [500, "Ticket not sent. Please check the settings of the app"] unless result 
         comment_on_ticket(ticket, html)
-        return [200, "Ticket sent to Basecamp"]
+        return [200, {message: "Ticket sent to Basecamp"}]
       rescue Exception => e
-        return [500, e.message]
+        puts e.message
+        puts e.backtrace.join("\n")
+        return [500, {message: e.message}]
       end
     end
 
@@ -61,13 +63,11 @@ module Basecamp
     end
 
     def project_id
-      return payload.project_id if payload.project_id
-      return payload.overlay.projects_select if payload.overlay
+      payload.projects_select
     end
 
     def todolist_id
-      return payload.todolist_id if payload.todolist_id
-      return payload.overlay.todo_lists if payload.overlay
+      payload.todo_list
     end
 
     def title

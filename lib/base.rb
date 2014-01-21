@@ -237,7 +237,8 @@ module SupportBeeApp
 
         return response
       rescue Exception => e
-        LOGGER.error log_event_message("#{e.message} \n #{e.backtrace}")
+        LOGGER.error log_event_message(e.message)
+        LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
       end
     end
@@ -248,6 +249,7 @@ module SupportBeeApp
       result = []
       begin
         result = self.respond_to?(method) ? self.send(method) : [400, 'This app does not support the specified action']
+
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
@@ -255,6 +257,7 @@ module SupportBeeApp
         result = [500, e.message]
       end
 
+      LOGGER.error log_action_message("#{result[1]}") if result[0] == 500
       result
     end
 
