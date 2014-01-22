@@ -27,6 +27,7 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
     @todo_lists_selector = @$("[name='todo_lists']")
     @people_list_selector = @$("[name='assign_to']")
     @target_type_selector = @$("[name='type']")
+    @description_field = @$("[name='description']")
     @title_el = @$(".title")
     @description_el = @$(".description")
     @todo_lists_el = @$(".todo_lists")
@@ -49,6 +50,7 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
     @hide_everything()
     switch @type
       when 'todo_item'
+        @show_todo_lists_selector()
         @populate_lists()
         @populate_people()
       when 'todo_list'
@@ -81,9 +83,13 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
 
   show_description: ->
     @description_el.show()
+
+  show_todo_lists_selector: ->
+    @todo_lists_el.show()    
  
   hide_description: ->
     @description_el.hide()
+    @description_field.html('')
  
   populate_lists: ->
     @lists = new SB.Apps.BaseCollection([],

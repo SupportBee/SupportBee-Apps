@@ -8,21 +8,21 @@ module Basecamp
           case payload.type
           when 'message'
             response = create_message
-            html = message_html_comment(response['id'], response['subject']) if response
+            html = message_html_comment(response.body['id'], response.body['subject']) if response and response.body
             response
           when 'todo_list'
             response = create_todo_list
-            html = todolist_html_comment(response['id'], response['name']) if response
+            html = todolist_html_comment(response.body['id'], response.body['name']) if response and response.body
             response
           when 'todo_item'
             response = create_todo
-            html = todolist_html_comment(response['todolist_id'], 'Todo item created') if response
+            html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
             response
           end
         
-        return [500, "Ticket not sent. Please check the settings of the app"] unless result 
+        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result 
         comment_on_ticket(ticket, html)
-        return [200, {message: "Ticket sent to Basecamp"}]
+        return [200, '{"message": "Ticket sent to Basecamp"}']
       rescue Exception => e
         puts e.message
         puts e.backtrace.join("\n")
@@ -71,15 +71,15 @@ module Basecamp
     end
 
     def title
-      payload.overlay.title rescue nil
+      payload.title rescue nil
     end
 
     def description
-      payload.overlay.description rescue nil
+      payload.description rescue nil
     end
 
     def assignee_id
-      payload.overlay.assignee rescue nil
+      payload.assignee
     end
     
     private
@@ -160,10 +160,11 @@ module Basecamp
       post_body[:assignee] = {
         id: assignee_id,
         type: 'Person'
-      } if assignee_id
+      } if assignee_id and assignee_id != 'none'
       post_body = post_body.to_json
 
       response = basecamp_post(project_todolist_todos_url, post_body)
+      response.status == 201 ? response : false
     end
 
     def fetch_projects
@@ -181,12 +182,16 @@ module Basecamp
       response.body.to_json
     end
 
-    def todolist_html_comment(_todolist_id, name)
-      "Basecamp todo created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{name}</a>"
+    def todolist_html_comment(_todolist_id, _todolist_name)
+      "Basecamp To-do List created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
     end
     
+    def todo_html_comment(_todolist_id, _todolist_name)
+      "Basecamp todo created in the list <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
+    end
+
     def message_html_comment(_message_id, subject)
-      "Basecamp message created!\n <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
+      "Basecamp message created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
     end
    
     def comment_on_ticket(ticket, html)
