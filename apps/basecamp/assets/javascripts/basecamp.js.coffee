@@ -64,6 +64,7 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
     @people_list_el.hide()
 
   project_changed: ->
+    @hide_everything()
     @reset_form()
 
   reset_form: ->
@@ -76,7 +77,7 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
     @show_description()
 
   reset_todo_lists: ->
-    @todo_lists_el.html('').hide()
+    @todo_lists_el.find('option').remove().hide()
 
   show_title: ->
     @title_el.show()
@@ -116,6 +117,7 @@ SB.Apps.Basecamp.View = SB.Apps.BaseView.extend(
     
 
   render_lists: ->
+    console.log 'render_lists', @lists
     @lists.each @render_one_list
     @todo_lists_el.show()
     @description_el.hide()

@@ -15,7 +15,7 @@ module Basecamp
             html = todolist_html_comment(response.body['id'], response.body['name']) if response and response.body
             response
           when 'todo_item'
-            response = create_todo
+            response = create_todo_item
             html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
             response
           end
@@ -67,7 +67,7 @@ module Basecamp
     end
 
     def todolist_id
-      payload.todo_list
+      payload.todo_lists
     end
 
     def title
@@ -79,7 +79,7 @@ module Basecamp
     end
 
     def assignee_id
-      payload.assignee
+      payload.assign_to
     end
     
     private
@@ -153,7 +153,7 @@ module Basecamp
       response.status == 201 ? response : false
     end
 
-    def create_todo
+    def create_todo_item
       post_body = {
         content: title
       }
