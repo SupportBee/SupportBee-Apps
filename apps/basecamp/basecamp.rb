@@ -5,7 +5,7 @@ module Basecamp
       html = ''
       begin
         result = 
-          case payload.type
+          case payload.overlay.type
           when 'message'
             response = create_message
             html = message_html_comment(response.body['id'], response.body['subject']) if response and response.body
@@ -63,23 +63,23 @@ module Basecamp
     end
 
     def project_id
-      payload.projects_select
+      payload.overlay.projects_select
     end
 
     def todolist_id
-      payload.todo_lists
+      payload.overlay.todo_lists
     end
 
     def title
-      payload.title rescue nil
+      payload.overlay.title rescue nil
     end
 
     def description
-      payload.description rescue nil
+      payload.overlay.description rescue nil
     end
 
     def assignee_id
-      payload.assign_to
+      payload.overlay.assign_to
     end
     
     private
