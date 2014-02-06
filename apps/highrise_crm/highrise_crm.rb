@@ -8,7 +8,15 @@ module HighriseCRM
       setup_highrise
       make_old_settings_compatible
 
-      if settings.associate_ticket_with_person.to_s == '1'
+      if settings.associate_ticket_with_company.to_s == '1'
+        if company = find_company(requester)
+          ticket.comment(:html => company_info_html(company))
+        else
+          if company = create_company(requester)
+            ticket.comment(:html => new_company_info_html(company))
+          end
+        end
+      elsif settings.associate_ticket_with_person.to_s == '1'
         if person = find_person(requester)
           ticket.comment(:html => person_info_html(person))
         else
@@ -18,25 +26,12 @@ module HighriseCRM
         end
       end
 
-      if settings.associate_ticket_with_company.to_s == '1'
-        if company = find_company(requester)
-          ticket.comment(:html => company_info_html(company))
-        else
-          if company = create_company(requester)
-            ticket.comment(:html => new_company_info_html(company))
-          end
-        end
-      end
-
-      note_content = nil
-      [person, company].each do |subject|
-        next if subject.nil?
-
-        note_content ||= generate_note_content(ticket)
-        subject_type = subject.class.name.split('::').last
-        note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
-        note.save
-      end
+      subject = person || company
+      return unless subject
+      note_content = generate_note_content(ticket)
+      subject_type = subject.class.name.split('::').last
+      note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
+      note.save
 
       return true
     end
@@ -48,13 +43,9 @@ module HighriseCRM
     # Define Settings
     string :auth_token, :required => true, :hint => 'Highrise Auth Token'
     string :subdomain, :required => true, :label => 'Highrise Subdomain'
-
     boolean :associate_ticket_with_person, :default => true, :label => 'Associate Ticket with a Person in Highrise'
-    boolean :should_create_person, :default => true, :label => 'Create a New Person in Highrise if one does not exist'
-
-    boolean :associate_ticket_with_company, :default => false, :label => 'Associate Ticket with a Company in Highrise'
-    boolean :should_create_company, :default => false, :label => 'Create a New Company in Highrise if it does not exist'
-
+    boolean :associate_ticket_with_company, :label => 'Associate Ticket with a Company in Highrise', :hint => "`Associate Ticket with a Person in Highrise` will be ignored"
+    boolean :should_create_person, :default => true, :label => 'Create a New Person / Company in Highrise if one does not exist'
     boolean :return_ticket_content, :label => 'Send ticket content to Highrise'
 
     # White list settings for logging
@@ -88,7 +79,7 @@ module HighriseCRM
     end
 
     def create_company(requester)
-      return unless settings.should_create_company.to_s == '1'
+      return unless settings.should_create_person.to_s == '1'
 
       company = Highrise::Company.new({
         name: requester.name,
@@ -113,8 +104,7 @@ module HighriseCRM
     def make_old_settings_compatible
       {
         'associate_ticket_with_person' => '1',
-        'associate_ticket_with_company' => '0',
-        'should_create_company' => '0'
+        'associate_ticket_with_company' => '0'
       }.each do |name, value|
         next if ['0', '1'].include?(settings[name])
         settings[name] = value
