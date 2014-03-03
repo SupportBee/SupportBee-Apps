@@ -55,11 +55,6 @@ module Hipchat
 
     private 
 
-    def send_to_hipchat(message, options = {})
-      options[:notify] = 1 if settings.alert_users.to_s == '1'
-      get_room.send('SupportBee', message, options)
-    end
-
     def validate_api_token
       response = http_get "https://api.hipchat.com/v1/rooms/list?auth_token=#{settings.token}&auth_test=true"
       response.body
@@ -71,6 +66,15 @@ module Hipchat
 
     def paste_in_hipchat(text)
       get_room.send('SupportBee', text.slice(0,140), :message_format => 'text')
+    end
+
+    def send_to_hipchat(message, options = {})
+      enable_user_alerts(options) if settings.alert_users.to_s == '1'
+      get_room.send('SupportBee', message, options)
+    end
+
+    def enable_user_alerts(options)
+      options[:notify] = 1
     end
 
     def get_room
