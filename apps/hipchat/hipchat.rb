@@ -41,6 +41,7 @@ module Hipchat
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
     boolean :notify_agent_reply_created, :default => true, :label => "Notify when an agent replies"
     boolean :notify_comment_created, :default => true, :label => "Notify when a comment is posted"
+    boolean :alert_users, :label => 'Alert users on notifications', :hint => 'Alert (play a sound, change tab color etc.) users on notifications. Depends on user preferences in HipChat.'
 
     white_list :subdomain, :room, :notify_ticket_created, :notify_agent_reply_created, :notify_customer_reply_created, :notify_comment_created
     
@@ -54,8 +55,9 @@ module Hipchat
 
     private 
 
-    def send_to_hipchat(message)
-      get_room.send('SupportBee', message)
+    def send_to_hipchat(message, options = {})
+      options[:notify] = 1 if settings.alert_users.to_s == '1'
+      get_room.send('SupportBee', message, options)
     end
 
     def validate_api_token
