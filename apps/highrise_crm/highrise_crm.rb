@@ -45,9 +45,11 @@ module HighriseCRM
       ticket = payload.ticket
       return true unless note_id = get_note_id(ticket.id)
 
+      reply = payload.reply
+      body = agent_reply_header(reply) + payload.reply.content.html
+
       setup_highrise
-      reply_html = payload.reply.content.html
-      comment = Highrise::Comment.new(parent_id: note_id, body: reply_html)
+      comment = Highrise::Comment.new(parent_id: note_id, body: body)
       comment.save
     end
   end
@@ -144,6 +146,16 @@ module HighriseCRM
 
     def ticket_note_association_key(ticket_id)
       "ticket_note:#{ticket_id}"
+    end
+
+    def agent_reply_header(reply)
+      Mab::Builder.new do
+        p do
+          text "New Agent Reply by #{reply.replier.name}"
+          br
+          br
+        end
+      end.to_s
     end
 
     def person_info_html(person)
