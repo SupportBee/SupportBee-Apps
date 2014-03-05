@@ -78,6 +78,7 @@ GEM
     libv8 (3.16.14.3)
     listen (0.5.3)
     lumberjack (1.0.2)
+    mab (0.0.3)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -198,6 +199,7 @@ DEPENDENCIES
   hipchat
   htmlentities
   jaconda
+  mab
   mail
   mock_redis
   multimap

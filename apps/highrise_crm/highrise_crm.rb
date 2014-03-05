@@ -29,11 +29,24 @@ module HighriseCRM
       subject = person || company
       return unless subject
       note_content = generate_note_content(ticket)
-      subject_type = subject.class.name.split('::').last
+      subject_type = subject.class.name.demodulize
       note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
-      note.save
+      return false unless note.save
 
+      return true unless settings.associate_reply_with_comment.to_s == '1'
+
+      store_note_id(ticket.id, note.id)
       return true
+    end
+
+    def agent_reply_created
+      header = agent_reply_header(payload.reply)
+      create_comment(header: header)
+    end
+
+    def customer_reply_created
+      header = customer_reply_header(payload.reply)
+      create_comment(header: header)
     end
   end
 end
@@ -43,10 +56,13 @@ module HighriseCRM
     # Define Settings
     string :auth_token, :required => true, :hint => 'Highrise Auth Token'
     string :subdomain, :required => true, :label => 'Highrise Subdomain'
+
     boolean :associate_ticket_with_person, :default => true, :label => 'Associate Ticket with a Person in Highrise'
     boolean :associate_ticket_with_company, :label => 'Associate Ticket with a Company in Highrise', :hint => "`Associate Ticket with a Person in Highrise` will be ignored"
     boolean :should_create_person, :default => true, :label => 'Create a New Person / Company in Highrise if one does not exist'
     boolean :return_ticket_content, :label => 'Send ticket content to Highrise'
+
+    boolean :associate_reply_with_comment, :label => 'Associate Reply with a Comment on Highrise'
 
     # White list settings for logging
     white_list :subdomain, :should_create_person
@@ -109,6 +125,55 @@ module HighriseCRM
         next if ['0', '1'].include?(settings[name])
         settings[name] = value
       end
+    end
+
+    def store
+      @redis_key_prefix = 'highrise:'
+      @store ||= SupportBeeApp::Store.new(redis_key_prefix: @redis_key_prefix)
+    end
+
+    def store_note_id(ticket_id, note_id)
+      store.set(ticket_note_association_key(ticket_id), note_id)
+    end
+
+    def get_note_id(ticket_id)
+      store.get(ticket_note_association_key(ticket_id))
+    end
+
+    def ticket_note_association_key(ticket_id)
+      "ticket_note:#{ticket_id}"
+    end
+
+    def create_comment(options)
+      return true unless settings.associate_reply_with_comment.to_s == '1'
+
+      ticket = payload.ticket
+      return true unless note_id = get_note_id(ticket.id)
+
+      setup_highrise
+      body = "#{options[:header]}#{payload.reply.content.html}"
+      comment = Highrise::Comment.new(parent_id: note_id, body: body)
+      comment.save
+    end
+
+    def agent_reply_header(reply)
+      Mab::Builder.new do
+        p do
+          text "New Agent Reply by #{reply.replier.name}"
+          br
+          br
+        end
+      end.to_s
+    end
+
+    def customer_reply_header(reply)
+      Mab::Builder.new do
+        p do
+          text "New Customer Reply by #{reply.replier.name}"
+          br
+          br
+        end
+      end.to_s
     end
 
     def person_info_html(person)
