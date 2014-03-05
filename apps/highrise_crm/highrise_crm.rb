@@ -40,17 +40,13 @@ module HighriseCRM
     end
 
     def agent_reply_created
-      return true unless settings.associate_reply_with_comment.to_s == '1'
+      header = agent_reply_header(payload.reply)
+      create_comment(header: header)
+    end
 
-      ticket = payload.ticket
-      return true unless note_id = get_note_id(ticket.id)
-
-      reply = payload.reply
-      body = agent_reply_header(reply) + payload.reply.content.html
-
-      setup_highrise
-      comment = Highrise::Comment.new(parent_id: note_id, body: body)
-      comment.save
+    def customer_reply_created
+      header = customer_reply_header(payload.reply)
+      create_comment(header: header)
     end
   end
 end
@@ -148,10 +144,32 @@ module HighriseCRM
       "ticket_note:#{ticket_id}"
     end
 
+    def create_comment(options)
+      return true unless settings.associate_reply_with_comment.to_s == '1'
+
+      ticket = payload.ticket
+      return true unless note_id = get_note_id(ticket.id)
+
+      setup_highrise
+      body = options['header'] + payload.reply.content.html
+      comment = Highrise::Comment.new(parent_id: note_id, body: body)
+      comment.save
+    end
+
     def agent_reply_header(reply)
       Mab::Builder.new do
         p do
           text "New Agent Reply by #{reply.replier.name}"
+          br
+          br
+        end
+      end.to_s
+    end
+
+    def customer_reply_header(reply)
+      Mab::Builder.new do
+        p do
+          text "New Customer Reply by #{reply.replier.name}"
           br
           br
         end
