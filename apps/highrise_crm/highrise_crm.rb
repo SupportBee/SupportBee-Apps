@@ -29,7 +29,7 @@ module HighriseCRM
       subject = person || company
       return unless subject
       note_content = generate_note_content(ticket)
-      subject_type = subject.class.name.split('::').last
+      subject_type = subject.class.name.demodulize
       note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
       return false unless note.save
 
