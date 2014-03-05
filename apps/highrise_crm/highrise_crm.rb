@@ -31,7 +31,7 @@ module HighriseCRM
       note_content = generate_note_content(ticket)
       subject_type = subject.class.name.split('::').last
       note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
-      note.save
+      return false unless note.save
 
       return true unless settings.associate_reply_with_comment.to_s == '1'
 
