@@ -151,7 +151,7 @@ module HighriseCRM
       return true unless note_id = get_note_id(ticket.id)
 
       setup_highrise
-      body = options['header'] + payload.reply.content.html
+      body = "#{options[:header]}#{payload.reply.content.html}"
       comment = Highrise::Comment.new(parent_id: note_id, body: body)
       comment.save
     end
