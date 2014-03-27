@@ -91,7 +91,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
  
   hide_description: ->
     @description_el.hide()
-    @description_field.html('')
  
   populate_lists: ->
     @lists = new SB.Apps.BaseCollection([],
