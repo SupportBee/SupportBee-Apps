@@ -43,4 +43,4 @@ gem 'mock_redis', :group => :test
 
 # Mail Gems
 gem 'rest-client'
-gem 'multimap'
+gem 'multimap', :git => 'git@github.com:SupportBee/multimap.git', :tag => 'v1.1.2'

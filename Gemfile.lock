@@ -7,6 +7,13 @@ GIT
       guard
       spoon
 
+GIT
+  remote: git@github.com:SupportBee/multimap.git
+  revision: 74bad36739a76406272203a9de361c02e9357e69
+  tag: v1.1.2
+  specs:
+    multimap (1.1.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -88,7 +95,6 @@ GEM
     mock_redis (0.6.2)
     multi_json (1.3.6)
     multi_xml (0.5.1)
-    multimap (1.1.2)
     multipart-post (1.1.5)
     nokogiri (1.5.5)
     nori (2.0.4)
@@ -202,7 +208,7 @@ DEPENDENCIES
   mab
   mail
   mock_redis
-  multimap
+  multimap!
   nokogiri
   pry
   rack-test
