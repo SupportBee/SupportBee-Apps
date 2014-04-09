@@ -55,13 +55,8 @@ module Pipedrive
       return person.body['data']
     end
 
-    def split_name(requester)
-      first_name, last_name = name(requester)
-      return first_name
-    end
-
     def name(requester)
-      requester.name ? requester.name.split(' ') : [requester.email,'']
+      requester.name || requester.email
     end
    
     def update_note(person, ticket) 
