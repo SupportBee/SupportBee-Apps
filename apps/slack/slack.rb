@@ -66,44 +66,46 @@ module Slack
                 :post_content
 
 
-    private   
+  private   
 
     def post_ticket(ticket)
       text = "*New Ticket* from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
       if settings.post_content
-        text += "\nMessage:\n#{ticket.content.text}"
+        text += "\n#{ticket.content.text}"
       end
-      #post_to_slack(ticket.content.text)
       post_to_slack(text)
     end
 
     def post_agent_reply(reply, ticket)
       text = "*Agent Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+      if settings.post_content
+        text += "\n#{ticket.content.text}"
+      end
       post_to_slack(text)
     end
 
     def post_customer_reply(reply, ticket)
       text = "*Customer Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+      if settings.post_content
+        text += "\n#{ticket.content.text}"
+      end
       post_to_slack(text)
     end
-
-    # def post_reply(reply,ticket)
-    #   text = "RE: #{ticket.subject} from #{reply.replier.name} (#{reply.replier.email})"
-    #   post_to_slack(text)
-    # end
 
     def post_comment(comment, ticket)
       text = "*Comment* from #{comment.commenter.name} on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      #text = comment.content.text
+      if settings.post_content
+        text += "\n#{comment.content.text}"
+      end
       post_to_slack(text)
     end
 
-     def post_to_slack(text)
-        payload = {"channel" => settings.channel, "username" => settings.name, "text" => text}.to_json
-        response = http_post "https://supportbee.slack.com/services/hooks/incoming-webhook?token=#{settings.token}" do |req|
-        req.body = payload
-        end
-    end    
+    def post_to_slack(text)
+      payload = {"channel" => settings.channel, "username" => settings.name, "text" => text}.to_json
+      response = http_post "https://supportbee.slack.com/services/hooks/incoming-webhook?token=#{settings.token}" do |req|
+      req.body = payload
+    end
+  end
   end
 end
 
