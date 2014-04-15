@@ -70,7 +70,9 @@ module Slack
 
     def post_ticket(ticket)
       text = "*New Ticket* from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-
+      if settings.post_content
+        text += "\nMessage:\n#{ticket.content.text}"
+      end
       #post_to_slack(ticket.content.text)
       post_to_slack(text)
     end
