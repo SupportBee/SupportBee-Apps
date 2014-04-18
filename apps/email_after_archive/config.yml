@@ -5,7 +5,7 @@ access: public
 description: "Send an email to a customer after archiving a ticket.
 This app requires a [mailgun](https://mailgun.com) API key"
 
-category: Workflow
+category: workflow
 
 tags: 
 - email
