@@ -47,11 +47,11 @@ module Slack
   require 'json'
 
   class Base < SupportBeeApp::Base
-    
+     
     string :token, :required => true, :hint => 'Slack API Token'
-    string :channel, :required => true, :label => 'Channel HashTag'
+    string :channel, :required => true, :label => 'Channel Name', :hint => "Channel Name without the hashtag, #example => example is the Channel Name"
     string :name, :required => true, :label => 'Publisher Name'
-    string :domain, :required => true, :label => 'Comapny Domain Name'
+    string :domain, :required => true, :label => 'Company Name in Domain', :hint => 'example.slack.com, example is the Company Name'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
     boolean :notify_agent_reply_created, :default => true, :label => "Notify when an agent replies"
@@ -78,7 +78,7 @@ module Slack
     def post_agent_reply(reply, ticket)
       text = "*Agent Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
       if settings.post_content
-        text += "\n#{reply.content.body}"
+        text += "\n#{reply.content.text}"
       end
       post_to_slack(text)
     end
@@ -86,7 +86,7 @@ module Slack
     def post_customer_reply(reply, ticket)
       text = "*Customer Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
       if settings.post_content
-        text += "\n#{reply.content.body}"
+        text += "\n#{reply.content.text}"
       end
       post_to_slack(text)
     end
@@ -100,8 +100,8 @@ module Slack
     end
 
     def post_to_slack(text)
-      payload = {"channel" => settings.channel, "username" => settings.name, "text" => text}.to_json
-      response = http_post "https://#{settings.domain}/services/hooks/incoming-webhook?token=#{settings.token}" do |req|
+      payload = {"channel" => "##{settings.channel}", "username" => settings.name, "text" => text}.to_json
+      response = http_post "https://#{settings.domain}.slack.com/services/hooks/incoming-webhook?token=#{settings.token}" do |req|
       req.body = payload
     end
   end
