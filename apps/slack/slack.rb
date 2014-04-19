@@ -49,9 +49,9 @@ module Slack
   class Base < SupportBeeApp::Base
      
     string :token, :required => true, :hint => 'Slack API Token'
-    string :channel, :required => true, :label => 'Channel Name', :hint => "Channel Name without the hashtag, #example => example is the Channel Name"
+    string :channel, :required => true, :label => 'Channel Name', :hint => "If #example is the Channel you want to send messages to, then enter 'example'"
     string :name, :required => true, :label => 'Publisher Name'
-    string :domain, :required => true, :label => 'Company Name in Domain', :hint => 'example.slack.com, example is the Company Name'
+    string :domain, :required => true, :label => 'Company Name in Domain', :hint => 'If your base URL is "http://example.slack.com", then enter "example"'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
     boolean :notify_agent_reply_created, :default => true, :label => "Notify when an agent replies"
