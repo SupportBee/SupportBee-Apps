@@ -37,7 +37,7 @@ module Redbooth
 
 		string :password,
 			required: true,
-			label: 'Redbooth Password'
+			label: 'Redbooth Password',
 			hint: 'Password is required to authorize your Redbooth account'
 
     # Define Settings
@@ -51,10 +51,34 @@ module Redbooth
 
     # Define public and private methods here which will be available
     # in the EventHandler and ActionHandler modules
-
-		def task_list_id
 		
+		def token
+			settings.oauth_token || settings.token
+		end
+		
+		def task_list_id
+			# return latest task list	
 	 	end
+
+		def due_on
+			payload.overlay.due_on
+		end	
+
+		def project_id
+			# return project id
+		end
+
+		def task_title
+			payload.overlay.task_title
+		end
+	
+		def task_description
+			payload.overlay.task_description
+		end
+
+		def assigned_id
+			# id of the person the task is supposed to be assigend
+		end
 
 		private
 
@@ -70,8 +94,12 @@ module Redbooth
 			base_api_url.join('task_lists')
 		end
 
-		def taks_list_id_url
-			task_lists_url.join()
+		def task_list_id_url
+			task_lists_url.join(task_list_id)
+		end
+
+		def tasks_url
+			task_lists_url.join('tasks')
 		end
 
 		def redbooth_post(url, body)
@@ -79,6 +107,7 @@ module Redbooth
 				req.headers['Content-Type'] = 'application/json'
 				req.headers['Accept'] = 'application/json'
 				req.body = body
+			end
 		end
 
 		def redbooth_get(url)
@@ -86,7 +115,26 @@ module Redbooth
 				req.headers['Accept'] = 'application/json'
 			end
 		end
+		
+		def create_task
+			post_body = {
+				name: title,
+				description: description,
+				due_on: due_on,
+				project_id: project_id,
+				assigned_id: assigned_id,
+				task_list_id: task_list_id
+			}.to_json
+			
+			response = redbooth.post(tasks_url, post_body)
+			response.status = 201 ? response : false	
+		end
 
+		def fetch_task_list
+			response = redbooth_get(task_lists_url)
+			response.body.to_json
+		end
+	
   end
 end
 
