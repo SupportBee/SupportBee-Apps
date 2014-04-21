@@ -1,6 +1,6 @@
 name: Slack
 slug: slack
-access: private
+access: public
 
 description: "'Be less busy.'
 Slack brings all your communication together in one place.
