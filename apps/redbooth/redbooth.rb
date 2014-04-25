@@ -65,7 +65,7 @@ module Redbooth
 		end	
 
 		def project_id
-			# return project id
+			payload.overlay.projects_select
 		end
 
 		def task_title
@@ -88,6 +88,14 @@ module Redbooth
 
 		def base_api_url
 			base_url.join('api', '1')
+		end
+
+		def projects_url
+			base_api_url.join('project')
+		end
+
+		def project_url
+			projects_url.join(project_id.to_s)
 		end
 
 		def task_lists_url
