@@ -1,4 +1,4 @@
-module Supportbug 
+module Bugify 
   module ActionHandler
     def button
       ticket = payload.tickets.first
@@ -14,12 +14,12 @@ module Supportbug
   end
 end
 
-module Supportbug
+module Bugify
   require 'json'
 
   class Base < SupportBeeApp::Base
+    string :domain, :required => true, :label => 'Bugify domain (eg https://bugify.me.com/)'
     string :api_key, :required => true, :label => 'Bugify API Key'
-    string :domain, :required => true, :label => 'Bugify domain'
 
     def validate
       errors[:flash] = ["Please fill in all the required fields"] if settings.api_key.blank? or settings.domain.blank?
@@ -29,8 +29,8 @@ module Supportbug
     private
 
     def create_issue(subject, description)
-      response = http_post "#{settings.domain}api" do |req|
-        req.body = {:subject => subject, :description => description, :api_key => settings.api_key}.to_json
+      response = http_post "#{settings.domain}api/issues.json?api_key=#{settings.api_key}" do |req|
+        req.body = URI.encode_www_form({:subject => subject, :description => description})
       end
     end
 

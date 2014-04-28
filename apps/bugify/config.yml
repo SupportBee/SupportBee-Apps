@@ -1,5 +1,5 @@
-name: Supportbug
-slug: supportbug
+name: Bugify
+slug: bugify
 access: public
 
 description: "Create Bugify issues directly from SupportBee"
