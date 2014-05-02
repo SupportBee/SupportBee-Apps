@@ -2,9 +2,32 @@ name: Bugify
 slug: bugify
 access: public
 
-description: "Create Bugify issues directly from SupportBee"
+description: "
+[Bugify](https://bugify.com) is a simple PHP issue tracker, designed to offer powerful bug tracking capabilities in an easy to use system.
 
-category: Integration
+## Create Bugify Issues from within SupportBee
+
+Using this app, you can send any ticket in SupportBee to Bugify and create an issue. The issue title and description are picked up from the ticket but can be edited. Description also carries a link to the ticket in SupportBee.
+
+## Using the App
+
+To add the app, click on the 'Add to My SupportBee'. On the settings screen, enter the following details
+
+### URL
+
+Your bugify URL (example: http://bugify.me). This is where you go and login to your Bugify.
+
+### API Key
+
+Your Bugify API Key
+
+## Using the App
+
+To use the app, open a ticket and click on Apps > Send to Bugify. You can edit the subject or the description of the issue before you send it to Bugify.
+
+"
+
+category: project-management
 
 tags: 
 - bugify
@@ -21,4 +44,4 @@ action:
     overlay: true
     screens: 
     - ticket
-    label: Create Bugify Issue
+    label: Send to Bugify
