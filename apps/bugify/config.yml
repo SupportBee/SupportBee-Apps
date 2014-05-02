@@ -1,0 +1,24 @@
+name: Bugify
+slug: bugify
+access: public
+
+description: "Create Bugify issues directly from SupportBee"
+
+category: Integration
+
+tags: 
+- bugify
+- issue tracking
+
+developer: 
+  name: Graham Bradley
+  email: hello@gbradley.com
+  twitter: "@gmbradley"
+  github: gbradley
+
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    label: Create Bugify Issue
