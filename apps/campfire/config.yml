@@ -3,9 +3,33 @@ slug: campfire
 access: public
 
 description: "
+[Campfire](https://campfirenow.com/) is like instant messaging, but designed exclusively for groups. Share text, files, and code in real time. Save transcripts so you don’t forget.
 
-Use this app to post new tickets, replies and comments to Campfire!
+## View Tickets, Replies & Comments in Campfire
 
+If you are using Campfire all day long, you can use this app to notify you of new tickets, comments and replies in a room of your choice. The app let's you selectively enable/disable notifications.
+
+## Adding the Campfire App
+
+To add the app, click on 'Add to My SupportBee' and fill in the following details
+
+### Subdomain
+
+This is your campfire subdomain. If your account URL is company.campfirenow.com, the subdomain is company.
+
+### Token
+
+You can get an API token by logging into Campfire and visiting 'My Info'.
+
+### Room
+
+Type the name of the room that you would like to send messages to
+
+Before you save the app, you can also select the kind of messages that you want to send to campfire. For example, you can choose to send only tickets and replies or only comments depending on your workflow.
+
+## Using the App
+
+Once you have setup the app, you don't need to do anything manually. As new tickets, replies and comments come in, the app will automatically post them to campfire.
 "
 
 category: notification 
