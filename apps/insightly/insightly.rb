@@ -43,9 +43,9 @@ module Insightly
         :details => description,
         :project_id => '1309485'
       }.to_json
-      response = http_post api_url('tasks') do |req|
+      response = http.post api_url('tasks') do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
-        req.headers['Accept-Encoding'] = 'gzip'
+        req.headers['Content-Type'] = 'application/json'
         req.body = post_body
       end
     end
@@ -53,9 +53,8 @@ module Insightly
     def insightly_get(url)
       response = http.get "#{url.to_s}" do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
-        req.headers['Accept-Encoding'] = 'gzip'
+        req.headers['Accept'] = 'application/json'
       end
-      response.body
     end
 
     def project_id
