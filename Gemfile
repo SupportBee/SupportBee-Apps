@@ -19,6 +19,7 @@ gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
+gem 'unicorn', :group => :development
 
 # App Gems
 gem 'tinder'
@@ -33,7 +34,6 @@ gem 'rubyzoho'
 gem 'restforce'
 gem 'mab'
 
-gem 'guard-shotgun', :git =>'git://github.com/rchampourlier/guard-shotgun.git', :group => :development
 gem 'execjs', :group => :development
 gem 'pry', group: :development
 gem 'rspec', :group => :test
