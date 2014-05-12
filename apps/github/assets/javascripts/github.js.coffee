@@ -1,8 +1,10 @@
 Github = {}
 Github.Views = {}
 
-option_tag = (item, attribute_name = 'name') ->
-  "<option value='#{item.get('id')}'>#{item.get(attribute_name)}</option>"
+option_tag = (item, options = {}) ->
+  attribute_name = options.attribute_name || 'name'
+  attribute_id   = options.attribute_id || 'id'
+  "<option value='#{item.get(attribute_id)}'>#{item.get(attribute_name)}</option>"
 
 
 Github.Views.Overlay = SB.Apps.BaseView.extend(
@@ -16,9 +18,8 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
   initialize: ->
     SB.Apps.BaseView.prototype.initialize.call(this)
 
-    _.bindAll this, 'render_projects', 'target_changed', 'render_one_project',
-                    'render_lists', 'render_one_list', 'project_changed',
-                    'render_people', 'render_person', 'render_orgs', 'render_one_org'
+    _.bindAll this, 'render_one_project', 'project_changed', 'render_orgs', 'render_one_org',
+                    'load_personal_projects', 'org_changed'
 
     @setup_selectors()
     @populate_orgs()
@@ -42,6 +43,8 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
     @orgs.on 'reset', @render_orgs
     @orgs.fetch()
 
+  project_changed: ->
+
   populate_projects: ->
     @projects = new SB.Apps.BaseCollection([], app: @app, endpoint: 'projects')
     @projects.on 'reset', @load_personal_projects
@@ -51,26 +54,13 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
     @projects.each @render_one_project
   
   render_one_project: (project) ->
-    @projects_selector.append option_tag(project)
+    @projects_selector.append option_tag(project, attribute_id: 'full_name')
 
   render_orgs: ->
     @orgs.each @render_one_org
   
   render_one_org: (org) ->
-    @orgs_selector.append option_tag(org, 'login')
-
-  target_changed: ->
-    @type = @target_type_selector.val()
-    @hide_everything()
-    switch @type
-      when 'todo_item'
-        @show_todo_lists_selector()
-        @populate_lists()
-        @populate_people()
-      when 'todo_list'
-        @hide_description()
-      when 'message'
-        @show_description()
+    @orgs_selector.append option_tag(org, attribute_name: 'login', attribute_id: 'login')
 
   hide_everything: ->
     @todo_lists_el.hide()
@@ -82,7 +72,16 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
     if @org == 'personal'
       @load_personal_projects()
     else
+      @reset_projects_list()
       @load_org_projects()
+
+  reset_projects_list: ->
+    @projects_selector.find('option').remove()
+
+  load_org_projects: ->
+    org = @orgs_selector.val()
+    @projects.request_params = {org: org}
+    @projects.fetch()
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
