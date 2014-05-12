@@ -19,7 +19,6 @@ gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
-gem 'unicorn', :group => :development
 
 # App Gems
 gem 'tinder'
