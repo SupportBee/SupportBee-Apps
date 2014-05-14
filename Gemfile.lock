@@ -67,6 +67,7 @@ GEM
     jaconda (2.0.2)
       activeresource (>= 2.3.5)
     json (1.7.5)
+    kgio (2.8.0)
     libv8 (3.16.14.3)
     mab (0.0.3)
     mail (2.4.4)
@@ -162,6 +163,9 @@ GEM
       eventmachine (>= 0.12.8)
       http_parser.rb (~> 0.5.1)
       simple_oauth (~> 0.1.4)
+    unicorn (3.7.0)
+      kgio (~> 2.3)
+      rack
     wasabi (3.0.0)
       httpi (~> 2.0)
       nokogiri (>= 1.4.0)
@@ -207,3 +211,4 @@ DEPENDENCIES
   therubyracer
   thor
   tinder
+  unicorn (= 3.7.0)

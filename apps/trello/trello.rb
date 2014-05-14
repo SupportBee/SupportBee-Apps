@@ -8,6 +8,10 @@ module Trello
       comment_on_ticket(ticket, html)
       [200, "Success"]
     end
+
+    def boards
+      [200, fetch_boards]
+    end
   end
 end
 
@@ -18,15 +22,24 @@ module Trello
     string :list, :required => true , :label => 'Name of Trello list'
 
     def create_card(card_title, description)
-      @client = setup_client
-      board_id = find_board
-      return false unless board_id
-      list_id = find_or_create_list(board_id)
-      @client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => list_id)
+      #board_id = find_board
+      #return false unless board_id
+      #list_id = find_or_create_list(board_id)
+      trello_client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => list_id)
     end
 
-    def setup_client
-     Trello::Client.new(
+    def fetch_boards
+      json = JSON.parse trello_client.get("/members/#{me.username}/boards")
+      puts json
+      json 
+    end
+
+    def me
+      trello_client.find('members', 'me')
+    end
+
+    def trello_client
+     @client ||= Trello::Client.new(
         :consumer_key => OMNIAUTH_CONFIG['trello']['key'],
         :consumer_secret => OMNIAUTH_CONFIG['trello']['secret'],
         :oauth_token => settings.oauth_token,
@@ -34,17 +47,6 @@ module Trello
       )
     end
 
-    def find_board
-      board = (JSON.parse @client.get('/members/me/boards')).select{|board| board['name'] == settings.board}.first
-      board["id"]
-    end
-
-    def find_or_create_list(board_id)
-      list = (JSON.parse @client.get("/boards/#{board_id}/lists")).select{|list| list['name'] == settings.list}.first
-      list = @client.create(:list, 'name' => settings.list, 'idBoard' => board_id) unless list
-      list['id']
-    end
-    
     def card_info_html(ticket, card)
       "Trello Card Created!\n <a href='#{card.url}'>#{ticket.subject}</a>"      
     end
