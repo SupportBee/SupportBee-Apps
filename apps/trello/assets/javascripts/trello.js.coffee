@@ -32,11 +32,6 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
     @title_el = @$(".title")
     @description_el = @$(".description")
 
-  populate_orgs: ->
-    @orgs = new SB.Apps.BaseCollection([], app: @app, endpoint: 'orgs')
-    @orgs.on 'reset', @render_orgs
-    @orgs.fetch()
-
   board_changed: ->
     @load_lists()
 
@@ -62,6 +57,7 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
 
   render_boards: ->
     @boards.each @render_one_board
+    @load_lists()
   
   render_one_board: (board) ->
     @boards_selector.append option_tag(board)
