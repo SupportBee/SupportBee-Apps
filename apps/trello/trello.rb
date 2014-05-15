@@ -12,6 +12,10 @@ module Trello
     def boards
       [200, fetch_boards]
     end
+
+    def lists
+      [200, fetch_lists]
+    end
   end
 end
 
@@ -26,8 +30,11 @@ module Trello
     end
 
     def fetch_boards
-      json = trello_client.get("/members/#{me.username}/boards")
-      json 
+      trello_client.get("/members/#{me.username}/boards")
+    end
+
+    def fetch_lists
+      trello_client.get("/boards/#{payload.overlay.board}/lists")
     end
 
     def me

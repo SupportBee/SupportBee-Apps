@@ -11,46 +11,56 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
 
   events: {
     'change [name="org_select"]': 'org_changed',
-    'change [name="boards_select"]': 'project_changed'
+    'change [name="boards_select"]': 'board_changed'
     'click a.submit': 'submit_form'
   }
 
   initialize: ->
     SB.Apps.BaseView.prototype.initialize.call(this)
 
-    _.bindAll this, 'render_one_board', 'project_changed', 'render_orgs',
-                    'load_boards'
+    _.bindAll this, 'render_one_board', 'board_changed', 'render_orgs',
+                    'render_boards', 'render_lists', 'render_one_list'
 
     @setup_selectors()
-    #@populate_orgs()
+    @setup_lists()
     @populate_boards()
 
   setup_selectors: ->
-    @orgs_selector = @$("[name='org_select']")
+    @lists_selector = @$("[name='lists_select']")
     @boards_selector = @$("[name='boards_select']")
-    @todo_lists_selector = @$("[name='todo_lists']")
-    @people_list_selector = @$("[name='assign_to']")
-    @target_type_selector = @$("[name='type']")
     @description_field = @$("[name='description']")
     @title_el = @$(".title")
     @description_el = @$(".description")
-    @todo_lists_el = @$(".todo_lists")
-    @people_list_el = @$(".assign")
-    @assign_el = @$(".assign")
 
   populate_orgs: ->
     @orgs = new SB.Apps.BaseCollection([], app: @app, endpoint: 'orgs')
     @orgs.on 'reset', @render_orgs
     @orgs.fetch()
 
-  project_changed: ->
+  board_changed: ->
+    @load_lists()
+
+  load_lists: ->
+    board = @boards_selector.val()
+    @lists.request_params = {board: board}
+    @lists.fetch()
+
+  setup_lists: ->
+    @lists = new SB.Apps.BaseCollection([], app: @app, endpoint: 'lists')
+    @lists.on 'reset', @render_lists
+
+  render_lists: ->
+    @lists.each @render_one_list
+
+  render_one_list: (list) ->
+    @lists_selector.append option_tag(list)
 
   populate_boards: ->
     @boards = new SB.Apps.BaseCollection([], app: @app, endpoint: 'boards')
-    @boards.on 'reset', @load_boards
+    @boards.on 'reset', @render_boards
     @boards.fetch()
 
-  load_boards: ->
+  render_boards: ->
     @boards.each @render_one_board
   
   render_one_board: (board) ->
