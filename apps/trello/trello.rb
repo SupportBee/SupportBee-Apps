@@ -22,8 +22,6 @@ end
 module Trello
   class Base < SupportBeeApp::Base
     oauth :trello, :oauth_options => {:app_name => "SupportBee", :expiration => :never, :scope => "read,write"}
-    string :board, :required => true, :label => 'Name of Trello board'
-    string :list, :required => true , :label => 'Name of Trello list'
 
     def create_card(card_title, description)
       trello_client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => payload.overlay.lists_select)
