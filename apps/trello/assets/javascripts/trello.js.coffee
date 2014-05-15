@@ -36,6 +36,7 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
     @load_lists()
 
   load_lists: ->
+    @lists_selector.find('option').remove()
     board = @boards_selector.val()
     @lists.request_params = {board: board}
     @lists.fetch()
