@@ -26,7 +26,7 @@ module Trello
     string :list, :required => true , :label => 'Name of Trello list'
 
     def create_card(card_title, description)
-      trello_client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => list_id)
+      trello_client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => payload.overlay.lists_select)
     end
 
     def fetch_boards
