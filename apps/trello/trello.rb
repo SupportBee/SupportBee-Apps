@@ -22,15 +22,11 @@ module Trello
     string :list, :required => true , :label => 'Name of Trello list'
 
     def create_card(card_title, description)
-      #board_id = find_board
-      #return false unless board_id
-      #list_id = find_or_create_list(board_id)
       trello_client.create(:card, 'name' => card_title, 'desc' => description, 'idList' => list_id)
     end
 
     def fetch_boards
-      json = JSON.parse trello_client.get("/members/#{me.username}/boards")
-      puts json
+      json = trello_client.get("/members/#{me.username}/boards")
       json 
     end
 

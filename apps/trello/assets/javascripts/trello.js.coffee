@@ -18,7 +18,8 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
   initialize: ->
     SB.Apps.BaseView.prototype.initialize.call(this)
 
-    _.bindAll this, 'render_one_board', 'project_changed', 'render_orgs'
+    _.bindAll this, 'render_one_board', 'project_changed', 'render_orgs',
+                    'load_boards'
 
     @setup_selectors()
     #@populate_orgs()
