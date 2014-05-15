@@ -21,8 +21,9 @@ module Github
     oauth  :github, :required => true, :oauth_options => {:scope => "user,repo,gist"}
 
     def validate
-      errors[:flash] = ["Please fill in all the required fields"] if settings.owner.blank? or settings.repo.blank?
-      errors.empty? ? true : false
+      #errors[:flash] = ["Please fill in all the required fields"] if settings.owner.blank? or settings.repo.blank?
+      #errors.empty? ? true : false
+      true
     end
     
     def projects
