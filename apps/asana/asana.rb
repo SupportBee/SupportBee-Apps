@@ -37,6 +37,7 @@ module Asana
   end
 
   class Base < SupportBeeApp::Base
+    oauth  :asana, :required => true#, :oauth_options => {:scope => "user,repo,gist"}
     string :workspace, :required => true, :label => 'Workspace Name'
     string :project, :required => true, :label => 'Project Name'
     string :token, :required => true, :label => 'Token'
