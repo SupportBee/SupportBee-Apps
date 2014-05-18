@@ -69,7 +69,7 @@ module Slack
 
     def post_ticket(ticket)
       text = "*New Ticket* from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      if settings.post_content
+      if settings.post_content.to_s == '1'
         text += "\n#{ticket.content.text}"
       end
       post_to_slack(text)
@@ -77,7 +77,7 @@ module Slack
 
     def post_agent_reply(reply, ticket)
       text = "*Agent Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      if settings.post_content
+      if settings.post_content.to_s == '1'
         text += "\n#{reply.content.text}"
       end
       post_to_slack(text)
@@ -85,7 +85,7 @@ module Slack
 
     def post_customer_reply(reply, ticket)
       text = "*Customer Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      if settings.post_content
+      if settings.post_content.to_s == '1'
         text += "\n#{reply.content.text}"
       end
       post_to_slack(text)
@@ -93,7 +93,7 @@ module Slack
 
     def post_comment(comment, ticket)
       text = "*Comment* from #{comment.commenter.name} on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      if settings.post_content
+      if settings.post_content.to_s == '1'
         text += "\n#{comment.content.text}"
       end
       post_to_slack(text)
