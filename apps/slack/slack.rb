@@ -97,11 +97,19 @@ module Slack
     end
 
     def post_customer_reply(reply, ticket)
-      text = "*Customer Reply* from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-      if settings.post_content.to_s == '1'
-        text += "\n#{reply.content.text}"
-      end
-      post_to_slack(text)
+      payload = {
+      	:username => "SupportBee",
+        :attachments => [
+          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+        		:text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+          		:color => "danger",
+          		:fields => [
+          			:title => "Reply:",
+          			:value => "#{reply.content.text}"
+          		]
+          	]
+      }.to_json
+      post_to_slack(payload)
     end
 
     def post_comment(comment, ticket)
