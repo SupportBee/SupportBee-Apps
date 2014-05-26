@@ -65,66 +65,94 @@ module Slack
   private
 
     def post_ticket(ticket)
-      payload = {
-      	:username => "SupportBee",
-        :attachments => [
-          		:fallback => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-        		:text => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-          		:color => "danger",
-          		:fields => [
-          			:title => "#{ticket.subject}",
-          			:value => "#{ticket.content.text}"
-          		]
-          	]
-      }.to_json
+      if settings.post_content.to_s == '1'
+        payload = {
+          :username => "SupportBee",
+          :attachments => [
+                :fallback => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :text => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :color => "danger",
+                :fields => [
+                  :title => "#{ticket.subject}",
+                  :value => "#{ticket.content.text}"
+                ]
+              ]
+        }.to_json
+      else
+        payload = {
+          :username => "SupportBee",
+          :text => "*New Ticket* from *#{ticket.requester.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+        }.to_json
+      end
       post_to_slack(payload)
     end
 
     def post_agent_reply(reply, ticket)
-      payload = {
-      	:username => "SupportBee",
-        :attachments => [
-          		:fallback => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-        		:text => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-          		:color => "good",
-          		:fields => [
-          			:title => "Reply:",
-          			:value => "#{reply.content.text}"
-          		]
-          	]
-      }.to_json
+      if settings.post_content.to_s == '1'
+        payload = {
+            :username => "SupportBee",
+            :attachments => [
+                :fallback => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :text => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :color => "good",
+                :fields => [
+                  :title => "Reply:",
+                  :value => "#{reply.content.text}"
+                ]
+              ]
+        }.to_json
+      else
+        payload = {
+          :username => "SupportBee",
+          :text => "*Agent Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+        }.to_json
+      end
       post_to_slack(payload)
     end
 
     def post_customer_reply(reply, ticket)
-      payload = {
-      	:username => "SupportBee",
-        :attachments => [
-          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-        		:text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-          		:color => "danger",
-          		:fields => [
-          			:title => "Reply:",
-          			:value => "#{reply.content.text}"
-          		]
-          	]
-      }.to_json
+      if settings.post_content.to_s == '1'
+	      payload = {
+	      	:username => "SupportBee",
+	        :attachments => [
+	          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+	        		:text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+	          		:color => "danger",
+	          		:fields => [
+	          			:title => "Reply:",
+	          			:value => "#{reply.content.text}"
+	          		]
+	          	]
+	      }.to_json
+	  else
+	  	payload = {
+          :username => "SupportBee",
+          :text => "*Customer Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+        }.to_json
+      end
       post_to_slack(payload)
     end
 
     def post_comment(comment, ticket)
-      payload = {
-      	:username => "SupportBee",
-        :attachments => [
-          		:fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-        		:text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-          		:color => "good",
-          		:fields => [
-          			:title => "Comment",
-          			:value => "#{comment.content.text}"
-          		]
-          	]
-      }.to_json
+   	  if settings.post_content.to_s == '1'
+	      payload = {
+	      	:username => "SupportBee",
+	        :attachments => [
+	          		:fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+	        		:text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+	          		:color => "good",
+	          		:fields => [
+	          			:title => "Comment",
+	          			:value => "#{comment.content.text}"
+	          		]
+	          	]
+	      }.to_json
+  	  else
+  	  	payload = {
+          :username => "SupportBee",
+          :text => "*#{comment.commenter.name}* commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+        }.to_json
+  	  end
       post_to_slack(payload)
     end
 
