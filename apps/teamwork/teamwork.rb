@@ -193,10 +193,6 @@ module Teamwork
       "Teamwork Task created! - <a href='#{url}'>#{title}</a>"
     end
 
-    def message_html_comment(_message_id, subject)
-      "Teamwork message created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
-    end
-   
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
