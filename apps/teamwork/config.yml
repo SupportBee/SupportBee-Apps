@@ -2,20 +2,42 @@ name: Teamwork
 slug: teamwork
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "
 
-category: Integration
+TeamworkPM is an online project management software application that helps teams work together more productively online. Designed to help users manage their day to day projects either in a company or personal setting.
+
+## Send a Ticket to Teamwork as a Task List or a Task in an Existing List
+
+If you are using Teamwork for project management and often create tasks based on emails that your customers or clients send you, you can use our Teamwork app to accomplish this in one click! You can choose to create a new task list in Teamwork or add a new task in an existing task list. We fill in the description of the task list/task with the contents of the email and also add a link to the SupportBee ticket so your team can follow-up once the task is completed. A link to the Teamwork item is also posted on the ticket as a comment.
+
+## Support for Multiple Projects
+
+Our app lets you pick a project and a task list before sending a ticket over to Teamwork.
+
+## Adding the Teamwork App
+
+To add the app, click on the 'Add to My SupportBee'. There is only one field to fill and you are ready to use tha app!
+
+### API Token
+
+Your API token can be found by logging into your Teamwork account, clicking your avatar in the top right and choosing Edit my details. On the API tab of the dialog click the 'Show your token' at the bottom (under 'API Authentication tokens').
+
+## Using the App
+
+To send a ticket to Teamwork, open a ticket and click Apps > Send to Teamwork. Before you send the ticket, you can edit the title/description. You can also select a project and an optional task list before sending the ticket over to Teamwork. Once the ticket has been sent to Teamwork, a comment will with the URL of the task will be posted on the ticket automatically.
+
+"
+
+category: project-management
 
 tags: 
-- tag1
-- tag2
+- project management
 
 developer: 
-  name: <Your Name>
-  email: <Your Email>
-  twitter: "<Your Twitter Handle>"
-  github: <Your Github Handle>
+  name: Prateek Dayal
+  email: prateek@supportbee.com
+  twitter: "@prateekdayal"
+  github: prateekdayal
 
 # The following config keys are used by Action Handlers
 # Set button 'overlay' to true, if you want to have an overlay
@@ -27,6 +49,4 @@ action:
     overlay: true
     screens: 
     - ticket
-    - all
-    - unassigned
     label: Send To Teamwork
