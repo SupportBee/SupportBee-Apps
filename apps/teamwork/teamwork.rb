@@ -9,13 +9,14 @@ module Teamwork
           when 'todo_list'
             response = create_todo_list
             html = todolist_html_comment(response.headers['location']) if response and response.success?
+            response
           when 'todo_item'
             response = create_todo_item
-            html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
+            html = todo_html_comment(response.headers['location']) if response and response.success?
             response
           end
         
-        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result 
+        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless response.success?
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Teamwork"}']
       rescue Exception => e
@@ -132,8 +133,8 @@ module Teamwork
       api_url("projects/#{project_id}/todo_lists")
     end
 
-    def project_todolist_todos_url
-      project_todolists_url.join(todolist_id.to_s, 'todos')
+    def todolist_todos_url
+      api_url("tasklists/#{todolist_id}/tasks")
     end
 
     def teamwork_post(url, body)
@@ -159,16 +160,13 @@ module Teamwork
 
     def create_todo_item
       post_body = {
-        content: title
-      }
-      post_body[:assignee] = {
-        id: assignee_id,
-        type: 'Person'
-      } if assignee_id and assignee_id != 'none'
-      post_body = post_body.to_json
+        'todo-item' => {
+          :content => title,
+          :description => description
+        }
+      }.to_json
 
-      response = teamwork_post(project_todolist_todos_url, post_body)
-      response.status == 201 ? response : false
+      response = teamwork_post(todolist_todos_url, post_body)
     end
 
     def fetch_projects
@@ -191,8 +189,8 @@ module Teamwork
       "Teamwork Task List created! - <a href='#{url}'>#{title}</a>"
     end
     
-    def todo_html_comment(_todolist_id, _todolist_name)
-      "Teamwork todo created in the list <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
+    def todo_html_comment(url)
+      "Teamwork Task created! - <a href='#{url}'>#{title}</a>"
     end
 
     def message_html_comment(_message_id, subject)

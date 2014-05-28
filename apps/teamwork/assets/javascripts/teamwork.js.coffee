@@ -56,7 +56,6 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
   hide_everything: ->
     @todo_lists_el.hide()
-    @people_list_el.hide()
 
   project_changed: ->
     @hide_everything()
@@ -77,14 +76,8 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
   show_title: ->
     @title_el.show()
 
-  show_description: ->
-    @description_el.show()
-
   show_todo_lists_selector: ->
     @todo_lists_el.show()
- 
-  hide_description: ->
-    @description_el.hide()
  
   populate_lists: ->
     @lists = new SB.Apps.BaseCollection([],
@@ -113,7 +106,6 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
   render_lists: ->
     @lists.each @render_one_list
     @todo_lists_el.show()
-    @description_el.hide()
 
   render_one_list: (list) ->
     @todo_lists_selector.append option_tag(list)
