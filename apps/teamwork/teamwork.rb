@@ -60,12 +60,25 @@ module Teamwork
     end
     
     def validate_api_token
-      return true if teamwork_get(authentication_url).success?
+      account_details_req = teamwork_get(authentication_url)
+      if account_details_req.success?
+        store.set 'URL', url = (JSON.parse(account_details_req.body))["account"]["URL"]
+        return true 
+      end
       return false
     end
 
     def authentication_url
       'https://authenticate.teamwork.com/authenticate.json'
+    end
+
+    def account_url
+      store.get 'URL'
+    end
+
+    def api_url(resource)
+      "#{account_url}#{resource}.json"
+
     end
 
     def teamwork_get(url)
@@ -100,20 +113,12 @@ module Teamwork
     
     private
 
-    def base_url
-      Pathname.new("https://basecamp.com/#{settings.app_id}")
-    end
-
-    def base_api_url
-      base_url.join('api','v1')
-    end
-
     def projects_url
-      base_api_url.join("projects")
+      api_url("projects")
     end
 
     def project_url
-      projects_url.join(project_id.to_s)
+      api_url("projects/#{project_id}")
     end
 
     def project_accesses_url
@@ -125,7 +130,7 @@ module Teamwork
     end
 
     def project_todolists_url
-      project_url.join('todolists')
+      api_url("projects/#{project_id}/todo_lists")
     end
 
     def project_todolist_todos_url
@@ -138,13 +143,6 @@ module Teamwork
         req.headers['Content-Type'] = 'application/json'
         req.body = body
       end 
-    end
-
-    def basecamp_get(url)
-      response = http.get "#{url.to_s}.json" do |req|
-       req.headers['Authorization'] = 'Bearer ' + token
-       req.headers['Accept'] = 'application/json'
-      end
     end
 
     def create_message
@@ -184,17 +182,18 @@ module Teamwork
     end
 
     def fetch_projects
-      response = basecamp_get(projects_url)
-      response.body.to_json
+      response = teamwork_get(projects_url)
+      ((JSON.parse response.body)['projects']).to_json
     end
 
     def fetch_todo_lists
-      response = basecamp_get(project_todolists_url)
-      response.body.to_json
+      response = teamwork_get(project_todolists_url)
+      puts response.body
+      ((JSON.parse response.body)['todo-lists']).to_json
     end
 
     def fetch_project_accesses
-      response = basecamp_get(project_accesses_url)
+      response = teamwork_get(project_accesses_url)
       response.body.to_json
     end
 
