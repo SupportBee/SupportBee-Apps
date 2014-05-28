@@ -6,14 +6,9 @@ module Teamwork
       begin
         result = 
           case payload.overlay.type
-          when 'message'
-            response = create_message
-            html = message_html_comment(response.body['id'], response.body['subject']) if response and response.body
-            response
           when 'todo_list'
             response = create_todo_list
-            html = todolist_html_comment(response.body['id'], response.body['name']) if response and response.body
-            response
+            html = todolist_html_comment(response.headers['location']) if response and response.success?
           when 'todo_item'
             response = create_todo_item
             html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
@@ -81,10 +76,14 @@ module Teamwork
 
     end
 
-    def teamwork_get(url)
+    def connection(url)
       conn = Faraday.new(:url => url)
       conn.basic_auth(settings.token, "any_password_will_do")
-      conn.get 
+      conn
+    end
+
+    def teamwork_get(url)
+      connection(url).get 
     end
 
     def token
@@ -137,34 +136,25 @@ module Teamwork
       project_todolists_url.join(todolist_id.to_s, 'todos')
     end
 
-    def basecamp_post(url, body)
-      http.post "#{url.to_s}.json" do |req|
-        req.headers['Authorization'] = 'Bearer ' + token
-        req.headers['Content-Type'] = 'application/json'
+    def teamwork_post(url, body)
+      response = connection(url).post do |req|
         req.body = body
+        req.headers['Content-Type'] = 'application/json'
+        req.headers['Accept'] = 'application/json'
       end 
     end
 
-    def create_message
-      post_body = {
-        subject: title, 
-        content: description 
-      }.to_json 
-
-      response = basecamp_post(project_messages_url, post_body)
-      response.status == 201 ? response : false
-    end
-    
     def create_todo_list
       _description = description.blank? ? '' : description
 
-      post_body = {
-        name: title, 
-        description: _description 
-      }.to_json
+      post_body = ({
+        'todo-list' => {
+          :name => title, 
+          :description => _description 
+        }
+      }).to_json
 
-      response = basecamp_post(project_todolists_url, post_body)
-      response.status == 201 ? response : false
+      response = teamwork_post(project_todolists_url, post_body)
     end
 
     def create_todo_item
@@ -177,7 +167,7 @@ module Teamwork
       } if assignee_id and assignee_id != 'none'
       post_body = post_body.to_json
 
-      response = basecamp_post(project_todolist_todos_url, post_body)
+      response = teamwork_post(project_todolist_todos_url, post_body)
       response.status == 201 ? response : false
     end
 
@@ -197,8 +187,8 @@ module Teamwork
       response.body.to_json
     end
 
-    def todolist_html_comment(_todolist_id, _todolist_name)
-      "Teamwork To-do List created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
+    def todolist_html_comment(url)
+      "Teamwork Task List created! - <a href='#{url}'>#{title}</a>"
     end
     
     def todo_html_comment(_todolist_id, _todolist_name)

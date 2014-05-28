@@ -56,7 +56,6 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
   hide_everything: ->
     @todo_lists_el.hide()
-    @hide_description()
     @people_list_el.hide()
 
   project_changed: ->
