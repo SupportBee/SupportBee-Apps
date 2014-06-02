@@ -53,7 +53,7 @@ end
 
 module HighriseCRM
   class Base < SupportBeeApp::Base
-    # Define Settings
+    #Define Settings
     string :auth_token, :required => true, :hint => 'Highrise Auth Token'
     string :subdomain, :required => true, :label => 'Highrise Subdomain'
 
@@ -66,6 +66,18 @@ module HighriseCRM
 
     # White list settings for logging
     white_list :subdomain, :should_create_person
+    
+    def validate
+      setup_highrise
+      begin
+        account_info = Highrise::Account.me
+        puts account_info.inspect
+        true
+      rescue ActiveResource::UnauthorizedAccess
+        errors[:flash] = 'Settings Incorrect. Please check Token & Subdomain'
+        false
+      end
+    end
 
     def find_person(requester)
       people = Highrise::Person.search(:email => requester.email)
