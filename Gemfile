@@ -40,6 +40,7 @@ gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test
 gem 'flexmock', :group => :test
 gem 'mock_redis', :group => :test
+gem 'awesome_print', :group => :development
 
 # Mail Gems
 gem 'rest-client'

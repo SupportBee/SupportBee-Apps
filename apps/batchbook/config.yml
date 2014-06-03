@@ -1,0 +1,51 @@
+name: Batchbook
+slug: batchbook
+access: public
+
+category: crm
+
+description: "
+[Batchbook](https://batchbook.com) is a simple tool to help small businesses build meaningful relationships with their best customers. We help our customers organize disperse contact information and access it from the cloud so that small businesses can stay on top of their world saving agendas.
+
+## Update Batchbook contacts when they send you support tickets
+
+SupportBee's Batchbook app updates your contacts whenever they send you a support ticket. Every time someone emails your support team, SupportBee checks for a contact in Batchbook and a communication is automatically added to their profile. A link to the Batchbook profile page is added as a comment on the ticket. 
+
+## Create A Contact for New Customers
+
+If you get an email from a customer that isn't on Batchbook, the app can create a new contact. Once again, a communication is automatically added to the profile. This is an optional setting and you can turn it on when you add the app.
+
+## Adding the Batchbook App
+
+To add the app, click on 'Add to My SupportBee' and enter the few required details
+
+### Auth Token
+
+You can find your auth token by visiting the Integrations tab in Batchbook
+
+### Subdomain
+
+If you access Batchbook at ``https://company.batchbook.com``, enter ``company``.
+
+### Create a new contact in Batchbook if one does not exist 
+
+Check this setting if you would like the app to create new contacts in Batchbook for customers that don't have a record already
+
+### Send the complete text of the ticket to Batchbook 
+
+When we add a communication to a profile in Batchbook, we add a line from the ticket to it. If you would rather have the full text pasted there, check this option.
+
+## Using the App
+
+Once you have added the app, it works automatically without any intervention. Every time you have a new ticket, we'll create/update the contact in Batchbook and add a comment on the ticket with a link to the Batchbook profile. 
+"
+
+tags: 
+- crm
+- batchbook
+
+developer: 
+  name: Nisanth Chunduru
+  email: nisanth074@gmail.com
+  twitter: "@nisanth074"
+  github: nisanth074
