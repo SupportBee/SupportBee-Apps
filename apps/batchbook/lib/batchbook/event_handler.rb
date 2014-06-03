@@ -2,8 +2,6 @@ module Batchbook
   module EventHandler
     # Handle 'ticket.created' event
     def ticket_created
-      setup_batchbook
-
       ticket = payload.ticket
       requester = ticket.requester
       person = find_person(requester)

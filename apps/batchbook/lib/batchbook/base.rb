@@ -23,10 +23,6 @@ module Batchbook
       false
     end
 
-    def setup_batchbook
-      self.class.base_uri("https://#{settings.subdomain}.batchbook.com")
-    end
-
     def api_base_url
       "https://#{settings.subdomain}.batchbook.com/api/v1/"
     end
