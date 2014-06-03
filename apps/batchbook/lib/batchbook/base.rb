@@ -6,8 +6,6 @@ module Batchbook
     boolean :should_create_person, label: 'Create a new contact in Batchbook if one does not exist', default: true
     boolean :send_ticket_contents, label: 'Send the complete text of the ticket to Batchbook', hint: 'By default we only send a one line summary'
 
-    include HTTParty
-
     def setup_batchbook
       self.class.base_uri("https://#{settings.subdomain}.batchbook.com")
     end
