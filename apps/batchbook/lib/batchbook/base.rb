@@ -2,7 +2,7 @@ module Batchbook
   class Base < SupportBeeApp::Base
     # Define Settings
     string :auth_token, required: true, hint: 'Batchbook Auth Token'
-    string :subdomain, required: true, label: 'Batchbook Subdomain'
+    string :subdomain, required: true, label: 'Batchbook Subdomain', hint: 'If your account URL is https://company.batchbook.com, please enter company'
     boolean :should_create_person, label: 'Create a new contact in Batchbook if one does not exist', default: true
     boolean :send_ticket_contents, label: 'Send the complete text of the ticket to Batchbook', hint: 'By default we only send a one line summary'
 
