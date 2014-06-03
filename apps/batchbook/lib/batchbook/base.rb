@@ -6,6 +6,23 @@ module Batchbook
     boolean :should_create_person, label: 'Create a new contact in Batchbook if one does not exist', default: true
     boolean :send_ticket_contents, label: 'Send the complete text of the ticket to Batchbook', hint: 'By default we only send a one line summary'
 
+    def validate
+      if settings.subdomain.blank?
+        errors[:subdomain] = "Cannot be blank"
+        return false
+      end
+
+      if settings.auth_token.blank?
+        errors[:auth_token] = "Cannot be blank"
+        return false
+      end
+
+      ping_req = http_get api_url('people')
+      return true if ping_req.success?
+      errors[:flash] = 'Settings Incorrect. Please check the Subdomain and Auth Token'
+      false
+    end
+
     def setup_batchbook
       self.class.base_uri("https://#{settings.subdomain}.batchbook.com")
     end
