@@ -36,6 +36,9 @@ module Batchbook
           person: {
             first_name: first_name,
             last_name: last_name,
+            tags: [
+              {name: 'supportbee'}
+            ],
             emails: [{
               address: requester.email,
               primary: true,
