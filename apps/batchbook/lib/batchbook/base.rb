@@ -37,7 +37,7 @@ module Batchbook
             first_name: first_name,
             last_name: last_name,
             tags: [
-              {name: 'supportbee'}
+              {name: 'SupportBee'}
             ],
             emails: [{
               address: requester.email,
