@@ -17,7 +17,7 @@ module Batchbook
         return true
       end
 
-      create_communication(person) if settings.return_ticket_content?
+      create_communication(person)
       true
     end
   end

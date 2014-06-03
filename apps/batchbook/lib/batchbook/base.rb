@@ -116,8 +116,8 @@ module Batchbook
         html << ticket.content.html + '<br />'
       else
         html << ticket.summary + '<br />'
-        html << "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}</a>"
       end
+      html << "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}</a>"
     end
   end
 end
