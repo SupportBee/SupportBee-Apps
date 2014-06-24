@@ -1,7 +1,5 @@
 module Slack
-
   module EventHandler
-
    def ticket_created
       return unless settings.notify_ticket_created.to_s == '1'
       post_ticket(payload.ticket)
@@ -25,30 +23,26 @@ module Slack
       post_comment(payload.comment, payload.ticket)
       true
     end
-
   end
-
 end
 
 module Slack
-
   module ActionHandler
-
     def button
      [200, "Success"]
     end
-
   end
-
 end
 
 module Slack
-
   require 'json'
 
   class Base < SupportBeeApp::Base
+    string :url_webhook, :label => 'Webhook URL'
+    string :token, :required => true, :hint => 'Slack API Token'
+    string :channel, :required => true, :label => 'Channel Name', :hint => "If #example is the Channel you want to send messages to, then enter 'example'"
+    string :domain, :required => true, :label => 'Company Name in Domain', :hint => 'If your base URL is "http://example.slack.com", then enter "example"'
 
-    string :webhook_url, :required => true, :label => 'Webhook URL'
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
     boolean :notify_agent_reply_created, :default => true, :label => "Notify when an agent replies"
@@ -61,7 +55,6 @@ module Slack
                 :notify_comment_created,
                 :post_content
 
-
   private
 
     def post_ticket(ticket)
@@ -69,20 +62,20 @@ module Slack
         payload = {
           :username => "SupportBee",
           :attachments => [
-                :fallback => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :text => "New Ticket from #{ticket.requester.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :fallback => "New Ticket from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :text => "New Ticket from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
                 :color => "danger",
                 :fields => [
                   :title => "#{ticket.subject}",
                   :value => "#{ticket.content.text}"
                 ]
               ]
-        }.to_json
+        }
       else
         payload = {
           :username => "SupportBee",
-          :text => "*New Ticket* from *#{ticket.requester.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-        }.to_json
+          :text => "*New Ticket* from *#{ticket.requester.name}*: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+        }
       end
       post_to_slack(payload)
     end
@@ -100,12 +93,12 @@ module Slack
                   :value => "#{reply.content.text}"
                 ]
               ]
-        }.to_json
+        }
       else
         payload = {
           :username => "SupportBee",
           :text => "*Agent Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-        }.to_json
+        }
       end
       post_to_slack(payload)
     end
@@ -116,19 +109,19 @@ module Slack
 	      	:username => "SupportBee",
 	        :attachments => [
 	          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	        		:text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
 	          		:color => "danger",
 	          		:fields => [
 	          			:title => "Reply:",
 	          			:value => "#{reply.content.text}"
 	          		]
 	          	]
-	      }.to_json
+	      }
 	  else
 	  	payload = {
           :username => "SupportBee",
           :text => "*Customer Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-        }.to_json
+        }
       end
       post_to_slack(payload)
     end
@@ -139,28 +132,47 @@ module Slack
 	      	:username => "SupportBee",
 	        :attachments => [
 	          		:fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	        		:text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+                :text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
 	          		:color => "good",
 	          		:fields => [
 	          			:title => "Comment",
 	          			:value => "#{comment.content.text}"
 	          		]
 	          	]
-	      }.to_json
+	      }
   	  else
   	  	payload = {
           :username => "SupportBee",
           :text => "*#{comment.commenter.name}* commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-        }.to_json
+        }
   	  end
       post_to_slack(payload)
     end
 
     def post_to_slack(payload)
-      response = http_post settings.webhook_url do |req|
-      req.body = payload
+      unless settings.url_webhook.blank?
+       response = http_post settings.url_webhook do |req|
+         req.body = payload.to_json
+       end
+      else
+        text = payload[:attachments][0][:text] + "\n" + payload[:attachments][0][:fields][0][:value] unless payload[:attachments].blank?
+        text = payload[:text] unless payload[:text].blank?
+
+        post_payload = {
+          "channel" => "##{settings.channel}",
+          "username" => "SupportBee",
+          "text" => text 
+        }.to_json
+
+        response = http_post create_webhook_url do |req|
+          req.body = post_payload
+        end
+      end
     end
-  end
+
+    def create_webhook_url
+      "https://#{settings.domain}.slack.com/services/hooks/incoming-webhook?token=#{settings.token}"
+    end
   end
 end
 
