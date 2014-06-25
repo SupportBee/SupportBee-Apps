@@ -4,11 +4,13 @@ access: public
 
 description: "
 
-'Be less busy.' Slack brings all your communication together in one place. Add Slack to your SupportBee to get notifications for important events in your support desk. This app will notify you when a customer sends a new ticket or replies to an existing ticket, or when an agent answers a ticket or adds a comment on it. Sign up for Slack [here](https://slack.com/), its free!
+'Be less busy' -  Slack is the chat tool that brings all your communication together in one place. By integrating Slack with SupportBee, you can get notified in your Slack channels for important events in your support desk. To sign up for Slack click [here](https://slack.com/).
+
+Not already on SupportBee? [Setup your support desk now!](https://app.supportbee.com/)
+
+You can choose to get all kinds of notifications in your Slack channels. These notifications would pop up as a message with all the necessary details and information about the ticket.
 
 To add the app, click **Add to My SupportBee** 
-
-This app would send all your SupportBee notifications to Slack. The notifications would pop up in your Slack chat room, as a message from SupportBee. It would contain all the information of the ticket.
 
 ## Setting up Slack
 
@@ -18,9 +20,7 @@ This app would send all your SupportBee notifications to Slack. The notification
 
 - Once you setup an Incoming Webhook, Slack would provide you with a **unique Webhook URL**, add this to your SupportBee.
 
-That's it, your done! You should be all set to see notifications pop up in your Slack app.
-
-You can add a comment below for any queries related to this app, or write to us at support@supportbee.com."
+That's it, your done! You should be all set to see notifications pop up in your Slack app. You can add a comment below for any queries related to this app, or write to us at support@supportbee.com.
 
 category: notification
 
