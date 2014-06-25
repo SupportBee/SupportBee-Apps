@@ -38,10 +38,10 @@ module Slack
   require 'json'
 
   class Base < SupportBeeApp::Base
-    string :url_webhook, :label => 'Webhook URL'
-    string :token, :required => true, :hint => 'Slack API Token'
-    string :channel, :required => true, :label => 'Channel Name', :hint => "If #example is the Channel you want to send messages to, then enter 'example'"
-    string :domain, :required => true, :label => 'Company Name in Domain', :hint => 'If your base URL is "http://example.slack.com", then enter "example"'
+    string :url_webhook, :required => true, :label => 'Webhook URL', :hint => "If you configure this, you can ignore the rest of the settings."
+    string :token, :hint => 'Slack Incoming Webhook Token'
+    string :channel, :label => 'Channel Name', :hint => "If #example is the Channel you want to send messages to, then enter 'example'"
+    string :domain, :label => 'Company Name in Domain', :hint => 'If your base URL is "http://example.slack.com", then enter "example"'
 
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
