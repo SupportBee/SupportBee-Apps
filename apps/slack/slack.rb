@@ -72,21 +72,20 @@ module Slack
     end
 
     def test_ping
-      test_body = {
-            :username => "SupportBee",
-            :text => "Hello, World!"
-          }
-
-      unless settings.url_webhook.blank?
-        response = http_post settings.url_webhook do |req|
-          req.body = test_body.to_json
-        end
-      else
+      if settings.url_webhook.blank?
         response = http_post create_webhook_url do |req|
           body = {
             :channel => "##{settings.channel}",
             :username => "SupportBee",
             :text => "Hello, World!"
+          }
+          req.body = body.to_json
+        end
+      else
+        response = http_post settings.url_webhook do |req|
+          body = {
+            username: "SupportBee",
+            text: "Hello, World!"
           }
           req.body = body.to_json
         end
@@ -187,22 +186,22 @@ module Slack
     end
 
     def post_to_slack(payload)
-      unless settings.url_webhook.blank?
-       response = http_post settings.url_webhook do |req|
-         req.body = payload.to_json
-       end
-      else
+      if settings.url_webhook.blank?
         text = payload[:attachments][0][:text] + "\n" + payload[:attachments][0][:fields][0][:value] unless payload[:attachments].blank?
         text = payload[:text] unless payload[:text].blank?
 
-        post_payload = {
+        body = {
           "channel" => "##{settings.channel}",
           "username" => "SupportBee",
           "text" => text 
-        }.to_json
+        }
 
         response = http_post create_webhook_url do |req|
-          req.body = post_payload
+          req.body = body.to_json
+        end
+      else
+        response = http_post settings.url_webhook do |req|
+          req.body = payload.to_json
         end
       end
     end
