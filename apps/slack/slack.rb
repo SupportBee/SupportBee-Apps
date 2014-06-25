@@ -55,7 +55,44 @@ module Slack
                 :notify_comment_created,
                 :post_content
 
-  private
+    def validate
+      errors[:flash] = ["Please fill in either the Webhook URL or other required settings"] if validate_presense_of_url
+      errors.empty? ? true : false
+    end
+
+    def validate
+      errors[:flash] = ["Webhook URL or other settings incorrect"] unless test_ping.success?
+      errors.empty? ? true : false
+    end
+
+    private
+
+    def validate_presense_of_url
+      not(settings.url_webhook.blank?) or not(settings.token.blank? and settings.channel.blank? and settings.domain.blank?)
+    end
+
+    def test_ping
+      test_body = {
+            :username => "SupportBee",
+            :text => "Hello, World!"
+          }
+
+      unless settings.url_webhook.blank?
+        response = http_post settings.url_webhook do |req|
+          req.body = test_body.to_json
+        end
+      else
+        response = http_post create_webhook_url do |req|
+          body = {
+            :channel => "##{settings.channel}",
+            :username => "SupportBee",
+            :text => "Hello, World!"
+          }
+          req.body = body.to_json
+        end
+      end
+      response
+    end
 
     def post_ticket(ticket)
       if settings.post_content.to_s == '1'
