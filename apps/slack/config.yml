@@ -2,9 +2,7 @@ name: Slack
 slug: slack
 access: public
 
-description: "
-
-'Be less busy' -  Slack is the chat tool that brings all your communication together in one place. By integrating Slack with SupportBee, you can get notified in your Slack channels for important events in your support desk. To sign up for Slack click [here](https://slack.com/).
+description: "'Be less busy' -  Slack is the chat tool that brings all your communication together in one place. By integrating Slack with SupportBee, you can get notified in your Slack channels for important events in your support desk. To sign up for Slack click [here](https://slack.com/).
 
 Not already on SupportBee? [Setup your support desk now!](https://app.supportbee.com/)
 
@@ -20,7 +18,7 @@ To add the app, click **Add to My SupportBee**
 
 - Once you setup an Incoming Webhook, Slack would provide you with a **unique Webhook URL**, add this to your SupportBee.
 
-That's it, your done! You should be all set to see notifications pop up in your Slack app. You can add a comment below for any queries related to this app, or write to us at support@supportbee.com.
+That's it, your done! You should be all set to see notifications pop up in your Slack app. You can add a comment below for any queries related to this app, or write to us at support@supportbee.com. "
 
 category: notification
 
