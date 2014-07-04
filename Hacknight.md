@@ -123,4 +123,12 @@ Preparing Assets...
 [2014-07-04 17:33:56] INFO  WEBrick::HTTPServer#start: pid=86474 port=9292
 ```
 
+### Register your SupportBee
+
+We have repurposed our staging servers for the Hacknight. Head out to http://reminderhawk.com/ and create your SupportBee.
+
+### Talk to us
+
+We're around. We are looking forward to talk about our API, pair program with you and get you started with a demo app using our app platform.  
+
 ## Happy Hacking! Bee Awesome!
