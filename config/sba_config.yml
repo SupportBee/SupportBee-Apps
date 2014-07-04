@@ -1,8 +1,8 @@
 development:
   app_platform:
-    core_app_base_domain: supportbee.com
+    core_app_base_domain: reminderhawk.com
     core_app_port:
-    core_app_protocol: https
+    core_app_protocol: http
     cloudfront_base_url: http://localhost:9292
     redis:
       host: '127.0.0.1'
@@ -10,9 +10,9 @@ development:
 
 test:
   app_platform:
-    core_app_base_domain: supportbee.com
+    core_app_base_domain: reminderhawk.com
     core_app_port:
-    core_app_protocol: https
+    core_app_protocol: http
     cloudfront_base_url: http://localhost:9292
     redis:
       host: '127.0.0.1'
