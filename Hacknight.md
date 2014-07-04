@@ -8,7 +8,7 @@ SupportBee is the easiest way to manage customer support emails. The customers o
 
 ### API and App Platform
 
-We have a JSON REST API. It powers our own frontend. So it can do whatever our own frontend can do. The API docs can be found here https://developers.supportbee.com/api. We care about [developer experience](https://www.youtube.com/watch?v=V3rQWpnykyY) so we built an app platform over our API. Our platform takes care of all the setup required to use an API. For example: Authentication. It lets you concentrate on the app itself. You can learn more about the platfrom here: https://developers.supportbee.com
+We have a JSON REST API. It powers our own frontend. So it can do whatever our own frontend can do. The API docs can be found here https://developers.supportbee.com/api. We care about [developer experience](https://www.youtube.com/watch?v=V3rQWpnykyY) so we built an app platform over our API. Our platform takes care of all the setup required to use an API. For example: Authentication. It lets you concentrate on the app itself. You can learn more about the platform here: https://developers.supportbee.com
 
 For this HackNight we are opening up our staging environment. 
 
@@ -35,8 +35,8 @@ If you are in the mood for refactoring, you extract a Ruby wrapper out of the Ap
 Innovate on creation of ticket creation widgets. We have very simple web widget to create a ticket. How about a way to send crash reports to SupportBee from a mobile app?
 
 ### Apps
-+ NLP on push event data
-+ Google Calendar
++ NLP on our push events
++ Google Calendar Integration
 
 ### Hack on the App Platform
 
