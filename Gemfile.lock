@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:SupportBee/multimap.git
+  remote: https://github.com/SupportBee/multimap.git
   revision: 74bad36739a76406272203a9de361c02e9357e69
   tag: v1.1.2
   specs:

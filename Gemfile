@@ -44,4 +44,4 @@ gem 'awesome_print', :group => :development
 
 # Mail Gems
 gem 'rest-client'
-gem 'multimap', :git => 'git@github.com:SupportBee/multimap.git', :tag => 'v1.1.2'
+gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
