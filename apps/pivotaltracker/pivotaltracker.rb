@@ -3,10 +3,10 @@ module Pivotaltracker
     def button
       ticket = payload.tickets.first
       story = create_story(payload.overlay.title, payload.overlay.description)
-      return [500, "Story not sent!"] unless story
+      return [500, "There was an error in sending the story. Please try again!"] unless story
       html = story_info_html(story)
 
-      [200, "Success"]
+      [200, "Story sent to your PivotalTracker"]
     end
 
     def projects
@@ -32,8 +32,7 @@ module Pivotaltracker
     end
 
     def project_id
-      # Will return the ID of the selected project from the overlay form
-      "1114382"
+      payload.overlay.projects_select
     end
 
     private
