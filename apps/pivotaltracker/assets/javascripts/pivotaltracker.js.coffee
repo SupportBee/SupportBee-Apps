@@ -1,12 +1,10 @@
-PivotalTracker = {}
-PivotalTracker.Views = {}
+Pivotaltracker = {}
+Pivotaltracker.Views = {}
 
-option_tag = (item, options = {}) ->
-  attribute_name  = options.attribute_name || 'name'
-  attribute_id    = options.attribute_id || 'id'
-  "<option value='#{item.get(attribute_id)}'>#{item.get(attribute_name)}</option>"
+option_tag = (item) ->
+  "<option value='#{item.get('id')}'>#{item.get('name')}</option>"
 
-PivotalTracker.Views.Overlay = SB.Apps.BaseView.extend(
+Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
 
   events: {
     'click a.submit': 'submit_form'
@@ -20,23 +18,27 @@ PivotalTracker.Views.Overlay = SB.Apps.BaseView.extend(
     @setup_selectors()
     @populate_projects()
 
-    setup_selectors: ->
-      @projects_selector = @$("[name='projects_select']")
-      @description_field = @$("[name='description']")
-      @title_el = @$(".title")
-      @description_el = @$(".description")
+  setup_selectors: ->
+    @projects_selector = @$("[name='projects_select']")
+    @description_field = @$("[name='description']")
+    @title_el = @$(".title")
+    @description_el = @$(".description")
 
-    populate_projects: ->
-      @projects = new SB.Apps.BaseCollection([], app: @app, endpoint: 'projects')
-      @projects.on 'reset', @render_projects
-      @projects.fetch()
+  populate_projects: ->
+    @projects = new SB.Apps.BaseCollection([], app: @app, endpoint: 'projects')
+    @projects.on 'reset', @render_projects
+    @projects.fetch()
 
-    render_projects: ->
-      @projects.each @render_one_project
+  render_projects: ->
+    console.log @projects
+    @projects.each @render_one_project
 
-    render_one_project: ->
-      @projects_selector.append option_tag(project)
+  render_one_project: (project) ->
+    @projects_selector.append option_tag(project)
 
+  submit_form: ->
+    @post 'button', @$('form').toJSON()
+    
 )
 
-return PivotalTracker
+return Pivotaltracker
