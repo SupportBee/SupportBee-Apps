@@ -35,6 +35,10 @@ module Pivotaltracker
       payload.overlay.projects_select
     end
 
+    def story_type
+      payload.overlay.story_type
+    end
+
     private
 
     def test_ping

@@ -38,7 +38,6 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
-    
 )
 
 return Pivotaltracker
