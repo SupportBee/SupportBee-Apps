@@ -7,22 +7,25 @@ option_tag = (item) ->
 Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
 
   events: {
+    'change [name="projects_select"]': 'project_changed',
     'click a.submit': 'submit_form'
   }
 
   initialize: ->
     SB.Apps.BaseView.prototype.initialize.call(this)
 
-    _.bindAll this, 'render_projects', 'render_one_project'
+    _.bindAll this, 'render_projects', 'render_one_project', 'render_memberships', 'render_one_membership', 'project_changed'
 
     @setup_selectors()
     @populate_projects()
 
   setup_selectors: ->
     @projects_selector = @$("[name='projects_select']")
+    @story_owner_selector = @$("[name='story_owner']")
     @description_field = @$("[name='description']")
     @title_el = @$(".title")
     @description_el = @$(".description")
+    @story_owner_el = @$(".story_owner")
 
   populate_projects: ->
     @projects = new SB.Apps.BaseCollection([], app: @app, endpoint: 'projects')
@@ -35,9 +38,32 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
 
   render_one_project: (project) ->
     @projects_selector.append option_tag(project)
+    @populate_memberships()
+
+  project_changed: ->
+    @reset_story_owner()
+    @populate_memberships()
+
+  reset_story_owner: ->
+    @story_owner_el.find('option').remove()
+
+  populate_memberships: ->
+    @memberships = new SB.Apps.BaseCollection([],
+                                              endpoint: 'memberships',
+                                              app: @app,
+                                              request_params: {projects_select: @projects_selector.val()})
+    @memberships.bind 'reset', @render_memberships
+    @memberships.fetch()
+
+  render_memberships: ->
+    @memberships.each @render_one_membership
+
+  render_one_membership: (member)->
+    @story_owner_selector.append option_tag(member)
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
+
 )
 
 return Pivotaltracker

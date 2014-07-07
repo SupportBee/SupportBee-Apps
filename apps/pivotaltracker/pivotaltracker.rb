@@ -12,6 +12,10 @@ module Pivotaltracker
     def projects
       [200, fetch_projects]
     end
+
+    def memberships
+      [200, fetch_memberships]
+    end
   end
 end
 
@@ -33,6 +37,11 @@ module Pivotaltracker
 
     def project_id
       payload.overlay.projects_select
+    end
+
+    def owner_id
+      return [] if payload.overlay.story_owner == "none"
+      [payload.overlay.story_owner.to_i]
     end
 
     def story_type
@@ -60,6 +69,8 @@ module Pivotaltracker
         req.body = {
           name: story_name,
           description: description,
+          story_type: story_type,
+          owner_ids: owner_id,
           labels: [{
             name: 'supportbee'
           }]
@@ -76,12 +87,24 @@ module Pivotaltracker
       response.body.to_json
     end
 
+    def fetch_memberships
+      response = http_get memberships_url do |req|
+        req.headers['X-TrackerToken'] = settings.token
+        req.headers['Content-Type'] = 'application/json'
+      end
+      response.body[0]['person'].to_json
+    end
+
     def projects_url
       pivotal_url("projects") 
     end
 
     def stories_url
       pivotal_url("projects/#{project_id}/stories")
+    end
+
+    def memberships_url
+      pivotal_url("projects/#{project_id}/memberships")
     end
 
     def pivotal_url(resource="")
