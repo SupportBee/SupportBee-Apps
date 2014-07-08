@@ -51,11 +51,7 @@ module Pivotaltracker
     private
 
     def test_ping
-      response = http_get projects_url do |req|
-        req.headers['X-TrackerToken'] = settings.token
-        req.headers['Content-Type'] = 'application/json'
-      end
-      response
+      pivotal_get(projects_url)
     end
 
     def validate_presence_of_token
@@ -79,20 +75,26 @@ module Pivotaltracker
       response if response.status == 200
     end
 
-    def fetch_projects
-      response = http_get projects_url do |req|
+    def pivotal_get(endpoint_url)
+      response = http_get endpoint_url do |req|
         req.headers['X-TrackerToken'] = settings.token
         req.headers['Content-Type'] = 'application/json'
       end
+      response
+    end
+
+    def fetch_projects
+      response = pivotal_get(projects_url)
       response.body.to_json
     end
 
     def fetch_memberships
-      response = http_get memberships_url do |req|
-        req.headers['X-TrackerToken'] = settings.token
-        req.headers['Content-Type'] = 'application/json'
-      end
-      response.body[0]['person'].to_json
+      response = pivotal_get(memberships_url)
+      memberships = []
+      response.body.each { |i|
+        memberships << i['person']
+      }
+      memberships.to_json
     end
 
     def projects_url
