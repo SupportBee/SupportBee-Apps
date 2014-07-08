@@ -24,7 +24,7 @@ module Pivotaltracker
   require 'json'
 
   class Base < SupportBeeApp::Base
-    string :token, required: true, label: 'Token'
+    string :token, required: true, label: 'Token', hint: 'Find the token under Profile (in the user menu) > API Token.'
 
     def validate
       if validate_presence_of_token
