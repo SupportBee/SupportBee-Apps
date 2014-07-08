@@ -17,6 +17,7 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     _.bindAll this, 'render_projects', 'render_one_project', 'render_memberships', 'render_one_membership', 'project_changed'
 
     @setup_selectors()
+    @setup_memberships()
     @populate_projects()
 
   setup_selectors: ->
@@ -34,25 +35,26 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
 
   render_projects: ->
     @projects.each @render_one_project
+    @load_memberships()
 
   render_one_project: (project) ->
     @projects_selector.append option_tag(project)
-    @populate_memberships()
 
   project_changed: ->
     @reset_story_owner()
-    @populate_memberships()
+    @load_memberships()
 
   reset_story_owner: ->
     @story_owner_selector.find('option').remove().end().append('<option value="none">No Owner</option>').val("none")
 
-  populate_memberships: ->
-    @memberships = new SB.Apps.BaseCollection([],
-                                              endpoint: 'memberships',
-                                              app: @app,
-                                              request_params: {projects_select: @projects_selector.val()})
-    @memberships.bind 'reset', @render_memberships
+  load_memberships: ->
+    project = @projects_selector.val()
+    @memberships.request_params = {projects_select: project}
     @memberships.fetch()
+
+  setup_memberships: ->
+    @memberships = new SB.Apps.BaseCollection([], endpoint: 'memberships', app: @app)
+    @memberships.on 'reset', @render_memberships
 
   render_memberships: ->
     @memberships.each @render_one_membership
