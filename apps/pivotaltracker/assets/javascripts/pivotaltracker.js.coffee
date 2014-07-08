@@ -33,7 +33,6 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     @projects.fetch()
 
   render_projects: ->
-    console.log @projects
     @projects.each @render_one_project
 
   render_one_project: (project) ->

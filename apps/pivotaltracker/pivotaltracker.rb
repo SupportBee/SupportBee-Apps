@@ -27,12 +27,11 @@ module Pivotaltracker
     string :token, required: true, label: 'Token'
 
     def validate
-      errors[:flash] = ["Please fill in the Pivotal API Token"] if validate_presence_of_token
-      errors.empty? ? true : false
-    end
-
-    def validate
-      errors[:flash] = ["There seems to problem with your API Token"] unless test_ping.success?
+      if validate_presence_of_token
+        errors[:flash] = ["Please fill in the API Token"]
+      elsif not(test_ping.success?)
+        errors[:flash] = ["Invalid API Token"]
+      end
       errors.empty? ? true : false
     end
 
@@ -56,7 +55,7 @@ module Pivotaltracker
     end
 
     def validate_presence_of_token
-      not(settings.token.blank?)
+      settings.token.blank?
     end
 
     def create_story(story_name, description)
@@ -115,7 +114,7 @@ module Pivotaltracker
     end
 
     def story_info_html(story)
-      "Pivotal Tracker Story Created! \n <a href='#{story.body['url']}>#{story.body['name']}</a>"
+      "Pivotal Tracker Story Created! \n <a href=#{story.body['url']}>#{story.body['name']}</a>"
     end
     
     def comment_on_ticket(ticket, html)
