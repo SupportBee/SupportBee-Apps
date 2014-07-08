@@ -6,6 +6,7 @@ module Pivotaltracker
       return [500, "There was an error in sending the story. Please try again!"] unless story
       html = story_info_html(story)
 
+      comment_on_ticket(ticket, html)
       [200, "Story sent to your PivotalTracker"]
     end
 
