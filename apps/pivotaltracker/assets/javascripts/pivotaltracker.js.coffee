@@ -45,7 +45,7 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     @populate_memberships()
 
   reset_story_owner: ->
-    @story_owner_el.find('option').remove()
+    @story_owner_selector.find('option').remove().end().append('<option value="none">No Owner</option>').val("none")
 
   populate_memberships: ->
     @memberships = new SB.Apps.BaseCollection([],
