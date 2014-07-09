@@ -38,7 +38,6 @@ Bugify.Views.Overlay = SB.Apps.BaseView.extend(
     @projects.fetch()
 
   render_projects: ->
-    console.log @projects
     @projects.each @render_one_project
 
   render_one_project: (project) ->
@@ -90,7 +89,6 @@ Bugify.Views.Overlay = SB.Apps.BaseView.extend(
     
 
   render_lists: ->
-    console.log 'render_lists', @lists
     @lists.each @render_one_list
     @todo_lists_el.show()
     @description_el.hide()
