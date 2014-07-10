@@ -3,6 +3,7 @@ config/secret_config.yml
 .bundle
 public/javascripts/app_error_handler.js
 config/omniauth.platform.yml
+config/sba_config.yml
 supportbeeapp_production.sql
 solr/data
 db/*.qlite3
