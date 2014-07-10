@@ -10,6 +10,18 @@ Pivotal Tracker is an award winning agile project management tool which not only
 
 The Pivotal Tracker app can send your Tickets as Stories to Pivotal. If you get a support ticket that needs some work done, you can create a tracker story and send it to your Icebox without leaving SupportBee.
 
+### Select a Pivotal Project
+
+You can send a Ticket to Multiple Projects, all your Pivotal projects would be listed in the Select Project dropdown.
+
+### Assign an Owner of the Story
+
+Once you select a Pivotal project, we populate the Story Owner dropdown with all the Memberships of that Project, you can assign the Story to an Owner before you send it to Pivotal Tracker. By default the Story would not be assigned.
+
+### Select a Story Type
+
+You can also a select a Story Type of the Ticket, by default we set it to Feature, but you can decide whether the story is a Bug, Chore, Release or a Feature.
+
 ## Adding the Pivotal Tracker App
 
 To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
