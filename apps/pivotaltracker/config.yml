@@ -4,23 +4,23 @@ access: public
 
 description: "
 
-Pivotal Tracker is an award winning agile project management tool which not only helps in collaboration but also to get continuous feedback from the customers. For more information visit http://www.pivotaltracker.com/
+Pivotal Tracker is an award winning agile project management tool which not only helps in collaboration but also to get continuous feedback from the customers. For more information, please visit [http://www.pivotaltracker.com/](http://www.pivotaltracker.com/)
 
 ## Easily send Customer emails from SupportBee to Pivotal Tracker
 
-The Pivotal Tracker app can send your Tickets as Stories to Pivotal. If you get a support ticket that needs some work done, you can create a tracker story and send it to your Icebox without leaving SupportBee.
+The Pivotal Tracker app can send your customer support tickets to Pivotal Tracker and create stories. If you get a support ticket that needs some work done, you can create a tracker story and send it to your Icebox without leaving SupportBee.
 
-### Select a Pivotal Project
+### Support for Multiple Projects
 
-You can send a Ticket to Multiple Projects, all your Pivotal projects would be listed in the Select Project dropdown.
+You can send a ticket to any projects that you have access to before. When you click on 'Send to Pivotal Tracker', all your projects would be listed in the 'Select Project' dropdown.
 
-### Assign an Owner of the Story
+### Assign the Story when you create it
 
-Once you select a Pivotal project, we populate the Story Owner dropdown with all the Memberships of that Project, you can assign the Story to an Owner before you send it to Pivotal Tracker. By default the Story would not be assigned.
+Once you select a Pivotal project, we populate the Story Owner dropdown with all the members of that project. You can assign an owner before you send the ticket to Pivotal Tracker. By default, the story would have no owner.
 
 ### Select a Story Type
 
-You can also a select a Story Type of the Ticket, by default we set it to Feature, but you can decide whether the story is a Bug, Chore, Release or a Feature.
+You can also a select a Story Type before creating it. By default, we set it to Feature, but you can change the story to be a Bug, Chore or Release. 
 
 ## Adding the Pivotal Tracker App
 
