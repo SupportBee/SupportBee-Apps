@@ -1,50 +1,87 @@
 module Jira
   module ActionHandler
     def button
-      http.basic_auth(settings.user_name, settings.password)
-
       begin
         return create_issue(payload.overlay.title, payload.overlay.description)
       rescue Exception => e
         return [500, e.message]
       end
+
+      [200, "JIRA Issue Created Successfully!"]
     end
   end
 end
 
 module Jira
+  require 'json'
+
   class Base < SupportBeeApp::Base
-    string :user_name, :required => true, :label => 'Enter User Name', :hint => 'You have to use your JIRA username. The JIRA email address will not work. You can find the user name in your Profile page inside JIRA.'
-    password :password, :required => true, :label => 'Enter Password'
-    string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your JIRA URL is "https://something.atlassian.net" then your Subdomain value is "something"'
-    string :project_key, :required => true, :label => 'Enter Project Key', :hint => 'Your Project key can be found in the URL of the Project page'
-    string :issue_type, :required => true, :label => 'Enter Issue Type', :hint => 'For example: "Bug". This field is case sensitive. "bug" will not work'
+    string :user_name, required: true, label: 'JIRA Username', hint: 'You have to use your JIRA username. The JIRA email address will not work. You can find the username in your JIRA Profile page'
+    password :password, required: true, label: 'JIRA Password'
+    string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
+
+    def validate
+      http.basic_auth(settings.user_name, settings.password)
+      errors[:flash] = ["Cannot reach JIRA. Please check configuration"] unless test_ping.success?
+      errors.empty? ? true : false
+    end
+
+    def project_key
+      #payload.overlay.projects_select
+      'TP'
+    end
 
     private
 
+    def test_ping
+      jira_get(projects_url)
+    end
+
+    def jira_get(endpoint_url)
+      http.basic_auth(settings.user_name, settings.password)
+
+      response = http_get endpoint_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+      end
+      response
+    end
+
+    def jira_post(endpoint_url, body)
+      http.basic_auth(settings.user_name, settings.password)
+
+      response = http_post endpoint_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json
+      end
+      binding.pry
+      response
+    end
+
     def create_issue(summary, description)
+      body = {
+        fields: {
+          project: {
+            key: project_key,
+          },
+          summary: summary,
+          description: description,
+          issuetype: {
+            name: "Task"
+          },
+          labels: [
+            "supportbee"
+          ]
+        }
+      }
+      jira_post(issues_url, body)
+    end
 
-      begin
-        response = http_post "https://#{settings.subdomain}.atlassian.net/rest/api/2/issue" do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.body = {fields:{project:{key:settings.project_key}, summary:summary, description:description, issuetype:{name:settings.issue_type}}}.to_json
-        end
-      rescue Faraday::Error::ConnectionFailed => e
-        return [500, "Cannot connect to your JIRA account. Please check the 'Subdomain' setting"]
-      end
-
-      if response.status == 201
-        result = [200, "Ticket sent to JIRA"] if response.status == 201
-      elsif response.status == 401
-        result = [500, "Unauthorized. Please check JIRA username"]
-      elsif response.status == 403
-        result = [500, "Forbidden. Please check JIRA password"]
-      else
-        result = [500, "Error: #{response.body['errors'].first.last}"]
-      end
-
-      result
+    def projects_url
+      "#{settings.domain}/rest/api/2/project"
+    end
+    
+    def issues_url
+      "#{settings.domain}/rest/api/2/issue"
     end
   end
 end
-
