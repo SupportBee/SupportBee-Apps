@@ -1,18 +1,31 @@
-<h3>Edit the Issue Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <ol>
-      <li>
-        <label for="title">Issue Summary</label>
-        <input name="title" value="{{subject}}">
-      </li>
-      <li>
-        <label for="description">Issue Description</label>
-        <textarea name="description">
-{{content.text}} \n
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </li>
-    </ol>
-  {{/ticket}}
-{{/each}}
+<h3>Edit Issue Details</h3>
+
+<form>
+  {{#each tickets}}
+    {{#ticket}}
+      <ol>
+        <li>
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </li>
+
+        <li>
+          <label for="title">Issue Summary</label>
+          <input name="title" value="{{subject}}">
+        </li>
+
+        <li>
+          <label for="description">Issue Description</label>
+          <textarea name="description">
+            {{content.text}}
+            https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+          </textarea>
+        </li>
+
+        <li>
+          <a class="submit btn btn-primary">Send to JIRA</a>
+          <a class="cancel btn">Cancel</a>
+      </ol>
+    {{/ticket}}
+  {{/each}}
+</form>

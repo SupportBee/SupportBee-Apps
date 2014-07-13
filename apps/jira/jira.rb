@@ -1,13 +1,17 @@
 module Jira
   module ActionHandler
     def button
-      begin
-        return create_issue(payload.overlay.title, payload.overlay.description)
-      rescue Exception => e
-        return [500, e.message]
-      end
+      ticket = payload.tickets.first
+      issue = create_issue(payload.overlay.title, payload.overlay.description)
+      return [500, "There was an error creating an Issue in JIRA. Please try again"] unless issue
+      html = create_issue_html(issue.body, ticket.subject)
 
+      comment_on_ticket(ticket, html)
       [200, "JIRA Issue Created Successfully!"]
+    end
+
+    def projects
+      [200, fetch_projects]
     end
   end
 end
@@ -27,8 +31,7 @@ module Jira
     end
 
     def project_key
-      #payload.overlay.projects_select
-      'TP'
+      payload.overlay.projects_select
     end
 
     private
@@ -53,7 +56,6 @@ module Jira
         req.headers['Content-Type'] = 'application/json'
         req.body = body.to_json
       end
-      binding.pry
       response
     end
 
@@ -76,12 +78,25 @@ module Jira
       jira_post(issues_url, body)
     end
 
+    def fetch_projects
+      response = jira_get(projects_url)
+      response.body.to_json
+    end
+
     def projects_url
       "#{settings.domain}/rest/api/2/project"
     end
     
     def issues_url
       "#{settings.domain}/rest/api/2/issue"
+    end
+
+    def create_issue_html(issue, subject)
+      "JIRA Issue Created! \n <a href=#{issue['self']}>#{subject}</a>"
+    end
+
+    def comment_on_ticket(ticket, html)
+      ticket.comment(html: html)
     end
   end
 end
