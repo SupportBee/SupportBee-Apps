@@ -13,6 +13,10 @@ module Jira
     def projects
       [200, fetch_projects]
     end
+
+    def users
+      [200, fetch_assignable_users]
+    end
   end
 end
 
@@ -23,6 +27,7 @@ module Jira
     string :user_name, required: true, label: 'JIRA Username', hint: 'You have to use your JIRA username. The JIRA email address will not work. You can find the username in your JIRA Profile page'
     password :password, required: true, label: 'JIRA Password'
     string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
+    string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name'
 
     def validate
       http.basic_auth(settings.user_name, settings.password)
@@ -81,6 +86,25 @@ module Jira
     def fetch_projects
       response = jira_get(projects_url)
       response.body.to_json
+    end
+
+    def fetch_assignable_users
+      http.basic_auth(settings.user_name, settings.password)
+
+      response = http_get users_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = {
+          projectKeys: [
+            project_key
+          ]
+        }.to_json
+      end
+      binding.pry
+      response.body.to_json
+    end
+
+    def users_url
+      "#{settings.domain}/rest/api/2/user/assignable/multiProjectSearch"
     end
 
     def projects_url
