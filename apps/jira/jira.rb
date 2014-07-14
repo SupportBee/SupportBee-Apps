@@ -2,8 +2,9 @@ module Jira
   module ActionHandler
     def button
       ticket = payload.tickets.first
+
       issue = create_issue(payload.overlay.title, payload.overlay.description)
-      return [500, "There was an error creating an Issue in JIRA. Please try again"] unless issue
+      return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
       html = create_issue_html(issue.body, ticket.subject)
 
       comment_on_ticket(ticket, html)
@@ -16,6 +17,10 @@ module Jira
 
     def users
       [200, fetch_assignable_users]
+    end
+  
+    def issue_types
+      [200, fetch_issue_types]
     end
   end
 end
@@ -30,7 +35,6 @@ module Jira
     string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name'
 
     def validate
-      http.basic_auth(settings.user_name, settings.password)
       errors[:flash] = ["Cannot reach JIRA. Please check configuration"] unless test_ping.success?
       errors.empty? ? true : false
     end
@@ -40,8 +44,11 @@ module Jira
     end
 
     def assignee_name
-      return if payload.overlay.users_select == "none"
       payload.overlay.users_select
+    end
+
+    def issue_type
+      payload.overlay.issue_type_select
     end
 
     private
@@ -51,7 +58,7 @@ module Jira
     end
 
     def jira_get(endpoint_url)
-      http.basic_auth(settings.user_name, settings.password)
+      basic_auth
 
       response = http_get endpoint_url do |req|
         req.headers['Content-Type'] = 'application/json'
@@ -60,7 +67,7 @@ module Jira
     end
 
     def jira_post(endpoint_url, body)
-      http.basic_auth(settings.user_name, settings.password)
+      basic_auth
 
       response = http_post endpoint_url do |req|
         req.headers['Content-Type'] = 'application/json'
@@ -70,15 +77,38 @@ module Jira
     end
 
     def create_issue(summary, description)
-      body = {
-        fields: {
+      body = assigned_body(summary, description) if assigned?
+      body = unassigned_body(summary, description) unless assigned?
+
+      jira_post(issues_url, body)
+    end
+
+    def unassigned_body(summary, description)
+      { fields: {
           project: {
             key: project_key,
           },
           summary: summary,
           description: description,
           issuetype: {
-            name: "Task"
+            id: issue_type
+          },
+          labels: [
+            "supportbee"
+          ]
+        }
+      }
+    end
+
+    def assigned_body(summary, description)
+      { fields: {
+          project: {
+            key: project_key,
+          },
+          summary: summary,
+          description: description,
+          issuetype: {
+            id: issue_type
           },
           assignee: {
             name: assignee_name
@@ -88,7 +118,10 @@ module Jira
           ]
         }
       }
-      jira_post(issues_url, body)
+    end
+
+    def assigned?
+      assignee_name != "none"
     end
 
     def fetch_projects
@@ -97,13 +130,20 @@ module Jira
     end
 
     def fetch_assignable_users
-      http.basic_auth(settings.user_name, settings.password)
-
+      basic_auth
       response = http_get (users_url + "?project=#{project_key}") do |req|
         req.headers['Content-Type'] = 'application/json'
       end
-      errors[:flash] = ["It seems you don't have access to Fetch Users, but you can still create an Issue!"] if response.status == 401
       response.body.to_json
+    end
+
+    def fetch_issue_types
+      response = jira_get(issue_type_url)
+      response.body.to_json
+    end
+
+    def issue_type_url
+      "#{settings.domain}/rest/api/2/issuetype"
     end
 
     def users_url
@@ -124,6 +164,10 @@ module Jira
 
     def comment_on_ticket(ticket, html)
       ticket.comment(html: html)
+    end
+
+    def basic_auth
+      http.basic_auth(settings.user_name, settings.password)
     end
   end
 end
