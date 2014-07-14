@@ -39,6 +39,11 @@ module Jira
       payload.overlay.projects_select
     end
 
+    def assignee_name
+      return if payload.overlay.users_select == "none"
+      payload.overlay.users_select
+    end
+
     private
 
     def test_ping
@@ -75,6 +80,9 @@ module Jira
           issuetype: {
             name: "Task"
           },
+          assignee: {
+            name: assignee_name
+          },
           labels: [
             "supportbee"
           ]
@@ -91,20 +99,15 @@ module Jira
     def fetch_assignable_users
       http.basic_auth(settings.user_name, settings.password)
 
-      response = http_get users_url do |req|
+      response = http_get (users_url + "?project=#{project_key}") do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {
-          projectKeys: [
-            project_key
-          ]
-        }.to_json
       end
-      binding.pry
+      errors[:flash] = ["It seems you don't have access to Fetch Users, but you can still create an Issue!"] if response.status == 401
       response.body.to_json
     end
 
     def users_url
-      "#{settings.domain}/rest/api/2/user/assignable/multiProjectSearch"
+      "#{settings.domain}/rest/api/2/user/assignable/search"
     end
 
     def projects_url

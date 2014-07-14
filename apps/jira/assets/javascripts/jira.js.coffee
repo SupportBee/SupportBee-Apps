@@ -62,7 +62,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
     @users.each @render_one_user
 
   render_one_user: (user) ->
-    @users_selector.appen users_option_tag(user)
+    @users_selector.append users_option_tag(user)
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
