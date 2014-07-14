@@ -1,8 +1,52 @@
-name: "JIRA OnDemand"
+name: "JIRA"
 slug: jira
 access: public
 
-description: "Send ticket details to a JIRA OnDemand project. The ticket is saved as an issue type you specify on JIRA"
+description: "
+
+[JIRA](https://www.atlassian.com/software/jira) is the tracker for teams planning and building great products. Thousands of teams choose JIRA to capture and organize issues, assign work, and follow team activity.
+
+## Create JIRA Issues from SupportBee Customer emails
+
+The JIRA app can send your customer support tickets to JIRA and create issues. If you're support ticket needs some work done, directly create an Issue and send to JIRA without leaving SupportBee.
+
+### Support for Multiple Projects
+
+You can send tickets to multiple projects in JIRA. Select Apps > Send to JIRA, and all your projects would be populated in a dropdown.
+
+### Assign an Issue to a User
+
+Once you select a project, you'll see that the 'Select User' dropdown is populated with all the assignable Users. You can assign the Issue to a User before sending the ticket to JIRA. By default, the issue would not be assigned.
+
+### Select an Issue Type
+
+You can also a select an Issue Type before creating it. You would see the Issue Type dropdown populated with all the available Issue Types. By default, it would be set to Task.
+
+## Adding the JIRA App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+
+### Username & Password
+
+This would be the Username and Password of your JIRA instance. It would be best if you use the Global Administrator's crendentials to configure the integration, as then you would have access to all features, including assigning Issues.
+
+### JIRA Domain
+
+We support both JIRA OnDemand, and JIRA Self Hosted. 
+
+For OnDemand users, the domain would look something like this: 'https://example.atlassian.net'. 
+
+
+For Self Hosted JIRA, you should first make sure that your JIRA instance is accessible via HTTP or HTTPS, the domain could look something like this: 'https://example.com/jira' or 'http://your-machine:2990/jira'.
+
+The best way to be sure if you entered the correct domain name is by visiting the URL you entered.
+
+## Using the App
+
+Using the app is fairly simple, open a ticket and click Apps > Send to JIRA.
+You can edit the Title and Description of the Issue, and select the Project to which you want the Issue to be sent. You can also assign the Issue to a User, and give it a type.   We also put a link to the ticket in the story description.
+
+"
 
 category: project-management
 
@@ -10,12 +54,11 @@ tags:
 - jira
 - project management
 
-video: https://vimeo.com/77828454
-
 developer: 
-  name: Bopanna D.C
-  email: bops.91@gmail.com
-  github: bopanna
+  name: Pranav Singh
+  email: pranav@supportbee.com
+  twitter: "@pranav7"
+  github: "pranav7"
  
 action:
   button:
