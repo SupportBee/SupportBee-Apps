@@ -32,7 +32,7 @@ module Jira
     string :user_name, required: true, label: 'JIRA Username', hint: 'You have to use your JIRA username. The JIRA email address will not work. You can find the username in your JIRA Profile page'
     password :password, required: true, label: 'JIRA Password'
     string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
-    string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name'
+    string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name, this is only to support previous integrations'
 
     def validate
       errors[:flash] = ["Cannot reach JIRA. Please check configuration"] unless test_ping.success?
@@ -134,6 +134,7 @@ module Jira
       response = http_get (users_url + "?project=#{project_key}") do |req|
         req.headers['Content-Type'] = 'application/json'
       end
+      flash[:errors] = ["It seems you do not have access to Assign Issues."] if response.status == 401
       response.body.to_json
     end
 
@@ -143,19 +144,19 @@ module Jira
     end
 
     def issue_type_url
-      "#{settings.domain}/rest/api/2/issuetype"
+      "#{domain}/rest/api/2/issuetype"
     end
 
     def users_url
-      "#{settings.domain}/rest/api/2/user/assignable/search"
+      "#{domain}/rest/api/2/user/assignable/search"
     end
 
     def projects_url
-      "#{settings.domain}/rest/api/2/project"
+      "#{domain}/rest/api/2/project"
     end
     
     def issues_url
-      "#{settings.domain}/rest/api/2/issue"
+      "#{domain}/rest/api/2/issue"
     end
 
     def create_issue_html(issue, subject)
@@ -168,6 +169,11 @@ module Jira
 
     def basic_auth
       http.basic_auth(settings.user_name, settings.password)
+    end
+
+    def domain
+      return settings.domain unless settings.domain.blank?
+      return "https://#{settings.subdomain}.atlassian.net"
     end
   end
 end
