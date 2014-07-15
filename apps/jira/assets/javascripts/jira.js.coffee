@@ -13,7 +13,7 @@ issue_type_option_tag = (item) ->
 Jira.Views.Overlay = SB.Apps.BaseView.extend(
 
   events: {
-    'change [name="project_select"]': 'project_changed'
+    'change [name="projects_select"]': 'project_changed'
     'click a.submit': 'submit_form'
   }
 
@@ -53,7 +53,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
     @load_users()
 
   reset_users: ->
-    @users_selector.find('option').remove().end().append('<option value="none">No Assignee(changed)</option>').val("none")
+    @users_selector.find('option').remove().end().append('<option value="none">No Assignee</option>').val("none")
 
   load_users: ->
     project = @projects_selector.val()

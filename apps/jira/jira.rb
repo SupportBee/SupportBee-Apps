@@ -134,7 +134,6 @@ module Jira
       response = http_get (users_url + "?project=#{project_key}") do |req|
         req.headers['Content-Type'] = 'application/json'
       end
-      flash[:errors] = ["It seems you do not have access to Assign Issues."] if response.status == 401
       response.body.to_json
     end
 
