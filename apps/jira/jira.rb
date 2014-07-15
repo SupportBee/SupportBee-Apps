@@ -35,7 +35,7 @@ module Jira
     string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name, this is only to support previous integrations'
 
     def validate
-      errors[:flash] = ["Cannot reach JIRA. Please check configuration"] unless test_ping.success?
+      errors[:flash] = ["We could not reach JIRA. Please check the configuration, and try again"] unless test_ping.success?
       errors.empty? ? true : false
     end
 
