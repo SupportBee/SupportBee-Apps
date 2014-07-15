@@ -8,7 +8,7 @@ description: "
 
 ## Create JIRA Issues from SupportBee Customer emails
 
-The JIRA app can send your customer support tickets to JIRA and create issues. If you're support ticket needs some work done, directly create an Issue and send to JIRA without leaving SupportBee.
+The JIRA app can send your customer support tickets to JIRA and create issues. If you're support ticket needs some work done, directly create an Issue and send it to JIRA without leaving SupportBee.
 
 ### Support for Multiple Projects
 
@@ -22,9 +22,13 @@ Once you select a project, you'll see that the 'Select User' dropdown is populat
 
 You can also a select an Issue Type before creating it. You would see the Issue Type dropdown populated with all the available Issue Types. By default, it would be set to Task.
 
+### Support for JIRA OnDemand & Self Hosted
+
+We now support both JIRA OnDemand, and JIRA Self Hosted. The only thing you need to make sure is that your JIRA instance is accessible via HTTP or HTTPS.
+
 ## Adding the JIRA App
 
-To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details.
 
 ### Username & Password
 
@@ -32,14 +36,13 @@ This would be the Username and Password of your JIRA instance. It would be best 
 
 ### JIRA Domain
 
-We support both JIRA OnDemand, and JIRA Self Hosted. 
-
-For OnDemand users, the domain would look something like this: 'https://example.atlassian.net'. 
+For OnDemand users, the domain would look something like this: 'https://example.atlassian.net'.
 
 
 For Self Hosted JIRA, you should first make sure that your JIRA instance is accessible via HTTP or HTTPS, the domain could look something like this: 'https://example.com/jira' or 'http://your-machine:2990/jira'.
 
-The best way to be sure if you entered the correct domain name is by visiting the URL you entered.
+
+The best way to be sure if you entered the correct domain name is by visiting the URL you entered, through your browser, and you should be taken to your JIRA instance.
 
 ## Using the App
 
