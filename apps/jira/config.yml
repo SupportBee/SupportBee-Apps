@@ -28,7 +28,7 @@ We now support both JIRA OnDemand, and JIRA Self Hosted. The only thing you need
 
 ## Adding the JIRA App
 
-To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details.
+To add the app, click on 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details.
 
 ### Username & Password
 
@@ -40,6 +40,7 @@ For OnDemand users, the domain would look something like this: 'https://example.
 
 
 For Self Hosted JIRA, you should first make sure that your JIRA instance is accessible via HTTP or HTTPS, the domain could look something like this: 'https://example.com/jira' or 'http://your-machine:2990/jira'.
+
 
 To check that you are using the correct URL, visit it using your browser. You should be taken to your JIRA instance.
 
