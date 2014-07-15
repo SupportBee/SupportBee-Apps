@@ -6,7 +6,7 @@ module Jira
       issue = create_issue(payload.overlay.title, payload.overlay.description)
       return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
       html = create_issue_html(issue.body, ticket.subject)
-
+      
       comment_on_ticket(ticket, html)
       [200, "JIRA Issue Created Successfully!"]
     end
@@ -158,8 +158,8 @@ module Jira
       "#{domain}/rest/api/2/issue"
     end
 
-    def create_issue_html(issue, subject)
-      "JIRA Issue Created! \n <a href=#{issue['self']}>#{subject}</a>"
+    def create_issue_html(issue, summary)
+      "JIRA Issue Created! \n <a href=#{domain}/browse/#{issue['key']}>#{issue['key']}: #{summary}</a>"
     end
 
     def comment_on_ticket(ticket, html)

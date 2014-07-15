@@ -8,7 +8,7 @@ description: "
 
 ## Create JIRA Issues from SupportBee Customer emails
 
-The JIRA app can send your customer support tickets to JIRA and create issues. If you're support ticket needs some work done, directly create an Issue and send it to JIRA without leaving SupportBee.
+The JIRA app can send your customer support tickets to JIRA and create issues. If the support tickets need some development work done, directly create an Issue and send it to JIRA without leaving SupportBee.
 
 ### Support for Multiple Projects
 
@@ -41,8 +41,7 @@ For OnDemand users, the domain would look something like this: 'https://example.
 
 For Self Hosted JIRA, you should first make sure that your JIRA instance is accessible via HTTP or HTTPS, the domain could look something like this: 'https://example.com/jira' or 'http://your-machine:2990/jira'.
 
-
-The best way to be sure if you entered the correct domain name is by visiting the URL you entered, through your browser, and you should be taken to your JIRA instance.
+To check that you are using the correct URL, visit it using your browser. You should be taken to your JIRA instance.
 
 ## Using the App
 
