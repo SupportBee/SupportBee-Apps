@@ -64,6 +64,7 @@ module SupportBee
       end
     end
 
+    attr_reader :attributes
     
     def initialize(data={}, payload={})
       raise NotImplementedError.new('SupportBee::Base is an abstract class.  You should perform actions on its subclasses (Ticket, Reply, etc.)') if self.class == SupportBee::Base
