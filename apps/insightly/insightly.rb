@@ -26,16 +26,29 @@ module Insightly
   class Base < SupportBeeApp::Base
 
     string  :api_key,
-            :required => true,
-            :label => 'Insightly API Key',
-            :hint => 'Can be found in User Settings page.'
+            required: true,
+            label: 'Insightly API Key',
+            hint: 'Can be found in User Settings page.'
 
     def validate
       errors[:flash] = ["Please fill in all the required fields"] if settings.url.blank? or settings.api_key.blank?
       errors.empty? ? true : false
     end
 
+    def validate
+      errors[:flash] = ["API Key Invalid"] unless test_ping.success?
+      errors.empty? ? true : false
+    end
+    
+    def project_id
+      payload.overlay.projects_select
+    end
+
     private
+
+    def test_ping
+      insightly_get(api_url('projects'))
+    end
 
     def create_task(title, description)
       post_body = {
@@ -51,14 +64,10 @@ module Insightly
     end
 
     def insightly_get(url)
-      response = http.get "#{url.to_s}" do |req|
+      response = http.get url do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
         req.headers['Accept'] = 'application/json'
       end
-    end
-
-    def project_id
-      payload.overlay.projects_select
     end
 
     def fetch_projects
@@ -71,13 +80,12 @@ module Insightly
     end
 
     def comment_html(response)
-      "Insightly Task created!\n <a href='#{api_url('Tasks')}/TaskDetails/#{response.body['TASK_ID']}'>#{response.body['Title']}</a>"
+      "Insightly Task created!\n <a href=#{api_url('Tasks')}/TaskDetails/#{response.body['TASK_ID']}>#{response.body['Title']}</a>"
     end
 
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
-
   end
 end
 
