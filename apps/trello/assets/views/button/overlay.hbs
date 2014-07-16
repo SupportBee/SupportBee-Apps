@@ -1,24 +1,32 @@
-<!-- 
-  Set overlay: true in the config
-  This file will be rendered on the overlay
-  The below code sample is taken from the Pivotal App
--->
+<form>
+  {{#each tickets}}
+    {{#ticket}}
+      <ol>
+        <li>
+          <label for="board">Select Board</label>
+          <select name="boards_select"></select>
+        </li>
+        <li>
+          <label for="list">Select List</label>
+          <select name="lists_select"></select>
+        </li>
+        <li>
+          <label for="title">Issue Title</label>
+          <input name="title" value="{{subject}}">
+        </li>
+        <li>
+          <label for="description">Issue Description</label>
+          <textarea name="description">
+  {{content.text}} \n
+  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+          </textarea>
+        </li>
+        <li>
+          <a class="submit btn btn-primary">Send to Trello</a>
+          <a class="cancel btn">Cancel</a>
+        </li>
+      </ol>
+    {{/ticket}}
+  {{/each}}
+</form>
 
-<h3>Edit the Card Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <ol>
-      <li>
-        <label for="title">Card Title</label>
-        <input name="title" value="{{subject}}">
-      </li>
-      <li>
-        <label for="description">Card Description</label>
-        <textarea name="description">
-{{content.text}} \n
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </li>
-    </ol>
-  {{/ticket}}
-{{/each}}

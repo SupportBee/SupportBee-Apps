@@ -1,18 +1,31 @@
-<h3>Edit the Task Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <ol>
-      <li>
-        <label for="title">Task Name</label>
-        <input name="title" value="{{subject}}">
-      </li>
-      <li>
-        <label for="notes">Notes</label>
-        <textarea name="notes">
-{{content.text}} \n
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </li>
-    </ol>
-  {{/ticket}}
-{{/each}}
+<form>
+  {{#each tickets}}
+    {{#ticket}}
+      <ol>
+        <li>
+          <label for="org_select">Select Organization</label>
+          <select name="org_select"></select>
+        </li>
+        <li>
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </li>
+        <li>
+          <label for="title">Task Name</label>
+          <input name="title" value="{{subject}}">
+        </li>
+        <li>
+          <label for="notes">Notes</label>
+          <textarea name="notes">
+  {{content.text}} \n
+  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+          </textarea>
+        </li>
+        <li>
+          <a class="submit btn btn-primary">Send to Asana</a>
+          <a class="cancel btn">Cancel</a>
+        </li>
+      </ol>
+    {{/ticket}}
+  {{/each}}
+</form>

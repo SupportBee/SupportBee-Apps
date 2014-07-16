@@ -27,12 +27,11 @@ module Bugify
     string :api_key, :required => true, :label => 'Bugify API Key'
 
     def validate
-      errors[:flash] = ["Please fill in all the required fields"] if settings.api_key.blank? or settings.url.blank?
-      errors.empty? ? true : false
-    end
-    
-    def validate
-      errors[:flash] = ["URL or API Key Incorrect"] unless test_ping.success?
+      if settings.api_key.blank? or settings.url.blank?
+        errors[:flash] = ["Please fill in all the required fields"]
+      elsif not(test_ping.success?)
+        errors[:flash] = ["URL or API Key Incorrect"] unless test_ping.success?
+      end
       errors.empty? ? true : false
     end
 

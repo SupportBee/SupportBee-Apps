@@ -3,9 +3,23 @@ slug: asana
 access: public
 
 description: "
-Create a task on Asana!
+[Asana](https://asana.com/) puts conversations & tasks together, so you can get more done with less effort. Conversations are kept with your work, so you’ll spend less time in email, and more time getting things done.
 
-An agent can create a task on Asana for a particular ticket in SupportBee Ticket screen.
+## Send a Ticket to Asana in One Click
+
+More often than not, when customers email you with a problem, you need to involve your team by creating tasks for them. Instead of emailing them, you can create Asana tasks for them from within SupportBee using this app. Tasks created using this app contain the ticket content and also link back to the SupportBee ticket so your team has the right context before starting work. A link to the Asana task is also posted as a comment on the ticket so it's easy for you to find it later.
+
+## Support for Multiple Workspaces & Projects
+
+If you are operating at any scale, you probably have multiple projects in Asana, possibly in several workspaces. Our Asana integration lets you select the workspace and project that you want to send the ticket to when you create a task.
+
+## Adding the Asana App
+
+To add the Asana app, simply click on the 'Add to My SupportBee'. You will be redirected to Asana where you can authorize SupportBee to talk to your Asana account. Once you have authorized the app, click on Save Settings.
+
+## Using the App
+
+To use the app, open a ticket and click on Apps > Send to Asana. You can select a workspace and we'll populate a list of projects for the selected workspace. Once you have selected a project, you can send the ticket to Asana. You can also edit the task title and description before sending it over. A link to the ticket is automatically added in the description.
 "
 
 category: project-management
@@ -14,7 +28,7 @@ tags:
 - asana
 - project management
 
-video: https://vimeo.com/77646673
+#video: https://vimeo.com/77646673
 
 developer: 
   name: Avinasha S

@@ -1,0 +1,19 @@
+development:
+  app_platform:
+    core_app_base_domain: https://supportbee.com
+    core_app_port:
+    core_app_protocol: http
+    cloudfront_base_url: http://localhost:9292
+    redis:
+      host: '127.0.0.1'
+      db: 1
+
+test:
+  app_platform:
+    core_app_base_domain: https://supportbee.com
+    core_app_port:
+    core_app_protocol: http
+    cloudfront_base_url: http://localhost:9292
+    redis:
+      host: '127.0.0.1'
+      db: 2

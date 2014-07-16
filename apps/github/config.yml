@@ -3,9 +3,25 @@ slug: github
 access: public
 
 description: "
-Create an issue on Github Issues!
 
-An agent can create an issue on Github for a particular ticket in SupportBee. You can customize the title/description before creating the issue.
+[Github](https://github.com) offers powerful collaboration, code review and code management for open source and private projects. Github also offers a flexible issue tracker lets you stay on top of bugs and focus on features.
+
+## Send a Ticket to Github Issues in One Click
+
+Customer support tickets often contain bug reports and feature requests. SupportBee's Github App lets you create Github issues for these tickets without leaving the ticket screen. The issue contains a link to the support ticket so you can follow up with the customer after closing the issue. The app also posts a link to the Github issue as a comment on the ticket so it's easy to find the issue later.
+
+## Support for Mutliple Organizations & Projects
+
+If you are managing multiple organizations and projects with your Github account, you can select the organization and project that you would like to create an issue in before sending the ticket over to Github.
+
+## Adding the App
+
+To add the app, click on 'Add to My SupportBee'. You will be redirected to Github where you need to allow the app to access your Github account. Once you authorize the app, you will be redirected back to SupportBee and you need to click 'Save Settings'.
+
+## Using the Github App
+
+To use the app, open a ticket and click on Apps > Send to Github. You can select an organization and we'll populate a list of projects for the selected org. Once you have selected a project, you can send the ticket to Github. You can also edit the issue title and description before sending it over. A link to the ticket is automatically added in the description.
+
 "
 
 category: project-management
@@ -13,8 +29,6 @@ category: project-management
 tags:
 - github
 - issue tracking 
-
-video: https://vimeo.com/77796980
 
 developer: 
   name: Anh Do

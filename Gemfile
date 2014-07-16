@@ -19,6 +19,7 @@ gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
+gem 'unicorn', '=3.7.0'
 
 # App Gems
 gem 'tinder'
@@ -33,14 +34,14 @@ gem 'rubyzoho'
 gem 'restforce'
 gem 'mab'
 
-gem 'guard-shotgun', :git =>'git://github.com/rchampourlier/guard-shotgun.git', :group => :development
 gem 'execjs', :group => :development
 gem 'pry', group: :development
 gem 'rspec', :group => :test
 gem 'rack-test', :require => "rack/test", :group => :test
 gem 'flexmock', :group => :test
 gem 'mock_redis', :group => :test
+gem 'awesome_print', :group => :development
 
 # Mail Gems
 gem 'rest-client'
-gem 'multimap', :git => 'git@github.com:SupportBee/multimap.git', :tag => 'v1.1.2'
+gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'

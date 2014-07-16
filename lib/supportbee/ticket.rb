@@ -87,7 +87,14 @@ module SupportBee
       post_data = { :assignment => { :user_id => user_id }}
       response = api_post(assignment_url, :body => post_data)
       refresh
-      SupportBee::Assignment.new(@params, response.body['assignment'])
+
+      begin
+        SupportBee::Assignment.new(@params, response.body['assignment'])
+      rescue => e
+        LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.message}"
+        LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.backtrace}"
+        LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{response.inspect}"
+      end
     end
 
     def assign_to_group(group)
