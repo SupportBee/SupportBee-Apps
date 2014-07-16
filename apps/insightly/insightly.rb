@@ -52,9 +52,13 @@ module Insightly
 
     def create_task(title, description)
       post_body = {
-        :title => title,
-        :details => description,
-        :project_id => '1309485'
+        title: title,
+        details: description,
+        project_id: project_id,
+        completed: false,
+        publicly_visible: true,
+        responsible_user_id: '535114',
+        owner_user_id: '535114'
       }.to_json
       response = http.post api_url('tasks') do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
@@ -80,7 +84,7 @@ module Insightly
     end
 
     def comment_html(response)
-      "Insightly Task created!\n <a href=#{api_url('Tasks')}/TaskDetails/#{response.body['TASK_ID']}>#{response.body['Title']}</a>"
+      "Insightly Task created!\n <a href=/TaskDetails/#{response.body['TASK_ID']}>#{response.body['Title']}</a>"
     end
 
     def comment_on_ticket(ticket, html)
