@@ -1,6 +1,8 @@
 module Insightly
   module EventHandler
     def ticket_created
+      return unless settings.sync_contacts.to_s == '1'
+      
       ticket = payload.ticket
       requester = ticket.requester
 
@@ -31,9 +33,11 @@ module Insightly
     def button
      ticket = payload.tickets.first
      begin
-       response = create_task(payload.overlay.title, payload.overlay.description)
-       html = comment_html(response)
+       task = create_task(payload.overlay.title, payload.overlay.description)
+
+       html = task_created_html(task)
        comment_on_ticket(ticket, html)
+
      rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
         return [500, e.message]
@@ -61,9 +65,17 @@ module Insightly
             required: true,
             label: 'Insightly API Key',
             hint: 'Can be found in User Settings page.'
+    string  :subdomain,
+            required: true,
+            label: 'Insightly Subdomain',
+            hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
+
+    boolean :sync_contacts,
+            label: 'Create Insightly Contact with Customer Information',
+            default: true
 
     def validate
-      errors[:flash] = ["Please fill in all the required fields"] if settings.url.blank? or settings.api_key.blank?
+      errors[:flash] = ["Please fill in all the required fields"] if settings.subdomain.blank? or settings.api_key.blank?
       errors.empty? ? true : false
     end
 
@@ -105,7 +117,7 @@ module Insightly
         req.headers['Content-Type'] = 'application/json'
         req.body = post_body
       end
-      response
+      response.body
     end
 
     def create_contact(requester)
@@ -153,10 +165,18 @@ module Insightly
       "https://api.insight.ly/v2.1/#{resource}"
     end
 
-    def comment_html(response)
+    def contact_link(contact)
+      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
+    end
+
+    def task_link(project)
+      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
+    end
+
+    def task_created_html(task)
       html = ''
       html << "Insightly Task Created!<br/>"
-      html << "<b>#{response.body['TITLE']}</b>"
+      html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
     end
 
     def comment_on_ticket(ticket, html)
@@ -165,12 +185,14 @@ module Insightly
 
     def existing_contact_info(contact)
       html = ""
-      html << "<b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> is already a Insightly Contact."
+      html << "<b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> is already an Insightly Contact.<br/>"
+      html << contact_link(contact)
     end
 
     def created_contact_info(contact)
       html = ""
-      html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts."
+      html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts.<br/>"
+      html << contact_link(contact)
     end
   end
 end

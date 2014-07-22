@@ -2,20 +2,69 @@ name: Insightly
 slug: insightly
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "
 
-category: Integration
+Insightly is an easy to use Online Small Business CRM. For more details please visit [insightly.com](http://insightly.com/).
+
+## Sync Customer Information between Insightly & SupportBee
+
+Use the Insightly app to share information about a customer between Insightly and SupportBee. Everytime a new Ticket comes in, an Insightly Contact would be created with the Customer Information, and a comment would be added to the ticket, with a link the customer's profile.
+
+If a Customer already exists in Insightly, the app would fetch his information and add it as a comment on the ticket.
+
+## Easily create Insightly tasks from Customer emails
+
+Using the Insightly app one can send support emails to Insightly as Tasks.
+
+### Send Tickets to Multiple Projects
+
+The Insightly app can send a ticket to multiple projects. When you click on 'Apps > Send to Insightly', all your projects would be listed in the 'Select Project' dropdown.
+
+### Select Assignee and Reporter of the Task
+
+Using the Insightly app, one can Assign a Task to an Insightly User without leaving SupportBee. One can also select the Responsible User of the Task.
+
+## Adding the Insightly App
+
+To add the app, click on 'Add to My SupportBee'. If this is the first app you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details.
+
+### Insightly API Key
+
+To get the API Key, login to your Insightly account, and go to User Settings.
+
+### Insightly Subdomain
+
+If your Insightly domain looks something like this: 'https://example.insight.ly/', then 'example' is your subdomain.
+
+### Create Insightly Contact with Customer Information
+
+Check this option if you want to create a new contact in Insightly if we can't find one based on the email address of the customer.
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Insightly and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
+
+However, if you want to send a Ticket as a Task in Insightly. You can select the Ticket, and then go to Apps > Send to Insightly. The pop up would contain all your Insightly Projects, and Users. You can Assign the Task to a User, and also select the Responsible User of the Task.
+
+
+We would love to hear from you.
+
+If you have any app requests or app enhancement requests, please feel free to add them as comments below, or write to us at support@supportbee.com.
+
+"
+
+category: crm
 
 tags: 
-- tag1
-- tag2
+- crm
+- insightly
+- project-management
 
 developer: 
-  name: <Your Name>
-  email: <Your Email>
-  twitter: "<Your Twitter Handle>"
-  github: <Your Github Handle>
+  name: Pranav Singh
+  email: pranav@supportbee.com
+  twitter: "pranav7"
+  github: pranav7
 
 # The following config keys are used by Action Handlers
 # Set button 'overlay' to true, if you want to have an overlay
