@@ -35,6 +35,7 @@ module Insightly
        html = comment_html(response)
        comment_on_ticket(ticket, html)
      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]
@@ -44,6 +45,9 @@ module Insightly
       [200, fetch_projects]
     end
 
+    def users
+      [200, fetch_users]
+    end
   end
 end
 
@@ -72,6 +76,14 @@ module Insightly
       payload.overlay.projects_select
     end
 
+    def responsible_user_id
+      payload.overlay.responsible_select
+    end
+
+    def owner_user_id
+      payload.overlay.owner_select
+    end
+
     private
 
     def test_ping
@@ -85,8 +97,8 @@ module Insightly
         project_id: project_id,
         completed: false,
         publicly_visible: true,
-        responsible_user_id: '535114',
-        owner_user_id: '535114'
+        responsible_user_id: responsible_user_id,
+        owner_user_id: owner_user_id
       }.to_json
       response = http.post api_url('tasks') do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
@@ -129,6 +141,11 @@ module Insightly
 
     def fetch_projects
       response = insightly_get(api_url('projects'))
+      response.body.to_json
+    end
+
+    def fetch_users
+      response = insightly_get(api_url('users'))
       response.body.to_json
     end
 
