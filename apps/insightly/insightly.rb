@@ -1,4 +1,32 @@
 module Insightly
+  module EventHandler
+    def ticket_created
+      ticket = payload.ticket
+      requester = ticket.requester
+
+      begin
+        contact = find_contact(requester)
+        html = ''
+
+        if contact
+          html = existing_contact_info(contact)
+        else
+          contact = create_contact(requester)
+          html = created_contact_info(contact)
+        end
+
+        if contact
+          comment_on_ticket(ticket, html)
+        end
+
+      rescue Exception => e
+        puts "#{e.message}\n#{e.backtrace}"
+        [500, e.message]
+      end
+      [200, "Contact sent"]
+    end
+  end
+
   module ActionHandler
     def button
      ticket = payload.tickets.first
@@ -65,6 +93,31 @@ module Insightly
         req.headers['Content-Type'] = 'application/json'
         req.body = post_body
       end
+      response
+    end
+
+    def create_contact(requester)
+      name = requester.name.split(' ', 2)
+      body = {
+        first_name: name[0],
+        last_name: name[1],
+        contactinfos: [{
+          type: 'Email',
+          detail: requester.email
+        }]
+      }
+      response = http.post api_url('Contacts') do |req|
+        req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json
+      end
+      response.body
+    end
+
+    def find_contact(requester)
+      response = insightly_get(api_url("Contacts?email=#{requester.email}"))
+      body = response.body
+      body ? body.first : nil
     end
 
     def insightly_get(url)
@@ -84,11 +137,23 @@ module Insightly
     end
 
     def comment_html(response)
-      "Insightly Task created!\n <a href=/TaskDetails/#{response.body['TASK_ID']}>#{response.body['Title']}</a>"
+      html = ''
+      html << "Insightly Task Created!<br/>"
+      html << "<b>#{response.body['TITLE']}</b>"
     end
 
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
+    end
+
+    def existing_contact_info(contact)
+      html = ""
+      html << "<b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> is already a Insightly Contact."
+    end
+
+    def created_contact_info(contact)
+      html = ""
+      html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts."
     end
   end
 end
