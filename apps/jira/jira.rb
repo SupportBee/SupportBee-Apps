@@ -1,50 +1,178 @@
 module Jira
   module ActionHandler
     def button
-      http.basic_auth(settings.user_name, settings.password)
+      ticket = payload.tickets.first
 
-      begin
-        return create_issue(payload.overlay.title, payload.overlay.description)
-      rescue Exception => e
-        return [500, e.message]
-      end
+      issue = create_issue(payload.overlay.title, payload.overlay.description)
+      return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
+      html = create_issue_html(issue.body, ticket.subject)
+      
+      comment_on_ticket(ticket, html)
+      [200, "JIRA Issue Created Successfully!"]
+    end
+
+    def projects
+      [200, fetch_projects]
+    end
+
+    def users
+      [200, fetch_assignable_users]
+    end
+  
+    def issue_types
+      [200, fetch_issue_types]
     end
   end
 end
 
 module Jira
+  require 'json'
+
   class Base < SupportBeeApp::Base
-    string :user_name, :required => true, :label => 'Enter User Name', :hint => 'You have to use your JIRA username. The JIRA email address will not work. You can find the user name in your Profile page inside JIRA.'
-    password :password, :required => true, :label => 'Enter Password'
-    string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your JIRA URL is "https://something.atlassian.net" then your Subdomain value is "something"'
-    string :project_key, :required => true, :label => 'Enter Project Key', :hint => 'Your Project key can be found in the URL of the Project page'
-    string :issue_type, :required => true, :label => 'Enter Issue Type', :hint => 'For example: "Bug". This field is case sensitive. "bug" will not work'
+    string :user_name, required: true, label: 'JIRA Username', hint: 'You have to use your JIRA username. The JIRA email address will not work. You can find the username in your JIRA Profile page'
+    password :password, required: true, label: 'JIRA Password'
+    string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
+    string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name, this is only to support previous integrations'
+
+    def validate
+      errors[:flash] = ["We could not reach JIRA. Please check the configuration, and try again"] unless test_ping.success?
+      errors.empty? ? true : false
+    end
+
+    def project_key
+      payload.overlay.projects_select
+    end
+
+    def assignee_name
+      payload.overlay.users_select
+    end
+
+    def issue_type
+      payload.overlay.issue_type_select
+    end
 
     private
 
+    def test_ping
+      jira_get(projects_url)
+    end
+
+    def jira_get(endpoint_url)
+      basic_auth
+
+      response = http_get endpoint_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+      end
+      response
+    end
+
+    def jira_post(endpoint_url, body)
+      basic_auth
+
+      response = http_post endpoint_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json
+      end
+      response
+    end
+
     def create_issue(summary, description)
+      body = assigned_body(summary, description) if assigned?
+      body = unassigned_body(summary, description) unless assigned?
 
-      begin
-        response = http_post "https://#{settings.subdomain}.atlassian.net/rest/api/2/issue" do |req|
-          req.headers['Content-Type'] = 'application/json'
-          req.body = {fields:{project:{key:settings.project_key}, summary:summary, description:description, issuetype:{name:settings.issue_type}}}.to_json
-        end
-      rescue Faraday::Error::ConnectionFailed => e
-        return [500, "Cannot connect to your JIRA account. Please check the 'Subdomain' setting"]
+      jira_post(issues_url, body)
+    end
+
+    def unassigned_body(summary, description)
+      { fields: {
+          project: {
+            key: project_key,
+          },
+          summary: summary,
+          description: description,
+          issuetype: {
+            id: issue_type
+          },
+          labels: [
+            "supportbee"
+          ]
+        }
+      }
+    end
+
+    def assigned_body(summary, description)
+      { fields: {
+          project: {
+            key: project_key,
+          },
+          summary: summary,
+          description: description,
+          issuetype: {
+            id: issue_type
+          },
+          assignee: {
+            name: assignee_name
+          },
+          labels: [
+            "supportbee"
+          ]
+        }
+      }
+    end
+
+    def assigned?
+      assignee_name != "none"
+    end
+
+    def fetch_projects
+      response = jira_get(projects_url)
+      response.body.to_json
+    end
+
+    def fetch_assignable_users
+      basic_auth
+      response = http_get (users_url + "?project=#{project_key}") do |req|
+        req.headers['Content-Type'] = 'application/json'
       end
+      response.body.to_json
+    end
 
-      if response.status == 201
-        result = [200, "Ticket sent to JIRA"] if response.status == 201
-      elsif response.status == 401
-        result = [500, "Unauthorized. Please check JIRA username"]
-      elsif response.status == 403
-        result = [500, "Forbidden. Please check JIRA password"]
-      else
-        result = [500, "Error: #{response.body['errors'].first.last}"]
-      end
+    def fetch_issue_types
+      response = jira_get(issue_type_url)
+      response.body.to_json
+    end
 
-      result
+    def issue_type_url
+      "#{domain}/rest/api/2/issuetype"
+    end
+
+    def users_url
+      "#{domain}/rest/api/2/user/assignable/search"
+    end
+
+    def projects_url
+      "#{domain}/rest/api/2/project"
+    end
+    
+    def issues_url
+      "#{domain}/rest/api/2/issue"
+    end
+
+    def create_issue_html(issue, summary)
+      "JIRA Issue Created! \n <a href=#{domain}/browse/#{issue['key']}>#{issue['key']}: #{summary}</a>"
+    end
+
+    def comment_on_ticket(ticket, html)
+      ticket.comment(html: html)
+    end
+
+    def basic_auth
+      http.basic_auth(settings.user_name, settings.password)
+    end
+
+    def domain
+      return settings.domain unless settings.domain.blank?
+      return "https://#{settings.subdomain}.atlassian.net"
     end
   end
 end
-
