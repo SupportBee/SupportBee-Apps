@@ -15,7 +15,7 @@ module Vibe
       }
       # End the url with a '/', get request is redirected otherwise
       response = http_get 'http://vibeapp.co/api/v1/initial_data/', params
-      return unless response.body['success']
+      return unless response.success?
 
       html = render_user_profile(response.body)
       ticket.comment(html: html)
@@ -40,7 +40,7 @@ module Vibe
       html << "#{user_details['email']}"
       html << "<br/><br/>"
 
-      if organizations
+      unless organizations.blank?
         html << "<b>Organizations:</b><br/><hr>"
         html << "<ul>"
 
@@ -51,7 +51,7 @@ module Vibe
         html << "</ul></br><br/>"
       end
 
-      if social
+      unless social.blank?
         html << "<b>Social Profiles:</b><br/><hr>"
         html << "<ul>"
         
