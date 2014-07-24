@@ -33,7 +33,6 @@ gem 'bigcommerce', "~> 0.8.2"
 gem 'rubyzoho'
 gem 'restforce'
 gem 'mab'
-gem 'tilt'
 
 gem 'execjs', :group => :development
 gem 'pry', group: :development

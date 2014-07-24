@@ -212,6 +212,5 @@ DEPENDENCIES
   sinatra-initializers
   therubyracer
   thor
-  tilt
   tinder
   unicorn (= 3.7.0)
