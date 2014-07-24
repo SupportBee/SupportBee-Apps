@@ -31,10 +31,36 @@ module Vibe
 
     def render_user_profile(user_details)
       self.user_details = user_details
+      organizations = user_details['organizations']
+      social = user_details['social_profiles']
 
-      template_file = File.join File.dirname(__FILE__), 'templates', 'user_profile.haml'
-      template = Tilt::HamlTemplate.new(template_file)
-      template.render(self)
+      html = ""
+      html << "<b>#{user_details['name']}</b><br/>"
+      html << "#{user_details['bio']}<br/>"
+      html << "#{user_details['email']}"
+      html << "<br/><br/>"
+
+      if organizations
+        html << "<b>Organizations:</b><br/><hr>"
+        html << "<ul>"
+
+        organizations.each do |org|
+          html << "<li>#{org['title']} at #{org['name']}</li>"
+        end
+
+        html << "</ul></br><br/>"
+      end
+
+      if social
+        html << "<b>Social Profiles:</b><br/><hr>"
+        html << "<ul>"
+        
+        social.each do |social|
+          html << "<li><a href=#{social['url']}>#{social['typeName']}</a></li>"
+        end
+
+        html << "</ul>"
+      end
     end
   end
 end
