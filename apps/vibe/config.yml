@@ -1,0 +1,50 @@
+name: Vibe
+slug: vibe
+access: public
+
+description: "
+Fastest way to know everything about your contacts. Checkout more about the Vibe App [here](http://vibeapp.co/).
+
+## Enjoy the power of Vibe app inside SupportBee
+
+The Vibe integration would help you get all the information of your Customers right inside SupportBee. It would be a great way to know more about your customers, helping you with better customer support. 
+
+Every time there is a new Ticket created, the Vibe app would fetch all the information of the customer, and add it as a comment on the ticket. You'll have access to all your customer's social profile and organizations within the ticket he created.
+
+## Adding the Vibe App
+
+You would need to generate a Vibe API key to add the integration to SupportBee.
+You can generate the Vibe API key [here](http://vibeapp.co/partners/supportbee/).
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, the Vibe app would look for the customer's profile and post a comment on the ticket if we find a contact based on the email address.
+
+
+We would love to hear from you.
+
+
+If you have any app requests or app enhancement requests, please feel free to add them as comments below, or write to us at support@supportbee.com.
+"
+
+category: crm
+
+tags: 
+- crm
+
+developer: 
+  name: Rahul
+
+# The following config keys are used by Action Handlers
+# Set button 'overlay' to true, if you want to have an overlay
+# The valid values for screens are [ticket, all, unassigned, my, groups]
+# Remove the following section if you do not want to define Action Handlers
+ 
+action:
+  button:
+    overlay: false
+    screens: 
+    - ticket
+    - all
+    - unassigned
+    label: Send To Vibe
