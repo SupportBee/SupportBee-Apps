@@ -34,7 +34,7 @@ To get the API Key, login to your Insightly account, and go to User Settings.
 
 ### Insightly Subdomain
 
-If your Insightly domain looks something like this: 'https://example.insight.ly/', then 'example' is your subdomain.
+If your Insightly domain looks something like this: ``https://example.insight.ly/``, then ``example`` is your subdomain.
 
 ### Create Insightly Contact with Customer Information
 
