@@ -4,13 +4,14 @@ access: public
 
 description: "
 
-Insightly is an easy to use Online Small Business CRM. For more details please visit [insightly.com](http://insightly.com/).
+Insightly is an easy to use CRM application for managing sales, contacts and more! You can checkout out their complete set of features [here](http://insightly.com/features).
 
 ## Sync Customer Information between Insightly & SupportBee
 
-Use the Insightly app to share information about a customer between Insightly and SupportBee. Everytime a new Ticket comes in, an Insightly Contact would be created with the Customer Information, and a comment would be added to the ticket, with a link the customer's profile.
+Use the Insightly app to share information about a customer between Insightly and SupportBee. Every time there is a new customer email in SupportBee, the app would automatically check if the customer contact exists in Insightly. If it does, the app would comment on the ticket with a link to the customer’s profile in Insightly.
 
-If a Customer already exists in Insightly, the app would fetch his information and add it as a comment on the ticket.
+If the contact does not already exist in Insightly, the app would create a new contact in Insightly. It would also add a comment on the ticket, with a link to the newly created Insightly profile of the customer
+
 
 ## Easily create Insightly tasks from Customer emails
 
@@ -47,7 +48,7 @@ Once you add the app, sit back and relax. You don't have to do anything manually
 However, if you want to send a Ticket as a Task in Insightly. You can select the Ticket, and then go to Apps > Send to Insightly. The pop up would contain all your Insightly Projects, and Users. You can Assign the Task to a User, and also select the Responsible User of the Task.
 
 
-We would love to hear from you.
+We would love to hear your feedback on this integration!
 
 If you have any app requests or app enhancement requests, please feel free to add them as comments below, or write to us at support@supportbee.com.
 
