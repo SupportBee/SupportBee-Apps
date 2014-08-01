@@ -4,6 +4,7 @@ module Insightly
       return unless settings.sync_contacts.to_s == '1'
       
       ticket = payload.ticket
+      return if ticket.trash
       requester = ticket.requester
 
       begin

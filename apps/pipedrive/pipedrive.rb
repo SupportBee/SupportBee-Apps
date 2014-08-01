@@ -2,7 +2,9 @@ module Pipedrive
   module EventHandler
     def ticket_created
       ticket = payload.ticket
+      return if ticket.trash
       requester = ticket.requester
+
       begin
         person = find_person(requester)
         html = ''
