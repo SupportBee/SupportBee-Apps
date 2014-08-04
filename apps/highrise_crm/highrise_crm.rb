@@ -3,6 +3,7 @@ module HighriseCRM
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
+      return if ticket.trash
       requester = ticket.requester
 
       setup_highrise
