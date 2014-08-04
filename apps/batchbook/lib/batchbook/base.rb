@@ -67,13 +67,13 @@ module Batchbook
     def person_details_html(person)
       html = "<b>#{person_name(person)}</b><br />"
       number, address = person_number(person), person_address(person)
-      html << "Phone: #{number}<br />" if number
-      html << "Address: #{address}<br />" if address
+      html << "#{number}<br />" if number
+      html << "#{address}<br />" if address
       html << person_link_html(person)
     end
 
     def new_person_details_html(person)
-      html = "Added <b>#{person_name(person)}</b> to Batchbook - "
+      html = "Added <b>#{person_name(person)}</b> to Batchbook<br />"
       html << person_link_html(person)
     end
 
