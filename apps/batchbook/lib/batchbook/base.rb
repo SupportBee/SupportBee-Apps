@@ -63,10 +63,12 @@ module Batchbook
       response.body['person']
     end
 
+    # TODO: Move it to a template
     def person_details_html(person)
       html = "<b>#{person_name(person)}</b><br />"
-      html << "Phone: #{number}<br />" if number = person_number(person)
-      html << "Address: #{address}<br />" if address = person_address(person)
+      number, address = person_number(person), person_address(person)
+      html << "Phone: #{number}<br />" if number
+      html << "Address: #{address}<br />" if address
       html << person_link_html(person)
     end
 
