@@ -63,15 +63,17 @@ module Batchbook
       response.body['person']
     end
 
+    # TODO: Move it to a template
     def person_details_html(person)
       html = "<b>#{person_name(person)}</b><br />"
-      html << "Phone: #{number}<br />" if number = person_number(person)
-      html << "Address: #{address}<br />" if address = person_address(person)
+      number, address = person_number(person), person_address(person)
+      html << "#{number}<br />" if number
+      html << "#{address}<br />" if address
       html << person_link_html(person)
     end
 
     def new_person_details_html(person)
-      html = "Added <b>#{person_name(person)}</b> to Batchbook - "
+      html = "Added <b>#{person_name(person)}</b> to Batchbook<br />"
       html << person_link_html(person)
     end
 
@@ -109,11 +111,8 @@ module Batchbook
 
     def person_address(person)
       return unless address = person['addresses'].first
-      keys = %w(address_1 address_2 city state postal_code country)
-      keys.each_with_object('') do |k, addr|
-        return addr unless address['k']
-        "#{addr}, #{address['k']}"
-      end
+      address_fields = %w(address_1 address_2 city state country)
+      address.values_at(*address_fields).compact.join(', ')
     end
 
     def person_link_html(person)
