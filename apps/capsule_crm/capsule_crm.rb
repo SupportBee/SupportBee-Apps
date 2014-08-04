@@ -3,6 +3,7 @@ module CapsuleCrm
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
+      return if ticket.trash
       requester = ticket.requester 
       http.basic_auth(settings.api_token, "")
 
