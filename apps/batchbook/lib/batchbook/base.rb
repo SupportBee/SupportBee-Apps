@@ -111,11 +111,8 @@ module Batchbook
 
     def person_address(person)
       return unless address = person['addresses'].first
-      keys = %w(address_1 address_2 city state postal_code country)
-      keys.each_with_object('') do |k, addr|
-        return addr unless address['k']
-        "#{addr}, #{address['k']}"
-      end
+      address_fields = %w(address_1 address_2 city state country)
+      address.values_at(*address_fields).compact.join(', ')
     end
 
     def person_link_html(person)
