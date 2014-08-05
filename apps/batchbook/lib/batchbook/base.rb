@@ -67,8 +67,8 @@ module Batchbook
     def person_details_html(person)
       html = "<b>#{person_name(person)}</b><br />"
       number, address = person_number(person), person_address(person)
-      html << "#{number}<br />" if number
-      html << "#{address}<br />" if address
+      html << "#{number}<br />" unless number.blank?
+      html << "#{address}<br />" unless address.blank?
       html << person_link_html(person)
     end
 
@@ -105,12 +105,12 @@ module Batchbook
     end
 
     def person_number(person)
-      return unless phone = person['phones'].first
+      return '' unless phone = person['phones'].first
       phone['number']
     end
 
     def person_address(person)
-      return unless address = person['addresses'].first
+      return '' unless address = person['addresses'].first
       address_fields = %w(address_1 address_2 city state country)
       address.values_at(*address_fields).compact.join(', ')
     end
