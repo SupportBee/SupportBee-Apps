@@ -10,7 +10,7 @@ module CapsuleCrm
       begin
         person = find_person(requester)  
         unless person
-          return [200, 'Contact creation deisabled'] unless settings.should_create_person.to_s == '1'
+          return [200, 'Contact creation disabled'] unless settings.should_create_person.to_s == '1'
           person =  create_new_person(ticket, requester)
           html = new_person_info_html(person)
         else
@@ -23,7 +23,7 @@ module CapsuleCrm
       end
       
       comment_on_ticket(ticket, html)
-      [200, "Ticket sent to Capsulecrm"]
+      [200, "Ticket sent to Capsule"]
     end
   end
 end
