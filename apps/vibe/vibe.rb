@@ -1,5 +1,3 @@
-require 'tilt/haml'
-
 module Vibe
   module EventHandler
     def ticket_created
@@ -14,7 +12,7 @@ module Vibe
         force: 1
       }
       # End the url with a '/', get request is redirected otherwise
-      response = http_get 'http://vibeapp.co/api/v1/initial_data/', params
+      response = http_get 'https://vibeapp.co/api/v1/initial_data/', params
       return unless response.success?
 
       html = render_user_profile(response.body)
@@ -25,7 +23,7 @@ end
 
 module Vibe
   class Base < SupportBeeApp::Base
-    string :api_key, :required => true, :label => 'API Key', :hint => 'API Key from http://vibeapp.co/developers/'
+    string :api_key, :required => true, :label => 'API Key', :hint => 'API Key from http://vibeapp.co/partners/supportbee/'
 
     attr_accessor :user_details
 
