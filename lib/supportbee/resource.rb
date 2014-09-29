@@ -33,7 +33,13 @@ module SupportBee
 
     def refresh
       response = api_get(url)
-      load_attributes(response.body[self.class.key])
+      begin
+        load_attributes(response.body[self.class.key])
+      rescue => e
+        Logger.warn "__REFRESH_FAILED__#{e.message}"
+        Logger.warn "__REFRESH_FAILED__#{e.backtrace}"
+        Logger.warn "__REFRESH_FAILED__#{response.inspect}"
+      end
       self
     end
   end
