@@ -36,10 +36,10 @@ module SupportBee
       begin
         load_attributes(response.body[self.class.key])
       rescue => e
-        Logger.warn "__REFRESH_FAILED__#{e.message}"
-        Logger.warn "__REFRESH_FAILED__#{e.backtrace}"
-        Logger.warn "__REFRESH_FAILED__#{response.status}" if response.respond_to?(:status)
-        Logger.warn "__REFRESH_FAILED__#{response.body}" if response.respond_to?(:body)
+        LOGGER.warn "__REFRESH_FAILED__#{e.message}"
+        LOGGER.warn "__REFRESH_FAILED__#{e.backtrace}"
+        LOGGER.warn "__REFRESH_FAILED__#{response.status}" if response.respond_to?(:status)
+        LOGGER.warn "__REFRESH_FAILED__#{response.body}" if response.respond_to?(:body)
       end
       self
     end
