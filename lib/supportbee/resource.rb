@@ -38,7 +38,8 @@ module SupportBee
       rescue => e
         Logger.warn "__REFRESH_FAILED__#{e.message}"
         Logger.warn "__REFRESH_FAILED__#{e.backtrace}"
-        Logger.warn "__REFRESH_FAILED__#{response.inspect}"
+        Logger.warn "__REFRESH_FAILED__#{response.status}" if response.respond_to?(:status)
+        Logger.warn "__REFRESH_FAILED__#{response.body}" if response.respond_to?(:body)
       end
       self
     end
