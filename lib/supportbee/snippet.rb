@@ -2,7 +2,7 @@ module SupportBee
   class Snippet < Resource
     class << self
       def list(auth={}, params={})
-        response = api_get(url, auth, params)
+        response = api_get(resource_url, auth, params)
         snippets_array_from_multi_response(response, auth)
       end
 
@@ -14,7 +14,7 @@ module SupportBee
         snippet_attributes[:content_attributes][:body_html] = params.delete(:html) if params[:html]
        
         post_body = {:snippet => snippet_attributes}
-        response = api_post(url,auth,{body: post_body})
+        response = api_post(resource_url,auth,{body: post_body})
         self.new(auth,response.body['snippet'])
       end
 

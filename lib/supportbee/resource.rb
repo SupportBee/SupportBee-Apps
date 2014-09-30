@@ -9,7 +9,7 @@ module SupportBee
         @key = value
       end
 
-      def url
+      def resource_url
         if self == Resource
           raise NotImplementedError.new('APIResource is an abstract class.  You should perform actions on its subclasses (Ticket, Reply, etc.)')
         end
@@ -24,15 +24,15 @@ module SupportBee
       @current_company = SupportBee::Company.new(@params, @params[:current_company]) if @params[:current_company]
     end
 
-    def url
+    def resource_url
       unless id
         raise InvalidRequestError.new("Could not determine which URL to request: #{self.class} instance has invalid ID: #{id.inspect}", 'id')
       end
-      "#{self.class.url}/#{id}"
+      "#{self.class.resource_url}/#{id}"
     end
 
     def refresh
-      response = api_get(url)
+      response = api_get(resource_url)
       begin
         load_attributes(response.body[self.class.key])
       rescue => e

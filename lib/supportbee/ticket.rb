@@ -24,7 +24,7 @@ module SupportBee
         response = api_post(url,auth,{body: post_body})
         self.new(auth,response.body['ticket'])
       end
-  
+
       private
 
       def ticket_array_from_multi_response(response, auth)
@@ -238,6 +238,10 @@ module SupportBee
     end
 
     private
+
+    def url
+      resource_url
+    end
 
     def to_replies_array(response)
       replies = []
