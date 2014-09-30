@@ -119,7 +119,8 @@ module SupportBee
         pre_process_content(@attributes[:content])
       end
 
-      hash.keys.each do |key|          
+      hash.keys.each do |key|
+        next if key.to_s == 'url'
         self.class.create_method(key) { @attributes.send(key) }
         self.class.create_method("#{key}=") { |value| @attributes.send("#{key}=", value) }
       end
