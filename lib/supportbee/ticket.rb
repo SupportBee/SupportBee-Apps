@@ -2,13 +2,13 @@ module SupportBee
   class Ticket < Resource
     class << self
       def list(auth={},params={})
-        response = api_get(url,auth,params)
+        response = api_get(resource_url,auth,params)
         ticket_array_from_multi_response(response, auth)
       end
 
       def search(auth={}, params={})
         return if params[:query].blank?
-        response = api_get("#{url}/search",auth,params)
+        response = api_get("#{resource_url}/search",auth,params)
         ticket_array_from_multi_response(response, auth)
       end
 
@@ -21,7 +21,7 @@ module SupportBee
         ticket_attributes[:content_attributes][:body_html] = params.delete(:html) if params[:html]
        
         post_body = {:ticket => ticket_attributes}
-        response = api_post(url,auth,{body: post_body})
+        response = api_post(resource_url,auth,{body: post_body})
         self.new(auth,response.body['ticket'])
       end
 
@@ -52,30 +52,30 @@ module SupportBee
       end 
       ticket_attributes[:subject] = params.delete(:subject) unless params[:subject].blank?
       put_body = {ticket: ticket_attributes}
-      api_put(url, {body: put_body})
+      api_put(resource_url, {body: put_body})
       refresh
     end
 
     def archive
-      archive_url = "#{url}/archive"
+      archive_url = "#{resource_url}/archive"
       api_post(archive_url)
       refresh
     end
     
     def unarchive
-      archive_url = "#{url}/archive"
+      archive_url = "#{resource_url}/archive"
       api_delete(archive_url)
       refresh
     end
     
     def mark_answered
-      archive_url = "#{url}/answered"
+      archive_url = "#{resource_url}/answered"
       api_post(archive_url)
       refresh
     end
     
     def mark_unanswered
-      archive_url = "#{url}/answered"
+      archive_url = "#{resource_url}/answered"
       api_delete(archive_url)
       refresh
     end
@@ -83,7 +83,7 @@ module SupportBee
     def assign_to_user(user)
       user_id = user
       user_id = user.id if user.kind_of?(SupportBee::User)
-      assignment_url = "#{url}/assignments"
+      assignment_url = "#{resource_url}/assignments"
       post_data = { :assignment => { :user_id => user_id }}
       response = api_post(assignment_url, :body => post_data)
       refresh
@@ -100,7 +100,7 @@ module SupportBee
     def assign_to_group(group)
       group_id = group
       group_id = group.id if group.kind_of?(SupportBee::Group)
-      assignment_url = "#{url}/assignments"
+      assignment_url = "#{resource_url}/assignments"
       post_data = { :assignment => { :group_id => group_id }}
       response = api_post(assignment_url, :body => post_data)
       refresh
@@ -108,43 +108,43 @@ module SupportBee
     end
 
     def unassign
-      assignment_url = "#{url}/assignments"
+      assignment_url = "#{resource_url}/assignments"
       api_delete(assignment_url)
       refresh
     end
 
     def star
-      star_url = "#{url}/star"
+      star_url = "#{resource_url}/star"
       api_post(star_url)
       refresh
     end
 
     def unstar
-      unstar_url = "#{url}/star"
+      unstar_url = "#{resource_url}/star"
       api_delete(unstar_url)
       refresh
     end
 
     def spam
-      spam_url = "#{url}/spam"
+      spam_url = "#{resource_url}/spam"
       api_post(spam_url)
       refresh
     end
 
     def unspam
-      unspam_url = "#{url}/spam"
+      unspam_url = "#{resource_url}/spam"
       api_delete(unspam_url)
       refresh
     end
 
     def trash
-      trash_url = "#{url}/trash"
+      trash_url = "#{resource_url}/trash"
       api_post(trash_url)
       refresh
     end
 
     def untrash
-      untrash_url = "#{url}/trash"
+      untrash_url = "#{resource_url}/trash"
       api_delete(untrash_url)
       refresh
     end
@@ -152,7 +152,7 @@ module SupportBee
     def replies(refresh=false)
       refresh = true unless @replies
       if refresh
-        replies_url = "#{url}/replies"
+        replies_url = "#{resource_url}/replies"
         response = api_get(replies_url)
         @replies = to_replies_array(response).replies 
       end
@@ -160,7 +160,7 @@ module SupportBee
     end
 
     def refresh_reply(reply_id)
-      replies_url = "#{url}/replies/#{reply_id}"
+      replies_url = "#{resource_url}/replies/#{reply_id}"
       response = api_get(replies_url)
       SupportBee::Reply.new(@params, response.body['reply'])
     end
@@ -173,7 +173,7 @@ module SupportBee
       content_attributes[:attachment_ids] = params.delete(:attachment_ids) if params[:attachment_ids]
       post_body[:reply][:content_attributes] = content_attributes
       params[:body] = post_body
-      replies_url = "#{url}/replies"
+      replies_url = "#{resource_url}/replies"
       response = api_post(replies_url,params)
       refresh
       SupportBee::Reply.new(@params, response.body['reply'])
@@ -182,7 +182,7 @@ module SupportBee
     def comments(refresh=false)
       refresh = true unless @comments
       if refresh
-        comments_url = "#{url}/comments"
+        comments_url = "#{resource_url}/comments"
         response = api_get(comments_url)
         @comments = to_comments_array(response).comments
       end
@@ -197,7 +197,7 @@ module SupportBee
       content_attributes[:attachment_ids] = params.delete(:attachment_ids) if params[:attachment_ids]
       post_body[:comment][:content_attributes] = content_attributes
       params[:body] = post_body
-      comments_url = "#{url}/comments"
+      comments_url = "#{resource_url}/comments"
       response = api_post(comments_url,params)
       refresh
       SupportBee::Comment.new(@params, response.body['comment'])
@@ -225,23 +225,19 @@ module SupportBee
     def add_label(label_name)
       return if has_label?(label_name)
       return unless find_label(label_name)
-      labels_url = "#{url}/labels/#{label_name}"
+      labels_url = "#{resource_url}/labels/#{label_name}"
       api_post(labels_url)
       refresh
     end
 
     def remove_label(label_name)
       return unless has_label?(label_name)
-      labels_url = "#{url}/labels/#{label_name}"
+      labels_url = "#{resource_url}/labels/#{label_name}"
       api_delete(labels_url)
       refresh
     end
 
     private
-
-    def url
-      resource_url
-    end
 
     def to_replies_array(response)
       replies = []
