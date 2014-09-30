@@ -2,7 +2,7 @@ module SupportBee
   class Group < Resource
     class << self
       def list(auth={}, params={})
-        response = api_get(url,auth,params)
+        response = api_get(resource_url,auth,params)
         group_array_from_multi_response(response, auth)
       end
 

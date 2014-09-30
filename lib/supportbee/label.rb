@@ -2,7 +2,7 @@ module SupportBee
   class Label < Resource
     class << self
       def list(auth={},params={})
-        response = api_get(url,auth,params)
+        response = api_get(resource_url,auth,params)
         to_labels_array(response,auth)
       end
 
