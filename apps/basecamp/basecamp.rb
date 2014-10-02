@@ -31,7 +31,7 @@ module Basecamp
     end
 
     def projects
-      [200, fetch_projects]
+      fetch_projects
     end
 
     def todo_lists
@@ -57,6 +57,11 @@ module Basecamp
       label: 'Enter App ID', 
       hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
 
+    def validate
+      status, projects = fetch_projects
+      errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200 
+      errors.empty? ? true : false
+    end
 
     def token
       settings.oauth_token || settings.token
@@ -169,7 +174,7 @@ module Basecamp
 
     def fetch_projects
       response = basecamp_get(projects_url)
-      response.body.to_json
+      [response.status, response.body.to_json]
     end
 
     def fetch_todo_lists
