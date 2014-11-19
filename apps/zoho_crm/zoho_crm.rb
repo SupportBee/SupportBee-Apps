@@ -5,6 +5,7 @@ module ZohoCrm
       begin
        	setup_zoho
   			ticket = payload.ticket
+        return if ticket.trash || ticket.spam
         requester = ticket.requester 
         contact = find_contact(requester)  
         unless contact

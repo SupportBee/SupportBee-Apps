@@ -2,6 +2,7 @@ module Vibe
   module EventHandler
     def ticket_created
       ticket = payload.ticket
+      return if ticket.trash || ticket.spam
 
       params = {
         api_key: settings.api_key,

@@ -2,7 +2,7 @@ module Pipedrive
   module EventHandler
     def ticket_created
       ticket = payload.ticket
-      return if ticket.trash
+      return if ticket.trash || ticket.spam
       requester = ticket.requester
 
       begin

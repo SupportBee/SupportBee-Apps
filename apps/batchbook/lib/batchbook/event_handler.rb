@@ -3,6 +3,7 @@ module Batchbook
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
+      return if ticket.trash || ticket.spam
       requester = ticket.requester
       person = find_person(requester)
       if person
