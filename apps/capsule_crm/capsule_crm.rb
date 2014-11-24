@@ -38,7 +38,7 @@ module CapsuleCrm
     white_list :should_create_person, :subdomain
 
     def validate
-      return false unless validate_presence_of_required_fields
+      return false unless required_fields_present?
       return false unless valid_credentials?
       true
     end
@@ -128,16 +128,16 @@ module CapsuleCrm
 
   private
 
-    def validate_presence_of_required_fields
+    def required_fields_present?
       field_errors = []
-      error_message = []
+      error_message = nil
       field_errors << "API Token cannot be blank" if api_token_blank?
       field_errors << "Subdomain cannot be blank" if subdomain_blank?
       unless field_errors.empty?
-        error_message << field_errors.join(" and ")
+        error_message = field_errors.join(" and ")
         errors[:flash] = error_message
       end
-      error_message.empty? ? true : false
+      error_message.nil? ? true : false
     end
 
     def api_token_blank?
