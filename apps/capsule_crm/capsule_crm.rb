@@ -37,6 +37,15 @@ module CapsuleCrm
 	
     white_list :should_create_person, :subdomain
 
+    def validate
+      fields_present = validate_presence_of_required_fields
+      if fields_present
+        return true if valid_credentials?
+        errors[:flash] = "Invalid subdomain and/or API Token. Please verify the entered details"
+      end
+      false
+    end
+
     def find_person(requester)
       first_name = split_name(requester)
       response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/party" do |req|
@@ -118,6 +127,40 @@ module CapsuleCrm
       note = ""
       note << ticket.summary + "\n" if settings.return_ticket_content.to_s == '1'
       note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+    end
+
+  private
+
+    def validate_presence_of_required_fields
+      if api_token_blank? && subdomain_blank?
+        errors[:api_token] = "API Token cannot be blank"
+        errors[:subdomain] = "Subdomain cannot be blank"
+        return false
+      elsif api_token_blank?
+        errors[:api_token] = "API Token cannot be blank"
+        return false
+      elsif subdomain_blank?
+        errors[:subdomain] = "Subdomain cannot be blank"
+        return false
+      else
+        true
+      end
+    end
+
+    def api_token_blank?
+      settings.api_token.blank?
+    end
+
+    def subdomain_blank?
+      settings.subdomain.blank?
+    end
+
+    def valid_credentials?
+      http.basic_auth(settings.api_token, "x")
+      response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/users" do |req|
+        req.headers['Accept'] = 'application/json'
+      end
+      response.status == 200 ? true : false
     end
      
   end
