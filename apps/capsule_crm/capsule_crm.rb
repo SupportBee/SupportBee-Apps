@@ -38,12 +38,9 @@ module CapsuleCrm
     white_list :should_create_person, :subdomain
 
     def validate
-      fields_present = validate_presence_of_required_fields
-      if fields_present
-        return true if valid_credentials?
-        errors[:flash] = "Invalid subdomain and/or API Token. Please verify the entered details"
-      end
-      false
+      return false unless validate_presence_of_required_fields
+      return false unless valid_credentials?
+      true
     end
 
     def find_person(requester)
@@ -156,7 +153,12 @@ module CapsuleCrm
       response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/users" do |req|
         req.headers['Accept'] = 'application/json'
       end
-      response.status == 200 ? true : false
+      if response.status == 200
+        true
+      else
+        errors[:flash] = "Invalid subdomain and/or API Token. Please verify the entered details"
+        false
+      end
     end
      
   end
