@@ -133,14 +133,13 @@ module CapsuleCrm
 
     def validate_presence_of_required_fields
       if api_token_blank? && subdomain_blank?
-        errors[:api_token] = "API Token cannot be blank"
-        errors[:subdomain] = "Subdomain cannot be blank"
+        errors[:flash] = "API Token and Subdomain cannot be blank"
         return false
       elsif api_token_blank?
-        errors[:api_token] = "API Token cannot be blank"
+        errors[:flash] = "API Token cannot be blank"
         return false
       elsif subdomain_blank?
-        errors[:subdomain] = "Subdomain cannot be blank"
+        errors[:flash] = "Subdomain cannot be blank"
         return false
       else
         true
