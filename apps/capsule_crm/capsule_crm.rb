@@ -31,9 +31,9 @@ end
 module CapsuleCrm
   class Base < SupportBeeApp::Base
     string :api_token, :required => true, :label => 'Capsule Auth Token', :hint => 'Login to your Capsule account, go to My Preferences (in the User Menu) > API Authentication Token'
-    string :subdomain, :required => true, :hint => 'If your Capsule Crm URL is "https://something.capsulecrm.com" then your Subdomain name is "something"'
+    string :subdomain, :required => true, :hint => 'If your Capsule Crm URL is "https://example.capsulecrm.com" then your Subdomain name is "example"'
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Capsule if one does not exist'
-    boolean :return_ticket_content, :required => false, :label => 'Send entire new ticket content to Capsule(by default the new ticket summary is sent to Capsule)'
+    boolean :return_ticket_content, :required => false, :label => 'Send Ticket Content to Capsule (by default the Ticket Summary is sent)'
 
     white_list :should_create_person, :subdomain
 
