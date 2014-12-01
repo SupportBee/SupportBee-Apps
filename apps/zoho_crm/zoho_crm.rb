@@ -36,6 +36,12 @@ module ZohoCrm
 
     white_list :should_create_contact
 
+    def validate
+      return false unless required_fields_present?
+      return false unless valid_credentials?
+      true
+    end
+
     require 'ruby_zoho'
 
     def setup_zoho
@@ -112,6 +118,37 @@ module ZohoCrm
       note << ticket.summary + "\n"
       note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
       note
+    end
+
+    private
+
+    def required_fields_present?
+      if settings.api_token.blank?
+        errors[:flash] = "API Token cannot be blank"
+      end
+      errors.empty? ? true : false
+    end
+
+    def valid_credentials?
+      response = get_admin_users
+      if api_response_has_admin_users?(response)
+        true
+      else
+        errors[:flash] = "Invalid API Token. Please verify the entered details"
+        false
+      end
+    end
+
+    def get_admin_users
+      http_get('https://crm.zoho.com/crm/private/json/Users/getUsers') do |req|
+        req.params['scope'] = 'crmapi'
+        req.params['authtoken'] = settings.api_token
+        req.params['type'] = 'AdminUsers'
+      end
+    end
+
+    def api_response_has_admin_users?(response)
+      JSON.parse(response.body).has_key?("users")
     end
  
   end
