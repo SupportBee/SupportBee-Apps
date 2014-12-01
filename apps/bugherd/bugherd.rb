@@ -28,6 +28,12 @@ module Bugherd
     string :token, :required => true, :label => 'Bugherd Api Key', :hint => 'Login to your Bugherd account, go to Settings > General Settings'
     string :project_id, :required => true, :label => 'Project ID' 
 
+    def validate
+      return false unless required_fields_present?
+      return false unless valid_credentials?
+      true
+    end
+
     def create_task(ticket, description)
       project_id = settings.project_id
       response = http_post "https://www.bugherd.com/api_v2/projects/#{project_id}/tasks.json" do |req|
@@ -69,6 +75,40 @@ module Bugherd
     def generate_comment_content(ticket)
       "#{ticket.summary} \n https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
+
+    private
+
+    def required_fields_present?
+      field_errors = []
+      error_message = nil
+      field_errors << "API Key cannot be blank" if api_token_blank?
+      field_errors << "Project ID cannot be blank" if project_id_blank?
+      unless field_errors.empty?
+        error_message = field_errors.join(" and ")
+        errors[:flash] = error_message
+      end
+      error_message.nil? ? true : false
+    end
+
+    def api_token_blank?
+      settings.token.blank?
+    end
+
+    def project_id_blank?
+      settings.project_id.blank?
+    end
+
+    def valid_credentials?
+      http.basic_auth(settings.token, "x")
+      response = http_get "https://www.bugherd.com/api_v2/projects/#{settings.project_id}.json"
+      if response.status == 200
+        true
+      else
+        errors[:flash] = "Invalid API Key and/or Project ID. Please verify the entered details"
+        false
+      end
+    end
+
   end
 end
 
