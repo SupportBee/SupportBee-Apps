@@ -206,7 +206,7 @@ DEPENDENCIES
   restforce
   rspec
   ruby-trello
-  rubyzoho
+  rubyzoho (~> 0.1.7)
   savon (~> 2.1.0)
   sinatra
   sinatra-initializers
