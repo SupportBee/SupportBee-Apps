@@ -1,23 +1,26 @@
 module ZohoCrm
   module EventHandler
     def ticket_created
-
       begin
-       	setup_zoho
   			ticket = payload.ticket
         return if ticket.trash || ticket.spam
+
+        setup_zoho
         requester = ticket.requester 
-        contact = find_contact(requester)  
+        contact = find_contact(requester)
+
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
+ 
           contact =  create_new_contact(requester)
           html = new_contact_info_html(contact)
+
         else
           html = contact_info_html(contact)
         end
-        if contact
-          send_note(ticket, contact)
-        end
+
+        send_note(ticket, contact) if contact
+
         comment_on_ticket(ticket, html)
       rescue Exception => e
         puts "#{e.message}\n#{e.backtrace}"
