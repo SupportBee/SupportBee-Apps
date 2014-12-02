@@ -30,7 +30,7 @@ gem 'jaconda'
 gem 'ruby-trello', :require => 'trello'
 gem 'flowdock'
 gem 'bigcommerce', "~> 0.8.2"
-gem 'rubyzoho'
+gem 'rubyzoho',  "~> 0.1.7"
 gem 'restforce'
 gem 'mab'
 
