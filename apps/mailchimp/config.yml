@@ -2,31 +2,28 @@ name: Mailchimp
 slug: mailchimp
 access: public
 
-description: "This is to test and a boilerplate app.
-Accepts newline"
+description: "MailChimp Integration with SupportBee.
+User Story:
+Lets say a user requests for a feature and it would be available in the next upcoming release. For this you will have to track and record the users who requested for this and other feature. You can create a campaign in MailChimp and select the list of users whom you'd like to announce regarding the release(feature made available).
+
+For achieving this purpose, you can push a user to a list in mailchimp right from SupportBee.
+"
 
 category: Integration
 
 tags: 
-- tag1
-- tag2
+- mailchimp
+- announcement
 
 developer: 
-  name: <Your Name>
-  email: <Your Email>
-  twitter: "<Your Twitter Handle>"
-  github: <Your Github Handle>
+  name: Swaroop SM
+  email: swaroop.striker@gmail.com
+  twitter: "@smswaroop"
+  github: swaroopsm
 
-# The following config keys are used by Action Handlers
-# Set button 'overlay' to true, if you want to have an overlay
-# The valid values for screens are [ticket, all, unassigned, my, groups]
-# Remove the following section if you do not want to define Action Handlers
- 
 action:
   button:
-    overlay: false
+    overlay: true
     screens: 
     - ticket
-    - all
-    - unassigned
-    label: Send To Mailchimp
+    label: Send To MailChimp

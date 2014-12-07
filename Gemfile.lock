@@ -77,6 +77,8 @@ GEM
     mab (0.0.3)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mailchimp (0.0.9)
+      httparty
     method_source (0.8.2)
     mime-types (2.4.3)
     mimemagic (0.2.1)
@@ -207,6 +209,7 @@ DEPENDENCIES
   jaconda
   mab
   mail
+  mailchimp
   mock_redis
   multimap!
   nokogiri
