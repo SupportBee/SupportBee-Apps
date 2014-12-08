@@ -4,7 +4,7 @@ access: public
 
 description: "MailChimp Integration with SupportBee.
 User Story:
-Lets say a user requests for a feature and it would be available in the next upcoming release. For this you will have to track and record the users who requested for this and other feature. You can create a campaign in MailChimp and select the list of users whom you'd like to announce regarding the release(feature made available).
+Lets say a user requests for a feature and it would be available in the next upcoming release. For this you will have to track and record the users who requested this(or similar) feature. You can create a campaign in MailChimp and select the list of users whom you'd like to announce regarding the release(feature made available).
 
 For achieving this purpose, you can push a user to a list in mailchimp right from SupportBee.
 "
