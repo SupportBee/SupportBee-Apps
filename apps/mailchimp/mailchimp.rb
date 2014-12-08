@@ -2,15 +2,10 @@ module Mailchimp
   module ActionHandler
     def button
       ticket = payload.tickets.first
-      email = ticket.requester.email
 
       begin
         add_to_list(ticket)
-      rescue Mailchimp::ListAlreadySubscribedError
-        return [ 200, "#{email} is already subscribed to the list." ]
-      rescue Mailchimp::ListDoesNotExistError
-        return [ 200, "This list could not be found." ]
-      rescue Excpetion => e
+      rescue Exception => e
         return [ 500, e.message ]
       end
 

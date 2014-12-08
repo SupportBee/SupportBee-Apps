@@ -1,24 +1,16 @@
-<!-- 
-  Set overlay: true in the config
-  This file will be rendered on the overlay
-  The below code sample is taken from the Pivotal App
--->
-
-<h3>Edit the Story Details</h3>
+<form>
 {{#each tickets}}
   {{#ticket}}
     <ol>
       <li>
-        <label for="title">Story Title</label>
-        <input name="title" value="{{subject}}">
+        <label for="list">Select List</label>
+        <select name="lists_select"></select>
       </li>
       <li>
-        <label for="description">Story Description</label>
-        <textarea name="description">
-{{content.text}} \n
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
+        <a class="submit btn btn-primary">Send to MailChimp</a>
+        <a class="cancel btn">Cancel</a>
       </li>
     </ol>
   {{/ticket}}
 {{/each}}
+</form>
