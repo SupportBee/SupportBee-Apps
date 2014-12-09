@@ -72,16 +72,25 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
   reset_type: ->
     @target_type_selector.children().first().attr('selected','selected')
     @reset_todo_lists()
+    @reset_people_list()
     @show_title()
     @show_description()
 
   reset_todo_lists: ->
     @todo_lists_el.find('option').remove().hide()
 
+  reset_people_list: ->
+    @people_list_el.find('option').remove().hide()
+
   show_title: ->
     @title_el.show()
 
   show_todo_lists_selector: ->
+    console.log("Hi ya")
+    console.log(@todo_lists_el)
+    if @todo_lists_el.find('option').length > 0
+      @todo_lists_el.find('option').remove()
+    debugger
     @todo_lists_el.show()
  
   show_people_lists_selector: ->
