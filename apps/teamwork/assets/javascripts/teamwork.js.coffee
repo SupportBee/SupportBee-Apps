@@ -86,11 +86,6 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
     @title_el.show()
 
   show_todo_lists_selector: ->
-    console.log("Hi ya")
-    console.log(@todo_lists_el)
-    if @todo_lists_el.find('option').length > 0
-      @todo_lists_el.find('option').remove()
-    debugger
     @todo_lists_el.show()
  
   show_people_lists_selector: ->
