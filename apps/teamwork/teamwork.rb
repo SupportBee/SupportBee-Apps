@@ -122,7 +122,7 @@ module Teamwork
     end
 
     def project_accesses_url
-      project_url.join('accesses')
+      api_url("projects/#{project_id}/people")
     end
 
     def project_messages_url
@@ -162,7 +162,8 @@ module Teamwork
       post_body = {
         'todo-item' => {
           :content => title,
-          :description => description
+          :description => description,
+          "responsible-party-id" => assignee_id
         }
       }.to_json
 
@@ -182,7 +183,7 @@ module Teamwork
 
     def fetch_project_accesses
       response = teamwork_get(project_accesses_url)
-      response.body.to_json
+      ((JSON.parse response.body)['people']).to_json
     end
 
     def todolist_html_comment(url)

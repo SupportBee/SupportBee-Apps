@@ -5,7 +5,7 @@ option_tag = (item) ->
   "<option value='#{item.get('id')}'>#{item.get('name')}</option>"
 
 people_option_tag = (item) ->
-  "<option value='#{item.get('id')}'>#{item.get('first-name')}</option>"
+  "<option value='#{item.get('id')}'>#{item.get('first-name').concat(" ", item.get('last-name'))}</option>"
 
 Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
@@ -108,7 +108,7 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
     @people_list_el.show()
 
   render_person: (person)->
-    @people_list_selector.append option_tag(person)
+    @people_list_selector.append people_option_tag(person)
     
 
   render_lists: ->
