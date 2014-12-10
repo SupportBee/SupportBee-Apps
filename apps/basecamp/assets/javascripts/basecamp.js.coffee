@@ -56,8 +56,12 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
         @populate_people()
       when 'todo_list'
         @hide_description()
+        @reset_todo_lists()
+        @reset_people_list()
       when 'message'
         @show_description()
+        @reset_todo_lists()
+        @reset_people_list()
 
   hide_everything: ->
     @todo_lists_el.hide()
