@@ -177,7 +177,6 @@ module Teamwork
 
     def fetch_todo_lists
       response = teamwork_get(project_todolists_url)
-      puts response.body
       ((JSON.parse response.body)['todo-lists']).to_json
     end
 

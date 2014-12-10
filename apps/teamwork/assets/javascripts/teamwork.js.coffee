@@ -57,6 +57,10 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
         @populate_lists()
         @show_people_lists_selector()
         @populate_people()
+      when 'todo_list'
+        @reset_todo_lists()
+        @reset_people_list()
+
 
   hide_everything: ->
     @todo_lists_el.hide()
