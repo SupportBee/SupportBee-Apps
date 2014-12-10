@@ -14,7 +14,7 @@ MailChimp.Views.Overlay = SB.Apps.BaseView.extend(
     SB.Apps.BaseView.prototype.initialize.call(this)
     _.bindAll this, 'load_lists', 'render_list'
     @setup_selectors()
-    @lpopulate_lists()
+    @populate_lists()
 
   setup_selectors: ->
     @lists_selector = @$("[name='lists_select']")
