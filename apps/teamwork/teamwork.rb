@@ -108,7 +108,8 @@ module Teamwork
     end
 
     def assignee_id
-      payload.overlay.assign_to
+      default_value_when_not_specifically_assigned = -1
+      payload.overlay.assign_to == "none" ? default_value_when_not_specifically_assigned : payload.overlay.assign_to
     end
     
     private

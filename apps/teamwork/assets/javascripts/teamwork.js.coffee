@@ -85,6 +85,10 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
   reset_people_list: ->
     @people_list_el.find('option').remove().hide()
+    @append_default_option_on_reset()
+
+  append_default_option_on_reset: ->
+    @people_list_el.find('select').append('<option value="none">Don\'t Assign</option>')
 
   show_title: ->
     @title_el.show()
