@@ -8,7 +8,7 @@ TeamworkPM is an online project management software application that helps teams
 
 ## Send a Ticket to Teamwork as a Task List or a Task in an Existing List
 
-If you are using Teamwork for project management and often create tasks based on emails that your customers or clients send you, you can use our Teamwork app to accomplish this in one click! You can choose to create a new task list in Teamwork or add a new task in an existing task list which can be optionally assigned to person in the project. We fill in the description of the task list/task with the contents of the email and also add a link to the SupportBee ticket so your team can follow-up once the task is completed. A link to the Teamwork item is also posted on the ticket as a comment.
+If you are using Teamwork for project management and often create tasks based on emails that your customers or clients send you, you can use our Teamwork app to accomplish this in one click! You can choose to create a new task list in Teamwork or add a new task in an existing task list which can be optionally assigned to a person in the project. We fill in the description of the task list/task with the contents of the email and also add a link to the SupportBee ticket so your team can follow-up once the task is completed. A link to the Teamwork item is also posted on the ticket as a comment.
 
 ## Support for Multiple Projects
 
@@ -24,7 +24,7 @@ Your API token can be found by logging into your Teamwork account, clicking your
 
 ## Using the App
 
-To send a ticket to Teamwork, open a ticket and click Apps > Send to Teamwork. Before you send the ticket, you can edit the title/description. You can also select a project and an optional task list before sending the ticket over to Teamwork. In case you select an optional task list you can create a new task for that list and assign that to some person in the project. Once the ticket has been sent to Teamwork, a comment will with the URL of the task will be posted on the ticket automatically.
+To send a ticket to Teamwork, open a ticket and click Apps > Send to Teamwork. Before you send the ticket, you can edit the title/description. You can also select a project and an optional task list before sending the ticket over to Teamwork. In case you select an optional task list you can create a new task for that list and assign that to a person in the project. Once the ticket has been sent to Teamwork, a comment will with the URL of the task will be posted on the ticket automatically.
 
 "
 
