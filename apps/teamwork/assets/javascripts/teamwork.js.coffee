@@ -4,6 +4,8 @@ Teamwork.Views = {}
 option_tag = (item) ->
   "<option value='#{item.get('id')}'>#{item.get('name')}</option>"
 
+people_option_tag = (item) ->
+  "<option value='#{item.get('id')}'>#{item.get('first-name').concat(" ", item.get('last-name'))}</option>"
 
 Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
@@ -53,9 +55,16 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
       when 'todo_item'
         @show_todo_lists_selector()
         @populate_lists()
+        @show_people_lists_selector()
+        @populate_people()
+      when 'todo_list'
+        @reset_todo_lists()
+        @reset_people_list()
+
 
   hide_everything: ->
     @todo_lists_el.hide()
+    @people_list_el.hide()
 
   project_changed: ->
     @hide_everything()
@@ -67,11 +76,19 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
   reset_type: ->
     @target_type_selector.children().first().attr('selected','selected')
     @reset_todo_lists()
+    @reset_people_list()
     @show_title()
     @show_description()
 
   reset_todo_lists: ->
     @todo_lists_el.find('option').remove().hide()
+
+  reset_people_list: ->
+    @people_list_el.find('option').remove().hide()
+    @append_default_option_on_reset()
+
+  append_default_option_on_reset: ->
+    @people_list_el.find('select').append('<option value="none">Don\'t Assign</option>')
 
   show_title: ->
     @title_el.show()
@@ -79,6 +96,9 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
   show_todo_lists_selector: ->
     @todo_lists_el.show()
  
+  show_people_lists_selector: ->
+    @people_list_el.show()
+
   populate_lists: ->
     @lists = new SB.Apps.BaseCollection([],
                                         endpoint: 'todo_lists',
@@ -100,7 +120,7 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
     @people_list_el.show()
 
   render_person: (person)->
-    @people_list_selector.append option_tag(person)
+    @people_list_selector.append people_option_tag(person)
     
 
   render_lists: ->

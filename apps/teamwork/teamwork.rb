@@ -108,7 +108,8 @@ module Teamwork
     end
 
     def assignee_id
-      payload.overlay.assign_to
+      default_value_when_not_specifically_assigned = -1
+      payload.overlay.assign_to == "none" ? default_value_when_not_specifically_assigned : payload.overlay.assign_to
     end
     
     private
@@ -122,7 +123,7 @@ module Teamwork
     end
 
     def project_accesses_url
-      project_url.join('accesses')
+      api_url("projects/#{project_id}/people")
     end
 
     def project_messages_url
@@ -162,7 +163,8 @@ module Teamwork
       post_body = {
         'todo-item' => {
           :content => title,
-          :description => description
+          :description => description,
+          "responsible-party-id" => assignee_id
         }
       }.to_json
 
@@ -176,13 +178,12 @@ module Teamwork
 
     def fetch_todo_lists
       response = teamwork_get(project_todolists_url)
-      puts response.body
       ((JSON.parse response.body)['todo-lists']).to_json
     end
 
     def fetch_project_accesses
       response = teamwork_get(project_accesses_url)
-      response.body.to_json
+      ((JSON.parse response.body)['people']).to_json
     end
 
     def todolist_html_comment(url)

@@ -56,8 +56,10 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
         @populate_people()
       when 'todo_list'
         @hide_description()
+        @reset_lists()
       when 'message'
         @show_description()
+        @reset_lists()
 
   hide_everything: ->
     @todo_lists_el.hide()
@@ -73,12 +75,23 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     
   reset_type: ->
     @target_type_selector.children().first().attr('selected','selected')
-    @reset_todo_lists()
+    @reset_lists()
     @show_title()
     @show_description()
 
+  reset_lists: ->
+    @reset_todo_lists()
+    @reset_people_list()
+
   reset_todo_lists: ->
     @todo_lists_el.find('option').remove().hide()
+
+  reset_people_list: ->
+    @people_list_el.find('option').remove().hide()
+    @append_default_option_on_reset()
+
+  append_default_option_on_reset: ->
+    @people_list_el.find('select').append('<option value="none">Don\'t Assign</option>')
 
   show_title: ->
     @title_el.show()
