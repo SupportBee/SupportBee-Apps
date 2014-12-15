@@ -71,6 +71,14 @@ module Insightly
             label: 'Insightly Subdomain',
             hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
 
+    string :tagged_name,
+            label: 'Tag Name',
+            hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
+
+    boolean :tag_contacts,
+            label: 'Tag new contacts that are created from within SupportBee with a tag name',
+            default: false
+
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
@@ -131,12 +139,20 @@ module Insightly
           detail: requester.email
         }]
       }
+
+      body[:tags] = [{tag_name: get_tag_name}] if settings.tag_contacts.to_s == "1"
+
       response = http.post api_url('Contacts') do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
         req.headers['Content-Type'] = 'application/json'
         req.body = body.to_json
       end
       response.body
+    end
+
+    def get_tag_name
+      default_tag_name = "supportbee"
+      settings.tagged_name.empty? ? default_tag_name : settings.tagged_name
     end
 
     def find_contact(requester)
