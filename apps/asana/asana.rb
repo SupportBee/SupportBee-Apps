@@ -25,6 +25,10 @@ module Asana
       [200, fetch_orgs]
     end
 
+    def workspace_users
+      [200, fetch_workspace_users]
+    end
+
   end
 end
 
@@ -65,6 +69,15 @@ module Asana
     def fetch_projects
       response = asana_get(projects_url(payload.overlay.org))
       JSON.parse(response.body.to_json)['data'].to_json
+    end
+
+    def fetch_workspace_users
+      response = asana_get(users_url(payload.overlay.org))
+      JSON.parse(response.body.to_json)['data'].to_json
+    end
+
+    def users_url(workspace)
+      api_url("workspaces/#{workspace}/users")
     end
 
     def projects_url(workspace)
