@@ -75,6 +75,10 @@ module Insightly
             label: 'Create Insightly Contact with Customer Information',
             default: true
 
+    boolean :tag_contacts,
+            label: 'Tag new contacts that are created from within SupportBee with a "supportbee" tag name',
+            default: false
+
     def validate
       errors[:flash] = ["Please fill in all the required fields"] if settings.subdomain.blank? or settings.api_key.blank?
       errors.empty? ? true : false
@@ -129,6 +133,9 @@ module Insightly
         contactinfos: [{
           type: 'Email',
           detail: requester.email
+        }],
+        tags: [{
+          tag_name: settings.tag_contacts.to_s == "1" ? tag_contact_created_within_platform : ""
         }]
       }
       response = http.post api_url('Contacts') do |req|
@@ -137,6 +144,10 @@ module Insightly
         req.body = body.to_json
       end
       response.body
+    end
+
+    def tag_contact_created_within_platform
+      tag_name = "supportbee"
     end
 
     def find_contact(requester)
