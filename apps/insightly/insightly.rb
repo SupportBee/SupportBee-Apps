@@ -137,11 +137,11 @@ module Insightly
         contactinfos: [{
           type: 'Email',
           detail: requester.email
-        }],
-        tags: [{
-          tag_name: settings.tag_contacts.to_s == "1" ? get_tag_name : ""
         }]
       }
+
+      body[:tags] = [{tag_name: get_tag_name}] if settings.tag_contacts.to_s == "1"
+
       response = http.post api_url('Contacts') do |req|
         req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
         req.headers['Content-Type'] = 'application/json'
