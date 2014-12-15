@@ -75,13 +75,13 @@ module Insightly
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
 
+    boolean :tag_contacts,
+            label: 'Tag new contacts that are created from within SupportBee with a tag name',
+            default: false
+
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
-
-    boolean :tag_contacts,
-            label: 'Tag new contacts that are created from within SupportBee with a "supportbee" tag name',
-            default: false
 
     def validate
       errors[:flash] = ["Please fill in all the required fields"] if settings.subdomain.blank? or settings.api_key.blank?
