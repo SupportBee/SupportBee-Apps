@@ -82,10 +82,19 @@ Asana.Views.Overlay = SB.Apps.BaseView.extend(
 
   org_changed: ->
     @reset_projects_list()
+    @reset_people_list()
     @load_org_projects()
+    @load_org_people()
 
   reset_projects_list: ->
     @projects_selector.find('option').remove()
+
+  reset_people_list: ->
+    @people_list_el.find('option').remove()
+    @append_default_option_on_reset()
+
+  append_default_option_on_reset: ->
+    @people_list_el.find('select').append('<option value="none">Don\'t Assign</option>')
 
   load_org_projects: ->
     org = @orgs_selector.val()
