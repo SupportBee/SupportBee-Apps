@@ -98,7 +98,8 @@ module Asana
       response = http_post api_url('tasks') do |req|
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.headers['Content-Type'] = 'application/json'
-        req.body = {:data => {:workspace => payload.overlay.org_select, :projects => payload.overlay.projects_select, :name => task_name, :notes => notes}}.to_json
+        req.body = {:data => {:workspace => payload.overlay.org_select, :projects => payload.overlay.projects_select,
+         :name => task_name, :notes => notes, :assignee => payload.overlay.assign_to}}.to_json
       end
     end
     
