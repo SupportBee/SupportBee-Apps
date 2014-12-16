@@ -25,6 +25,10 @@ module Asana
       [200, fetch_orgs]
     end
 
+    def workspace_users
+      [200, fetch_workspace_users]
+    end
+
   end
 end
 
@@ -67,6 +71,15 @@ module Asana
       JSON.parse(response.body.to_json)['data'].to_json
     end
 
+    def fetch_workspace_users
+      response = asana_get(users_url(payload.overlay.org))
+      JSON.parse(response.body.to_json)['data'].to_json
+    end
+
+    def users_url(workspace)
+      api_url("workspaces/#{workspace}/users")
+    end
+
     def projects_url(workspace)
       api_url("workspaces/#{workspace}/projects")
     end
@@ -85,7 +98,9 @@ module Asana
       response = http_post api_url('tasks') do |req|
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.headers['Content-Type'] = 'application/json'
-        req.body = {:data => {:workspace => payload.overlay.org_select, :projects => payload.overlay.projects_select, :name => task_name, :notes => notes}}.to_json
+        body = {:data => {:workspace => payload.overlay.org_select, :projects => payload.overlay.projects_select, :name => task_name, :notes => notes}}
+        body[:data][:assignee] = payload.overlay.assign_to if payload.overlay.assign_to != "none"
+        req.body = body.to_json
       end
     end
     
