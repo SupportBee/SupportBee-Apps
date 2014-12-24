@@ -4,7 +4,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/load")
 module RackSpecHelpers
   include Rack::Test::Methods
   def app
-    Sinatra::Application
+    RunApp
   end
 end
 
