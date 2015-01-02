@@ -46,7 +46,8 @@ describe SupportBeeApp::Base do
         Dummy::Base.schema.should == {
           'name' => {'type' => 'string', 'label' => 'Name', 'required' => true, 'hint' => 'A Dummy Name'},
           'key' => {'type' => 'password', 'label' => 'Token', 'required' => true},
-          'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true }
+          'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true },
+          'handler_methods' => {'event' => ['ticket_created', 'ticket_updated', 'reply_created', 'reply_updated', 'all_events']}
         }
       end
     end
