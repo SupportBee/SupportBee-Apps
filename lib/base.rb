@@ -67,7 +67,8 @@ module SupportBeeApp
           'name' => configuration['name'],
           'slug' => configuration['slug'],
           'configuration' => configuration,
-          'schema' => schema
+          'schema' => schema,
+          'events' => event_methods.map {|each_method| each_method.to_s}
         }
       end
 
@@ -215,18 +216,11 @@ module SupportBeeApp
       end
 
     	def inherited(app)
-        if app.event_handler
-          app.send(:include, app.event_handler)
-          add_event_handler_methods_to_schema(app)
-        end
+        app.send(:include, app.event_handler) if app.event_handler
         app.send(:include, app.action_handler) if app.action_handler
       	SupportBeeApp::Base.apps << app 
       	super
     	end
-
-      def add_event_handler_methods_to_schema(app)
-        app.schema['handler_methods'] = {'event' => app.event_methods.map {|each_method| each_method.to_s}}
-      end
 
     	def setup_for(sinatra_app)
     		sinatra_app.setup(self)

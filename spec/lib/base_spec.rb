@@ -47,10 +47,16 @@ describe SupportBeeApp::Base do
           'name' => {'type' => 'string', 'label' => 'Name', 'required' => true, 'hint' => 'A Dummy Name'},
           'key' => {'type' => 'password', 'label' => 'Token', 'required' => true},
           'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true },
-          'handler_methods' => {'event' => ['ticket_created', 'ticket_updated', 'reply_created', 'reply_updated', 'all_events']}
         }
       end
     end
+
+    describe "Info" do
+      it "should have the right event handler methods" do
+        expect(Dummy::Base.info['events']).to eq(['ticket_created', 'ticket_updated', 'reply_created', 'reply_updated', 'all_events'])
+      end
+    end
+
   end
 
   describe "Instance" do
