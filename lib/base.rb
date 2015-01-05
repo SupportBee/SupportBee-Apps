@@ -67,8 +67,7 @@ module SupportBeeApp
           'name' => configuration['name'],
           'slug' => configuration['slug'],
           'configuration' => configuration,
-          'schema' => schema,
-          'events' => event_methods.map {|each_method| each_method.to_s}
+          'schema' => schema
         }
       end
 
@@ -82,6 +81,7 @@ module SupportBeeApp
         result['javascript'] = compiled_js if has_javascript?
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
+        result['events'] = event_methods.map {|each_method| each_method.to_s}
         result
       end
 

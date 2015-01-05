@@ -51,9 +51,9 @@ describe SupportBeeApp::Base do
       end
     end
 
-    describe "Info" do
+    describe "api_hash" do
       it "should have the right event handler methods" do
-        expect(Dummy::Base.info['events']).to eq(['ticket_created', 'ticket_updated', 'reply_created', 'reply_updated', 'all_events'])
+        expect(Dummy::Base.api_hash['events']).to eq(['ticket_created', 'ticket_updated', 'reply_created', 'reply_updated', 'all_events'])
       end
     end
 
