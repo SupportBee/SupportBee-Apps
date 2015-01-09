@@ -46,7 +46,7 @@ describe SupportBeeApp::Base do
         Dummy::Base.schema.should == {
           'name' => {'type' => 'string', 'label' => 'Name', 'required' => true, 'hint' => 'A Dummy Name'},
           'key' => {'type' => 'password', 'label' => 'Token', 'required' => true},
-          'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true },
+          'active' => {'type' => 'boolean', 'label' => 'Active', 'required' => false,'default' => true }
         }
       end
     end
