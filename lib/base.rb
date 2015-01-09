@@ -81,6 +81,7 @@ module SupportBeeApp
         result['javascript'] = compiled_js if has_javascript?
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
+        result['events'] = events
         result
       end
 
@@ -92,6 +93,10 @@ module SupportBeeApp
         return false unless Dir.exists? javascripts_path
         return false unless [coffeescript_files, javascript_files].flatten.length > 0
         true
+      end
+
+      def events
+        event_methods.map {|each_method| each_method.to_s.gsub('_','.')}
       end
 
       def compiled_js
