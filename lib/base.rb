@@ -81,7 +81,7 @@ module SupportBeeApp
         result['javascript'] = compiled_js if has_javascript?
         result['icon'] = image_url('icon.png')
         result['screenshots'] = [image_url('screenshot.png')]
-        result['events'] = get_formatted_event_method_names
+        result['events'] = events
         result
       end
 
@@ -95,7 +95,7 @@ module SupportBeeApp
         true
       end
 
-      def get_formatted_event_method_names
+      def events
         event_methods.map {|each_method| each_method.to_s.gsub('_','.')}
       end
 
