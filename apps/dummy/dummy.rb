@@ -6,7 +6,6 @@ module Dummy
     def reply_created; end
     def reply_updated; end
 
-    def all_events; end
   end
 end
 
