@@ -263,7 +263,6 @@ module SupportBeeApp
       @event = event
       method = to_method(event)
       begin
-        all_events if self.respond_to?(:all_events)
         response = self.send method if self.respond_to?(method)
         if response 
           LOGGER.info log_event_message

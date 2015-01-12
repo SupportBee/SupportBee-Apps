@@ -1,14 +1,11 @@
 module <%= slug.classify %>
   module EventHandler
+
     # Handle 'ticket.created' event
     def ticket_created
       return true
     end
 
-    # Handle all events
-    def all_events
-      return true
-    end
   end
 end
 

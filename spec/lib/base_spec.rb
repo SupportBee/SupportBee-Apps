@@ -53,7 +53,7 @@ describe SupportBeeApp::Base do
 
     describe "api_hash" do
       it "should have the right event handler methods" do
-        expect(Dummy::Base.api_hash['events']).to eq(['ticket.created', 'ticket.updated', 'reply.created', 'reply.updated', 'all.events'])
+        expect(Dummy::Base.api_hash['events']).to eq(['ticket.created', 'ticket.updated', 'reply.created', 'reply.updated'])
       end
     end
 
@@ -103,12 +103,6 @@ describe SupportBeeApp::Base do
         it "should trigger an event" do
           dummy = create_dummy_instance
           flexmock(dummy).should_receive(:ticket_created).once
-          dummy.trigger_event('ticket.created')
-        end
-
-        it "should trigger all_events for any event" do
-          dummy = create_dummy_instance
-          flexmock(dummy).should_receive(:all_events).once
           dummy.trigger_event('ticket.created')
         end
 
