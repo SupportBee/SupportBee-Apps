@@ -120,7 +120,7 @@ module Jira
 
     def fetch_projects
       response = jira_get(projects_url)
-      response.body.to_json
+      response.body["projects"].to_json
     end
 
     def fetch_assignable_users
@@ -145,7 +145,7 @@ module Jira
     end
 
     def projects_url
-      "#{domain}/rest/api/2/project"
+      "#{domain}/rest/api/2/issue/createmeta"
     end
     
     def issues_url
