@@ -5,6 +5,7 @@ module Jira
 
       issue = create_issue(payload.overlay.title, payload.overlay.description)
       return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
+      assign_issue(issue) if assigned?
       html = create_issue_html(issue.body, ticket.subject)
       
       comment_on_ticket(ticket, html)
@@ -32,10 +33,13 @@ module Jira
     string :user_name, required: true, label: 'JIRA Username', hint: 'You have to use your JIRA username. The JIRA email address will not work. You can find the username in your JIRA Profile page'
     password :password, required: true, label: 'JIRA Password'
     string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
-    string :subdomain, label: 'JIRA subdomain', hint: 'Ignore this if you have filled in the JIRA Domain Name, this is only to support previous integrations'
 
     def validate
+      if settings.user_name.blank? or settings.password.blank? or settings.domain.blank?
+        errors[:flash] = "Please fill in all required details" 
+      else
       errors[:flash] = ["We could not reach JIRA. Please check the configuration, and try again"] unless test_ping.success?
+      end
       errors.empty? ? true : false
     end
 
@@ -66,6 +70,15 @@ module Jira
       response
     end
 
+    def jira_put(endpoint_url, body)
+      basic_auth
+      response = http_put endpoint_url do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json
+      end
+      response
+    end
+
     def jira_post(endpoint_url, body)
       basic_auth
 
@@ -77,10 +90,13 @@ module Jira
     end
 
     def create_issue(summary, description)
-      body = assigned_body(summary, description) if assigned?
-      body = unassigned_body(summary, description) unless assigned?
-
+      body = unassigned_body(summary, description)
       jira_post(issues_url, body)
+    end
+
+    def assign_issue(issue)
+      body = {name: assignee_name}
+      jira_put(assign_issue_url(issue['id']), body)
     end
 
     def unassigned_body(summary, description)
@@ -92,33 +108,11 @@ module Jira
           description: description,
           issuetype: {
             id: issue_type
-          },
-          labels: [
-            "supportbee"
-          ]
+          }
         }
       }
     end
 
-    def assigned_body(summary, description)
-      { fields: {
-          project: {
-            key: project_key,
-          },
-          summary: summary,
-          description: description,
-          issuetype: {
-            id: issue_type
-          },
-          assignee: {
-            name: assignee_name
-          },
-          labels: [
-            "supportbee"
-          ]
-        }
-      }
-    end
 
     def assigned?
       assignee_name != "none"
@@ -156,6 +150,10 @@ module Jira
     
     def issues_url
       "#{domain}/rest/api/2/issue"
+    end
+    
+    def assign_issue_url(issue_id)
+      "#{domain}/rest/api/2/issue/#{issue_id}/assignee"
     end
 
     def create_issue_html(issue, summary)

@@ -72,6 +72,11 @@ module HttpHelper
     http_method :post, url, body, headers, &block
   end
 
+  def http_put(url = nil, body = nil, headers = nil)
+    block = Proc.new if block_given?
+    http_method :put, url, body, headers, &block
+  end
+
   # Public: Makes an HTTP call.
   #
   # method  - Symbol of the HTTP method.  Example: :put
