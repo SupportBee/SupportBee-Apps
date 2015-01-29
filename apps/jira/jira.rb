@@ -132,13 +132,12 @@ module Jira
     end
 
     def fetch_issue_types
-      response = jira_get(issue_type_url)
-      response.body.to_json
+      response = jira_get(projects_url)
+      projects = response.body["projects"]
+      project = (projects.detect {|project|  project["key"] == project_key})
+      project["issuetypes"].to_json
     end
 
-    def issue_type_url
-      "#{domain}/rest/api/2/issuetype"
-    end
 
     def users_url
       "#{domain}/rest/api/2/user/assignable/search"
