@@ -26,7 +26,6 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
 
     @setup_selectors()
     @setup_users()
-    @setup_issue_type()
     @populate_projects()
 
   setup_selectors: ->
@@ -44,13 +43,19 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
   render_projects: ->
     @projects.each @render_one_project
     @load_users()
+    @setup_issue_type()
 
   render_one_project: (project) ->
     @projects_selector.append project_option_tag(project)
 
   project_changed: ->
     @reset_users()
+    @reset_issue_type()
     @load_users()
+    @setup_issue_type()
+
+  reset_issue_type: ->
+    @issue_type_selector.find('option').remove()
 
   reset_users: ->
     @users_selector.find('option').remove().end().append('<option value="none">No Assignee</option>').val("none")
@@ -72,6 +77,8 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
 
   setup_issue_type: ->
     @issue_types = new SB.Apps.BaseCollection([], endpoint: 'issue_types', app: @app)
+    project = @projects_selector.val()
+    @issue_types.request_params = {projects_select: project}
     @issue_types.on 'reset', @render_issue_types
     @issue_types.fetch()
 
@@ -79,6 +86,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
     @issue_types.each @render_one_issue_type
 
   render_one_issue_type: (issue_type) ->
+    return if issue_type.get('id') == "5" #Skip issue type sub-issue
     @issue_type_selector.append issue_type_option_tag(issue_type)
 
   submit_form: ->
