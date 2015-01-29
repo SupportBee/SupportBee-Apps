@@ -35,7 +35,7 @@ module Bugify
         end
         errors.empty? ? true : false
       rescue Exception => e
-        errors[:flash] = ["Please check the URL"]
+        errors[:flash] = [e.message]
         errors[:url] = ["URL looks incorrect"]
         false
       end
