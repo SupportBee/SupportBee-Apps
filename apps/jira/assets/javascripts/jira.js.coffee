@@ -79,6 +79,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
     @issue_types.each @render_one_issue_type
 
   render_one_issue_type: (issue_type) ->
+    return if issue_type.get('id') == "5" #Skip issue type sub-issue
     @issue_type_selector.append issue_type_option_tag(issue_type)
 
   submit_form: ->
