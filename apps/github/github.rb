@@ -58,9 +58,9 @@ module Github
 
     def projects_url
       if payload.overlay and org = payload.overlay.org
-        api_url("orgs/#{org}/repos")
+        api_url("orgs/#{org}/repos?per_page=200")
       else
-        api_url('user/repos')
+        api_url('user/repos?per_page=200')
       end
     end
 
