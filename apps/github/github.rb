@@ -34,6 +34,14 @@ module Github
       [200, fetch_orgs]
     end
 
+    # TODO: Move to a gem
+    def api_url(resource = "", params = {})
+      url = URI("https://api.github.com/#{resource}")
+      url.query = to_query(params.merge(default_api_params))
+
+      url.to_s
+    end
+
     private
 
     def fetch_orgs
@@ -57,21 +65,19 @@ module Github
     end
 
     def projects_url
-      if payload.overlay and org = payload.overlay.org
-        api_url("orgs/#{org}/repos?per_page=200")
+      resource = if payload.overlay and org = payload.overlay.org
+        "orgs/#{org}/repos"
       else
-        api_url('user/repos?per_page=200')
+        'user/repos'
       end
+
+      api_url(resource, per_page: 200)
     end
 
     def token
       token = settings.oauth_token || settings.token
     end
     
-    def api_url(resource="")
-      "https://api.github.com/#{resource}?access_token=#{token}"
-    end
-
     def create_issue(issue_title, description, repo)
       response = http_post "https://api.github.com/repos/#{repo}/issues?access_token=#{token}" do |req|
         req.body = {:title => issue_title, :body => description, :labels => ['supportbee']}.to_json
@@ -86,5 +92,14 @@ module Github
       ticket.comment(:html => html)
     end
 
+    def default_api_params
+      { access_token: token }
+    end
+
+    def to_query(query_params)
+      query_params.reduce("") do |query, (k, v)|
+        query + "#{k}=#{v}&" # Not url encoding params for now. Just move to a gem.
+      end.chop
+    end
   end
 end
