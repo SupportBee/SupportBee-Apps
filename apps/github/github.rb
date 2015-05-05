@@ -71,7 +71,7 @@ module Github
         'user/repos'
       end
 
-      api_url(resource, per_page: 200)
+      api_url(resource, per_page: 100)
     end
 
     def token
