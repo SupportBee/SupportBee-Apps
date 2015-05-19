@@ -21,7 +21,6 @@ module Pipedrive
           comment_on_ticket(html, ticket)
         end
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
         [500, e.message]
       end
       [200, "Ticket sent"]
@@ -35,6 +34,10 @@ module Pipedrive
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
     boolean :send_ticket_content, :required => false, :label => 'Send Ticket\'s Full Contents to Pipedrive', :default => false
 
+    def api_url(endpoint)
+      "https://api.pipedrive.com/v1#{endpoint}"
+    end
+
     white_list :should_create_person
 
     def validate
@@ -44,7 +47,7 @@ module Pipedrive
     end
 
     def find_person(requester)
-      response = http_get('http://api.pipedrive.com/v1/persons/find') do |req|
+      response = http_get api_url('/persons/find') do |req|
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token
         req.params['term'] = requester.email
@@ -55,7 +58,7 @@ module Pipedrive
     
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
-      person = http_post('http://api.pipedrive.com/v1/persons') do |req|
+      person = http_post api_url('/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
         req.body = {name:name(requester), email:[requester.email]}.to_json
@@ -68,7 +71,7 @@ module Pipedrive
     end
    
     def update_note(person, ticket) 
-      http_post('http://api.pipedrive.com/v1/notes') do |req|
+      http_post api_url('/notes') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
         req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
@@ -113,7 +116,7 @@ module Pipedrive
     end
 
     def valid_credentials?
-      response = http_get('http://api.pipedrive.com/v1/activityTypes') do |req|
+      response = http_get api_url('/activityTypes') do |req|
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token
       end
