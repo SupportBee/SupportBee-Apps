@@ -1,0 +1,38 @@
+name: Slack
+slug: slack
+access: public
+
+description: "'Be less busy' -  Slack is the chat tool that brings all your communication together in one place. By integrating Slack with SupportBee, you can get notified in your Slack channels for important events in your support desk. To sign up for Slack click [here](https://slack.com/).
+
+Not already on SupportBee? [Setup your support desk now!](https://app.supportbee.com/)
+
+You can choose to get all kinds of notifications in your Slack channels. These notifications would pop up as a message with all the necessary details and information about the ticket.
+
+To add the app, click **Add to My SupportBee** 
+
+## Setting up Slack
+
+  ### Webhook URL
+
+- You would first need to add an **Incoming Webhook** to your Slack app. You can add a webhook in **Configure Integrations** in Slack.
+
+- Once you setup an Incoming Webhook, Slack would provide you with a **unique Webhook URL**, add this to your SupportBee.
+
+That's it, your done! You should be all set to see notifications pop up in your Slack app. You can add a comment below for any queries related to this app, or write to us at support@supportbee.com. "
+
+category: notification
+
+tags: 
+- slack
+- notification
+- chat
+
+developer:
+  name: Pranav Singh
+  email: pranav@supportbee.com
+  twitter: "@pranav7"
+  github: 'pranav7'
+
+# The following config keys are used by Action Handlers
+# Set button 'overlay' to true, if you want to have an overlay
+# The valid values for screens are [ticket, all, unassigned, my, groups]
