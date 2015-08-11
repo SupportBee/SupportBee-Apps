@@ -20,6 +20,7 @@ gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
 gem 'unicorn', '=3.7.0'
+gem 'newrelic_rpm', :require => false # Monitoring
 
 # App Gems
 gem 'tinder'

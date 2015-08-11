@@ -6,6 +6,11 @@ Bundler.setup
 
 Bundler.require(:default, PLATFORM_ENV.to_sym)
 
+# Setup newrelic monitoring
+if ['staging', 'production'].include?(PLATFORM_ENV)
+  require 'newrelic_rpm'
+end
+
 require "#{PLATFORM_ROOT}/config/environments/#{PLATFORM_ENV}"
 
 require 'active_support/core_ext/string/inflections'
