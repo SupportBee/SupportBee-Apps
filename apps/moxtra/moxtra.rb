@@ -84,9 +84,9 @@ module Moxtra
         payload = {
           :username => "SupportBee",
           :attachments => [
-                :fallback => "New Ticket from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :text => "New Ticket from #{ticket.requester.name}: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :color => "danger",
+                :ticketid => "#{ticket.id}",
+                :user => "#{ticket.requester.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
                 :fields => [
                   :title => "#{ticket.subject}",
                   :value => "#{ticket.content.text}"
@@ -94,10 +94,18 @@ module Moxtra
               ]
         }
       else
-        payload = {
+      payload = {
           :username => "SupportBee",
-          :text => "*New Ticket* from *#{ticket.requester.name}*: <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
-        }
+          :attachments => [
+          :ticketid => "#{ticket.id}",
+          :user => "#{ticket.requester.name}: ",
+          :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+          :fields => [
+          :title => "#{ticket.subject}",
+          :value => ""
+          ]
+          ]
+      }
       end
       post_to_moxtra(payload)
     end
@@ -107,9 +115,10 @@ module Moxtra
         payload = {
             :username => "SupportBee",
             :attachments => [
-                :fallback => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :text => "Agent Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :color => "good",
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :replier => "#{reply.replier.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
                 :fields => [
                   :title => "Reply:",
                   :value => "#{reply.content.text}"
@@ -118,8 +127,17 @@ module Moxtra
         }
       else
         payload = {
-          :username => "SupportBee",
-          :text => "*Agent Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+            :username => "SupportBee",
+            :attachments => [
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :replier => "#{reply.replier.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+                :fields => [
+                  :title => "Reply:",
+                  :value => ""
+                ]
+              ]
         }
       end
       post_to_moxtra(payload)
@@ -129,20 +147,30 @@ module Moxtra
       if settings.post_content.to_s == '1'
 	      payload = {
 	      	:username => "SupportBee",
-	        :attachments => [
-	          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	          		:color => "danger",
-	          		:fields => [
-	          			:title => "Reply:",
-	          			:value => "#{reply.content.text}"
-	          		]
-	          	]
+            :attachments => [
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :replier => "#{reply.replier.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+                :fields => [
+                  :title => "Reply:",
+                  :value => "{reply.content.text}"
+                ]
+              ]
 	      }
 	  else
 	  	payload = {
-          :username => "SupportBee",
-          :text => "*Customer Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+          	:username => "SupportBee",
+            :attachments => [
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :replier => "#{reply.replier.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+                :fields => [
+                  :title => "Reply:",
+                  :value => ""
+                ]
+              ]
         }
       end
       post_to_moxtra(payload)
@@ -151,44 +179,40 @@ module Moxtra
     def post_comment(comment, ticket)
    	  if settings.post_content.to_s == '1'
 	      payload = {
-	      	:username => "SupportBee",
-	        :attachments => [
-	          		:fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-                :text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	          		:color => "good",
-	          		:fields => [
-	          			:title => "Comment",
-	          			:value => "#{comment.content.text}"
-	          		]
-	          	]
+          	:username => "SupportBee",
+            :attachments => [
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :commenter => "#{comment.commenter.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+                :fields => [
+                  :title => "Comment:",
+                  :value => "#{comment.content.text}"
+                ]
+              ]
 	      }
   	  else
   	  	payload = {
-          :username => "SupportBee",
-          :text => "*#{comment.commenter.name}* commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
+          	:username => "SupportBee",
+        	:attachments => [
+                :ticketid => "#{ticket.id}",
+                :ticketsubject => "#{ticket.subject}",
+                :commenter => "#{comment.commenter.name}: ",
+                :url => "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}",
+                :fields => [
+                  :title => "Comment:",
+                  :value => ""
+                ]
+              ]
         }
   	  end
       post_to_moxtra(payload)
     end
 
     def post_to_moxtra(payload)
-      if settings.url_webhook.blank?
-        text = payload[:attachments][0][:text] + "\n" + payload[:attachments][0][:fields][0][:value] unless payload[:attachments].blank?
-        text = payload[:text] unless payload[:text].blank?
-
-        body = {
-          "username" => "SupportBee",
-          "text" => text 
-        }
-
-        response = http_post url_webhook do |req|
-          req.body = body.to_json
-        end
-      else
         response = http_post settings.url_webhook do |req|
           req.body = payload.to_json
         end
-      end
     end
 
   end

@@ -1,38 +1,40 @@
-name: Slack
-slug: slack
+name: Moxtra
+slug: moxtra
 access: public
 
-description: "'Be less busy' -  Slack is the chat tool that brings all your communication together in one place. By integrating Slack with SupportBee, you can get notified in your Slack channels for important events in your support desk. To sign up for Slack click [here](https://slack.com/).
+description: "Moxtra is an embeddable, multilayered cloud collaboration service that provides conversations, content and meeting on demand. By integrating Moxtra with SupportBee, you can keep anyone notified about important support events in your Moxtra binders. You can choose to get all kinds of notifications in your Moxtra binders.
 
-Not already on SupportBee? [Setup your support desk now!](https://app.supportbee.com/)
+To sign up for Moxtra click [here](https://moxtra.com/). 
 
-You can choose to get all kinds of notifications in your Slack channels. These notifications would pop up as a message with all the necessary details and information about the ticket.
+In April 2015, Gartner named Moxtra a 'Cool Vendor in Social Software and Collaboration.'
 
 To add the app, click **Add to My SupportBee** 
 
-## Setting up Slack
+## Setting up Moxtra
 
   ### Webhook URL
 
-- You would first need to add an **Incoming Webhook** to your Slack app. You can add a webhook in **Configure Integrations** in Slack.
+- Navigate to **Integrations** tab on the left menu. Search for SupportBee and click on the **Add** button. 
 
-- Once you setup an Incoming Webhook, Slack would provide you with a **unique Webhook URL**, add this to your SupportBee.
+- Follow the instructions provided in Moxtra. 
 
-That's it, your done! You should be all set to see notifications pop up in your Slack app. You can add a comment below for any queries related to this app, or write to us at support@supportbee.com. "
+- You will be provided with a Moxtra **Webhook URL**. **Copy** this URL to your SupportBee.
+
+You should be all set to receive support desk notifications in your Moxtra binder."
 
 category: notification
 
 tags: 
-- slack
-- notification
-- chat
+- moxtra
+- power messenger
+- collaboration 
+- communication
+- embeddables
 
 developer:
-  name: Pranav Singh
-  email: pranav@supportbee.com
-  twitter: "@pranav7"
-  github: 'pranav7'
+  name: Raj Sen Sharma
+  email: support@moxtra.com
+  twitter: "@raj_sen_sharma"
+  github: 'rajss'
 
-# The following config keys are used by Action Handlers
-# Set button 'overlay' to true, if you want to have an overlay
-# The valid values for screens are [ticket, all, unassigned, my, groups]
+
