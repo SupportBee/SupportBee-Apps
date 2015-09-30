@@ -1,0 +1,40 @@
+name: Moxtra
+slug: moxtra
+access: public
+
+description: "Moxtra is an embeddable, multilayered cloud collaboration service that provides conversations, content and meeting on demand. By integrating Moxtra with SupportBee, you can keep anyone notified about important support events in your Moxtra binders. You can choose to get all kinds of notifications in your Moxtra binders.
+
+To sign up for Moxtra click [here](https://moxtra.com/). 
+
+In April 2015, Gartner named Moxtra a 'Cool Vendor in Social Software and Collaboration.'
+
+To add the app, click **Add to My SupportBee** 
+
+## Setting up Moxtra
+
+  ### Webhook URL
+
+- Navigate to **Integrations** tab on the left menu. Search for SupportBee and click on the **Add** button. 
+
+- Follow the instructions provided in Moxtra. 
+
+- You will be provided with a Moxtra **Webhook URL**. **Copy** this URL to your SupportBee.
+
+You should be all set to receive support desk notifications in your Moxtra binder."
+
+category: notification
+
+tags: 
+- moxtra
+- power messenger
+- collaboration 
+- communication
+- embeddables
+
+developer:
+  name: Raj Sen Sharma
+  email: support@moxtra.com
+  twitter: "@raj_sen_sharma"
+  github: 'rajss'
+
+
