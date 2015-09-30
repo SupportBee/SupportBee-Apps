@@ -53,12 +53,7 @@ module Moxtra
                 :post_content
 
     def validate
-      errors[:flash] = ["Please fill in the Webhook URL"] if validate_presense_of_url
-      errors.empty? ? true : false
-    end
-
-    def validate
-      errors[:flash] = ["Webhook URL is incorrect"] unless test_ping.success?
+      errors[:flash] = ["Webhook URL is incorrect"] unless can_ping_moxtra
       errors.empty? ? true : false
     end
 
@@ -68,15 +63,15 @@ module Moxtra
       not(settings.url_webhook.blank?)
     end
 
-    def test_ping
-        response = http_post url_webhook do |req|
-          body = {
-            :username => "SupportBee",
-            :text => "Hello, World!"
-          }
-          req.body = body.to_json
-        end
-      response
+    def can_ping_moxtra
+      response = http_post settings.url_webhook do |req|
+        body = {
+          :username => "SupportBee",
+          :text => "Hello, World!"
+        }
+        req.body = body.to_json
+      end
+      response.success?
     end
 
     def post_ticket(ticket)
