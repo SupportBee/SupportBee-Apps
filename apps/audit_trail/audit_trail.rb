@@ -42,6 +42,7 @@ module AuditTrail
     def ticket_unassigned
       log_string(action_type: 'Unassigned')
     end
+    alias_method :ticket_unassigned_from_agent, :ticket_unassigned
 
     def ticket_removed_from_group
       log_string(action_type: "Removed from group")
