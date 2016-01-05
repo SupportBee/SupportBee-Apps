@@ -1,14 +1,12 @@
 require 'spec_helper'
 
 describe AuditTrail do
+  let(:api_token) { 'my_api_token' }
+
   describe '#ticket_assigned_to_agent' do
-    let(:time_now) { Time.utc(2015, 'Jan', 18, 12) }
-
     it 'adds a comment to the ticket' do
-      skip 'have to fix failing webmock expectations'
-
+      # Stub create comment request
       url = "http://muziboo.lvh.me:3000/tickets/1/comments?auth_token=my_api_token"
-      create_comment_url = url
       request_body_hash = {
         'comment' => {
           'content_attributes' => {
@@ -16,7 +14,6 @@ describe AuditTrail do
           }
         }
       }
-      create_comment_request_body_hash = request_body_hash
       response_body = {
         'comment' => {
           'content' => {
@@ -26,11 +23,12 @@ describe AuditTrail do
           'attachment_ids' => []
         }
       }.to_json
-      create_comment_response_body = response_body
       response_headers = {
         'Content-Type' => 'application/json'
       }
-      create_comment_request = stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
+      stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
+
+      # Stub refresh ticket request
       response_body = {
         'ticket' => {
           'id' => 1
@@ -74,19 +72,14 @@ describe AuditTrail do
           }
         }
       }.to_json
-      response = nil
-      Timecop.freeze(time_now) do
-        response = post "#{AuditTrail::Base.slug}/event/ticket.assigned.to.agent", request_body, 'CONTENT_TYPE' => 'application/json'
-      end
+      response = post "#{AuditTrail::Base.slug}/event/ticket.assigned.to.agent", request_body, 'CONTENT_TYPE' => 'application/json'
 
+      # This is a brittle test but its better than not having any test
       response.status.should == 204
-      # create_comment_request.should have_been_made.once
-      # WebMock.should have_requested(:post, url).with(body: create_comment_request_body_hash).once
     end
   end
 
   describe '#ticket_sent_to_group' do
-    let(:api_token) { 'my_api_token' }
     let(:event_name) { 'ticket.sent.to.group' } 
 
     it 'adds a comment to the ticket' do
@@ -147,14 +140,12 @@ describe AuditTrail do
       }.to_json
       response = post "#{AuditTrail::Base.slug}/event/#{event_name}", request_body, 'CONTENT_TYPE' => 'application/json'
 
-      # This is a brittle test but its better than not having any test
       response.status.should == 204
     end
   end
 
-  describe '#ticket_removed_from_group' do
-    let(:api_token) { 'my_api_token' }
-    let(:event_name) { 'ticket.removed.from.group' } 
+  describe '#ticket_unassigned_from_agent' do
+    let(:event_name) { 'ticket.unassigned.from.agent' } 
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
@@ -204,14 +195,12 @@ describe AuditTrail do
       }.to_json
       response = post "#{AuditTrail::Base.slug}/event/#{event_name}", request_body, 'CONTENT_TYPE' => 'application/json'
 
-      # This is a brittle test but its better than not having any test
       response.status.should == 204
     end
   end
 
-  describe '#ticket_unassigned_from_agent' do
-    let(:api_token) { 'my_api_token' }
-    let(:event_name) { 'ticket.unassigned.from.agent' } 
+  describe '#ticket_removed_from_group' do
+    let(:event_name) { 'ticket.removed.from.group' } 
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
