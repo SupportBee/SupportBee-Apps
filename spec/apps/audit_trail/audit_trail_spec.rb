@@ -2,8 +2,25 @@ require 'spec_helper'
 
 describe AuditTrail do
   let(:api_token) { 'my_api_token' }
+  let(:response_headers) do
+    {
+      'Content-Type' => 'application/json'
+    }
+  end
+
+  before(:each) do
+    # Stub refresh ticket request
+    response_body = {
+      'ticket' => {
+        'id' => 1
+      }
+    }.to_json
+    stub_request(:get, "http://muziboo.lvh.me:3000/tickets/1?auth_token=my_api_token").to_return(status: 200, body: response_body, headers: response_headers)
+  end
 
   describe '#ticket_assigned_to_agent' do
+    let(:event_name) { 'ticket.assigned.to.agent' }
+
     it 'adds a comment to the ticket' do
       # Stub create comment request
       url = "http://muziboo.lvh.me:3000/tickets/1/comments?auth_token=my_api_token"
@@ -23,23 +40,12 @@ describe AuditTrail do
           'attachment_ids' => []
         }
       }.to_json
-      response_headers = {
-        'Content-Type' => 'application/json'
-      }
       stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
-
-      # Stub refresh ticket request
-      response_body = {
-        'ticket' => {
-          'id' => 1
-        }
-      }.to_json
-      stub_request(:get, "http://muziboo.lvh.me:3000/tickets/1?auth_token=my_api_token").to_return(status: 200, body: response_body, headers: response_headers)
 
       request_body = {
         'payload' => {
           'payload' => {
-            'action_type' => 'ticket.assigned.to.agent',
+            'action_type' => event_name,
             'company' => {
               'subdomain' => 'muziboo',
               'name' => 'Muziboo Music'
@@ -72,7 +78,7 @@ describe AuditTrail do
           }
         }
       }.to_json
-      response = post "#{AuditTrail::Base.slug}/event/ticket.assigned.to.agent", request_body, 'CONTENT_TYPE' => 'application/json'
+      response = post "#{AuditTrail::Base.slug}/event/#{event_name}", request_body, 'CONTENT_TYPE' => 'application/json'
 
       # This is a brittle test but its better than not having any test
       response.status.should == 204
@@ -94,19 +100,7 @@ describe AuditTrail do
           'attachment_ids' => []
         }
       }.to_json
-      response_headers = {
-        'Content-Type' => 'application/json'
-      }
       stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
-
-      # Stub refresh ticket request
-      url = "http://muziboo.lvh.me:3000/tickets/1?auth_token=#{api_token}"
-      response_body = {
-        'ticket' => {
-          'id' => 1
-        }
-      }.to_json
-      stub_request(:get, url).to_return(status: 200, body: response_body, headers: response_headers)
 
       request_body = {
         'payload' => {
@@ -159,19 +153,7 @@ describe AuditTrail do
           'attachment_ids' => []
         }
       }.to_json
-      response_headers = {
-        'Content-Type' => 'application/json'
-      }
       stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
-
-      # Stub refresh ticket request
-      url = "http://muziboo.lvh.me:3000/tickets/1?auth_token=#{api_token}"
-      response_body = {
-        'ticket' => {
-          'id' => 1
-        }
-      }.to_json
-      stub_request(:get, url).to_return(status: 200, body: response_body, headers: response_headers)
 
       request_body = {
         'payload' => {
@@ -214,19 +196,7 @@ describe AuditTrail do
           'attachment_ids' => []
         }
       }.to_json
-      response_headers = {
-        'Content-Type' => 'application/json'
-      }
       stub_request(:post, url).to_return(status: 200, body: response_body, headers: response_headers)
-
-      # Stub refresh ticket request
-      url = "http://muziboo.lvh.me:3000/tickets/1?auth_token=#{api_token}"
-      response_body = {
-        'ticket' => {
-          'id' => 1
-        }
-      }.to_json
-      stub_request(:get, url).to_return(status: 200, body: response_body, headers: response_headers)
 
       request_body = {
         'payload' => {
@@ -250,7 +220,6 @@ describe AuditTrail do
       }.to_json
       response = post "#{AuditTrail::Base.slug}/event/#{event_name}", request_body, 'CONTENT_TYPE' => 'application/json'
 
-      # This is a brittle test but its better than not having any test
       response.status.should == 204
     end
   end
