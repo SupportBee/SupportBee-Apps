@@ -12,4 +12,9 @@ end
 RSpec.configure do |config|
   config.include RackSpecHelpers
   config.mock_with :flexmock
+
+  # Use should syntax, just like the core app
+  config.expect_with :rspec do |c|
+    c.syntax = :should
+  end
 end
