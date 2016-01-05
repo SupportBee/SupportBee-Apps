@@ -1,6 +1,5 @@
 module AuditTrail
   module EventHandler
-    
     def ticket_archived
       log_string(action_type: 'Archived')
     end
@@ -35,6 +34,11 @@ module AuditTrail
       log_string(action_type: "Assigned to \"#{assignee.name}\" group")
     end
 
+    def ticket_sent_to_group
+      group = payload.ticket.group
+      log_string(action_type: "Sent to \"#{group.name}\" group")
+    end
+
     def ticket_unassigned
       log_string(action_type: 'Unassigned')
     end
@@ -59,7 +63,7 @@ module AuditTrail
       puts payload.inspect
       agent = payload.agent
       message << " by #{agent.name} (#{agent.email})" if agent
-      message << " at #{Time.now.strftime("%I:%M %P, %D")} UTC"
+      message << " at #{Time.now.utc.strftime("%I:%M %P, %D")} UTC"
       payload.ticket.comment :html => message
     end
   end
