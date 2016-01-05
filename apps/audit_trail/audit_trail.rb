@@ -65,11 +65,17 @@ module AuditTrail
     # in the EventHandler and ActionHandler modules
     def log_string(options={})
       message = options[:message] || "#{options[:action_type]}"
-      puts payload.inspect
+      puts payload.inspect unless test_env?
       agent = payload.agent
       message << " by #{agent.name} (#{agent.email})" if agent
       message << " at #{Time.now.utc.strftime("%I:%M %P, %D")} UTC"
       payload.ticket.comment :html => message
+    end
+
+    private
+
+    def test_env?
+      ENV['RACK_ENV'] == 'test'
     end
   end
 end
