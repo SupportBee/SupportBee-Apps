@@ -20,3 +20,13 @@ RSpec.configure do |config|
     c.syntax = :should
   end
 end
+
+# Prevent test unit gem from throwing errors when rspec in run
+#
+# Test unit gem tries to autorun tests when ruby exits. This patch
+# disables the autorun behaviour.
+#
+# @see http://www.jonathanleighton.com/articles/2012/stop-test-unit-autorun/
+class Test::Unit::Runner
+  @@stop_auto_run = true
+end
