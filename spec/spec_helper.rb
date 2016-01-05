@@ -1,6 +1,8 @@
 ENV['RACK_ENV'] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/load")
 
+require 'webmock/rspec'
+
 module RackSpecHelpers
   include Rack::Test::Methods
 
