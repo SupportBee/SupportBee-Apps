@@ -24,6 +24,10 @@ module AuditTrail
       log_string(action_type: 'Untrashed')
     end
 
+    #
+    # Old events before Assign to Teams launch
+    #
+
     def ticket_assigned_to_agent
       assignee = payload.assignment.assignee.user
       log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
@@ -34,18 +38,30 @@ module AuditTrail
       log_string(action_type: "Assigned to \"#{assignee.name}\" group")
     end
 
-    def ticket_sent_to_group
-      group = payload.ticket.group
-      log_string(action_type: "Sent to \"#{group.name}\" group")
-    end
-
     def ticket_unassigned
       log_string(action_type: 'Unassigned')
     end
-    alias_method :ticket_unassigned_from_agent, :ticket_unassigned
 
-    def ticket_removed_from_group
-      log_string(action_type: "Removed from group")
+    #
+    # New events after Assign to Teams launch
+    #
+
+    def ticket_assigned_to_user
+      assignee = payload.assignment.assignee.user
+      log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
+    end
+
+    def ticket_assigned_to_team
+      assignee = payload.team_assignment.assignee.team
+      log_string(action_type: "Assigned to \"#{assignee.name}\" team")
+    end
+
+    def ticket_unassigned_from_user
+      log_string(action_type: 'Unassigned from agent')
+    end
+
+    def ticket_unassigned_from_team
+      log_string(action_type: 'Unassigned from team')
     end
   end
 end
@@ -79,4 +95,3 @@ module AuditTrail
     end
   end
 end
-
