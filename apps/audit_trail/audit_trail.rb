@@ -47,7 +47,7 @@ module AuditTrail
     #
 
     def ticket_assigned_to_user
-      assignee = payload.assignment.assignee.user
+      assignee = payload.user_assignment.assignee.user
       log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
     end
 
