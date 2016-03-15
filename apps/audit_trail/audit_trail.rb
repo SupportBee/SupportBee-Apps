@@ -1,6 +1,5 @@
 module AuditTrail
   module EventHandler
-    
     def ticket_archived
       log_string(action_type: 'Archived')
     end
@@ -25,6 +24,10 @@ module AuditTrail
       log_string(action_type: 'Untrashed')
     end
 
+    #
+    # Old events before Assign to Teams launch
+    #
+
     def ticket_assigned_to_agent
       assignee = payload.assignment.assignee.user
       log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
@@ -37,6 +40,28 @@ module AuditTrail
 
     def ticket_unassigned
       log_string(action_type: 'Unassigned')
+    end
+
+    #
+    # New events after Assign to Teams launch
+    #
+
+    def ticket_assigned_to_user
+      assignee = payload.assignment.assignee.user
+      log_string(action_type: "Assigned to #{assignee.name} (#{assignee.email})")
+    end
+
+    def ticket_assigned_to_team
+      assignee = payload.team_assignment.assignee.team
+      log_string(action_type: "Assigned to \"#{assignee.name}\" team")
+    end
+
+    def ticket_unassigned_from_user
+      log_string(action_type: 'Unassigned from agent')
+    end
+
+    def ticket_unassigned_from_team
+      log_string(action_type: 'Unassigned from team')
     end
   end
 end
@@ -56,12 +81,17 @@ module AuditTrail
     # in the EventHandler and ActionHandler modules
     def log_string(options={})
       message = options[:message] || "#{options[:action_type]}"
-      puts payload.inspect
+      puts payload.inspect unless test_env?
       agent = payload.agent
       message << " by #{agent.name} (#{agent.email})" if agent
-      message << " at #{Time.now.strftime("%I:%M %P, %D")} UTC"
+      message << " at #{Time.now.utc.strftime("%I:%M %P, %D")} UTC"
       payload.ticket.comment :html => message
+    end
+
+    private
+
+    def test_env?
+      ENV['RACK_ENV'] == 'test'
     end
   end
 end
-

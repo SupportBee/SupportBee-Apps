@@ -1,6 +1,5 @@
 module SupportBeeApp
   class Base
-
     include HttpHelper
 
     class << self
@@ -346,7 +345,6 @@ module SupportBeeApp
       string
     end
 
-
     def pre_process_payload(raw)
       result = Hashie::Mash.new(raw)
       raw = result.delete(:payload)
@@ -356,12 +354,14 @@ module SupportBeeApp
         result[:tickets] = []
         raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
       end
-      result[:ticket]  = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
-      result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
+      result[:ticket] = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
+      result[:reply] = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
       result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
       result[:assignment] = SupportBee::Assignment.new(auth, raw[:assignment]) if raw[:assignment]
+      result[:user_assignment] = SupportBee::UserAssignment.new(auth, raw[:user_assignment]) if raw[:user_assignment]
+      result[:team_assignment] = SupportBee::TeamAssignment.new(auth, raw[:team_assignment]) if raw[:team_assignment]
       result
     end
 

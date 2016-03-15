@@ -1,5 +1,5 @@
 module SupportBee
-  class Group < Resource
+  class Team < Resource
     class << self
       def list(auth={}, params={})
         response = api_get(resource_url,auth,params)
@@ -22,7 +22,7 @@ module SupportBee
         groups = []
         result = Hashie::Mash.new
         response.body.keys.each do |key|
-          if key == 'groups'
+          if key == 'teams'
             response.body[key].each do |group|
               groups << self.new(auth,group)
             end
@@ -30,7 +30,7 @@ module SupportBee
             result[key] = response.body[key]
           end
         end
-        result.groups = groups
+        result.teams = groups
         result
       end
     end

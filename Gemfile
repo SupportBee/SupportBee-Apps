@@ -35,13 +35,23 @@ gem 'rubyzoho',  "= 0.1.7"
 gem 'restforce'
 gem 'mab'
 
-gem 'execjs', :group => :development
-gem 'pry', group: :development
-gem 'rspec', :group => :test
-gem 'rack-test', :require => "rack/test", :group => :test
-gem 'flexmock', :group => :test
-gem 'mock_redis', :group => :test
-gem 'awesome_print', :group => :development
+group :development, :test do
+  gem 'pry'
+  gem 'awesome_print'
+end
+
+group :development do
+  gem 'execjs'
+end
+
+group :test do
+  gem 'rspec'
+  gem 'rack-test', :require => 'rack/test'
+  gem 'flexmock'
+  gem 'webmock', :require => false
+  gem 'mock_redis'
+  gem 'timecop'
+end
 
 # Mail Gems
 gem 'rest-client'
