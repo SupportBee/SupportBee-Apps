@@ -96,14 +96,14 @@ module SupportBee
       end
     end
 
-    def assign_to_group(group)
-      group_id = group
-      group_id = group.id if group.kind_of?(SupportBee::Group)
-      assignment_url = "#{resource_url}/assignments"
-      post_data = { :assignment => { :group_id => group_id }}
+    def assign_to_team(team)
+      team_id = team.kind_of?(SupportBee::Team) ? team.id : team
+      assignment_url = "#{resource_url}/team_assignment"
+      post_data = { :team_assignment => { :team_id => team_id }}
       response = api_post(assignment_url, :body => post_data)
       refresh
-      SupportBee::Assignment.new(@params, response.body['assignment'])
+
+      SupportBee::TeamAssignment.new(@params, response.body['team_assignment'])
     end
 
     def unassign
