@@ -19,7 +19,7 @@ module SupportBee
         ticket_attributes[:subject] = params.delete(:subject)
         ticket_attributes[:content_attributes][:body] = params.delete(:text) if params[:text]
         ticket_attributes[:content_attributes][:body_html] = params.delete(:html) if params[:html]
-       
+
         post_body = {:ticket => ticket_attributes}
         response = api_post(resource_url,auth,{body: post_body})
         self.new(auth,response.body['ticket'])
@@ -49,7 +49,7 @@ module SupportBee
       if params[:requester_email]
         ticket_attributes[:requester_email] = params.delete(:requester_email)
         ticket_attributes[:requester_name] = params.delete(:requester_name)
-      end 
+      end
       ticket_attributes[:subject] = params.delete(:subject) unless params[:subject].blank?
       put_body = {ticket: ticket_attributes}
       api_put(resource_url, {body: put_body})
@@ -61,19 +61,19 @@ module SupportBee
       api_post(archive_url)
       refresh
     end
-    
+
     def unarchive
       archive_url = "#{resource_url}/archive"
       api_delete(archive_url)
       refresh
     end
-    
+
     def mark_answered
       archive_url = "#{resource_url}/answered"
       api_post(archive_url)
       refresh
     end
-    
+
     def mark_unanswered
       archive_url = "#{resource_url}/answered"
       api_delete(archive_url)
@@ -81,15 +81,14 @@ module SupportBee
     end
 
     def assign_to_user(user)
-      user_id = user
-      user_id = user.id if user.kind_of?(SupportBee::User)
-      assignment_url = "#{resource_url}/assignments"
-      post_data = { :assignment => { :user_id => user_id }}
+      user_id = user.kind_of?(SupportBee::User) ? user.id : user
+      assignment_url = "#{resource_url}/user_assignment"
+      post_data = { :user_assignment => { :user_id => user_id }}
       response = api_post(assignment_url, :body => post_data)
       refresh
 
       begin
-        SupportBee::Assignment.new(@params, response.body['assignment'])
+        SupportBee::UserAssignment.new(@params, response.body['user_assignment'])
       rescue => e
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.message}"
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.backtrace}"
@@ -154,7 +153,7 @@ module SupportBee
       if refresh
         replies_url = "#{resource_url}/replies"
         response = api_get(replies_url)
-        @replies = to_replies_array(response).replies 
+        @replies = to_replies_array(response).replies
       end
       @replies
     end
