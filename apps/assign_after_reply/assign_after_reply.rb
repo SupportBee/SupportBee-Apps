@@ -6,7 +6,7 @@ module AssignAfterReply
       replier = payload.reply.replier
       return if assignee and settings.reassign.to_s != '1'
       ticket.assign_to_user(replier.id)
-      
+
       # Archive the ticket unless asked not to
       return if settings.keep_unanswered.to_s == '1'
       ticket.mark_answered
@@ -27,4 +27,3 @@ module AssignAfterReply
     # in the EventHandler and ActionHandler modules
   end
 end
-

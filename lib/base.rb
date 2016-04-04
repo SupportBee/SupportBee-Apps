@@ -295,7 +295,7 @@ module SupportBeeApp
       result
     end
 
-    def log_message(trigger, message ='')
+    def log_message(trigger, message='')
       "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
     end
 
@@ -359,14 +359,13 @@ module SupportBeeApp
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
       result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
-      result[:assignment] = SupportBee::Assignment.new(auth, raw[:assignment]) if raw[:assignment]
       result[:user_assignment] = SupportBee::UserAssignment.new(auth, raw[:user_assignment]) if raw[:user_assignment]
       result[:team_assignment] = SupportBee::TeamAssignment.new(auth, raw[:team_assignment]) if raw[:team_assignment]
       result
     end
 
     def to_method(string)
-      string.gsub('.','_').underscore
+      string.gsub('.', '_').underscore
     end
   end
 end

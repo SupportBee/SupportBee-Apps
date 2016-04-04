@@ -4,7 +4,7 @@ module SupportBee
    class InvalidRequestError < ::StandardError; end
 
   class Base
-    
+
     extend HttpHelper
     include HttpHelper
 
@@ -65,7 +65,7 @@ module SupportBee
     end
 
     attr_reader :attributes
-    
+
     def initialize(data={}, payload={})
       raise NotImplementedError.new('SupportBee::Base is an abstract class.  You should perform actions on its subclasses (Ticket, Reply, etc.)') if self.class == SupportBee::Base
       @params = Hashie::Mash.new(data)
@@ -87,7 +87,7 @@ module SupportBee
     end
 
     def default_headers
-      self.class.default_headers    
+      self.class.default_headers
     end
 
     def api_get(resource_url, params={})
@@ -139,9 +139,7 @@ require_relative 'supportbee/company'
 require_relative 'supportbee/resource'
 require_relative 'supportbee/label'
 require_relative 'supportbee/user'
-require_relative 'supportbee/group'
 require_relative 'supportbee/team'
-require_relative 'supportbee/assignment'
 require_relative 'supportbee/user_assignment'
 require_relative 'supportbee/team_assignment'
 require_relative 'supportbee/reply'
