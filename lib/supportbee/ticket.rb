@@ -80,13 +80,16 @@ module SupportBee
       refresh
     end
 
-    def assign_to_user(user)
-      user_id = user.kind_of?(SupportBee::User) ? user.id : user
+    def assign_to_user(user_id)
       assignment_url = "#{resource_url}/user_assignment"
       post_data = { :user_assignment => { :user_id => user_id }}
       response = api_post(assignment_url, :body => post_data)
-      refresh
+      if response.status == 409
+        error_message = "Given user isn't a member of the ticket's team assignee"
+        raise SupportBee::AssignmentError.new(error_message)
+      end
 
+      refresh
       begin
         SupportBee::UserAssignment.new(@params, response.body['user_assignment'])
       rescue => e
@@ -96,8 +99,7 @@ module SupportBee
       end
     end
 
-    def assign_to_team(team)
-      team_id = team.kind_of?(SupportBee::Team) ? team.id : team
+    def assign_to_team(team_id)
       assignment_url = "#{resource_url}/team_assignment"
       post_data = { :team_assignment => { :team_id => team_id }}
       response = api_post(assignment_url, :body => post_data)
