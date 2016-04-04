@@ -106,8 +106,14 @@ module SupportBee
       SupportBee::TeamAssignment.new(@params, response.body['team_assignment'])
     end
 
-    def unassign
-      assignment_url = "#{resource_url}/assignments"
+    def unassign_from_user
+      assignment_url = "#{resource_url}/user_assignment"
+      api_delete(assignment_url)
+      refresh
+    end
+
+    def unassign_from_team
+      assignment_url = "#{resource_url}/team_assignment"
       api_delete(assignment_url)
       refresh
     end
