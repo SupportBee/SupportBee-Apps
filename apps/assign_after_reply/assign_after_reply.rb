@@ -2,7 +2,7 @@ module AssignAfterReply
   module EventHandler
     def agent_reply_created
       ticket = payload.ticket
-      has_user_assignee = ticket.respond_to?(:current_user_assignee)
+      has_user_assignee = ticket.respond_to?(:current_user_assignee) && !ticket.current_user_assignee.nil?
       replier = payload.reply.replier
       return if has_user_assignee and settings.reassign.to_s != '1'
       assign_ticket_to_user(ticket, replier)
