@@ -4,11 +4,11 @@ module CapsuleCrm
     def ticket_created
       ticket = payload.ticket
       return if ticket.trash || ticket.spam
-      requester = ticket.requester 
+      requester = ticket.requester
       http.basic_auth(settings.api_token, "")
 
       begin
-        person = find_person(requester)  
+        person = find_person(requester)
         unless person
           return [200, 'Contact creation disabled'] unless settings.should_create_person.to_s == '1'
           person =  create_new_person(ticket, requester)
@@ -18,10 +18,10 @@ module CapsuleCrm
           send_note(ticket, person)
         end
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        ErrorReporter.report(e)
         [500, e.message]
       end
-      
+
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Capsule"]
     end
@@ -53,7 +53,7 @@ module CapsuleCrm
       person = body['parties']['person'] if body
       person ? person : nil
     end
- 
+
     def create_new_person(ticket, requester)
       location = create_person(requester)
       note_to_new_person(location, ticket)
@@ -77,7 +77,7 @@ module CapsuleCrm
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
     end
-    
+
     def note_to_new_person(location, ticket)
       http_post "#{location}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
@@ -96,10 +96,10 @@ module CapsuleCrm
         end
       person = response.body['person']
     end
-      
+
     def person_info_html(person)
       html = ""
-      html << "<b> #{person['firstName']} </b><br/>" 
+      html << "<b> #{person['firstName']} </b><br/>"
       html << "#{person['title']} " if person['title']
       html << "<br/>"
       html << person_link(person)
@@ -115,11 +115,11 @@ module CapsuleCrm
     def person_link(person)
       "<a href='https://#{settings.subdomain}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
     end
-   
+
     def comment_on_ticket(ticket, html)
         ticket.comment(:html => html)
     end
-   
+
     def generate_note_content(ticket)
       note = ""
       settings.return_ticket_content.to_s == '1' ? note << ticket.content.text : note << ticket.summary
@@ -160,7 +160,6 @@ module CapsuleCrm
         false
       end
     end
-     
+
   end
  end
-

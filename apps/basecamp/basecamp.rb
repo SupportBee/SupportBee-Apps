@@ -4,7 +4,7 @@ module Basecamp
       ticket = payload.tickets.first
       html = ''
       begin
-        result = 
+        result =
           case payload.overlay.type
           when 'message'
             response = create_message
@@ -19,13 +19,12 @@ module Basecamp
             html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
             response
           end
-        
-        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result 
+
+        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Basecamp"}']
       rescue Exception => e
-        puts e.message
-        puts e.backtrace.join("\n")
+        ErrorReporter.report(e)
         return [500, {message: e.message}]
       end
     end
@@ -48,18 +47,18 @@ module Basecamp
   class Base < SupportBeeApp::Base
     oauth  :basecamp,
       oauth_options: {
-        expiration: :never, 
+        expiration: :never,
         scope: "read,write"
       }
 
-    string :app_id, 
-      required: true, 
-      label: 'Enter App ID', 
+    string :app_id,
+      required: true,
+      label: 'Enter App ID',
       hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
 
     def validate
       status, projects = fetch_projects
-      errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200 
+      errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
       errors.empty? ? true : false
     end
 
@@ -86,7 +85,7 @@ module Basecamp
     def assignee_id
       payload.overlay.assign_to
     end
-    
+
     private
 
     def base_url
@@ -126,7 +125,7 @@ module Basecamp
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['Content-Type'] = 'application/json'
         req.body = body
-      end 
+      end
     end
 
     def basecamp_get(url)
@@ -138,20 +137,20 @@ module Basecamp
 
     def create_message
       post_body = {
-        subject: title, 
-        content: description 
-      }.to_json 
+        subject: title,
+        content: description
+      }.to_json
 
       response = basecamp_post(project_messages_url, post_body)
       response.status == 201 ? response : false
     end
-    
+
     def create_todo_list
       _description = description.blank? ? '' : description
 
       post_body = {
-        name: title, 
-        description: _description 
+        name: title,
+        description: _description
       }.to_json
 
       response = basecamp_post(project_todolists_url, post_body)
@@ -190,7 +189,7 @@ module Basecamp
     def todolist_html_comment(_todolist_id, _todolist_name)
       "Basecamp To-do List created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
     end
-    
+
     def todo_html_comment(_todolist_id, _todolist_name)
       "Basecamp todo created in the list <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
     end
@@ -198,10 +197,9 @@ module Basecamp
     def message_html_comment(_message_id, subject)
       "Basecamp message created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
     end
-   
+
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
   end
 end
-

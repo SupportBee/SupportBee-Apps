@@ -7,7 +7,7 @@ module Bigcommerce
 
       begin
         api = connect_to_bigcommerce
-        
+
         email = ticket.requester.email
 
         customers = get_customers(api, email)
@@ -16,12 +16,12 @@ module Bigcommerce
         customer = customers.first
         orders = get_orders(api, customer)
         return if orders.empty?
-        
+
         order_html = order_info_html(api, orders)
         sent_note_to_customer(api, orders)
         ticket.comment(:html => order_html)
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        ErrorReporter.report(e)
         [500, e.message]
       end
 
@@ -35,7 +35,7 @@ module Bigcommerce
     string :username, :required => true, :label => 'Enter User Name', :hint => 'See how to create an api user and get the token in "https://support.bigcommerce.com/questions/1560/How+do+I+enable+the+API+for+my+store%3F"'
     string :api_token, :required => true, :label => 'Enter Api Token'
     string :shop_url, :required => true, :label => 'API URL',  :hint => 'You should see this when enabling API access for this user. Example "https://store-bwvr466.mybigcommerce.com/api/v2/"'
-     
+
     white_list :subdomain
 
     def connect_to_bigcommerce
@@ -50,7 +50,7 @@ module Bigcommerce
       begin
         api.get_customers :email => email
       rescue
-        # Somehow the API throws 
+        # Somehow the API throws
         # Failed to parse Bigcommerce response: A JSON text must at least contain two octets!
         # if a record cannot be found!
         []
@@ -113,13 +113,13 @@ module Bigcommerce
     def order_items_html(order_items)
       html = ""
       if order_items.kind_of?(Array)
-        order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item['name']}"} 
-      else 
+        order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item['name']}"}
+      else
         html << "<br/><h5 style=\"font-weight:normal\">#{order_items['name']}" if order_items
       end
       return html
     end
-  
+
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end

@@ -56,3 +56,6 @@ end
 # Mail Gems
 gem 'rest-client'
 gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
+
+# ErrorReporter
+gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'

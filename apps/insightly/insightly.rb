@@ -2,7 +2,7 @@ module Insightly
   module EventHandler
     def ticket_created
       return unless settings.sync_contacts.to_s == '1'
-      
+
       ticket = payload.ticket
       return if ticket.trash || ticket.spam
       requester = ticket.requester
@@ -23,7 +23,7 @@ module Insightly
         end
 
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        ErrorReporter.report(e)
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -40,7 +40,7 @@ module Insightly
        comment_on_ticket(ticket, html)
 
      rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        ErrorReporter.report(e)
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]
@@ -92,7 +92,7 @@ module Insightly
       errors[:flash] = ["API Key Invalid"] unless test_ping.success?
       errors.empty? ? true : false
     end
-    
+
     def project_id
       payload.overlay.projects_select
     end
@@ -213,4 +213,3 @@ module Insightly
     end
   end
 end
-

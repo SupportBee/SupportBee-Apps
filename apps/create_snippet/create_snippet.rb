@@ -4,6 +4,7 @@ module CreateSnippet
      begin
        create_snippet(name: payload.overlay.name, text: payload.overlay.text, tags: payload.overlay.tags)
      rescue Exception => e
+       ErrorReporter.report(e)
        return [500, e.message]
      end
 
@@ -26,14 +27,13 @@ module CreateSnippet
   end
 
   class Base < SupportBeeApp::Base
-    
+
     private
-    
+
     def create_snippet(params={})
       raise NameCannotBeBlank if params[:name].blank?
       raise TextCannotBeBlank if params[:text].blank?
-      snippet = SupportBee::Snippet.create(auth, params) 
+      snippet = SupportBee::Snippet.create(auth, params)
     end
   end
 end
-

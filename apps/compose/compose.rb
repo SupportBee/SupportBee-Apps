@@ -29,6 +29,7 @@ module Compose
       begin
         mail.deliver
       rescue Exception => e
+        ErrorReporter.report(e)
         return [500, e.message]
       end
 
@@ -56,7 +57,7 @@ module Compose
     end
 
     def valid_email?(email)
-      not((email_regex =~ email).nil?) 
+      not((email_regex =~ email).nil?)
     end
   end
 end
