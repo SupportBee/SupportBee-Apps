@@ -21,7 +21,7 @@ module Bigcommerce
         sent_note_to_customer(api, orders)
         ticket.comment(:html => order_html)
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
 

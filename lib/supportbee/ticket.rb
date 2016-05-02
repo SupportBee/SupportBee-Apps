@@ -93,7 +93,7 @@ module SupportBee
       begin
         SupportBee::UserAssignment.new(@params, response.body['user_assignment'])
       rescue => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {user_id: user_id, resource_url: resource_url})
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.message}"
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.backtrace}"
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{response.inspect}"

@@ -18,7 +18,7 @@ module CapsuleCrm
           send_note(ticket, person)
         end
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
 

@@ -19,7 +19,7 @@ module Salesforce
         end
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
 

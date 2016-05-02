@@ -16,7 +16,7 @@ module Magento
           return response
         end
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
 
@@ -57,7 +57,7 @@ module Magento
       begin
         session_id = response.body[:login_response][:login_return] if response
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {response: response})
       end
 
     end

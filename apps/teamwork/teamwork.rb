@@ -20,7 +20,7 @@ module Teamwork
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Teamwork"}']
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         return [500, {message: e.message}]
       end
     end

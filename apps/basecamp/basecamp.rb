@@ -24,7 +24,7 @@ module Basecamp
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Basecamp"}']
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         return [500, {message: e.message}]
       end
     end

@@ -29,7 +29,7 @@ module Compose
       begin
         mail.deliver
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         return [500, e.message]
       end
 

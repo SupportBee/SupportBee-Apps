@@ -9,7 +9,7 @@ module Bugherd
         html = task_info_html(ticket, task)
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         return [500, e.message]
       end
 

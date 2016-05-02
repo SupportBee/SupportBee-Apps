@@ -21,7 +21,7 @@ module Pipedrive
           comment_on_ticket(html, ticket)
         end
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
       [200, "Ticket sent"]

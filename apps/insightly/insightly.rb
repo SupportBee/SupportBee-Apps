@@ -23,7 +23,7 @@ module Insightly
         end
 
       rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -40,7 +40,7 @@ module Insightly
        comment_on_ticket(ticket, html)
 
      rescue Exception => e
-        ErrorReporter.report(e)
+        ErrorReporter.report(e, {payload: payload})
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]
