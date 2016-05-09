@@ -1,0 +1,81 @@
+---
+:data:
+  auth:
+    subdomain: test
+    auth_token: AUTH_TOKEN
+  settings:
+    basecamp: ''
+    app_id: '3385370'
+    oauth_expires_at: '1463772403'
+    oauth_name: ''
+    oauth_uid: ''
+    oauth_secret: ''
+    oauth_refresh_token: OAUTH_REFRESH_TOKEN
+    oauth_token: BASECAMP_OAUTH_TOKEN
+    oauth_provider: basecamp
+:payload:
+  payload:
+    company:
+      subdomain: test
+      name: test
+    agent:
+      id: 1
+      email: paulo@supportbee.com
+      name: Paulo Soares
+      role: admin
+      agent: true
+      active_tickets_count: 0
+      picture:
+        thumb20: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=20
+        thumb24: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=24
+        thumb32: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=32
+        thumb48: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=48
+        thumb64: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=64
+        thumb128: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=128
+    tickets:
+    - id: 2
+      subject: Ticket title
+      replies_count: 0
+      agent_replies_count: 0
+      comments_count: 11
+      last_activity_at: '2016-05-07T14:07:31Z'
+      created_at: '2016-05-06T19:16:31Z'
+      unanswered: true
+      archived: false
+      private: false
+      spam: false
+      trash: false
+      summary: ! "Hi test,\n        Welcome to SupportBee. You are just a few steps
+        away from using SupportBee to deliver great"
+      draft: false
+      source:
+        web: test-support@reminderhawk.com
+      cc: []
+      labels:
+      - name: important
+        color: ! '#FF0000'
+      customer_rating: {}
+      requester:
+        id: 2
+        email: support@supportbee.com
+        name: SupportBee
+        role: customer
+        agent: false
+        picture:
+          thumb20: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=20
+          thumb24: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=24
+          thumb32: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=32
+          thumb48: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=48
+          thumb64: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=64
+          thumb128: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=128
+      content:
+        html: ticket content
+        truncated: false
+        attachments: []
+  overlay:
+    projects_select: '12176000'
+    type: todo_item
+    todo_lists: '38438511'
+    title: Ticket title
+    description: ticket content
+    assign_to: none

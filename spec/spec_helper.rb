@@ -30,3 +30,22 @@ end
 class Test::Unit::Runner
   @@stop_auto_run = true
 end
+
+class HashWithIndifferentAccess < Hash
+  def initialize(hash)
+    @hash = hash
+  end
+
+  def [](key)
+    @hash[key.to_s] || @hash[key.to_sym]
+  end
+end
+
+class Faraday::Response
+  def body
+    ret = finished? ? env[:body] : nil
+    HashWithIndifferentAccess.new(JSON.parse(ret))
+  rescue
+    ret
+  end
+end

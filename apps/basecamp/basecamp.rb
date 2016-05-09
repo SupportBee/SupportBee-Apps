@@ -120,6 +120,10 @@ module Basecamp
       project_todolists_url.join(todolist_id.to_s, 'todos')
     end
 
+    def todo_item_comments_url(id)
+      project_url.join('todos', id.to_s, 'comments')
+    end
+
     def basecamp_post(url, body)
       http.post "#{url.to_s}.json" do |req|
         req.headers['Authorization'] = 'Bearer ' + token
@@ -167,8 +171,12 @@ module Basecamp
       } if assignee_id and assignee_id != 'none'
       post_body = post_body.to_json
 
-      response = basecamp_post(project_todolist_todos_url, post_body)
-      response.status == 201 ? response : false
+      create_todo_item_response = basecamp_post(project_todolist_todos_url, post_body)
+      return false if create_todo_item_response.status != 201
+      todo_item_id = create_todo_item_response.body['id']
+      create_comment_url = todo_item_comments_url(todo_item_id)
+      create_comment_response = basecamp_post(create_comment_url, {content: description}.to_json)
+      create_comment_response.status == 201 ? create_todo_item_response : false
     end
 
     def fetch_projects
