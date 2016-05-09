@@ -23,7 +23,8 @@ module Insightly
         end
 
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -40,7 +41,8 @@ module Insightly
        comment_on_ticket(ticket, html)
 
      rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]

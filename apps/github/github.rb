@@ -7,7 +7,8 @@ module Github
         html = comment_html(response)
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
       end
       [200, "Ticket sent to Github Issues"]

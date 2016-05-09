@@ -21,7 +21,8 @@ module Bigcommerce
         sent_note_to_customer(api, orders)
         ticket.comment(:html => order_html)
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
 

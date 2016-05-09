@@ -37,6 +37,7 @@ gem 'mab'
 
 group :development, :test do
   gem 'pry'
+  gem 'pry-debugger'
   gem 'awesome_print'
 end
 

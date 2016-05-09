@@ -8,7 +8,8 @@ module Asana
         return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
         comment_on_ticket ticket, comment_html(response)
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
       end
 

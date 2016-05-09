@@ -245,6 +245,10 @@ module SupportBee
       refresh
     end
 
+    def context
+      {ticket_id: id}
+    end
+
     private
 
     def to_replies_array(response)

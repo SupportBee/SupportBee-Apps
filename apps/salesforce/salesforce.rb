@@ -19,7 +19,8 @@ module Salesforce
         end
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
 

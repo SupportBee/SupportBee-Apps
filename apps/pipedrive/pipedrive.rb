@@ -21,7 +21,8 @@ module Pipedrive
           comment_on_ticket(html, ticket)
         end
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
       [200, "Ticket sent"]
