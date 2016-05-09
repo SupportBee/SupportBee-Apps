@@ -1,0 +1,24 @@
+id: 250867970
+todolist_id: 38438511
+position: 10
+content: ticket content
+completed: false
+created_at: '2016-05-07T12:08:16.563-03:00'
+updated_at: '2016-05-07T12:08:16.637-03:00'
+comments_count: 0
+private: false
+trashed: false
+due_on:
+due_at:
+creator:
+  id: 13762184
+  name: Paulo
+  avatar_url: http://cdn.37img.com/builtin/default_avatar_v1_4/avatar.gif?r=3
+  fullsize_avatar_url: https://cdn.37img.com/builtin/default_avatar_v1_4/original.gif?r=3
+url: https://basecamp.com/3385370/api/v1/projects/12176000/todos/250867970.json
+app_url: https://basecamp.com/3385370/projects/12176000/todos/250867970
+comments: []
+attachments: []
+subscribers:
+- id: 13762184
+  name: Paulo

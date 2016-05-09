@@ -1,0 +1,5 @@
+---
+Accept: '*/*'
+Authorization: 'Bearer BASECAMP_OAUTH_TOKEN'
+Content-Type: application/json
+User-Agent: Ruby

@@ -49,21 +49,21 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   target_changed: ->
     @type = @target_type_selector.val()
     @hide_everything()
+    @show_description()
     switch @type
       when 'todo_item'
         @show_todo_lists_selector()
         @populate_lists()
         @populate_people()
       when 'todo_list'
-        @hide_description()
         @reset_lists()
       when 'message'
-        @show_description()
         @reset_lists()
+
 
   hide_everything: ->
     @todo_lists_el.hide()
-    @hide_description()
+    @description_el.hide()
     @people_list_el.hide()
 
   project_changed: ->
@@ -72,7 +72,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
 
   reset_form: ->
     @reset_type()
-    
+
   reset_type: ->
     @target_type_selector.children().first().attr('selected','selected')
     @reset_lists()
@@ -100,11 +100,8 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @description_el.show()
 
   show_todo_lists_selector: ->
-    @todo_lists_el.show()    
- 
-  hide_description: ->
-    @description_el.hide()
- 
+    @todo_lists_el.show()
+
   populate_lists: ->
     @lists = new SB.Apps.BaseCollection([],
                                         endpoint: 'todo_lists',
@@ -127,13 +124,12 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
 
   render_person: (person)->
     @people_list_selector.append option_tag(person)
-    
+
 
   render_lists: ->
     console.log 'render_lists', @lists
     @lists.each @render_one_list
     @todo_lists_el.show()
-    @description_el.hide()
 
   render_one_list: (list) ->
     @todo_lists_selector.append option_tag(list)
