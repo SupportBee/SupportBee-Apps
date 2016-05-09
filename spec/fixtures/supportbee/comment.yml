@@ -1,0 +1,26 @@
+id: 36
+created_at: '2016-05-07T17:55:56Z'
+merged: false
+ticket:
+  replies_count: 0
+  agent_replies_count: 0
+  comments_count: 7
+commenter:
+  id: 1
+  email: paulo@supportbee.com
+  name: Paulo Soares
+  role: admin
+  agent: true
+  active_tickets_count: 0
+  picture:
+    thumb20: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=20
+    thumb24: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=24
+    thumb32: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=32
+    thumb48: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=48
+    thumb64: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=64
+    thumb128: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=128
+content:
+  html: comment text
+  text: comment text
+  truncated: false
+  attachments: []
