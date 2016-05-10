@@ -2,17 +2,17 @@
 :data:
   auth:
     subdomain: test
-    auth_token: AUTH_TOKEN
+    auth_token: PwGpqdqpF9PuRCRkyoog
   settings:
     basecamp: ''
     app_id: '3385370'
-    oauth_expires_at: '1463772403'
+    oauth_token: BAhbB0kiAbB7ImNsaWVudF9pZCI6IjVmZGViMzg4MzA2ZWNlZWY4MWY5ZGQzNWVlMzk0NTU3NWQ4ZDlkMGIiLCJleHBpcmVzX2F0IjoiMjAxNi0wNS0yMFQxOToyNjo0M1oiLCJ1c2VyX2lkcyI6WzI4ODc2ODU1XSwidmVyc2lvbiI6MSwiYXBpX2RlYWRib2x0IjoiYjlmZmUyNDNkYTc5ZGE4ZjFjNGE5MGZlNGRmNTI5ZmMifQY6BkVUSXU6CVRpbWUNkxIdwBMeu2oJOg1uYW5vX251bWkCCgI6DW5hbm9fZGVuaQY6DXN1Ym1pY3JvIgdSIDoJem9uZUkiCFVUQwY7AEY=--b658541a730c798466502d1c7b8bbb6c66112e78
     oauth_name: ''
     oauth_uid: ''
     oauth_secret: ''
-    oauth_refresh_token: OAUTH_REFRESH_TOKEN
-    oauth_token: BASECAMP_OAUTH_TOKEN
+    oauth_expires_at: '1463772403'
     oauth_provider: basecamp
+    oauth_refresh_token: BAhbB0kiAbB7ImNsaWVudF9pZCI6IjVmZGViMzg4MzA2ZWNlZWY4MWY5ZGQzNWVlMzk0NTU3NWQ4ZDlkMGIiLCJleHBpcmVzX2F0IjoiMjAyNi0wNS0wNlQxOToyNjo0M1oiLCJ1c2VyX2lkcyI6WzI4ODc2ODU1XSwidmVyc2lvbiI6MSwiYXBpX2RlYWRib2x0IjoiYjlmZmUyNDNkYTc5ZGE4ZjFjNGE5MGZlNGRmNTI5ZmMifQY6BkVUSXU6CVRpbWUN05AfwMwqu2oJOg1uYW5vX251bWkCfgM6DW5hbm9fZGVuaQY6DXN1Ym1pY3JvIgeJQDoJem9uZUkiCFVUQwY7AEY=--2a560cc2bb32739161351fcc55ab8c26c1c021a9
 :payload:
   payload:
     company:
@@ -33,49 +33,46 @@
         thumb64: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=64
         thumb128: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=128
     tickets:
-    - id: 2
-      subject: Ticket title
+    - id: 3
+      subject: basecamp subject
       replies_count: 0
       agent_replies_count: 0
-      comments_count: 11
-      last_activity_at: '2016-05-07T14:07:31Z'
-      created_at: '2016-05-06T19:16:31Z'
+      comments_count: 20
+      last_activity_at: '2016-05-10T17:55:47Z'
+      created_at: '2016-05-10T12:39:24Z'
       unanswered: true
       archived: false
       private: false
       spam: false
       trash: false
-      summary: ! "Hi test,\n        Welcome to SupportBee. You are just a few steps
-        away from using SupportBee to deliver great"
+      summary: basecamp body
       draft: false
       source:
-        web: test-support@reminderhawk.com
+        web: paulo@supportbe.com
       cc: []
-      labels:
-      - name: important
-        color: ! '#FF0000'
+      labels: []
       customer_rating: {}
       requester:
-        id: 2
-        email: support@supportbee.com
-        name: SupportBee
+        id: 5
+        email: basecamp@example.com
+        name: basecamp customer
         role: customer
         agent: false
         picture:
-          thumb20: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=20
-          thumb24: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=24
-          thumb32: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=32
-          thumb48: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=48
-          thumb64: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=64
-          thumb128: https://secure.gravatar.com/avatar/908906ceeb8cedb49e6cea40efbd9649.png?r=PG&s=128
+          thumb20: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=20
+          thumb24: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=24
+          thumb32: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=32
+          thumb48: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=48
+          thumb64: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=64
+          thumb128: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=128
       content:
-        html: ticket content
+        html: <div>basecamp body</div>
+        text: basecamp body
         truncated: false
         attachments: []
   overlay:
-    projects_select: '12176000'
-    type: todo_item
-    todo_lists: '38438511'
-    title: Ticket title
-    description: ticket content
-    assign_to: none
+    projects_select: '12175992'
+    type: message
+    title: basecamp subject
+    description: ! "  basecamp body \\n\r\n  https://test.supportbee.com/tickets/3\r\n
+      \         "
