@@ -1,7 +1,7 @@
 development:
   app_platform:
-    core_app_base_domain: https://supportbee.com
-    core_app_port:
+    core_app_base_domain: lvh.me
+    core_app_port: 3000
     core_app_protocol: http
     cloudfront_base_url: http://localhost:9292
     redis:
@@ -10,8 +10,8 @@ development:
 
 test:
   app_platform:
-    core_app_base_domain: https://supportbee.com
-    core_app_port:
+    core_app_base_domain: lvh.me
+    core_app_port: 3000
     core_app_protocol: http
     cloudfront_base_url: http://localhost:9292
     redis:
