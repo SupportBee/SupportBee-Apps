@@ -37,6 +37,7 @@ gem 'mab'
 
 group :development, :test do
   gem 'pry'
+  gem 'pry-debugger'
   gem 'awesome_print'
 end
 
@@ -46,6 +47,7 @@ end
 
 group :test do
   gem 'rspec'
+  gem 'vcr'
   gem 'rack-test', :require => 'rack/test'
   gem 'flexmock'
   gem 'webmock', :require => false

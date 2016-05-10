@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'yaml'
-require 'pry'
 
 describe Basecamp do
   let(:todo_item) { YAML.load_file('spec/fixtures/basecamp/todo_item.yml')}

@@ -1,0 +1,254 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/tasks
+    body:
+      encoding: US-ASCII
+      string: ! '{"title":"insightly subject","details":"  insightly body\r\n  https://test.supportbee.com/tickets/3\r\n          ","project_id":null,"completed":false,"publicly_visible":true,"responsible_user_id":"1123592","owner_user_id":"1123592"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - '-1'
+      Location:
+      - https://api.insight.ly/v2.1/tasks/40183003
+      Server:
+      - Microsoft-IIS/7.5
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Tue, 10 May 2016 17:24:27 GMT
+      Content-Length:
+      - '651'
+      Set-Cookie:
+      - snaptid=sac1prdc01ut03; path=/; HttpOnly; Secure
+    body:
+      encoding: US-ASCII
+      string: ! '{"TASK_ID":40183003,"Title":"insightly subject","CATEGORY_ID":null,"DUE_DATE":null,"COMPLETED_DATE_UTC":null,"PUBLICLY_VISIBLE":true,"COMPLETED":false,"PROJECT_ID":null,"DETAILS":"  insightly
+        body\r\n  https://test.supportbee.com/tickets/3\r\n          ","STATUS":"NOT
+        STARTED","PRIORITY":null,"PERCENT_COMPLETE":0,"START_DATE":null,"ASSIGNED_BY_USER_ID":null,"PARENT_TASK_ID":null,"OWNER_VISIBLE":false,"RESPONSIBLE_USER_ID":1123592,"ASSIGNED_TEAM_ID":null,"ASSIGNED_DATE_UTC":null,"OWNER_USER_ID":1123592,"DATE_CREATED_UTC":"2016-05-10
+        17:24:27","DATE_UPDATED_UTC":"2016-05-10 17:24:27","REMINDER_DATE_UTC":null,"REMINDER_SENT":false,"TASKLINKS":[]}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 17:24:08 GMT
+- request:
+    method: get
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/Contacts?email=insightly@example.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: !binary |-
+        T0s=
+    headers:
+      !binary "Q2FjaGUtQ29udHJvbA==":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "UHJhZ21h":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "Q29udGVudC1UeXBl":
+      - !binary |-
+        YXBwbGljYXRpb24vanNvbjsgY2hhcnNldD11dGYtOA==
+      !binary "Q29udGVudC1FbmNvZGluZw==":
+      - !binary |-
+        Z3ppcA==
+      !binary "RXhwaXJlcw==":
+      - !binary |-
+        LTE=
+      !binary "VmFyeQ==":
+      - !binary |-
+        QWNjZXB0LUVuY29kaW5n
+      !binary "U2VydmVy":
+      - !binary |-
+        TWljcm9zb2Z0LUlJUy83LjU=
+      !binary "WC1Qb3dlcmVkLUJ5":
+      - !binary |-
+        QVNQLk5FVA==
+      !binary "RGF0ZQ==":
+      - !binary |-
+        VHVlLCAxMCBNYXkgMjAxNiAxNzoyNDoyOSBHTVQ=
+      !binary "Q29udGVudC1MZW5ndGg=":
+      - !binary |-
+        NTQ4
+      !binary "U2V0LUNvb2tpZQ==":
+      - !binary |-
+        c25hcHRpZD1zYWMxcHJkYzAxdXQwNTsgcGF0aD0vOyBIdHRwT25seTsgU2Vj
+        dXJl
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAEAO29B2AcSZYlJi9tynt/SvVK1+B0oQiAYBMk2JBAEOzBiM3m
+        kuwdaUcjKasqgcplVmVdZhZAzO2dvPfee++999577733ujudTif33/8/XGZk
+        AWz2zkrayZ4hgKrIHz9+fB8/Ir73iz86+fLFm+OTN7//2dOPHu0+2NnfffBg
+        79PRR6+Pn3/15vjN2ZcvPnr0UZs37Uejj56dvXr95vd/cfzFKX22bvKaPnt+
+        bD9arsty9NGT45Pf6/NXX371guDJJ2dfHH9++vt/9eo5vTVv29Wju3ebe+Ns
+        kf2gWmZXzXhaLe4Wy6a4mLfl9Rhwz4syb+5++um9ew/271InT0+fHX/1/M3v
+        //zsxe91+vT3//LV58cvzl4rdtLJl999cfrq9//qNf3DI9ndu3f/4R69evzm
+        9Pc/eXVKP57+/l+9OSEc9nZ2P93eub+9u5Pufvro/v6jnYfog1r8/l+9xI/N
+        DX/y7PXZk+env/+bL6nJ6U+evvp9vnxx6n9+evwF4yCImY8Vtdfm85OvXr/5
+        8otnZ6fP8dn3vj/66Pjp01enr1+f6p86MWcvnn2JT7yZok8I0keP9h7ufLq/
+        v7t7b/TRm9/nJc3AR6dfHJ89J1xef/VEPpG+nh8/OQX1v/vlq9+Lvn16+gbN
+        Hn1kqf575u+yxarMMRcf/RLqHGRAr/Trm+PP9TeQX39VXLxPuGv79y/5/v8D
+        6gfrYVsCAAA=
+    http_version: 
+  recorded_at: Tue, 10 May 2016 17:24:09 GMT
+- request:
+    method: post
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/notes
+    body:
+      encoding: US-ASCII
+      string: ! '{"title":"insightly subject","body":"  insightly body\r\n  https://test.supportbee.com/tickets/3\r\n          ","link_subject_type":"CONTACT","link_subject_id":170417726}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - '-1'
+      Location:
+      - https://api.insight.ly/v2.1/notes/35935518
+      Server:
+      - Microsoft-IIS/7.5
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Tue, 10 May 2016 17:24:30 GMT
+      Content-Length:
+      - '548'
+      Set-Cookie:
+      - snaptid=sac1prdc01ut04; path=/; HttpOnly; Secure
+    body:
+      encoding: US-ASCII
+      string: ! '{"NOTE_ID":35935518,"TITLE":"insightly subject","BODY":"  insightly
+        body\r\n  https://test.supportbee.com/tickets/3\r\n          ","LINK_SUBJECT_ID":170417726,"LINK_SUBJECT_TYPE":"CONTACT","OWNER_USER_ID":1123592,"DATE_CREATED_UTC":"2016-05-10
+        17:24:31","DATE_UPDATED_UTC":"2016-05-10 17:24:31","VISIBLE_TO":"EVERYONE","VISIBLE_TEAM_ID":null,"VISIBLE_USER_IDS":null,"FILE_ATTACHMENTS":[],"NOTELINKS":[{"NOTE_LINK_ID":38315462,"NOTE_ID":35935518,"CONTACT_ID":170417726,"ORGANISATION_ID":null,"OPPORTUNITY_ID":null,"PROJECT_ID":null,"LEAD_ID":null}]}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 17:24:11 GMT
+- request:
+    method: post
+    uri: http://test.lvh.me:3000/tickets/3/comments?auth_token=rDzBZvhyaPHWS6fuUasP
+    body:
+      encoding: US-ASCII
+      string: comment%5Bcontent_attributes%5D%5Bbody_html%5D=Insightly+Task+Created%21%3Cbr%2F%3E%3Cb%3E%3Ca+href%3D%27https%3A%2F%2Fwwwxu7wn.insight.ly%2FTasks%2FTaskDetails%2F40183003%27%3Einsightly+subject%3C%2Fa%3E%3C%2Fb%3E
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"48c2903752a68db4466e7a3968ee9eed"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiGXdhcmRlbi51c2VyLnVzZXIua2V5BjoGRVRbCEkiCVVzZXIGOwBGWwZpCUkiAAY7AFRJIg9zZXNzaW9uX2lkBjsARkkiJTRiYjc0YjM1M2FiZDYzOTRiNzlkYjljM2Y3MmRiZDAyBjsAVA%3D%3D--8a75e24521a705af87c92c3941787b43cd2a4d60;
+        path=/; HttpOnly
+      X-Request-Id:
+      - 01fe835803221ff1dd98b20b235e8785
+      X-Runtime:
+      - '0.652341'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"comment":{"id":59,"created_at":"2016-05-10T17:24:11Z","merged":false,"ticket":{"replies_count":0,"agent_replies_count":0,"comments_count":16},"commenter":{"id":4,"email":"app.1.insightly@appuser.supportbeemail.com","name":"Insightly","role":null,"agent":false,"active_tickets_count":0,"picture":{"thumb20":"http://localhost:9292/images/insightly/icon.png","thumb24":"http://localhost:9292/images/insightly/icon.png","thumb32":"http://localhost:9292/images/insightly/icon.png","thumb48":"http://localhost:9292/images/insightly/icon.png","thumb64":"http://localhost:9292/images/insightly/icon.png","thumb128":"http://localhost:9292/images/insightly/icon.png"}},"content":{"html":"Insightly
+        Task Created!<br><b><a href=\"https://wwwxu7wn.insight.ly/Tasks/TaskDetails/40183003\">insightly
+        subject</a></b>","text":"Insightly Task Created!\ninsightly subject (https://wwwxu7wn.insight.ly/Tasks/TaskDetails/40183003)","truncated":false,"attachments":[]}}}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 17:24:12 GMT
+- request:
+    method: get
+    uri: http://test.lvh.me:3000/tickets/3?auth_token=rDzBZvhyaPHWS6fuUasP
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"a151a87bee76ac515944a43f3e764a9e"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJWM0MzU3NDI5N2NiZmRmNzQ5MDkwNDU4YzU5MDM0OTdhBjsAVEkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsISSIJVXNlcgY7AEZbBmkJSSIABjsAVA%3D%3D--718eb50ce0c7fd70d49b0dd6ade3158f08d56d06;
+        path=/; HttpOnly
+      X-Request-Id:
+      - 83bc1fd01fa5391e6662ec7f1768286f
+      X-Runtime:
+      - '0.175593'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"ticket":{"id":3,"subject":"insightly subject","replies_count":0,"agent_replies_count":0,"comments_count":16,"last_activity_at":"2016-05-10T17:24:11Z","created_at":"2016-05-10T12:39:24Z","unanswered":true,"archived":false,"private":false,"spam":false,"trash":false,"summary":"insightly
+        body","draft":false,"source":{"web":"paulo@supportbe.com"},"cc":[],"labels":[],"customer_rating":{},"requester":{"id":5,"email":"insightly@example.com","name":"insightly
+        customer","role":"customer","agent":false,"picture":{"thumb20":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=20","thumb24":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=24","thumb32":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=32","thumb48":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=48","thumb64":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=64","thumb128":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=128"}},"content":{"html":"<div>insightly
+        body</div>","text":"insightly body","truncated":false,"attachments":[]},"starred":false}}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 17:24:12 GMT
+recorded_with: VCR 3.0.1
