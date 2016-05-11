@@ -19,10 +19,11 @@ module Salesforce
         end
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
-      
+
       [200, "Ticket sent to Salesforce"]
     end
   end
@@ -44,11 +45,11 @@ module Salesforce
         :client_id => OMNIAUTH_CONFIG['salesforce']['key'],
         :client_secret => OMNIAUTH_CONFIG['salesforce']['secret']
     end
-    
+
     def create_new_contact(requester)
       create_contact(requester)
     end
-    
+
     def create_contact(requester)
       return unless settings.should_create_contact.to_s == '1'
       firstname = split_name(requester).first
@@ -60,11 +61,11 @@ module Salesforce
     def find_contact_by_id(id)
       @client.find('Contact', id)
     end
-    
+
     def split_name(requester)
       requester.name ? requester.name.split(' ') : [requester.email,'']
     end
-   
+
     def new_contact_info_html(contact)
       "Added #{contact.Name} to Salesforce... \n #{contact_url(contact)}"
     end
@@ -81,15 +82,15 @@ module Salesforce
       email_id = @client.search("FIND {#{email}}")
       find_contact_by_id(email_id[0]['Id']) rescue nil
     end
-    
+
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
-    
+
     def contact_url(contact)
       "<a href='#{@client.instance_url}/#{contact.Id}'>View #{contact.Name}'s profile on Salesforce</a>"
     end
-    
+
     def send_note(ticket, contact)
       @client.create('Note', { "Body" => generate_note_content(ticket), "ParentId" => contact.Id, "Title" => ticket.summary })
 
@@ -104,4 +105,3 @@ module Salesforce
 
   end
 end
-

@@ -1,0 +1,9 @@
+---
+api_key: 'de6ea413'
+report_data: true
+# Disable user feedback forms
+# http://docs.honeybadger.io/lib/ruby.html#configuration
+"feedback.enabled": false
+# Don't send auth tokens to honeybadger
+"request.filter_keys":
+  - auth_token

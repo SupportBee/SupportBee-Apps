@@ -24,8 +24,8 @@ module Basecamp
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Basecamp"}']
       rescue Exception => e
-        puts e.message
-        puts e.backtrace.join("\n")
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, {message: e.message}]
       end
     end
@@ -212,4 +212,3 @@ module Basecamp
     end
   end
 end
-

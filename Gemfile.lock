@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/SupportBee/ErrorReporter.git
+  revision: 9b6e735925ef8a4bdcb8f900cda25ac85f3a3902
+  specs:
+    error-reporter (0.1.0)
+      honeybadger (= 2.2.0)
+
+GIT
   remote: https://github.com/SupportBee/multimap.git
   revision: 74bad36739a76406272203a9de361c02e9357e69
   tag: v1.1.2
@@ -63,6 +70,7 @@ GEM
       activeresource (~> 3.0)
     hipchat (0.7.0)
       httparty
+    honeybadger (2.2.0)
     htmlentities (4.3.1)
     httmultiparty (0.3.10)
       httparty (>= 0.7.3)
@@ -204,6 +212,7 @@ DEPENDENCIES
   awesome_print
   bigcommerce (~> 0.8.2)
   coffee-script
+  error-reporter!
   evernote-thrift
   execjs
   faraday

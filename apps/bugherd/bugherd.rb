@@ -9,6 +9,8 @@ module Bugherd
         html = task_info_html(ticket, task)
         comment_on_ticket(ticket, html)
       rescue Exception => e
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
       end
 
@@ -26,7 +28,7 @@ module Bugherd
 
   class Base < SupportBeeApp::Base
     string :token, :required => true, :label => 'Bugherd Api Key', :hint => 'Login to your Bugherd account, go to Settings > General Settings'
-    string :project_id, :required => true, :label => 'Project ID' 
+    string :project_id, :required => true, :label => 'Project ID'
 
     def validate
       return false unless required_fields_present?
@@ -43,18 +45,18 @@ module Bugherd
             "description" => description,
             "priority" => "normal",
             "status" => "backlog"
-          }  
+          }
         }.to_json
       end
       raise ProjectNotFound if response.status == 404
       send_comment(ticket, response.body) if response.status == 201
-      response.body    
+      response.body
     end
 
     def task_info_html(ticket, task)
       "Bugherd Task Created!\n <a href='#{task['task']['admin_link']}'>#{ticket.subject}</a>"
     end
-    
+
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
@@ -111,4 +113,3 @@ module Bugherd
 
   end
 end
-

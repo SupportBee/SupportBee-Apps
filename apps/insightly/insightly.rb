@@ -23,7 +23,8 @@ module Insightly
         end
 
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -39,7 +40,8 @@ module Insightly
        html = task_created_html(task)
        ticket.comment(:html => html)
      rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]

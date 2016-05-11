@@ -6,12 +6,12 @@ module ZohoCrm
         return if ticket.trash || ticket.spam
 
         setup_zoho
-        requester = ticket.requester 
+        requester = ticket.requester
         contact = find_contact(requester)
 
         unless contact
           return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
- 
+
           contact =  create_new_contact(requester)
           html = new_contact_info_html(contact)
 
@@ -23,7 +23,8 @@ module ZohoCrm
 
         comment_on_ticket(ticket, html)
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
 
@@ -50,27 +51,27 @@ module ZohoCrm
     def setup_zoho
       RubyZoho.configure do |config|
         config.api_key = settings.api_token
-        config.crm_modules = ['Accounts', 'Contacts', 'Leads', 'Potentials']    
+        config.crm_modules = ['Accounts', 'Contacts', 'Leads', 'Potentials']
       end
     end
 
     def create_new_contact(requester)
       contact =  create_contact(requester)
     end
-  
+
     def create_contact(requester)
      return unless settings.should_create_contact.to_s == '1'
      firstname = split_name(requester).first
      lastname = split_name(requester).last
      new_contact = RubyZoho::Crm::Contact.new(
-                    :first_name => firstname, 
+                    :first_name => firstname,
                     :last_name => lastname,
                     :email => requester.email
                   )
      created_contact = new_contact.save
      find_contact(created_contact)
     end
-    
+
     def contact_url(contact)
       "<a href='https://crm.zoho.com/crm/ShowEntityInfo.do?id=#{contact.contactid}&module=Contacts&isload=true'>View #{contact.first_name}'s profile on ZohoCrm</a>"
     end
@@ -78,15 +79,15 @@ module ZohoCrm
     def split_name(requester)
       requester.name ? requester.name.split(' ') : [requester.email,'']
     end
-     
+
     def find_contact(requester)
       RubyZoho::Crm::Contact.find_by_email(requester.email).first rescue nil
     end
-		
+
     def contact_info_html(contact)
       html = ""
       html << "<b> #{contact.first_name} #{contact.last_name}</b><br/>"
-      html << "#{contact.department} <br/>" if contact.respond_to?(:department) 
+      html << "#{contact.department} <br/>" if contact.respond_to?(:department)
       html << contact_url(contact)
       html
     end
@@ -97,11 +98,11 @@ module ZohoCrm
       html << contact_url(contact)
       html
     end
-    
+
      def comment_on_ticket(ticket, html)
         ticket.comment(:html => html)
     end
-    
+
     def send_note(ticket, contact)
       requestid = contact.id
       ownerid = contact.smownerid
@@ -113,7 +114,7 @@ module ZohoCrm
         req.body = %Q(<Notes><row no="1"><FL val="entityId">#{requestid}</FL><FL val="SMOWNERID">#{ownerid}</FL><FL val="Note Title">New Ticket</FL><FL val="Note Content">#{generate_note_content(ticket)}</FL></row> </Notes>)
         req.params[:xmlData] = req.body
       end
-     
+
     end
 
     def generate_note_content(ticket)
@@ -153,8 +154,6 @@ module ZohoCrm
     def api_response_has_admin_users?(response)
       JSON.parse(response.body).has_key?("users")
     end
- 
+
   end
 end
-
-

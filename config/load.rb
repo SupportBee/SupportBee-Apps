@@ -54,4 +54,5 @@ if PLATFORM_ENV == 'development'
   require 'pry'
 end
 
+require 'error-reporter'
 require "#{PLATFORM_ROOT}/run_app"

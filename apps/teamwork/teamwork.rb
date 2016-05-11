@@ -4,7 +4,7 @@ module Teamwork
       ticket = payload.tickets.first
       html = ''
       begin
-        result = 
+        result =
           case payload.overlay.type
           when 'todo_list'
             response = create_todo_list
@@ -15,13 +15,13 @@ module Teamwork
             html = todo_html_comment(response.headers['location']) if response and response.success?
             response
           end
-        
+
         return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless response.success?
         comment_on_ticket(ticket, html)
         return [200, '{"message": "Ticket sent to Teamwork"}']
       rescue Exception => e
-        puts e.message
-        puts e.backtrace.join("\n")
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, {message: e.message}]
       end
     end
@@ -42,24 +42,24 @@ end
 
 module Teamwork
   class Base < SupportBeeApp::Base
-    
-    string :token, 
-      required: true, 
-      label: 'Enter Your Teamwork Auth Token', 
+
+    string :token,
+      required: true,
+      label: 'Enter Your Teamwork Auth Token',
       hint: 'Your API token can be found by logging into your TeamworkPM account, clicking your avatar in the top right and choosing Edit my details. On the API tab of the dialog click the "Show your token" at the bottom (under "API Authentication tokens").'
 
     def validate
-      
+
       return true if validate_api_token
       errors[:token] = ["The API Token doesn't look right"]
       false
     end
-    
+
     def validate_api_token
       account_details_req = teamwork_get(authentication_url)
       if account_details_req.success?
         store.set 'URL', url = (JSON.parse(account_details_req.body))["account"]["URL"]
-        return true 
+        return true
       end
       return false
     end
@@ -84,7 +84,7 @@ module Teamwork
     end
 
     def teamwork_get(url)
-      connection(url).get 
+      connection(url).get
     end
 
     def token
@@ -111,7 +111,7 @@ module Teamwork
       default_value_when_not_specifically_assigned = -1
       payload.overlay.assign_to == "none" ? default_value_when_not_specifically_assigned : payload.overlay.assign_to
     end
-    
+
     private
 
     def projects_url
@@ -143,7 +143,7 @@ module Teamwork
         req.body = body
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
-      end 
+      end
     end
 
     def create_todo_list
@@ -151,8 +151,8 @@ module Teamwork
 
       post_body = ({
         'todo-list' => {
-          :name => title, 
-          :description => _description 
+          :name => title,
+          :description => _description
         }
       }).to_json
 
@@ -189,7 +189,7 @@ module Teamwork
     def todolist_html_comment(url)
       "Teamwork Task List created! - <a href='#{url}'>#{title}</a>"
     end
-    
+
     def todo_html_comment(url)
       "Teamwork Task created! - <a href='#{url}'>#{title}</a>"
     end
@@ -199,4 +199,3 @@ module Teamwork
     end
   end
 end
-
