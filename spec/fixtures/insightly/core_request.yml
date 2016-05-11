@@ -1,19 +1,15 @@
 ---
-:data:
+data:
   auth:
     subdomain: test
-    auth_token: PwGpqdqpF9PuRCRkyoog
+    auth_token: rDzBZvhyaPHWS6fuUasP
   settings:
-    basecamp: ''
-    app_id: '3385370'
-    oauth_token: BAhbB0kiAbB7ImNsaWVudF9pZCI6IjVmZGViMzg4MzA2ZWNlZWY4MWY5ZGQzNWVlMzk0NTU3NWQ4ZDlkMGIiLCJleHBpcmVzX2F0IjoiMjAxNi0wNS0yMFQxOToyNjo0M1oiLCJ1c2VyX2lkcyI6WzI4ODc2ODU1XSwidmVyc2lvbiI6MSwiYXBpX2RlYWRib2x0IjoiYjlmZmUyNDNkYTc5ZGE4ZjFjNGE5MGZlNGRmNTI5ZmMifQY6BkVUSXU6CVRpbWUNkxIdwBMeu2oJOg1uYW5vX251bWkCCgI6DW5hbm9fZGVuaQY6DXN1Ym1pY3JvIgdSIDoJem9uZUkiCFVUQwY7AEY=--b658541a730c798466502d1c7b8bbb6c66112e78
-    oauth_name: ''
-    oauth_uid: ''
-    oauth_secret: ''
-    oauth_expires_at: '1463772403'
-    oauth_provider: basecamp
-    oauth_refresh_token: BAhbB0kiAbB7ImNsaWVudF9pZCI6IjVmZGViMzg4MzA2ZWNlZWY4MWY5ZGQzNWVlMzk0NTU3NWQ4ZDlkMGIiLCJleHBpcmVzX2F0IjoiMjAyNi0wNS0wNlQxOToyNjo0M1oiLCJ1c2VyX2lkcyI6WzI4ODc2ODU1XSwidmVyc2lvbiI6MSwiYXBpX2RlYWRib2x0IjoiYjlmZmUyNDNkYTc5ZGE4ZjFjNGE5MGZlNGRmNTI5ZmMifQY6BkVUSXU6CVRpbWUN05AfwMwqu2oJOg1uYW5vX251bWkCfgM6DW5hbm9fZGVuaQY6DXN1Ym1pY3JvIgeJQDoJem9uZUkiCFVUQwY7AEY=--2a560cc2bb32739161351fcc55ab8c26c1c021a9
-:payload:
+    api_key: 5fce143c-c8c8-4c49-8add-a89d9c473ee0
+    subdomain: wwwxu7wn
+    tagged_name: ''
+    tag_contacts: '0'
+    sync_contacts: '1'
+payload:
   payload:
     company:
       subdomain: test
@@ -34,18 +30,18 @@
         thumb128: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=128
     tickets:
     - id: 3
-      subject: basecamp subject
+      subject: insightly subject
       replies_count: 0
       agent_replies_count: 0
-      comments_count: 20
-      last_activity_at: '2016-05-10T17:55:47Z'
+      comments_count: 4
+      last_activity_at: '2016-05-10T15:02:18Z'
       created_at: '2016-05-10T12:39:24Z'
       unanswered: true
       archived: false
       private: false
       spam: false
       trash: false
-      summary: basecamp body
+      summary: insightly body
       draft: false
       source:
         web: paulo@supportbe.com
@@ -54,8 +50,8 @@
       customer_rating: {}
       requester:
         id: 5
-        email: basecamp@example.com
-        name: basecamp customer
+        email: insightly@example.com
+        name: insightly customer
         role: customer
         agent: false
         picture:
@@ -66,13 +62,13 @@
           thumb64: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=64
           thumb128: https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=128
       content:
-        html: <div>basecamp body</div>
-        text: basecamp body
+        html: <div>insightly body</div>
+        text: insightly body
         truncated: false
         attachments: []
   overlay:
-    projects_select: '12175992'
-    type: message
-    title: basecamp subject
-    description: ! "  basecamp body \\n\r\n  https://test.supportbee.com/tickets/3\r\n
+    title: insightly subject
+    description: ! "  insightly body\r\n  https://test.supportbee.com/tickets/3\r\n
       \         "
+    responsible_select: '1123592'
+    owner_select: '1123592'

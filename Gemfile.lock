@@ -194,6 +194,7 @@ GEM
     unicorn (3.7.0)
       kgio (~> 2.3)
       rack
+    vcr (3.0.1)
     wasabi (3.0.0)
       httpi (~> 2.0)
       nokogiri (>= 1.4.0)
@@ -249,6 +250,7 @@ DEPENDENCIES
   timecop
   tinder
   unicorn (= 3.7.0)
+  vcr
   webmock
 
 BUNDLED WITH

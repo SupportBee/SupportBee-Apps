@@ -47,6 +47,7 @@ end
 
 group :test do
   gem 'rspec'
+  gem 'vcr'
   gem 'rack-test', :require => 'rack/test'
   gem 'flexmock'
   gem 'webmock', :require => false
