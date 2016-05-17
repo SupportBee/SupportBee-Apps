@@ -13,7 +13,7 @@ describe SupportBeeApp::Base do
 
       it "should set name" do
         Dummy::Base.name.should == 'Dummy'
-      end 
+      end
 
       it "should set slug" do
         Dummy::Base.slug.should == 'dummy'
@@ -53,7 +53,7 @@ describe SupportBeeApp::Base do
 
     describe "api_hash" do
       it "should have the right event handler methods" do
-        expect(Dummy::Base.api_hash['events']).to eq(['ticket.created', 'ticket.updated', 'reply.created', 'reply.updated'])
+        (Dummy::Base.api_hash['events']).should == ['ticket.created', 'ticket.updated', 'reply.created', 'reply.updated']
       end
     end
 
@@ -73,7 +73,7 @@ describe SupportBeeApp::Base do
     end
 
     it "should have a store" do
-      app = create_dummy_instance 
+      app = create_dummy_instance
       app.store.should be_kind_of(SupportBeeApp::Store)
       app.store.redis_key_prefix.should == "#{app.class.slug}:#{app.auth.subdomain}"
     end
@@ -113,7 +113,7 @@ describe SupportBeeApp::Base do
           }.should_not raise_error
         end
       end
-      context "Action" do 
+      context "Action" do
         it "should trigger a action" do
           dummy = create_dummy_instance
           flexmock(dummy).should_receive(:action_button).once

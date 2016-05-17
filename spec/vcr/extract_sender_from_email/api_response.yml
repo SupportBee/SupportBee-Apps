@@ -1,0 +1,178 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: http://test.lvh.me:3000/tickets/8/requester?auth_token=pggZFqQFX1anQPxjQXCT
+    body:
+      encoding: US-ASCII
+      string: requester%5Bemail%5D=zack4691%40gmail.com
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"b8cda9d083c13b08a34b29cf7df49fc5"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiGXdhcmRlbi51c2VyLnVzZXIua2V5BjoGRVRbCEkiCVVzZXIGOwBGWwZpC0kiAAY7AFRJIg9zZXNzaW9uX2lkBjsARkkiJTg0ZDM2ODQxN2YyOWYwOTdkZDkyYjRlNzI3ZDQ4MzE2BjsAVA%3D%3D--b4bd736826970d1e692e84afe63121f1cbf262f0;
+        path=/; HttpOnly
+      X-Request-Id:
+      - ad406fa2893705242d9d30512551894f
+      X-Runtime:
+      - '0.288667'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"user":{"auto_assign":true,"email":"newemail@example.com","first_name":null,"last_name":null}}'
+    http_version: 
+  recorded_at: Tue, 17 May 2016 19:17:42 GMT
+- request:
+    method: get
+    uri: http://test.lvh.me:3000/tickets/8?auth_token=pggZFqQFX1anQPxjQXCT
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"f53c7c0ebdfea385d555dee3ef14fbae"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJWE2ZDdjMmQ1YTVlOTFmNjkxOTJhZDY2OGQzYWM5M2JhBjsAVEkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsISSIJVXNlcgY7AEZbBmkLSSIABjsAVA%3D%3D--0b23830787c2779284e3562cc6d8c43d1f4f9a0b;
+        path=/; HttpOnly
+      X-Request-Id:
+      - ef32e113b9566dbeec17e5ce07fe645d
+      X-Runtime:
+      - '0.072847'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"ticket":{"id":8,"subject":"subject","replies_count":0,"agent_replies_count":0,"comments_count":10,"last_activity_at":"2016-05-17T19:10:01Z","created_at":"2016-05-16T14:14:32Z","unanswered":true,"archived":false,"private":false,"spam":false,"trash":false,"summary":"Ticket
+        body","draft":false,"source":{"web":"paulo@supportbe.com"},"cc":[],"labels":[],"customer_rating":{},"requester":{"id":20,"email":"newemail@example.com","name":null,"role":"customer","agent":false,"picture":{"thumb20":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=20","thumb24":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=24","thumb32":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=32","thumb48":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=48","thumb64":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=64","thumb128":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=128"}},"content":{"html":"Ticket
+        body","text":"Ticket body","truncated":false,"attachments":[]},"starred":false}}'
+    http_version: 
+  recorded_at: Tue, 17 May 2016 19:17:42 GMT
+- request:
+    method: post
+    uri: http://test.lvh.me:3000/tickets/8/comments?auth_token=pggZFqQFX1anQPxjQXCT
+    body:
+      encoding: US-ASCII
+      string: comment%5Bcontent_attributes%5D%5Bbody_html%5D=%3Cp%3ETicket%27s+sender+changed+to+zack4691%40gmail.com%3C%2Fp%3E
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"c7e0a78493b0fbddb8aa9b52bd44bd73"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiGXdhcmRlbi51c2VyLnVzZXIua2V5BjoGRVRbCEkiCVVzZXIGOwBGWwZpC0kiAAY7AFRJIg9zZXNzaW9uX2lkBjsARkkiJWY3MTI2MGYzZjIwNDI4ZjcyYTA5Mzc4ZjgyMDVkMTU4BjsAVA%3D%3D--2a7bcf6443ae73a385884d4ce169bdd45a5e3786;
+        path=/; HttpOnly
+      X-Request-Id:
+      - 19c91a9c2cc549ef04f79d442ff49591
+      X-Runtime:
+      - '1.479726'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"comment":{"id":83,"created_at":"2016-05-17T19:17:42Z","merged":false,"ticket":{"replies_count":0,"agent_replies_count":0,"comments_count":11},"commenter":{"id":6,"email":"app.1.extract_sender_from_email@appuser.supportbeemail.com","name":"Corporate
+        Email Forward","role":null,"agent":false,"active_tickets_count":0,"picture":{"thumb20":"http://localhost:9292/images/extract_sender_from_email/icon.png","thumb24":"http://localhost:9292/images/extract_sender_from_email/icon.png","thumb32":"http://localhost:9292/images/extract_sender_from_email/icon.png","thumb48":"http://localhost:9292/images/extract_sender_from_email/icon.png","thumb64":"http://localhost:9292/images/extract_sender_from_email/icon.png","thumb128":"http://localhost:9292/images/extract_sender_from_email/icon.png"}},"content":{"html":"<p>Ticket''s
+        sender changed to newemail@example.com</p>","text":"Ticket''s sender changed
+        to newemail@example.com","truncated":false,"attachments":[]}}}'
+    http_version: 
+  recorded_at: Tue, 17 May 2016 19:17:43 GMT
+- request:
+    method: get
+    uri: http://test.lvh.me:3000/tickets/8?auth_token=pggZFqQFX1anQPxjQXCT
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"a8ad2aa89e894bac99fb8f723ce208fa"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJTk1ZDgxNzhlODEwOTVlNTZiNGQwNDVmOWExNzhkYjE1BjsAVEkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsISSIJVXNlcgY7AEZbBmkLSSIABjsAVA%3D%3D--0e240d55772047bd8373382df4954e903b703081;
+        path=/; HttpOnly
+      X-Request-Id:
+      - a3d3d9edf74e1d81ecdc75155d96f593
+      X-Runtime:
+      - '0.060607'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"ticket":{"id":8,"subject":"subject","replies_count":0,"agent_replies_count":0,"comments_count":11,"last_activity_at":"2016-05-17T19:17:42Z","created_at":"2016-05-16T14:14:32Z","unanswered":true,"archived":false,"private":false,"spam":false,"trash":false,"summary":"Ticket
+        body","draft":false,"source":{"web":"paulo@supportbe.com"},"cc":[],"labels":[],"customer_rating":{},"requester":{"id":20,"email":"newemail@example.com","name":null,"role":"customer","agent":false,"picture":{"thumb20":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=20","thumb24":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=24","thumb32":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=32","thumb48":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=48","thumb64":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=64","thumb128":"https://secure.gravatar.com/avatar/bf168af3cccc78507058e6a46213ae47.png?r=PG&s=128"}},"content":{"html":"Ticket
+        body","text":"Ticket body","truncated":false,"attachments":[]},"starred":false}}'
+    http_version: 
+  recorded_at: Tue, 17 May 2016 19:17:43 GMT
+recorded_with: VCR 3.0.1

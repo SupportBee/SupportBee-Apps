@@ -3,6 +3,7 @@ module SupportBee
    class InvalidSubDomain < ::StandardError; end
    class InvalidRequestError < ::StandardError; end
    class AssignmentError < ::StandardError; end
+   class TicketUpdateError < ::StandardError; end
 
   class Base
     extend HttpHelper

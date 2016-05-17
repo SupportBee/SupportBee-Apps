@@ -1,0 +1,53 @@
+---
+:data:
+  auth:
+    subdomain: test
+    auth_token: pggZFqQFX1anQPxjQXCT
+  settings:
+    look_for_email_on_every_response:
+    always_extract: '1'
+:payload:
+  payload:
+    action_type: ticket.created
+    company:
+      subdomain: test
+      name: test
+    ticket:
+      id: 8
+      subject: subject
+      replies_count: 0
+      agent_replies_count: 0
+      comments_count: 0
+      last_activity_at: '2016-05-16T14:14:32Z'
+      created_at: '2016-05-16T14:14:32Z'
+      unanswered: true
+      archived: false
+      private: false
+      spam: false
+      trash: false
+      summary: Ticket body
+      draft: false
+      url: http://test.lvh.me:3000/tickets/8
+      source:
+        web: paulo@supportbe.com
+      cc: []
+      labels: []
+      customer_rating: {}
+      requester:
+        id: 11
+        email: payload@example.com
+        name: customer name
+        role: customer
+        agent: false
+        picture:
+          thumb20: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=20
+          thumb24: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=24
+          thumb32: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=32
+          thumb48: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=48
+          thumb64: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=64
+          thumb128: https://secure.gravatar.com/avatar/af76cf12a93683c1b9a6e06541f9b93a.png?r=PG&s=128
+      content:
+        html: Ticket body
+        text: Ticket body
+        truncated: false
+        attachments: []
