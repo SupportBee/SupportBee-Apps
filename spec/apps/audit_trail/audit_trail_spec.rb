@@ -19,7 +19,7 @@ describe AuditTrail do
   end
 
   describe '#ticket_assigned_to_agent' do
-    let(:event_name) { 'ticket.assigned.to.agent' }
+    let(:event_name) { 'ticket.assigned.to.user' }
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
@@ -59,7 +59,7 @@ describe AuditTrail do
               'name' => 'Dee Dee',
               'email' => 'deedee@labs.com'
             },
-            'assignment' => {
+            'user_assignment' => {
               'id' => 1,
               'assignee' => {
                 'user' => {
@@ -85,8 +85,8 @@ describe AuditTrail do
     end
   end
 
-  describe '#ticket_sent_to_group' do
-    let(:event_name) { 'ticket.sent.to.group' } 
+  describe '#ticket_assigned_to_team' do
+    let(:event_name) { 'ticket.assigned.to.team' }
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
@@ -122,6 +122,15 @@ describe AuditTrail do
               'id' => 2,
               'name' => 'Dee Dee',
               'email' => 'deedee@labs.com'
+            },
+            'team_assignment' => {
+              'id' => 10,
+              'assignee' => {
+                'team' => {
+                  'id' => 11,
+                  'name' => 'Dexter Team'
+                }
+              }
             }
           }
         },
@@ -139,7 +148,7 @@ describe AuditTrail do
   end
 
   describe '#ticket_unassigned_from_agent' do
-    let(:event_name) { 'ticket.unassigned.from.agent' } 
+    let(:event_name) { 'ticket.unassigned.from.user' }
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
@@ -181,8 +190,8 @@ describe AuditTrail do
     end
   end
 
-  describe '#ticket_removed_from_group' do
-    let(:event_name) { 'ticket.removed.from.group' } 
+  describe '#ticket_unassigned_from_team' do
+    let(:event_name) { 'ticket.unassigned.from.team' }
 
     it 'adds a comment to the ticket' do
       # Stub create comment request
