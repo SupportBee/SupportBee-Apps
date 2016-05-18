@@ -1,8 +1,8 @@
 checkout:
   post:
-    - cp honeybadger.yml.example honeybadger.yml
-    - cp omniauth.platform.yml omniauth.platform.example.yml
-    - cp sba_config.yml.example sba_config.yml
+    - cp config/honeybadger.yml.example config/honeybadger.yml
+    - cp config/omniauth.platform.yml config/omniauth.platform.example.yml
+    - cp config/sba_config.yml.example config/sba_config.yml
 
 machine:
   ruby:
