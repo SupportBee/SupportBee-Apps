@@ -116,7 +116,7 @@ describe SupportBeeApp::Base do
       context "Action" do
         it "should trigger a action" do
           dummy = create_dummy_instance
-          flexmock(dummy).should_receive(:action_button).once
+          flexmock(dummy).should_receive(:action_button).and_return([200, "something"]).once
           dummy.trigger_action('action_button')
         end
 
