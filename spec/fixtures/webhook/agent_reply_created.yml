@@ -4,8 +4,7 @@
     subdomain: test
     auth_token: pggZFqQFX1anQPxjQXCT
   settings:
-    look_for_email_on_every_response:
-    always_extract: '1'
+    urls: 'http://example1.com, http://example2.com'
 :payload:
   payload:
     action_type: agent.reply.created

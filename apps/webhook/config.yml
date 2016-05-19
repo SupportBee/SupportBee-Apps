@@ -1,0 +1,18 @@
+name: Webhook
+slug: webhook
+access: public
+
+description: "Provides Web Hooks for events like ticket created and team assigned"
+
+category: Integration
+
+tags:
+- webhook
+- webhook
+- automation
+
+developer:
+  name: Paulo Soares
+  email: paulo@supportbee.com
+  twitter: "@soares_ph"
+  github: paulosoares86
