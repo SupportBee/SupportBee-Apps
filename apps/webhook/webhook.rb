@@ -7,7 +7,7 @@ module Webhook
     def all_events
       webhook_urls = settings.urls.split(/\s*,\s*/)
       webhook_urls.each do |url|
-        post(url.strip, {payload: payload}.to_json)
+        post(url.strip, {payload: payload.raw_payload}.to_json)
       end
     end
   end

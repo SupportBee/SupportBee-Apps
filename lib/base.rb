@@ -1,3 +1,5 @@
+require "addressable/uri"
+
 module SupportBeeApp
   class Base
     include HttpHelper
@@ -363,6 +365,7 @@ module SupportBeeApp
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
       result[:user_assignment] = SupportBee::UserAssignment.new(auth, raw[:user_assignment]) if raw[:user_assignment]
       result[:team_assignment] = SupportBee::TeamAssignment.new(auth, raw[:team_assignment]) if raw[:team_assignment]
+      result[:raw_payload] = raw
       result
     end
 
