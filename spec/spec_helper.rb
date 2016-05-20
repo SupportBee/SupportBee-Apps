@@ -56,3 +56,11 @@ class Faraday::Response
     ret
   end
 end
+
+class ErrorReporter
+  def self.report(e, context)
+    puts ">>> [ERROR] Request: #{e.request}"
+    puts ">>> [ERROR] Context: #{context}"
+    puts ">>> [ERROR] Backtrace: #{e.backtrace.reject {|line| line =~ /\/gems\//} }"
+  end
+end
