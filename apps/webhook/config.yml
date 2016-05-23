@@ -22,10 +22,10 @@ Provides Web Hooks for events:
   Agent Reply Created
   Customer Reply Created
   Comment Created
-  
+
 "
 
-category: Integration
+category: notification
 
 tags:
 - webhook
