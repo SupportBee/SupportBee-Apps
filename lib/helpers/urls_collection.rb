@@ -10,7 +10,7 @@ class URLsCollection
   end
 
   def all
-    @urls.split(/[\s,;]+/)
+    @urls.split(/[,;]+/).map { |url| url.strip }
   end
 
   def post_to_all(payload)
@@ -21,14 +21,17 @@ class URLsCollection
   end
 
   def validate
-    @errors[:urls] = "Cannot be blank" and return if @urls.empty?
-    unless invalid_urls.empty?
+    if @urls.blank?
+      @errors[:urls] = "Cannot be blank"
+    elsif not invalid_urls.empty?
       @errors[:urls] = "Invalid URLs: #{invalid_urls.join(', ')}"
     end
   end
 
   def invalid_urls
-    all.reject { |url| valid_url?(url) }
+    all.reject { |url| valid_url?(url) }.map do |url|
+      url.blank? ? "Blank URL" : url
+    end
   end
 
   def valid?

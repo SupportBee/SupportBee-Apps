@@ -44,9 +44,18 @@ describe Webhook do
   describe "validate urls" do
     let(:validate_payload) { YAML.load_file('spec/fixtures/webhook/validate_payload.yml')}
 
-    context "without empty input" do
+    context "with empty input" do
       it "should be invalid" do
         validate_payload[:data]["settings"]["urls"] = ''
+        response = post "/webhook/valid", validate_payload.to_json
+        response.status.should == 400
+        response.body.should == '{"errors":{"urls":"Cannot be blank","flash":["Invalid URLs"]}}'
+      end
+    end
+
+    context "with whitespace url" do
+      it "should be invalid" do
+        validate_payload[:data]["settings"]["urls"] = '    '
         response = post "/webhook/valid", validate_payload.to_json
         response.status.should == 400
         response.body.should == '{"errors":{"urls":"Cannot be blank","flash":["Invalid URLs"]}}'
@@ -76,7 +85,7 @@ describe Webhook do
     context "with two urls" do
       it "should be valid all urls are valid" do
         VCR.use_cassette 'webhook/api_response' do
-          validate_payload[:data]["settings"]["urls"] = 'http://example.com, http://otherexample.com'
+          validate_payload[:data]["settings"]["urls"] = ' http://example.com,  http://otherexample.com'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 200
         end
@@ -84,10 +93,19 @@ describe Webhook do
 
       it "should be invalid if first url is invalid" do
         VCR.use_cassette 'webhook/api_response' do
-          validate_payload[:data]["settings"]["urls"] = 'crapyurl1; http://otherexample.com'
+          validate_payload[:data]["settings"]["urls"] = ' crapyurl1   ;  http://otherexample.com '
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 400
           response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1\",\"flash\":[\"Invalid URLs\"]}}"
+        end
+      end
+
+      it "should be invalid if first url is blank" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = ';  http://otherexample.com '
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 400
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: Blank URL\",\"flash\":[\"Invalid URLs\"]}}"
         end
       end
 
