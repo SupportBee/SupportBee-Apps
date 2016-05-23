@@ -1,4 +1,4 @@
-name: Webhook
+name: Web Hooks
 slug: webhook
 access: public
 
@@ -7,7 +7,6 @@ description: "Provides Web Hooks for events like ticket created and team assigne
 category: Integration
 
 tags:
-- webhook
 - webhook
 - automation
 
