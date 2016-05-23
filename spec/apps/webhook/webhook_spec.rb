@@ -49,7 +49,7 @@ describe Webhook do
         validate_payload[:data]["settings"]["urls"] = ''
         response = post "/webhook/valid", validate_payload.to_json
         response.status.should == 400
-        response.body.should == '{"errors":{"urls":"Cannot be blank"}}'
+        response.body.should == '{"errors":{"urls":"Cannot be blank","flash":["Invalid URLs"]}}'
       end
     end
 
@@ -59,6 +59,7 @@ describe Webhook do
           validate_payload[:data]["settings"]["urls"] = 'http://example.com'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 200
+          response.body.should == '{"errors":{}}'
         end
       end
 
@@ -67,7 +68,7 @@ describe Webhook do
           validate_payload[:data]["settings"]["urls"] = 'crapyurl'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 400
-          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl\"}}"
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl\",\"flash\":[\"Invalid URLs\"]}}"
         end
       end
     end
@@ -86,7 +87,7 @@ describe Webhook do
           validate_payload[:data]["settings"]["urls"] = 'crapyurl1; http://otherexample.com'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 400
-          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1\"}}"
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1\",\"flash\":[\"Invalid URLs\"]}}"
         end
       end
 
@@ -95,7 +96,7 @@ describe Webhook do
           validate_payload[:data]["settings"]["urls"] = 'http://example.com, crapyurl2'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 400
-          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl2\"}}"
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl2\",\"flash\":[\"Invalid URLs\"]}}"
         end
       end
 
@@ -104,7 +105,7 @@ describe Webhook do
           validate_payload[:data]["settings"]["urls"] = 'crapyurl1, crapyurl2'
           response = post "/webhook/valid", validate_payload.to_json
           response.status.should == 400
-          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1, crapyurl2\"}}"
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1, crapyurl2\",\"flash\":[\"Invalid URLs\"]}}"
         end
       end
     end
