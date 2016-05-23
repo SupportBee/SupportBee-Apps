@@ -1,4 +1,4 @@
-module Bugify 
+module Bugify
   module ActionHandler
     def button
       ticket = payload.tickets.first
@@ -7,15 +7,17 @@ module Bugify
         html = comment_html(response)
         comment_on_ticket(ticket, html)
       rescue Exception => e
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
       end
       [200, "Ticket sent to Bugify"]
     end
-    
+
     def projects
       [200, fetch_projects]
     end
-  
+
   end
 end
 
@@ -35,6 +37,7 @@ module Bugify
         end
         errors.empty? ? true : false
       rescue Exception => e
+        ErrorReporter.report(e)
         errors[:flash] = [e.message]
         errors[:url] = ["URL looks incorrect"]
         false
@@ -46,7 +49,7 @@ module Bugify
     def test_ping
       response = http.get api_url('projects')
     end
-    
+
     def fetch_projects
       response = bugify_get(api_url('projects'))['projects'].to_json
     end
@@ -61,7 +64,7 @@ module Bugify
       response = http.get "#{url.to_s}"
       response.body
     end
-    
+
     def project_id
       payload.overlay.projects_select
     end

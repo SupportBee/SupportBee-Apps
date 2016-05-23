@@ -2,7 +2,7 @@ module Insightly
   module EventHandler
     def ticket_created
       return unless settings.sync_contacts.to_s == '1'
-      
+
       ticket = payload.ticket
       return if ticket.trash || ticket.spam
       requester = ticket.requester
@@ -19,11 +19,12 @@ module Insightly
         end
 
         if contact
-          comment_on_ticket(ticket, html)
+          ticket.comment(:html => html)
         end
 
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -35,12 +36,12 @@ module Insightly
      ticket = payload.tickets.first
      begin
        task = create_task(payload.overlay.title, payload.overlay.description)
-
+       note = create_note(payload.overlay.title, payload.overlay.description, ticket.requester)
        html = task_created_html(task)
-       comment_on_ticket(ticket, html)
-
+       ticket.comment(:html => html)
      rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]
@@ -92,7 +93,7 @@ module Insightly
       errors[:flash] = ["API Key Invalid"] unless test_ping.success?
       errors.empty? ? true : false
     end
-    
+
     def project_id
       payload.overlay.projects_select
     end
@@ -112,7 +113,7 @@ module Insightly
     end
 
     def create_task(title, description)
-      post_body = {
+      response = api_post('tasks', {
         title: title,
         details: description,
         project_id: project_id,
@@ -120,13 +121,21 @@ module Insightly
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
         owner_user_id: owner_user_id
-      }.to_json
-      response = http.post api_url('tasks') do |req|
-        req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
-        req.headers['Content-Type'] = 'application/json'
-        req.body = post_body
-      end
-      response.body
+      })
+      return response.body if response.status == 201
+      raise Exception, "Create task status was #{response.status}. Response #{response.body}"
+    end
+
+    def create_note(title, description, email)
+      contact = find_contact(email)
+      response = api_post('notes', {
+        title: title,
+        body: description,
+        link_subject_type: 'CONTACT',
+        link_subject_id: contact["CONTACT_ID"]
+      })
+      return response.body if response.status == 201
+      raise Exception, "Create note status was #{response.status}. Response #{response.body}"
     end
 
     def create_contact(requester)
@@ -141,12 +150,7 @@ module Insightly
       }
 
       body[:tags] = [{tag_name: get_tag_name}] if settings.tag_contacts.to_s == "1"
-
-      response = http.post api_url('Contacts') do |req|
-        req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
-        req.headers['Content-Type'] = 'application/json'
-        req.body = body.to_json
-      end
+      response = api_post('Contacts', body)
       response.body
     end
 
@@ -182,6 +186,14 @@ module Insightly
       "https://api.insight.ly/v2.1/#{resource}"
     end
 
+    def api_post(resource, body = nil)
+      http.post api_url(resource) do |req|
+        req.headers['Authorization'] = 'Basic ' + Base64.encode64(settings.api_key)
+        req.headers['Content-Type'] = 'application/json'
+        req.body = body.to_json if body
+      end
+    end
+
     def contact_link(contact)
       "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
     end
@@ -194,10 +206,6 @@ module Insightly
       html = ''
       html << "Insightly Task Created!<br/>"
       html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
-    end
-
-    def comment_on_ticket(ticket, html)
-      ticket.comment(:html => html)
     end
 
     def existing_contact_info(contact)
@@ -213,4 +221,3 @@ module Insightly
     end
   end
 end
-

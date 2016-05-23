@@ -1,5 +1,5 @@
 module Magento
-  module EventHandler                      
+  module EventHandler
     def ticket_created
       ticket = payload.ticket
       requester = ticket.requester
@@ -16,10 +16,11 @@ module Magento
           return response
         end
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
-        
+
       comment_on_ticket(ticket, html)
       [200, "Ticket sent to Magento"]
     end
@@ -31,7 +32,7 @@ module Magento
     string :subdomain, :required => true, :label => 'Enter Subdomain', :hint => 'If your Magento URL is "https://something.gostorego.com" then your Subdomain value is "something"'
     string :username, :required => true, :label => 'Enter API User Name', :hint => 'See how to create an api user and key in "http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/api_user/index"'
     string :api_key, :required => true, :label => 'Enter API Key'
-    
+
     def get_client
       client = Savon.client(wsdl: "http://#{settings.subdomain}.gostorego.com/api/v2_soap?wsdl=1", ssl_ca_cert_file: "./config/cacert.pem")
     end
@@ -43,21 +44,23 @@ module Magento
       begin
         response = client.call(:login){message(username: username, apiKey: api_key)}
       rescue Wasabi::Resolver::HTTPError => e
+        ErrorReporter.report(e)
         return [500, "Request to get the wsdl document failed."]
       rescue Savon::SOAPFault => e
+        ErrorReporter.report(e)
         return [500, "Access Denied. Entered API key or user name is invalid"]
       end
 
     end
-  
+
     def get_session_id(response)
 
       begin
         session_id = response.body[:login_response][:login_return] if response
       rescue Exception => e
-        puts "#{e.message}\n#{e.backtrace}"
+        ErrorReporter.report(e, {response: response})
       end
-        
+
     end
 
     def get_order(client, session_id, requester)
@@ -65,12 +68,12 @@ module Magento
       order_list = result.body[:sales_order_list_response][:result][:item] if result
       orders = order_list.select{|order| order[:customer_email] == requester.email} if order_list
     end
-   
+
     def send_new_comment(client, session_id, ticket, orders)
       order = orders.last
       client.call(:sales_order_add_comment){message(:sessionId => session_id, :orderIncrementId => order[:increment_id], :resourcePath => 'sales_order.addComment', :comment => generate_comment(ticket), :status => 'pending')}
     end
- 
+
     def generate_comment(ticket)
       "[Support Ticket] https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
@@ -83,7 +86,7 @@ module Magento
       formatted_date = date.strftime('%a %b %d %H:%M:%S')
       html = ""
       html << "<h3>Order Details<p>"
-      html << "<p>Order Count: #{orders.count}" 
+      html << "<p>Order Count: #{orders.count}"
       html << "<p>Ordered Items:"
       html << items_html
       html << "<p><p><table>"
@@ -115,8 +118,8 @@ module Magento
     def order_items_html(order_items)
       html = ""
       if order_items.kind_of?(Array)
-        order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item[:name]}"} 
-      else 
+        order_items.select{|item| html << "<br/><h5 style=\"font-weight:normal\">#{item[:name]}"}
+      else
         html << "<br/><h5 style=\"font-weight:normal\">#{order_items[:name]}" if order_items
       end
       return html
@@ -127,4 +130,3 @@ module Magento
     end
   end
 end
-

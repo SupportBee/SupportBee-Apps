@@ -8,7 +8,7 @@ module Pipedrive
       begin
         person = find_person(requester)
         html = ''
-        
+
         if person
           html = existing_person_info(person)
         else
@@ -21,6 +21,8 @@ module Pipedrive
           comment_on_ticket(html, ticket)
         end
       rescue Exception => e
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         [500, e.message]
       end
       [200, "Ticket sent"]
@@ -51,11 +53,11 @@ module Pipedrive
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token
         req.params['term'] = requester.email
-      end 
+      end
       body = response.body['data']
       body ? body.first : nil
     end
-    
+
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
       person = http_post api_url('/persons') do |req|
@@ -69,8 +71,8 @@ module Pipedrive
     def name(requester)
       requester.name || requester.email
     end
-   
-    def update_note(person, ticket) 
+
+    def update_note(person, ticket)
       http_post api_url('/notes') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
@@ -81,25 +83,25 @@ module Pipedrive
     def comment_on_ticket(html, ticket)
       ticket.comment(:html => html)
     end
- 
+
     def existing_person_info(person)
       html = ""
-      html << "<b> #{person['name']} </b><br/>" 
+      html << "<b> #{person['name']} </b><br/>"
       html << "<br/>"
       html << person_link(person)
       html
     end
 
     def created_person_info(person)
-      html = "Added <b> #{person['name']} </b> to Pipedrive...<br/> " 
+      html = "Added <b> #{person['name']} </b> to Pipedrive...<br/> "
       html << person_link(person)
       html
     end
-    
+
     def person_link(person)
       "<a href='https://app.pipedrive.com/person/details/#{person['id']}'>View #{person['name']}'s profile on Pipedrive</a>"
     end
-   
+
     def generate_note_content(ticket)
       note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
       note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
@@ -130,4 +132,3 @@ module Pipedrive
 
   end
 end
-

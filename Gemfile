@@ -37,6 +37,7 @@ gem 'mab'
 
 group :development, :test do
   gem 'pry'
+  gem 'pry-debugger'
   gem 'awesome_print'
 end
 
@@ -46,6 +47,7 @@ end
 
 group :test do
   gem 'rspec'
+  gem 'vcr'
   gem 'rack-test', :require => 'rack/test'
   gem 'flexmock'
   gem 'webmock', :require => false
@@ -56,3 +58,6 @@ end
 # Mail Gems
 gem 'rest-client'
 gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
+
+# ErrorReporter
+gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'

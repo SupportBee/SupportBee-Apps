@@ -1,0 +1,156 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://basecamp.com/3385370/api/v1/projects/12175992/messages.json
+    body:
+      encoding: US-ASCII
+      string: ! '{"subject":"basecamp subject","content":"  basecamp body \\n\r\n  https://test.supportbee.com/tickets/3\r\n          "}'
+    headers:
+      Authorization:
+      - Bearer BAhbB0kiAbB7ImNsaWVudF9pZCI6IjVmZGViMzg4MzA2ZWNlZWY4MWY5ZGQzNWVlMzk0NTU3NWQ4ZDlkMGIiLCJleHBpcmVzX2F0IjoiMjAxNi0wNS0yMFQxOToyNjo0M1oiLCJ1c2VyX2lkcyI6WzI4ODc2ODU1XSwidmVyc2lvbiI6MSwiYXBpX2RlYWRib2x0IjoiYjlmZmUyNDNkYTc5ZGE4ZjFjNGE5MGZlNGRmNTI5ZmMifQY6BkVUSXU6CVRpbWUNkxIdwBMeu2oJOg1uYW5vX251bWkCCgI6DW5hbm9fZGVuaQY6DXN1Ym1pY3JvIgdSIDoJem9uZUkiCFVUQwY7AEY=--b658541a730c798466502d1c7b8bbb6c66112e78
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Server:
+      - openresty
+      Date:
+      - Tue, 10 May 2016 18:12:43 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Status:
+      - 201 Created
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Content-Type-Options:
+      - nosniff
+      X-Asset-Paths:
+      - ! '{"desktop.js":"desktop-95822349b958f36827ccbe87d7e2ee4b.js","desktop.css":"desktop-0d5667a15866f14b9198b5b658fef745.css"}'
+      Location:
+      - https://basecamp.com/3385370/api/v1/projects/12175992/messages/57755712.json
+      Etag:
+      - ! '"831125400c0d4003ba0d7eb3ee0b1f89"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Request-Id:
+      - 21f53641-aa3c-4885-ac25-d9849ccc3f41
+      X-Runtime:
+      - '0.226887'
+      Access-Control-Expose-Headers:
+      - X-Request-Id, X-Runtime, X-Request-Path, Content-Length
+      X-Queue-Time:
+      - '0.0007584095001220703'
+      Timing-Allow-Origin:
+      - ! '*'
+      Vary:
+      - Accept-Encoding
+    body:
+      encoding: US-ASCII
+      string: ! '{"id":57755712,"private":false,"trashed":false,"subject":"basecamp
+        subject","content":"basecamp body \\n\r\n  https://test.supportbee.com/tickets/3","created_at":"2016-05-10T15:12:42.974-03:00","updated_at":"2016-05-10T15:12:42.974-03:00","creator":{"id":13762184,"name":"Paulo","avatar_url":"http://cdn.37img.com/builtin/default_avatar_v1_4/avatar.gif?r=3","fullsize_avatar_url":"https://cdn.37img.com/builtin/default_avatar_v1_4/original.gif?r=3"},"comments":[],"attachments":[],"subscribers":[{"id":13762184,"name":"Paulo"}]}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 18:12:43 GMT
+- request:
+    method: post
+    uri: http://test.lvh.me:3000/tickets/3/comments?auth_token=PwGpqdqpF9PuRCRkyoog
+    body:
+      encoding: US-ASCII
+      string: comment%5Bcontent_attributes%5D%5Bbody_html%5D=Basecamp+message+created%21%3Cbr%2F%3E+%3Ca+href%3D%27https%3A%2F%2Fbasecamp.com%2F3385370%2Fprojects%2F12175992%2Fmessages%2F57755712%27%3Ebasecamp+subject%3C%2Fa%3E
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"97c684629434c9606632061575b3462a"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiGXdhcmRlbi51c2VyLnVzZXIua2V5BjoGRVRbCEkiCVVzZXIGOwBGWwZpCEkiAAY7AFRJIg9zZXNzaW9uX2lkBjsARkkiJTc5YjkxODI2NzRmODA3Y2Q0MTQzM2IyNTQ5YjAxMTY4BjsAVA%3D%3D--e7355272a683eca1425a7282243f36c36947da09;
+        path=/; HttpOnly
+      X-Request-Id:
+      - 90f08af8115db3c1f1868d1f73dfd8b4
+      X-Runtime:
+      - '0.230381'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"comment":{"id":66,"created_at":"2016-05-10T18:12:43Z","merged":false,"ticket":{"replies_count":0,"agent_replies_count":0,"comments_count":23},"commenter":{"id":3,"email":"app.1.basecamp@appuser.supportbeemail.com","name":"Basecamp","role":null,"agent":false,"active_tickets_count":0,"picture":{"thumb20":"http://localhost:9292/images/basecamp/icon.png","thumb24":"http://localhost:9292/images/basecamp/icon.png","thumb32":"http://localhost:9292/images/basecamp/icon.png","thumb48":"http://localhost:9292/images/basecamp/icon.png","thumb64":"http://localhost:9292/images/basecamp/icon.png","thumb128":"http://localhost:9292/images/basecamp/icon.png"}},"content":{"html":"Basecamp
+        message created!<br> <a href=\"https://basecamp.com/3385370/projects/12175992/messages/57755712\">basecamp
+        subject</a>","text":"Basecamp message created!\n basecamp subject (https://basecamp.com/3385370/projects/12175992/messages/57755712)","truncated":false,"attachments":[]}}}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 18:12:43 GMT
+- request:
+    method: get
+    uri: http://test.lvh.me:3000/tickets/3?auth_token=PwGpqdqpF9PuRCRkyoog
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"0e1b631f52171b9c531a4ac854fb1dd9"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJTQ3ZjZjNDY1NjZiZDNiNjQwMDE3ZWE5YjFmMjczOGExBjsAVEkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsISSIJVXNlcgY7AEZbBmkISSIABjsAVA%3D%3D--b60f5a794951f0f139aceabc819586e4d52d13a6;
+        path=/; HttpOnly
+      X-Request-Id:
+      - 4039ca5df9221d8cbf0355d4f0b4d57b
+      X-Runtime:
+      - '0.067125'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"ticket":{"id":3,"subject":"insightly subject","replies_count":0,"agent_replies_count":0,"comments_count":23,"last_activity_at":"2016-05-10T18:12:43Z","created_at":"2016-05-10T12:39:24Z","unanswered":true,"archived":false,"private":false,"spam":false,"trash":false,"summary":"insightly
+        body","draft":false,"source":{"web":"paulo@supportbe.com"},"cc":[],"labels":[],"customer_rating":{},"requester":{"id":5,"email":"insightly@example.com","name":"insightly
+        customer","role":"customer","agent":false,"picture":{"thumb20":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=20","thumb24":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=24","thumb32":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=32","thumb48":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=48","thumb64":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=64","thumb128":"https://secure.gravatar.com/avatar/d1286bb3bcf04891e6740e543c689d07.png?r=PG&s=128"}},"content":{"html":"<div>insightly
+        body</div>","text":"insightly body","truncated":false,"attachments":[]},"starred":false}}'
+    http_version: 
+  recorded_at: Tue, 10 May 2016 18:12:43 GMT
+recorded_with: VCR 3.0.1

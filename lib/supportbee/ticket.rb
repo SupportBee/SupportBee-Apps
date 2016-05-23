@@ -93,6 +93,7 @@ module SupportBee
       begin
         SupportBee::UserAssignment.new(@params, response.body['user_assignment'])
       rescue => e
+        ErrorReporter.report(e, {user_id: user_id, resource_url: resource_url})
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.message}"
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{e.backtrace}"
         LOGGER.warn "__ASSIGN_TO_USER_FAILED__#{response.inspect}"
@@ -210,6 +211,15 @@ module SupportBee
       SupportBee::Comment.new(@params, response.body['comment'])
     end
 
+    def change_sender(email)
+      payload = {requester: {email: email}}
+      requester_url = "/tickets/#{id}/requester"
+      response = api_put(requester_url, {body: payload})
+      refresh
+      return if requester.email == email
+      raise SupportBee::TicketUpdateError.new("Ticket sender should be #{email} but is #{requester.email}")
+    end
+
     def labels_list(refresh=false)
       refresh = true unless @labels
       unless refresh
@@ -242,6 +252,10 @@ module SupportBee
       labels_url = "#{resource_url}/labels/#{label_name}"
       api_delete(labels_url)
       refresh
+    end
+
+    def context
+      {ticket_id: id}
     end
 
     private

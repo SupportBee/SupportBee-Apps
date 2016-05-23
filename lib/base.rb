@@ -1,3 +1,5 @@
+require "addressable/uri"
+
 module SupportBeeApp
   class Base
     include HttpHelper
@@ -172,6 +174,10 @@ module SupportBeeApp
         schema
       end
 
+      def text(name, options={})
+        add_to_schema :text, name, options
+      end
+
       def string(name, options={})
         add_to_schema :string, name, options
       end
@@ -271,6 +277,7 @@ module SupportBeeApp
 
         return response
       rescue Exception => e
+        ErrorReporter.report(e, {event: event})
         LOGGER.error log_event_message(e.message)
         LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
@@ -287,6 +294,7 @@ module SupportBeeApp
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
+        ErrorReporter.report(e, {action: action})
         LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
         result = [500, e.message]
       end
@@ -361,10 +369,12 @@ module SupportBeeApp
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
       result[:user_assignment] = SupportBee::UserAssignment.new(auth, raw[:user_assignment]) if raw[:user_assignment]
       result[:team_assignment] = SupportBee::TeamAssignment.new(auth, raw[:team_assignment]) if raw[:team_assignment]
+      result[:raw_payload] = raw
       result
     end
 
     def to_method(string)
+      return 'all_events' if respond_to?(:all_events)
       string.gsub('.', '_').underscore
     end
   end

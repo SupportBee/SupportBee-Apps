@@ -1,0 +1,16 @@
+name: Extract Sender from Email
+slug: extract_sender_from_email
+access: public
+
+description: "If you are receiving tickets from a system that sends you emails from a noreply address with the customer's email address in the body of the email, you need this app. Once setup, it will run automatically when you get a new ticket and extract the email address from the body of the email and change the sender of the ticket."
+
+category: workflow
+
+tags:
+- workflow
+
+developer:
+  name: Paulo Soares
+  email: paulo@supportbee.com
+  twitter: "@soares_ph"
+  github: paulosoares86

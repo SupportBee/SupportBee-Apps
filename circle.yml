@@ -1,0 +1,15 @@
+checkout:
+  post:
+    - cp config/honeybadger.yml.example config/honeybadger.yml
+    - cp config/omniauth.platform.example.yml config/omniauth.platform.yml
+    - cp config/sba_config.yml.example config/sba_config.yml
+
+machine:
+  ruby:
+    version: 1.9.3-p484
+  environment:
+    RAILS_ENV: test
+
+database:
+  post:
+    - cp config/database-ci.yml config/database.yml

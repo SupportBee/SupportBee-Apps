@@ -2,7 +2,7 @@ require 'sinatra/base'
 require 'sinatra-initializers'
 
 class RunApp < Sinatra::Base
-  
+
   register Sinatra::Initializers
 
   unless PLATFORM_ENV == 'production'
@@ -14,9 +14,9 @@ class RunApp < Sinatra::Base
   before do
     return if PLATFORM_ENV == 'development'
     x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
-    return if x_supportbee_key == SECRET_CONFIG['key'] 
+    return if x_supportbee_key == SECRET_CONFIG['key']
     halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
-  end 
+  end
 
   def self.setup(app_class)
     get "/#{app_class.slug}" do
@@ -63,12 +63,12 @@ class RunApp < Sinatra::Base
     post "/#{app_class.slug}/action/:action" do
       data, payload = parse_request
       action = params[:action]
-      begin 
+      begin
         result = app_class.trigger_action(action, data, payload)
         status result[0]
         body result[1] if result[1]
       rescue Exception => e
-        puts "#{e.message} \n #{e.backtrace}"
+        ErrorReporter.report(e, {app_slug: app_class.slug, action: action, data: data, payload: payload})
         status 500
       end
     end
