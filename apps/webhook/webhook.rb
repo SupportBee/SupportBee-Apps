@@ -15,10 +15,11 @@ module Webhook
     white_list :urls
 
     def validate
-      errors.merge!(urls_collection.errors)
-      is_valid = errors.empty?
-      errors[:flash] = ["Invalid URLs"] unless is_valid
-      is_valid
+      unless urls_collection.valid?
+        errors.merge!(urls_collection.errors)
+        errors[:flash] = ["Invalid URLs"]
+      end
+      urls_collection.valid?
     end
 
     def urls_collection
