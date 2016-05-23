@@ -17,6 +17,7 @@ module Webhook
     def validate
       errors.merge!(urls_collection.errors)
       is_valid = errors.empty?
+      errors[:flash] = ["Invalid URLs"] unless is_valid
       is_valid
     end
 
