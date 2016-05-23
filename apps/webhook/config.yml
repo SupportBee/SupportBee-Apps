@@ -2,7 +2,28 @@ name: Web Hooks
 slug: webhook
 access: public
 
-description: "Provides Web Hooks for events like ticket created and team assigned"
+description: "
+
+Provides Web Hooks for events:
+
+  Ticket Created
+  Ticket Assigned to User
+  Ticket Unassigned from User
+  Ticket Assigned to Team
+  Ticket Unassigned from Team
+  Ticket Answered
+  Ticket Unanswered
+  Ticket Spammed
+  Ticket Unspammed
+  Ticket Trashed
+  Ticket Untrashed
+  Ticket Archived
+  Ticket Unarchived
+  Agent Reply Created
+  Customer Reply Created
+  Comment Created
+  
+"
 
 category: Integration
 
