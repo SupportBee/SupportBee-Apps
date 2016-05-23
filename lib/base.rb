@@ -174,6 +174,10 @@ module SupportBeeApp
         schema
       end
 
+      def text(name, options={})
+        add_to_schema :text, name, options
+      end
+
       def string(name, options={})
         add_to_schema :string, name, options
       end
@@ -370,6 +374,7 @@ module SupportBeeApp
     end
 
     def to_method(string)
+      return 'all_events' if respond_to?(:all_events)
       string.gsub('.', '_').underscore
     end
   end

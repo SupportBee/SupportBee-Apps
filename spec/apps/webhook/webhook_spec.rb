@@ -40,4 +40,73 @@ describe Webhook do
       response.status.should == 204
     end
   end
+
+  describe "validate urls" do
+    let(:validate_payload) { YAML.load_file('spec/fixtures/webhook/validate_payload.yml')}
+
+    context "without empty input" do
+      it "should be invalid" do
+        validate_payload[:data]["settings"]["urls"] = ''
+        response = post "/webhook/valid", validate_payload.to_json
+        response.status.should == 400
+        response.body.should == '{"errors":{"urls":"Cannot be blank"}}'
+      end
+    end
+
+    context "with one url" do
+      it "should be valid if url is valid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'http://example.com'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 200
+        end
+      end
+
+      it "should be invalid if url is invalid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'crapyurl'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 400
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl\"}}"
+        end
+      end
+    end
+
+    context "with two urls" do
+      it "should be valid all urls are valid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'http://example.com, http://otherexample.com'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 200
+        end
+      end
+
+      it "should be invalid if first url is invalid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'crapyurl1; http://otherexample.com'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 400
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1\"}}"
+        end
+      end
+
+      it "should be invalid if second url is invalid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'http://example.com, crapyurl2'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 400
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl2\"}}"
+        end
+      end
+
+      it "should be invalid if all urls are invalid" do
+        VCR.use_cassette 'webhook/api_response' do
+          validate_payload[:data]["settings"]["urls"] = 'crapyurl1, crapyurl2'
+          response = post "/webhook/valid", validate_payload.to_json
+          response.status.should == 400
+          response.body.should == "{\"errors\":{\"urls\":\"Invalid URLs: crapyurl1, crapyurl2\"}}"
+        end
+      end
+    end
+  end
 end
