@@ -16,7 +16,7 @@ class URLsCollection
   def post_to_all(payload)
     raise Exception.new("Cannot post: #{errors}") unless valid?
     all.each do |url|
-      http_post(url, payload, 'Content-Type' => 'application/json')
+      http_post_json(url, payload)
     end
   end
 

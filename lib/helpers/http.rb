@@ -72,6 +72,11 @@ module HttpHelper
     http_method :post, url, body, headers, &block
   end
 
+  def http_post_json(url = nil, body = nil)
+    body.force_encoding('utf-8')
+    http_post(url, body, 'Content-Type' => 'application/json; charset=utf-8')
+  end
+
   def http_put(url = nil, body = nil, headers = nil)
     block = Proc.new if block_given?
     http_method :put, url, body, headers, &block
