@@ -149,4 +149,3 @@ module HttpHelper
     #raise_config_error "Invalid SSL cert"
   end
 end
-
