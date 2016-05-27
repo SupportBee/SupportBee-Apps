@@ -126,8 +126,8 @@ module Insightly
       raise Exception, "Create task status was #{response.status}. Response #{response.body}"
     end
 
-    def create_note(title, description, email)
-      contact = find_contact(email)
+    def create_note(title, description, requester)
+      contact = find_or_create_contact(requester)
       response = api_post('notes', {
         title: title,
         body: description,
@@ -136,6 +136,12 @@ module Insightly
       })
       return response.body if response.status == 201
       raise Exception, "Create note status was #{response.status}. Response #{response.body}"
+    end
+
+    def find_or_create_contact(requester)
+      ret = find_contact(requester)
+      return ret unless ret.nil?
+      create_contact(requester)
     end
 
     def create_contact(requester)

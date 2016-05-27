@@ -59,7 +59,7 @@ end
 
 class ErrorReporter
   def self.report(e, context)
-    puts ">>> [ERROR] Request: #{e.request}"
+    puts ">>> [ERROR] Request: #{e.request}" if e.respond_to?(:request)
     puts ">>> [ERROR] Context: #{context}"
     puts ">>> [ERROR] Backtrace: #{e.backtrace.reject {|line| line =~ /\/gems\//} }"
   end
