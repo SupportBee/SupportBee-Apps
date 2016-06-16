@@ -4,21 +4,19 @@
   The below code sample is taken from the Pivotal App
 -->
 
-<h3>Edit the Story Details</h3>
+<h3 class="ui dividing header">Edit the Story Details</h3>
 {{#each tickets}}
   {{#ticket}}
-    <ol>
-      <li>
-        <label for="title">Story Title</label>
-        <input name="title" value="{{subject}}">
-      </li>
-      <li>
-        <label for="description">Story Description</label>
-        <textarea name="description">
-{{content.text}} \n
+    <div class="field">
+      <label for="title">Story Title</label>
+      <input name="title" type="text" value="{{subject}}">
+    </div>
+    <div class="field">
+      <label for="description">Story Description</label>
+      <textarea name="description">{{content.text}}
+
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </li>
-    </ol>
+      </textarea>
+    </div>
   {{/ticket}}
 {{/each}}
