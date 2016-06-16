@@ -1,51 +1,41 @@
-<h3>Edit the Story Details</h3>
-
-<form>
+<h3 class="ui dividing header">Send to Pivotal<span class="hint">Edit the Story Details</span></h3>
+<form class="ui app form">
   {{#each tickets}}
     {{#ticket}}
-      <ol>
+      <div class="field">
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </div>
+      <div class="title field">
+        <label for="title">Story Title</label>
+        <input name="title" type="text" value="{{subject}}">
+      </div>
+      <div class="description field">
+        <label for="description">Story Description</label>
+        <textarea name="description">{{content.text}}
 
-        <li>
-          <label for="project">Select Project</label>
-          <select name="projects_select"></select>
-        </li>
-
-        <li class="title">
-          <label for="title">Story Title</label>
-          <input name="title" value="{{subject}}">
-        </li>
-
-        <li class="description">
-          <label for="description">Story Description</label>
-          <textarea name="description">
-  {{content.text}}
-  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-          </textarea>
-        </li>
-
-        <li>
-          <label for="story_owner">Story Owner</label>
-          <select name="story_owner" id="story_owner">
-            <option value="none">No Owner</option>
-          </select>
-        </li>
-
-        <li>
-          <label for="story_type">Story Type</label>
-          <select name="story_type">
-            <option value="feature">Feature</option>
-            <option value="bug">Bug</option>
-            <option value="chore">Chore</option>
-            <option value="release">Release</option>
-          </select>
-        </li>
-
-        <li>
-          <a class="submit btn btn-primary">Send to Pivotal</a>
-          <a class="cancel btn">Cancel</a>
-        </li>
-
-      </ol>
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </div>
+      <div class="field">
+        <label for="story_owner">Story Owner</label>
+        <select name="story_owner" id="story_owner">
+          <option value="none">No Owner</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="story_type">Story Type</label>
+        <select name="story_type">
+          <option value="feature">Feature</option>
+          <option value="bug">Bug</option>
+          <option value="chore">Chore</option>
+          <option value="release">Release</option>
+        </select>
+      </div>
+      <div class="actions">
+        <a class="ui submit primary button btn">Send to Pivotal</a>
+        <a class="ui right floated cancel basic button btn">Cancel</a>
+      </div>
     {{/ticket}}
   {{/each}}
 </form>
