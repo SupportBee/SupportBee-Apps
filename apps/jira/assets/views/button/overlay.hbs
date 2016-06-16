@@ -1,44 +1,37 @@
-<h3>Edit Issue Details</h3>
-
-<form>
+<h3 class="ui dividing header">Send to JIRA<span class="hint">Edit Issue Details</span></h3>
+<form class="ui app form">
   {{#each tickets}}
     {{#ticket}}
-      <ol>
-        <li>
-          <label for="project">Select Project</label>
-          <select name="projects_select"></select>
-        </li>
+      <div class="field">
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </div>
+      <div class="field">
+        <label for="title">Issue Summary</label>
+        <input name="title" value="{{subject}}">
+      </div>
+      <div class="field">
+        <label for="description">Issue Description</label>
+        <textarea name="description">{{content.text}}
 
-        <li>
-          <label for="title">Issue Summary</label>
-          <input name="title" value="{{subject}}">
-        </li>
-
-        <li>
-          <label for="description">Issue Description</label>
-          <textarea name="description">
-            {{content.text}}
-            https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-          </textarea>
-        </li>
-
-        <li>
-          <label for="user">Select User</label>
-          <select name="users_select">
-            <option value="none">No Assignee</option>
-          </select>
-        </li>
-
-        <li>
-          <label for="issue_type">Issue Type</label>
-          <select name="issue_type_select">
-          </select>
-        </li>
-
-        <li>
-          <a class="submit btn btn-primary">Send to JIRA</a>
-          <a class="cancel btn">Cancel</a>
-      </ol>
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </div>
+      <div class="field">
+        <label for="user">Select User</label>
+        <select name="users_select">
+          <option value="none">No Assignee</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="issue_type">Issue Type</label>
+        <select name="issue_type_select">
+        </select>
+      </div>
+      <div class="actions">
+        <a class="submit btn btn-primary">Send to JIRA</a>
+        <a class="cancel btn">Cancel</a>
+      </div>
     {{/ticket}}
   {{/each}}
 </form>

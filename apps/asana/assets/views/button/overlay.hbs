@@ -1,39 +1,35 @@
-<form>
+<h3 class="ui dividing header">Send to Asana</h3>
+<form class="ui app form">
   {{#each tickets}}
     {{#ticket}}
-      <ol>
-        <li>
-          <label for="org_select">Select Organization</label>
-          <select name="org_select"></select>
-        </li>
-        <li>
-          <label for="project">Select Project</label>
-          <select name="projects_select"></select>
-        </li>
-        <li>
-          <label for="title">Task Name</label>
-          <input name="title" value="{{subject}}">
-        </li>
+      <div class="field">
+        <label for="org_select">Select Organization</label>
+        <select name="org_select"></select>
+      </div>
+      <div class="field">
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </div>
+      <div class="field">
+        <label for="title">Task Name</label>
+        <input name="title" value="{{subject}}">
+      </div>
+      <div class="assign field">
+        <label for="assign_to">Assign To</label>
+        <select name="assign_to">
+          <option value="none">Don't Assign</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="notes">Notes</label>
+        <textarea name="notes">{{content.text}}
 
-        <li class="assign">
-          <label for="assign_to">Assign To</label>
-          <select name="assign_to">
-            <option value="none">Don't Assign</option>
-          </select>
-        </li>
-
-        <li>
-          <label for="notes">Notes</label>
-          <textarea name="notes">
-  {{content.text}} \n
-  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-          </textarea>
-        </li>
-        <li>
-          <a class="submit btn btn-primary">Send to Asana</a>
-          <a class="cancel btn">Cancel</a>
-        </li>
-      </ol>
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}</textarea>
+      </div>
+      <div class="actions">
+        <a class="submit btn btn-primary">Send to Asana</a>
+        <a class="cancel btn">Cancel</a>
+      </div>
     {{/ticket}}
   {{/each}}
 </form>
