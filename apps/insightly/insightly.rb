@@ -120,7 +120,10 @@ module Insightly
         completed: false,
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
-        owner_user_id: owner_user_id
+        owner_user_id: owner_user_id,
+        tasklinks: [{
+          project_id: project_id
+        }]
       })
       return response.body if response.status == 201
       raise Exception, "Create task status was #{response.status}. Response #{response.body}"
