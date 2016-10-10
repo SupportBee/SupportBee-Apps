@@ -1,6 +1,6 @@
 name: Mark As Answered Button
 slug: mark_answered
-access: public
+access: test
 
 description: "Replying to a ticket changes it from Unanswered to Answered. However sometimes you create a ticket or get a ticket and reply to the customer via phone. If you don't want to archive this ticket yet (you are still working on it) but don't want to keep it around as Unanswered, use this app. It adds a 'Mark As Answered' button in the apps. You can access it from the tickets listing or when you open a single ticket.
 
