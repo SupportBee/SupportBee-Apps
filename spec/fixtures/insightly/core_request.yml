@@ -1,0 +1,74 @@
+:data:
+  auth:
+    subdomain: test
+    auth_token: 6Fep1JsrcSBc7bYvf6gX
+  settings:
+    api_key: 5fce143c-c8c8-4c49-8add-a89d9c473ee0
+    subdomain: wwwxu7wn
+    tagged_name: tag
+    tag_contacts: '1'
+    sync_contacts: '0'
+:payload:
+  payload:
+    company:
+      subdomain: test
+      name: test
+    agent:
+      id: 1
+      email: paulo@supportbee.com
+      name: Paul Soares
+      role: admin
+      agent: true
+      active_tickets_count: 4
+      picture:
+        thumb20: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=20
+        thumb24: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=24
+        thumb32: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=32
+        thumb48: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=48
+        thumb64: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=64
+        thumb128: https://secure.gravatar.com/avatar/d0cf98fc768e88505d389d68b80b231d.png?r=PG&s=128
+    tickets:
+    - id: 27
+      subject: lkjasjlkd@gmail.com
+      replies_count: 1
+      agent_replies_count: 1
+      comments_count: 1
+      last_activity_at: '2016-05-19T22:14:17Z'
+      created_at: '2016-05-19T22:13:38Z'
+      unanswered: false
+      archived: false
+      private: false
+      spam: false
+      trash: false
+      summary: ! 'adasd  On Thu, May 19, 2016 at 7:13 PM, "lkjasjlkd@gmail.com"  wrote:
+        &gt; lkjasjl'
+      draft: true
+      source:
+        web: paulo@supportbee.com
+      cc: []
+      labels: []
+      customer_rating: {}
+      requester:
+        id: 18
+        email: lkjasjlkd@gmail.com
+        name: lkjasjlkd@gmail.com
+        role: customer
+        agent: false
+        picture:
+          thumb20: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=20
+          thumb24: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=24
+          thumb32: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=32
+          thumb48: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=48
+          thumb64: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=64
+          thumb128: https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=128
+      content:
+        html: <div>lkjasjlkd@gmail.com</div>
+        text: lkjasjlkd@gmail.com
+        truncated: false
+        attachments: []
+  overlay:
+    title: lkjasjlkd@gmail.com
+    description: ! "  lkjasjlkd@gmail.com\r\n  https://test.supportbee.com/tickets/27\r\n
+      \         "
+    responsible_select: '1123592'
+    owner_select: '1123592'

@@ -1,51 +1,43 @@
-<form>
+<h3 class="ui dividing header">Send to Teamwork</h3>
+<form class="ui app form">
   {{#each tickets}}
     {{#ticket}}
-      <ol>
+      <div class="field">
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </div>
+      <div class="field">
+        <label for="type">Send Ticket as a</label>
+        <select name="type">
+          <option value="todo_list">New Task List</option>
+          <option value="todo_item">Task in an Existing List</option>
+        </select>
+      </div>
+      <div class="todo_lists field" style="display:none">
+        <label for="todo_lists">Select Task List</label>
+        <select name="todo_lists"></select>
+      </div>
+      <div class="assign field" style="display:none">
+        <label for="assign_to">Assign To</label>
+        <select name="assign_to">
+          <option value="none">Don't Assign</option>
+        </select>
+      </div>
+      <div class="title field">
+        <label for="title">Title</label>
+        <input name="title" type="text" value="{{subject}}">
+      </div>
+      <div class="description field">
+        <label for="description">Description</label>
+        <textarea name="description">{{content.text}}
 
-        <li>
-          <label for="project">Select Project</label>
-          <select name="projects_select"></select>
-        </li>
-
-        <li>
-          <label for="type">Send Ticket as a</label>
-          <select name="type">
-            <option value="todo_list">New Task List</option>
-            <option value="todo_item">Task in an Existing List</option>
-          </select>
-        </li>
-
-        <li class="todo_lists" style="display:none;">
-          <label for="todo_lists">Select Task List</label>
-          <select name="todo_lists"></select>
-        </li>
-
-        <li class="assign" style="display:none;">
-          <label for="assign_to">Assign To</label>
-          <select name="assign_to">
-            <option value="none">Don't Assign</option>
-          </select>
-        </li>
-
-        <li class="title">
-          <label for="title">Title</label>
-          <input name="title" value="{{subject}}">
-        </li>
-
-        <li class="description">
-          <label for="description">Description</label>
-          <textarea name="description">
-  {{content.text}} \n
-  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-          </textarea>
-        </li>
-
-        <li>
-          <a class="submit btn btn-primary">Send to Teamwork</a>
-          <a class="cancel btn">Cancel</a>
-        </li>
-      </ol>
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </div>
+      <div class="actions">
+        <a class="ui submit primary button btn">Send to Teamwork</a>
+        <a class="ui right floated cancel basic button btn">Cancel</a>
+      </div>
     {{/ticket}}
   {{/each}}
 </form>

@@ -5,7 +5,6 @@ module Jira
 
       issue = create_issue(payload.overlay.title, payload.overlay.description)
       return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
-      assign_issue(issue) if assigned?
       html = create_issue_html(issue.body, ticket.subject)
       
       comment_on_ticket(ticket, html)
@@ -90,7 +89,7 @@ module Jira
     end
 
     def create_issue(summary, description)
-      body = unassigned_body(summary, description)
+      body = build_request_body(summary, description)
       jira_post(issues_url, body)
     end
 
@@ -99,8 +98,9 @@ module Jira
       jira_put(assign_issue_url(issue['id']), body)
     end
 
-    def unassigned_body(summary, description)
-      { fields: {
+    def build_request_body(summary, description)
+      body = {
+        fields: {
           project: {
             key: project_key,
           },
@@ -111,8 +111,13 @@ module Jira
           }
         }
       }
-    end
 
+      if assigned?
+        body[:fields][:assignee] = { name: assignee_name }
+      end
+
+      body
+    end
 
     def assigned?
       assignee_name != "none"

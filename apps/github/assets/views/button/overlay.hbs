@@ -1,34 +1,32 @@
-<form>
+<h3 class="ui dividing header">Send to Github</h3>
+<form class="ui app form">
   {{#each tickets}}
     {{#ticket}}
-      <ol>
-        <li>
-          <label for="project">Select Organization</label>
-          <select name="org_select">
-            <option value='personal'>Personal</option>
-          </select>
-        </li>
-        <li>
-          <label for="project">Select Project</label>
-          <select name="projects_select"></select>
-        </li>
-        <li>
-          <label for="title">Issue Title</label>
-          <input name="title" value="{{subject}}">
-        </li>
-        <li>
-          <label for="description">Issue Description</label>
-          <textarea name="description">
-  {{content.text}} \n
-  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-          </textarea>
-        </li>
-        <li>
-          <a class="submit btn btn-primary">Send to Github</a>
-          <a class="cancel btn">Cancel</a>
-        </li>
-      </ol>
+      <div class="field">
+        <label for="project">Select Organization</label>
+        <select name="org_select">
+          <option value='personal'>Personal</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="project">Select Project</label>
+        <select name="projects_select"></select>
+      </div>
+      <div class="field">
+        <label for="title">Issue Title</label>
+        <input name="title" type="text" value="{{subject}}">
+      </div>
+      <div class="field">
+        <label for="description">Issue Description</label>
+        <textarea name="description">{{content.text}}
+
+https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
+      </div>
+      <div class="actions">
+        <a class="ui submit primary button btn">Send to Github</a>
+        <a class="ui right floated cancel basic button btn">Cancel</a>
+      </div>
     {{/ticket}}
   {{/each}}
 </form>
-

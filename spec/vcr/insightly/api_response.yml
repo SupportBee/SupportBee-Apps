@@ -1,0 +1,285 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/tasks
+    body:
+      encoding: US-ASCII
+      string: ! '{"title":"lkjasjlkd@gmail.com","details":"  lkjasjlkd@gmail.com\r\n  https://test.supportbee.com/tickets/27\r\n          ","project_id":null,"completed":false,"publicly_visible":true,"responsible_user_id":"1123592","owner_user_id":"1123592"}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - '-1'
+      Location:
+      - https://api.insight.ly/v2.1/tasks/41036052
+      Server:
+      - Microsoft-IIS/7.5
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 27 May 2016 20:15:02 GMT
+      Content-Length:
+      - '659'
+      Set-Cookie:
+      - snaptid=sac1prdc01ut04; path=/; HttpOnly; Secure
+    body:
+      encoding: US-ASCII
+      string: ! '{"TASK_ID":41036052,"Title":"lkjasjlkd@gmail.com","CATEGORY_ID":null,"DUE_DATE":null,"COMPLETED_DATE_UTC":null,"PUBLICLY_VISIBLE":true,"COMPLETED":false,"PROJECT_ID":null,"DETAILS":"  lkjasjlkd@gmail.com\r\n  https://test.supportbee.com/tickets/27\r\n          ","STATUS":"NOT
+        STARTED","PRIORITY":null,"PERCENT_COMPLETE":0,"START_DATE":null,"ASSIGNED_BY_USER_ID":null,"PARENT_TASK_ID":null,"OWNER_VISIBLE":false,"RESPONSIBLE_USER_ID":1123592,"ASSIGNED_TEAM_ID":null,"ASSIGNED_DATE_UTC":null,"OWNER_USER_ID":1123592,"DATE_CREATED_UTC":"2016-05-27
+        20:15:01","DATE_UPDATED_UTC":"2016-05-27 20:15:01","REMINDER_DATE_UTC":null,"REMINDER_SENT":false,"TASKLINKS":[]}'
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:07 GMT
+- request:
+    method: get
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/Contacts?email=lkjasjlkd@gmail.com
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: !binary |-
+        T0s=
+    headers:
+      !binary "Q2FjaGUtQ29udHJvbA==":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "UHJhZ21h":
+      - !binary |-
+        bm8tY2FjaGU=
+      !binary "Q29udGVudC1UeXBl":
+      - !binary |-
+        YXBwbGljYXRpb24vanNvbjsgY2hhcnNldD11dGYtOA==
+      !binary "Q29udGVudC1FbmNvZGluZw==":
+      - !binary |-
+        Z3ppcA==
+      !binary "RXhwaXJlcw==":
+      - !binary |-
+        LTE=
+      !binary "VmFyeQ==":
+      - !binary |-
+        QWNjZXB0LUVuY29kaW5n
+      !binary "U2VydmVy":
+      - !binary |-
+        TWljcm9zb2Z0LUlJUy83LjU=
+      !binary "WC1Qb3dlcmVkLUJ5":
+      - !binary |-
+        QVNQLk5FVA==
+      !binary "RGF0ZQ==":
+      - !binary |-
+        RnJpLCAyNyBNYXkgMjAxNiAyMDoxNTowNCBHTVQ=
+      !binary "Q29udGVudC1MZW5ndGg=":
+      - !binary |-
+        MTIy
+      !binary "U2V0LUNvb2tpZQ==":
+      - !binary |-
+        c25hcHRpZD1zYWMxcHJkYzAxdXQwNTsgcGF0aD0vOyBIdHRwT25seTsgU2Vj
+        dXJl
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        H4sIAAAAAAAEAO29B2AcSZYlJi9tynt/SvVK1+B0oQiAYBMk2JBAEOzBiM3m
+        kuwdaUcjKasqgcplVmVdZhZAzO2dvPfee++999577733ujudTif33/8/XGZk
+        AWz2zkrayZ4hgKrIHz9+fB8/Ir73/f8HKbtMDQIAAAA=
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:10 GMT
+- request:
+    method: post
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/Contacts
+    body:
+      encoding: US-ASCII
+      string: ! '{"first_name":"lkjasjlkd@gmail.com","last_name":null,"contactinfos":[{"type":"Email","detail":"lkjasjlkd@gmail.com"}],"tags":[{"tag_name":"tag"}]}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - '-1'
+      Location:
+      - https://api.insight.ly/v2.1/Contacts/173344223
+      Server:
+      - Microsoft-IIS/7.5
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 27 May 2016 20:15:06 GMT
+      Content-Length:
+      - '630'
+      Set-Cookie:
+      - snaptid=sac1prdc01ut03; path=/; HttpOnly; Secure
+    body:
+      encoding: US-ASCII
+      string: ! '{"CONTACT_ID":173344223,"SALUTATION":null,"FIRST_NAME":"lkjasjlkd@gmail.com","LAST_NAME":null,"BACKGROUND":null,"IMAGE_URL":"http://s3.amazonaws.com/insightly.userfiles/663374/","DEFAULT_LINKED_ORGANISATION":null,"OWNER_USER_ID":1123592,"DATE_CREATED_UTC":"2016-05-27
+        20:15:06","DATE_UPDATED_UTC":"2016-05-27 20:15:06","VISIBLE_TO":"EVERYONE","VISIBLE_TEAM_ID":null,"VISIBLE_USER_IDS":null,"CUSTOMFIELDS":[],"ADDRESSES":[],"CONTACTINFOS":[{"CONTACT_INFO_ID":297040870,"TYPE":"EMAIL","SUBTYPE":null,"LABEL":"Work","DETAIL":"lkjasjlkd@gmail.com"}],"DATES":[],"TAGS":[{"TAG_NAME":"tag"}],"LINKS":[],"CONTACTLINKS":[],"EMAILLINKS":[]}'
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:12 GMT
+- request:
+    method: post
+    uri: https://5fce143c-c8c8-4c49-8add-a89d9c473ee0@api.insight.ly/v2.1/notes
+    body:
+      encoding: US-ASCII
+      string: ! '{"title":"lkjasjlkd@gmail.com","body":"  lkjasjlkd@gmail.com\r\n  https://test.supportbee.com/tickets/27\r\n          ","link_subject_type":"CONTACT","link_subject_id":173344223}'
+    headers:
+      Content-Type:
+      - application/json
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - '-1'
+      Location:
+      - https://api.insight.ly/v2.1/notes/36617348
+      Server:
+      - Microsoft-IIS/7.5
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 27 May 2016 20:15:27 GMT
+      Content-Length:
+      - '556'
+      Set-Cookie:
+      - snaptid=sac1prdc01ut03; path=/; HttpOnly; Secure
+    body:
+      encoding: US-ASCII
+      string: ! '{"NOTE_ID":36617348,"TITLE":"lkjasjlkd@gmail.com","BODY":"  lkjasjlkd@gmail.com\r\n  https://test.supportbee.com/tickets/27\r\n          ","LINK_SUBJECT_ID":173344223,"LINK_SUBJECT_TYPE":"CONTACT","OWNER_USER_ID":1123592,"DATE_CREATED_UTC":"2016-05-27
+        20:15:27","DATE_UPDATED_UTC":"2016-05-27 20:15:27","VISIBLE_TO":"EVERYONE","VISIBLE_TEAM_ID":null,"VISIBLE_USER_IDS":null,"FILE_ATTACHMENTS":[],"NOTELINKS":[{"NOTE_LINK_ID":39035458,"NOTE_ID":36617348,"CONTACT_ID":173344223,"ORGANISATION_ID":null,"OPPORTUNITY_ID":null,"PROJECT_ID":null,"LEAD_ID":null}]}'
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:33 GMT
+- request:
+    method: post
+    uri: http://test.lvh.me:3000/tickets/27/comments?auth_token=6Fep1JsrcSBc7bYvf6gX
+    body:
+      encoding: US-ASCII
+      string: comment%5Bcontent_attributes%5D%5Bbody_html%5D=Insightly+Task+Created%21%3Cbr%2F%3E%3Cb%3E%3Ca+href%3D%27https%3A%2F%2Fwwwxu7wn.insight.ly%2FTasks%2FTaskDetails%2F41036052%27%3Elkjasjlkd%40gmail.com%3C%2Fa%3E%3C%2Fb%3E
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/x-www-form-urlencoded
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"f7cb86364c61ecd10e959ad03c24445d"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiGXdhcmRlbi51c2VyLnVzZXIua2V5BjoGRVRbCEkiCVVzZXIGOwBGWwZpG0kiAAY7AFRJIg9zZXNzaW9uX2lkBjsARkkiJWYwYTM5NjdjZDRkZjhhZTZiMWUyMzYxODFjZWI4YTQ1BjsAVA%3D%3D--e99579f3ed9b0926220f74a3decb177000c748d9;
+        path=/; HttpOnly
+      X-Request-Id:
+      - d90238527bd3570ed1c989f5ddfee703
+      X-Runtime:
+      - '1.028727'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"comment":{"id":30,"created_at":"2016-05-27T20:15:34Z","merged":false,"ticket":{"replies_count":1,"agent_replies_count":1,"comments_count":2},"commenter":{"id":22,"email":"app.1.insightly@appuser.supportbeemail.com","name":"Insightly","role":null,"agent":false,"active_tickets_count":0,"picture":{"thumb20":"http://localhost:9292/images/insightly/icon.png","thumb24":"http://localhost:9292/images/insightly/icon.png","thumb32":"http://localhost:9292/images/insightly/icon.png","thumb48":"http://localhost:9292/images/insightly/icon.png","thumb64":"http://localhost:9292/images/insightly/icon.png","thumb128":"http://localhost:9292/images/insightly/icon.png"}},"content":{"html":"Insightly
+        Task Created!<br><b><a href=\"https://wwwxu7wn.insight.ly/Tasks/TaskDetails/41036052\">lkjasjlkd@gmail.com</a></b>","text":"Insightly
+        Task Created!\nlkjasjlkd@gmail.com (https://wwwxu7wn.insight.ly/Tasks/TaskDetails/41036052)","truncated":false,"attachments":[]}}}'
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:35 GMT
+- request:
+    method: get
+    uri: http://test.lvh.me:3000/tickets/27?auth_token=6Fep1JsrcSBc7bYvf6gX
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Etag:
+      - ! '"c2f30d8a4e4893b3bbe427c6f9c3bd7c"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Set-Cookie:
+      - secure_code_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFRkkiJTgyNzU5MmQwOGQ3MDQzMmIwNWI4NDUzYjEyMWY2ODU0BjsAVEkiGXdhcmRlbi51c2VyLnVzZXIua2V5BjsAVFsISSIJVXNlcgY7AEZbBmkbSSIABjsAVA%3D%3D--4f2775fa5ad10c248bef58192e85e6b04af233eb;
+        path=/; HttpOnly
+      X-Request-Id:
+      - ccb266a57a51b561749d31433101c713
+      X-Runtime:
+      - '0.068242'
+      Connection:
+      - close
+      Server:
+      - thin 1.5.1 codename Straight Razor
+    body:
+      encoding: US-ASCII
+      string: ! '{"ticket":{"id":27,"subject":"lkjasjlkd@gmail.com","replies_count":1,"agent_replies_count":1,"comments_count":2,"last_activity_at":"2016-05-27T20:15:34Z","created_at":"2016-05-19T22:13:38Z","unanswered":false,"archived":false,"private":false,"spam":false,"trash":false,"summary":"adasd
+        \u00a0On Thu, May 19, 2016 at 7:13 PM, \"lkjasjlkd@gmail.com\"  wrote: &gt;
+        lkjasjl","draft":true,"source":{"web":"paulo@supportbee.com"},"cc":[],"labels":[],"customer_rating":{},"requester":{"id":18,"email":"lkjasjlkd@gmail.com","name":"lkjasjlkd@gmail.com","role":"customer","agent":false,"picture":{"thumb20":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=20","thumb24":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=24","thumb32":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=32","thumb48":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=48","thumb64":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=64","thumb128":"https://secure.gravatar.com/avatar/b5adff1f8412636306fec951b1891091.png?r=PG&s=128"}},"content":{"html":"<div>lkjasjlkd@gmail.com</div>","text":"lkjasjlkd@gmail.com","truncated":false,"attachments":[]},"starred":false}}'
+    http_version: 
+  recorded_at: Fri, 27 May 2016 20:15:35 GMT
+recorded_with: VCR 3.0.1

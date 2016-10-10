@@ -1,0 +1,54 @@
+name: Web Hooks
+slug: webhook
+access: public
+
+description: "
+
+Provides Web Hooks for events:
+
+
+  1. Ticket Created
+
+  2. Ticket Assigned to User
+
+  3. Ticket Unassigned from User
+
+  4. Ticket Assigned to Team
+
+  5. Ticket Unassigned from Team
+
+  6. Ticket Answered
+
+  7. Ticket Unanswered
+
+  8. Ticket Spammed
+
+  9. Ticket Unspammed
+
+  10. Ticket Trashed
+
+  11. Ticket Untrashed
+
+  12. Ticket Archived
+
+  13. Ticket Unarchived
+
+  14. Agent Reply Created
+
+  15. Customer Reply Created
+
+  16. Comment Created
+
+"
+
+category: notification
+
+tags:
+- webhook
+- automation
+
+developer:
+  name: Paulo Soares
+  email: paulo@supportbee.com
+  twitter: "@soares_ph"
+  github: paulosoares86

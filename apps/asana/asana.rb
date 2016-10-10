@@ -1,4 +1,4 @@
-module Asana 
+module Asana
   module ActionHandler
     def button
       ticket = payload.tickets.first
@@ -8,19 +8,19 @@ module Asana
         return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
         comment_on_ticket ticket, comment_html(response)
       rescue Exception => e
-        puts e.message
-        puts e.backtrace
+        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
+        ErrorReporter.report(e, context)
         return [500, e.message]
       end
 
       [200, "Ticket sent to Asana"]
 
     end
-    
+
     def projects
       [200, fetch_projects]
     end
-    
+
     def orgs
       [200, fetch_orgs]
     end
@@ -56,7 +56,7 @@ module Asana
 
     private
 
-    
+
     def fetch_orgs
       response = asana_get(orgs_url)
       JSON.parse(response.body.to_json)['data'].to_json
@@ -65,7 +65,7 @@ module Asana
     def orgs_url
       api_url('workspaces')
     end
-    
+
     def fetch_projects
       response = asana_get(projects_url(payload.overlay.org))
       JSON.parse(response.body.to_json)['data'].to_json
@@ -87,7 +87,7 @@ module Asana
     def api_url(resource)
       "https://app.asana.com/api/1.0/#{resource}"
     end
-    
+
     def asana_get(url)
       response = http.get url do |req|
        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
@@ -103,11 +103,11 @@ module Asana
         req.body = body.to_json
       end
     end
-    
+
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
-    
+
     def comment_html(response)
       url = "https://app.asana.com/0/#{payload.overlay.projects_select}/#{response.body['data']['id']}"
       title = response.body['data']['name']

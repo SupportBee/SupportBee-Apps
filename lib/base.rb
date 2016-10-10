@@ -1,10 +1,11 @@
+require "addressable/uri"
+
 module SupportBeeApp
-	class Base
-		
+  class Base
     include HttpHelper
 
     class << self
-			def env
+      def env
         @env ||= PLATFORM_ENV
       end
 
@@ -25,14 +26,14 @@ module SupportBeeApp
       attr_writer :current_sha
 
       %w(development test production staging).each do |m|
-      	define_method "#{m}?" do
-        	env == m
-      	end
-    	end
+        define_method "#{m}?" do
+          env == m
+        end
+      end
 
-    	def apps
-				@apps ||= []
-			end
+      def apps
+        @apps ||= []
+      end
 
       def root
         Pathname.new(APPS_PATH).join(app_module.to_s.underscore)
@@ -53,14 +54,14 @@ module SupportBeeApp
       def views_path
         assets_path.join('views')
       end
-    
+
       def configuration
         @configuration ||= YAML.load_file(root.join('config.yml').to_s)
       end
 
       def schema
-				@schema ||= {}
-			end
+        @schema ||= {}
+      end
 
       def info
         {
@@ -74,7 +75,7 @@ module SupportBeeApp
       def api_hash
         result = configuration.dup
         if has_actions?
-          result['actions'] = result.delete('action') 
+          result['actions'] = result.delete('action')
           result['actions']['button'] = buttons_hash if has_action?(:button)
         end
         result['actions'] = {} unless result['actions']
@@ -155,7 +156,7 @@ module SupportBeeApp
         end
       end
 
-			def add_to_schema(type,name,options={})
+      def add_to_schema(type,name,options={})
         type = type.to_s
         name = name.to_s
 
@@ -171,19 +172,23 @@ module SupportBeeApp
         schema[name]['hint'] = hint if hint
         schema[name]['oauth_options'] = oauth_options if type == "oauth" and oauth_options
         schema
-    	end
+      end
 
-    	def string(name, options={})
-      	add_to_schema :string, name, options
-    	end
+      def text(name, options={})
+        add_to_schema :text, name, options
+      end
 
-    	def password(name, options={})
-      	add_to_schema :password, name, options
-    	end
+      def string(name, options={})
+        add_to_schema :string, name, options
+      end
 
-    	def boolean(name, options={})
-      	add_to_schema :boolean, name, options
-    	end
+      def password(name, options={})
+        add_to_schema :password, name, options
+      end
+
+      def boolean(name, options={})
+        add_to_schema :boolean, name, options
+      end
 
       def token(name, options={})
         add_to_schema :token, name, options
@@ -201,15 +206,15 @@ module SupportBeeApp
         action_handler ? action_handler.instance_methods : []
       end
 
-    	def trigger_event(event, data, payload = nil)
-    	  app = new(data,payload)
+      def trigger_event(event, data, payload = nil)
+        app = new(data,payload)
         app.trigger_event(event)
-    	end
+      end
 
       def trigger_action(action, data, payload = nil)
-    		app = new(data,payload)
+        app = new(data,payload)
         app.trigger_action(action)
-    	end
+      end
 
       def event_handler
         app_module.const_defined?("EventHandler") ? app_module.const_get("EventHandler") : nil
@@ -219,22 +224,22 @@ module SupportBeeApp
         app_module.const_defined?("ActionHandler") ? app_module.const_get("ActionHandler") : nil
       end
 
-    	def inherited(app)
+      def inherited(app)
         app.send(:include, app.event_handler) if app.event_handler
         app.send(:include, app.action_handler) if app.action_handler
-      	SupportBeeApp::Base.apps << app 
-      	super
-    	end
+        SupportBeeApp::Base.apps << app
+        super
+      end
 
-    	def setup_for(sinatra_app)
-    		sinatra_app.setup(self)
-    	end
-		end
+      def setup_for(sinatra_app)
+        sinatra_app.setup(self)
+      end
+    end
 
-		self.env ||= PLATFORM_ENV
+    self.env ||= PLATFORM_ENV
 
     attr_reader :data
-		attr_reader :payload
+    attr_reader :payload
     attr_reader :auth
     attr_reader :settings
     attr_reader :store
@@ -242,8 +247,8 @@ module SupportBeeApp
 
     attr_writer :ca_file
 
-		def initialize(data = {}, payload = {})
-    	@data = Hashie::Mash.new(data) || {}
+    def initialize(data = {}, payload = {})
+      @data = Hashie::Mash.new(data) || {}
       @auth = @data[:auth] || {}
       @settings = @data[:settings] || {}
 
@@ -252,7 +257,7 @@ module SupportBeeApp
 
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
       @errors = {}
-  	end
+    end
 
     def valid?
       return true unless self.respond_to?(:validate)
@@ -264,7 +269,7 @@ module SupportBeeApp
       method = to_method(event)
       begin
         response = self.send method if self.respond_to?(method)
-        if response 
+        if response
           LOGGER.info log_event_message
         else
           LOGGER.warn log_event_message
@@ -272,6 +277,7 @@ module SupportBeeApp
 
         return response
       rescue Exception => e
+        ErrorReporter.report(e, {event: event})
         LOGGER.error log_event_message(e.message)
         LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
@@ -288,6 +294,7 @@ module SupportBeeApp
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
+        ErrorReporter.report(e, {action: action})
         LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
         result = [500, e.message]
       end
@@ -296,7 +303,7 @@ module SupportBeeApp
       result
     end
 
-    def log_message(trigger, message ='')
+    def log_message(trigger, message='')
       "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
     end
 
@@ -346,7 +353,6 @@ module SupportBeeApp
       string
     end
 
-    
     def pre_process_payload(raw)
       result = Hashie::Mash.new(raw)
       raw = result.delete(:payload)
@@ -356,17 +362,20 @@ module SupportBeeApp
         result[:tickets] = []
         raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
       end
-      result[:ticket]  = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
-      result[:reply]   = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
+      result[:ticket] = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
+      result[:reply] = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
       result[:company] = SupportBee::Company.new(auth, raw[:company]) if raw[:company]
       result[:comment] = SupportBee::Comment.new(auth, raw[:comment]) if raw[:comment]
       result[:agent] = SupportBee::User.new(auth, raw[:agent]) if raw[:agent]
-      result[:assignment] = SupportBee::Assignment.new(auth, raw[:assignment]) if raw[:assignment]
+      result[:user_assignment] = SupportBee::UserAssignment.new(auth, raw[:user_assignment]) if raw[:user_assignment]
+      result[:team_assignment] = SupportBee::TeamAssignment.new(auth, raw[:team_assignment]) if raw[:team_assignment]
+      result[:raw_payload] = raw
       result
     end
 
     def to_method(string)
-      string.gsub('.','_').underscore
+      return 'all_events' if respond_to?(:all_events)
+      string.gsub('.', '_').underscore
     end
-	end
+  end
 end

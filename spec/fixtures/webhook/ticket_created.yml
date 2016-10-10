@@ -1,0 +1,50 @@
+---
+:data:
+  auth:
+    subdomain: test
+    auth_token: pggZFqQFX1anQPxjQXCT
+  settings:
+    urls: 'http://example1.com, http://example2.com'
+:payload:
+  payload:
+    action_type: ticket.created
+    company:
+      subdomain: company1
+      name: Company, 1
+    ticket:
+      id: 1
+      subject: A Ticket
+      replies_count: 0
+      comments_count: 0
+      last_activity_at: '2012-03-01T17:02:51Z'
+      created_at: '2012-03-01T17:02:51Z'
+      unanswered: true
+      archived: false
+      spam: false
+      trash: false
+      summary: Ticket Content
+      cc: []
+      labels: []
+      requester:
+        id: 1
+        email: sahil@gmail.com
+        name: Sahil Rastogi
+        agent: false
+        picture:
+          thumb20: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=20
+          thumb24: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=24
+          thumb32: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=32
+          thumb48: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=48
+          thumb64: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=64
+          thumb128: https://secure.gravatar.com/avatar/be27d979489e5ff5f6f503442c9d349b.png?r=PG&s=128
+      content:
+        text: Ticket Content
+        html: <p>Ticket Content</p>
+        attachments:
+        - id: 1
+          created_at: '2012-03-01T17:05:50Z'
+          filename: todo2.txt
+          content_type: text/plain; charset=US-ASCII; name=todo2.txt
+          url:
+            original: http://company.example.com/attachments/1
+            thumb: http://company.example.com/attachments/1?version=thumb
