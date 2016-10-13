@@ -38,7 +38,7 @@ module Slack
   require 'json'
 
   class Base < SupportBeeApp::Base
-    string :url_webhook, :required => true, :label => 'Webhook URL', :hint => "If you configure this, you can ignore the rest of the settings."
+    string :url_webhook, :required => true, :label => 'Webhook URL'
 
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
