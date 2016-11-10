@@ -58,9 +58,20 @@ module Basecamp
       hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
 
     def validate
-      status, projects = fetch_projects
-      errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
-      errors.empty? ? true : false
+      # status, projects = fetch_projects
+      # errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
+      # errors.empty? ? true : false
+      response = basecamp_get(projects_url)
+      return true if response.status == 200
+
+      e = StandardError.new("Failed to fetch basecamp projects")
+      context = {
+        response_status: response.status,
+        response_body: response.body
+      }
+      ErrorReporter.report(e, context)
+      errors[:flash] = response.body
+      return false
     end
 
     def token
