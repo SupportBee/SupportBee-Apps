@@ -1,5 +1,3 @@
-require 'pry'
-
 module Insightly
   module EventHandler
     def ticket_created
