@@ -79,3 +79,5 @@ config/sb_config.yml
 *.swl
 public/stylesheets/common/tinymce.css
 public/stylesheets/common/tinymce_ui.css
+.ruby-gemset
+.ruby-version

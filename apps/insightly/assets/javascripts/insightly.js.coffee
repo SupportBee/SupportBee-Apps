@@ -7,8 +7,7 @@ option_tag = (item) ->
 users_option_tag = (item) ->
   "<option value='#{item.get('USER_ID')}'>#{item.get('FIRST_NAME')} #{item.get('LAST_NAME')}</option>"
 
-Insightly.Views.Overlay = SB.Apps.BaseView.extend(
-
+Insightly.Views.Overlay = SB.Apps.BaseView.extend
   events: {
     'click a.submit': 'submit_form'
   }
@@ -19,8 +18,8 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend(
     _.bindAll this, 'render_projects', 'render_one_project', 'render_users', 'render_one_user'
 
     @setup_selectors()
-    @populate_users()
     @populate_projects()
+    @populate_users()
 
   setup_selectors: ->
     @projects_selector = @$("[name='projects_select']")
@@ -35,6 +34,7 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend(
     @projects.fetch()
 
   render_projects: ->
+    @projects_selector.append "<option value='none'>None</option>"
     @projects.each @render_one_project
 
   render_one_project: (project) ->
@@ -54,6 +54,5 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend(
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
-)
 
 return Insightly

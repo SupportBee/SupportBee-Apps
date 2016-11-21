@@ -62,7 +62,6 @@ module Insightly
   require 'json'
 
   class Base < SupportBeeApp::Base
-
     string  :api_key,
             required: true,
             label: 'Insightly API Key',
@@ -71,15 +70,12 @@ module Insightly
             required: true,
             label: 'Insightly Subdomain',
             hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
-
     string :tagged_name,
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
-
     boolean :tag_contacts,
             label: 'Tag new contacts that are created from within SupportBee with a tag name',
             default: false
-
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
@@ -95,6 +91,8 @@ module Insightly
     end
 
     def project_id
+      return nil if payload.overlay.projects_select == 'none'
+
       payload.overlay.projects_select
     end
 
@@ -113,18 +111,21 @@ module Insightly
     end
 
     def create_task(title, description)
-      response = api_post('tasks', {
+      request_body = {
         title: title,
         details: description,
-        project_id: project_id,
         completed: false,
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
         owner_user_id: owner_user_id,
-        tasklinks: [{
-          project_id: project_id
-        }]
-      })
+      }
+
+      if project_id
+        request_body[:project_id] = project_id
+        request_body[:tasklinks] = [{ project_id: project_id }]
+      end
+
+      response = api_post('tasks', request_body)
       return response.body if response.status == 201
       raise Exception, "Create task status was #{response.status}. Response #{response.body}"
     end
