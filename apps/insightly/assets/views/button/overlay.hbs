@@ -29,6 +29,18 @@ https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         <label for="owner_user">Responsible User</label>
         <select name="owner_select"></select>
       </div>
+
+      <div class="field">
+        <label for="status">Select Status</label>
+        <select name="status_select">
+          <option>Not Started</option>
+          <option>In Progress</option>
+          <option>Waiting</option>
+          <option>Deferred</option>
+          <option>Completed</option>
+        </select>
+      </div>
+
       <div class="actions">
         <a class="ui submit primary button btn">Send to Insightly</a>
         <a class="ui right floated cancel basic button btn">Cancel</a>

@@ -96,13 +96,11 @@ module Insightly
 
     def project_id
       return nil if payload.overlay.projects_select == 'none'
-
       payload.overlay.projects_select
     end
 
     def opportunity_id
       return nil if payload.overlay.opportunities_select == 'none'
-
       payload.overlay.opportunities_select
     end
 
@@ -112,6 +110,11 @@ module Insightly
 
     def owner_user_id
       payload.overlay.owner_select
+    end
+
+    def status
+      return nil if payload.overlay.status_select == 'none'
+      payload.overlay.status_select
     end
 
     private
@@ -141,6 +144,7 @@ module Insightly
         tasklinks << { opportunity_id: opportunity_id }
       end
 
+      request_body[:status] = status if status
       request_body[:tasklinks] = tasklinks
 
       response = api_post('tasks', request_body)
