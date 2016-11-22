@@ -121,7 +121,7 @@ module Insightly
     end
 
     def create_task(title, description)
-      tasklinks = {}
+      tasklinks = []
       request_body = {
         title: title,
         details: description,
@@ -133,15 +133,15 @@ module Insightly
 
       if project_id
         request_body[:project_id] = project_id
-        tasklinks[:project_id] = project_id
+        tasklinks << { project_id: project_id }
       end
 
       if opportunity_id
         request_body[:opportunity_id] = opportunity_id
-        tasklinks[:opportunity_id] = opportunity_id
+        tasklinks << { opportunity_id: opportunity_id }
       end
 
-      request_body[:tasklinks] = [tasklinks]
+      request_body[:tasklinks] = tasklinks
 
       response = api_post('tasks', request_body)
       return response.body if response.status == 201
