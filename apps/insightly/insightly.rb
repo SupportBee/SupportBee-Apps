@@ -113,8 +113,11 @@ module Insightly
     end
 
     def status
-      return nil if payload.overlay.status_select == 'none'
       payload.overlay.status_select
+    end
+
+    def priority
+      payload.overlay.priority_select.to_i
     end
 
     private
@@ -132,6 +135,8 @@ module Insightly
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
         owner_user_id: owner_user_id,
+        status: status,
+        priority: priority
       }
 
       if project_id
@@ -144,7 +149,6 @@ module Insightly
         tasklinks << { opportunity_id: opportunity_id }
       end
 
-      request_body[:status] = status if status
       request_body[:tasklinks] = tasklinks
 
       response = api_post('tasks', request_body)
