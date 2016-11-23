@@ -51,6 +51,10 @@ module Insightly
       [200, fetch_projects]
     end
 
+    def opportunities
+      [200, fetch_opportunities]
+    end
+
     def users
       [200, fetch_users]
     end
@@ -92,8 +96,12 @@ module Insightly
 
     def project_id
       return nil if payload.overlay.projects_select == 'none'
-
       payload.overlay.projects_select
+    end
+
+    def opportunity_id
+      return nil if payload.overlay.opportunities_select == 'none'
+      payload.overlay.opportunities_select
     end
 
     def responsible_user_id
@@ -104,6 +112,14 @@ module Insightly
       payload.overlay.owner_select
     end
 
+    def status
+      payload.overlay.status_select
+    end
+
+    def priority
+      payload.overlay.priority_select.to_i
+    end
+
     private
 
     def test_ping
@@ -111,6 +127,7 @@ module Insightly
     end
 
     def create_task(title, description)
+      tasklinks = []
       request_body = {
         title: title,
         details: description,
@@ -118,12 +135,21 @@ module Insightly
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
         owner_user_id: owner_user_id,
+        status: status,
+        priority: priority
       }
 
       if project_id
         request_body[:project_id] = project_id
-        request_body[:tasklinks] = [{ project_id: project_id }]
+        tasklinks << { project_id: project_id }
       end
+
+      if opportunity_id
+        request_body[:opportunity_id] = opportunity_id
+        tasklinks << { opportunity_id: opportunity_id }
+      end
+
+      request_body[:tasklinks] = tasklinks
 
       response = api_post('tasks', request_body)
       return response.body if response.status == 201
@@ -184,6 +210,11 @@ module Insightly
 
     def fetch_projects
       response = insightly_get(api_url('projects'))
+      response.body.to_json
+    end
+
+    def fetch_opportunities
+      response = insightly_get(api_url('opportunities'))
       response.body.to_json
     end
 
