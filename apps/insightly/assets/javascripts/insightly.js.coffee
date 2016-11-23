@@ -2,7 +2,7 @@ Insightly = {}
 Insightly.Views = {}
 
 option_tag = (item) ->
-  "<option value='#{item.get('PROJECT_ID')}'>#{item.get('PROJECT_NAME')}</option>"
+  "<option value='#{item.get('PROJECT_ID')}'>#{item.get('PROJECT_NAME')} (#{item.get('STATUS')})</option>"
 
 opportunity_option_tag = (item) ->
   "<option value='#{item.get('OPPORTUNITY_ID')}'>#{item.get('OPPORTUNITY_NAME')} (#{item.get('OPPORTUNITY_STATE')})</option>"
