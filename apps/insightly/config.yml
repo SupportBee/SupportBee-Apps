@@ -17,13 +17,21 @@ If the contact does not already exist in Insightly, the app would create a new c
 
 Using the Insightly app one can send support emails to Insightly as Tasks.
 
-### Send Tickets to Multiple Projects
+### Link Tasks to Projects
 
 The Insightly app can send a ticket to multiple projects. When you click on 'Apps > Send to Insightly', all your projects would be listed in the 'Select Project' dropdown.
 
+### Attach Opportunities to Tasks 
+
+You can also attach Opportunities to Tasks you create from SupportBee. All your Insightly Opportunities would be listed in the 'Select Opportunities' dropdown, with the current status of the opportunity listed in brackets.
+
 ### Select Assignee and Reporter of the Task
 
-Using the Insightly app, one can Assign a Task to an Insightly User without leaving SupportBee. One can also select the Responsible User of the Task.
+You can assign a Task to an Insighttly User, and also add a user responsible for the Task right from SupportBee. All your Insightly Users would be listed in the dropdown.
+
+### Select Status and Priority of the Task
+
+Being able to select the Priority (Low, Medium, High) and the Status of a task from within SupportBee makes the integration even more powerful and handy!
 
 ## Adding the Insightly App
 
