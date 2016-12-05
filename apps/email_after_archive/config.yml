@@ -7,12 +7,15 @@ This app requires a [mailgun](https://mailgun.com) API key"
 
 category: workflow
 
-tags: 
+tags:
 - email
 - feedback
 
-developer: 
+developer:
   name: Rajat Chowdhary
   email: rajat188@gmail.com
   twitter: "technorajat"
   github: rajat-chowdhary
+
+retire: true
+temporary_redirect_url: "https://supportbee.com/blog/email-after-archive/"

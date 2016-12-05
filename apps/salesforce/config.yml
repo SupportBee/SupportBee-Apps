@@ -5,12 +5,14 @@ access: test
 description: "Pull customer information from Saleforce and posts it as a comment on the ticket. It also adds a note with the ticket URL for the SalesForce contact."
 category: crm
 
-tags: 
+tags:
 - crm
 - salesforce
 
-developer: 
+developer:
   name: Shaikh Imran
   email: imranshaikh818@gmail.com
   twitter: "@imranshaikh_me"
   github: Imranshaikh
+
+retired: true
