@@ -9,10 +9,7 @@ description: "
 **Polling is inefficient, use SupportBee's Webhooks**
 
 
-Writing an app or integration that does something on every new ticket or reply? Webhooks are a great way to be programatically notified when something happens. You can add any number of webhooks in SupportBee.
-
-
-**Supported Events with Webhooks**
+Writing an app or integration that does something on every new ticket or reply? Webhooks are a great way to be programmatically notified when something happens. You can add any number of web hooks in SupportBee. Below is a list of supported events with Webhooks:
 
 
 - Ticket Created
