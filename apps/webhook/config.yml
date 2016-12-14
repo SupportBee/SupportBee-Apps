@@ -4,41 +4,53 @@ access: public
 
 description: "
 
-Provides Web Hooks for events:
+## Webhook for Everything Important
+
+**Polling is inefficient, use SupportBee's Webhooks**
 
 
-  1. Ticket Created
+Writing an app or integration that does something on every new ticket or reply? Webhooks are a great way to be programatically notified when something happens. You can add any number of webhooks in SupportBee.
 
-  2. Ticket Assigned to User
 
-  3. Ticket Unassigned from User
+**Supported Events with Webhooks**
 
-  4. Ticket Assigned to Team
 
-  5. Ticket Unassigned from Team
+- Ticket Created
 
-  6. Ticket Answered
+- Ticket Assigned to User
 
-  7. Ticket Unanswered
+- Ticket Unassigned from User
 
-  8. Ticket Spammed
+- Ticket Assigned to Team
 
-  9. Ticket Unspammed
+- Ticket Unassigned from Team
 
-  10. Ticket Trashed
+- Ticket Answered
 
-  11. Ticket Untrashed
+- Ticket Unanswered
 
-  12. Ticket Archived
+- Ticket Spammed
 
-  13. Ticket Unarchived
+- Ticket Unspammed
 
-  14. Agent Reply Created
+- Ticket Trashed
 
-  15. Customer Reply Created
+- Ticket Untrashed
 
-  16. Comment Created
+- Ticket Archived
 
+- Ticket Unarchived
+
+- Agent Reply Created
+
+- Customer Reply Created
+
+- Comment Created
+
+
+You can use a service like [RequestBin](http://requestb.in/) to test these webhooks.
+
+[Read Webhooks Documentation to learn more &rarr;](https://supportbee.com/docs/using-web-hooks)
 "
 
 category: notification
