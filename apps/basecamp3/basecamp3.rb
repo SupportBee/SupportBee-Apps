@@ -1,4 +1,4 @@
-module Basecamp
+module Basecamp3
   module ActionHandler
     def button
       ticket = payload.tickets.first
@@ -44,7 +44,7 @@ module Basecamp
   end
 end
 
-module Basecamp
+module Basecamp3
   class Base < SupportBeeApp::Base
     oauth  :basecamp,
       oauth_options: {
@@ -101,7 +101,7 @@ module Basecamp
     private
 
     def base_url
-      Pathname.new("https://basecamp.com/#{settings.app_id}").join('api', 'v1')
+      Pathname.new("https://3.basecampapi.com/#{settings.app_id}")
     end
 
     def projects_url
@@ -117,7 +117,13 @@ module Basecamp
     end
 
     def messages_url
-      project_url.join('messages')
+      # project_url.join('messages')
+      response = basecamp_get(project_url)
+      # @todo Raise exception in case of http error
+      dock = response.body["dock"]
+      message_board = dock.select { |dock_item| dock_item["name"] == "message_board" }.first
+      message_board_url = message_board["url"]
+      Pathname.new(message_board_url.chomp(".json")).join("messages")
     end
 
     def project_todolists_url
@@ -135,6 +141,7 @@ module Basecamp
     def basecamp_post(url, body)
       http.post "#{url.to_s}.json" do |req|
         req.headers['Authorization'] = 'Bearer ' + token
+        req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
         req.headers['Content-Type'] = 'application/json'
         req.body = body
       end
@@ -143,6 +150,7 @@ module Basecamp
     def basecamp_get(url)
       response = http.get "#{url.to_s}.json" do |req|
        req.headers['Authorization'] = 'Bearer ' + token
+       req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
        req.headers['Accept'] = 'application/json'
       end
     end
@@ -150,7 +158,8 @@ module Basecamp
     def create_message
       body = {
         subject: title,
-        content: description
+        content: description,
+        status: "active" # Publish the message immediately
       }.to_json
 
       response = basecamp_post(messages_url, body)

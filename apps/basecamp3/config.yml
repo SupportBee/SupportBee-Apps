@@ -1,0 +1,49 @@
+name: "Basecamp3"
+slug: basecamp3
+access: public
+
+description: "
+
+Basecamp keeps all your projects, data, and people in one place. With an entire project on one page, nothing gets lost and your team always knows where things are. Signup for a [free trial](https://basecamp.com/signup).
+
+## Send a Ticket to Basecamp as a Todo List or Message
+
+Use SupportBee's New Basecamp App to send a ticket to Basecamp. You can either create a new todo list or a message.
+
+## Adding the New Basecamp App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to Basecamp to allow access to the API. Once you authorize the app, you will be shown a settings screen where you need to fill in a few details.
+
+### App ID
+
+If your base URL is https://basecamp.com/9999999 enter 9999999
+
+### Project ID
+
+When you go to a project, if the URL is https://basecamp.com/9999999/projects/8888888-explore-basecamp enter 8888888
+
+## Using the App
+
+To send a ticket to Basecamp, open a ticket and click Apps > Send to Bascamp. Before you send the ticket, you can edit the title/description. By default, we create a new todo list but you can also select message from the dropdown.
+
+"
+
+category: project-management
+
+tags: 
+- project management
+- basecamp3
+
+developer:  
+  name: Nisanth Chunduru
+  email: nisanth074@gmail.com
+  twitter: "@nisanth074"
+  github: nisanth074
+ 
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    - unassigned
+    label: Send To Basecamp 3

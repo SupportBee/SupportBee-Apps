@@ -2,7 +2,6 @@ require 'sinatra/base'
 require 'sinatra-initializers'
 
 class RunApp < Sinatra::Base
-
   register Sinatra::Initializers
 
   unless PLATFORM_ENV == 'production'
