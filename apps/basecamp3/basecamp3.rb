@@ -116,18 +116,30 @@ module Basecamp3
       project_url.join('accesses')
     end
 
-    def messages_url
-      # project_url.join('messages')
+    def project_messages_url
+      project_message_board_url.join("messages")
+    end
+
+    def project_message_board_url
       response = basecamp_get(project_url)
-      # @todo Raise exception in case of http error
+      # @todo Raise exception in case of an http error
       dock = response.body["dock"]
       message_board = dock.select { |dock_item| dock_item["name"] == "message_board" }.first
-      message_board_url = message_board["url"]
-      Pathname.new(message_board_url.chomp(".json")).join("messages")
+      message_board_url = message_board["url"].chomp(".json")
+      Pathname.new(message_board_url)
     end
 
     def project_todolists_url
-      project_url.join('todolists')
+      project_todoset_url.join('todolists')
+    end
+
+    def project_todoset_url
+      response = basecamp_get(project_url)
+      # @todo Raise exception in case of an http error
+      dock = response.body["dock"]
+      todoset = dock.select { |dock_item| dock_item["name"] == "todoset" }.first
+      todoset_url = todoset["url"].chomp(".json")
+      Pathname.new(todoset_url)
     end
 
     def project_todolist_todos_url
@@ -162,7 +174,7 @@ module Basecamp3
         status: "active" # Publish the message immediately
       }.to_json
 
-      response = basecamp_post(messages_url, body)
+      response = basecamp_post(project_messages_url, body)
       response.status == 201 ? response : false
     end
 

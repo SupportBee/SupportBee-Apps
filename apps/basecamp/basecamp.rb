@@ -116,7 +116,7 @@ module Basecamp
       project_url.join('accesses')
     end
 
-    def messages_url
+    def project_messages_url
       project_url.join('messages')
     end
 
@@ -153,7 +153,7 @@ module Basecamp
         content: description
       }.to_json
 
-      response = basecamp_post(messages_url, body)
+      response = basecamp_post(project_messages_url, body)
       response.status == 201 ? response : false
     end
 
