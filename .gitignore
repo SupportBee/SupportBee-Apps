@@ -1,6 +1,7 @@
 config/secret_config.yml
 .sass-cache/
 .bundle
+vendor/bundle/
 public/javascripts/app_error_handler.js
 config/omniauth.platform.yml
 config/sba_config.yml
