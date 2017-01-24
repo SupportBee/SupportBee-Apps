@@ -20,13 +20,13 @@ module Basecamp
             response
           end
 
-        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result
+        return [500, { error: "Ticket not sent. Please check the settings of the app" }.to_json] unless result
         comment_on_ticket(ticket, html)
-        return [200, '{"message": "Ticket sent to Basecamp"}']
+        return [200, { message: "Ticket sent to Basecamp" }.to_json]
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
         ErrorReporter.report(e, context)
-        return [500, {message: e.message}]
+        return [500, { message: e.message }.to_json]
       end
     end
 
@@ -124,7 +124,7 @@ module Basecamp
       project_url.join('todolists')
     end
 
-    def project_todolist_todos_url
+    def todolist_todos_url
       project_todolists_url.join(todolist_id.to_s, 'todos')
     end
 
@@ -179,7 +179,7 @@ module Basecamp
       } if assignee_id and assignee_id != 'none'
       body = body.to_json
 
-      create_todo_item_response = basecamp_post(project_todolist_todos_url, body)
+      create_todo_item_response = basecamp_post(todolist_todos_url, body)
       return false if create_todo_item_response.status != 201
       todo_item_id = create_todo_item_response.body['id']
       create_comment_url = todo_item_comments_url(todo_item_id)
