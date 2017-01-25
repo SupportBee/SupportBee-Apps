@@ -31,7 +31,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @description_el = @$(".description")
     @todo_lists_el = @$(".todo_lists")
     @people_list_el = @$(".assign")
-    @assign_el = @$(".assign")
 
   populate_projects: ->
     @projects = new SB.Apps.BaseCollection([], app: @app, endpoint: 'projects')
