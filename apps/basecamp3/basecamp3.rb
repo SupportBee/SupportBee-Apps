@@ -38,8 +38,8 @@ module Basecamp3
       [200, fetch_todo_lists]
     end
 
-    def project_accesses
-      [200, fetch_project_accesses]
+    def project_members
+      [200, fetch_project_members]
     end
   end
 end
@@ -94,8 +94,8 @@ module Basecamp3
       payload.overlay.description rescue nil
     end
 
-    def assignee_id
-      payload.overlay.assign_to
+    def assignee_ids
+      Array(payload.overlay.assign_to)
     end
 
     private
@@ -116,8 +116,8 @@ module Basecamp3
       projects_url.join(project_id.to_s)
     end
 
-    def project_accesses_url
-      project_url.join('accesses')
+    def project_members_url
+      project_url.join('people')
     end
 
     def project_messages_url
@@ -196,10 +196,7 @@ module Basecamp3
         content: title,
         description: description
       }
-      # body[:assignee] = {
-      #   id: assignee_id,
-      #   type: 'Person'
-      # } if assignee_id and assignee_id != 'none'
+      body[:assignee_ids] = assignee_ids unless assignee_ids.empty?
       body = body.to_json
 
       response = basecamp_post(todolist_todos_url, body)
@@ -220,8 +217,8 @@ module Basecamp3
       response.body.to_json
     end
 
-    def fetch_project_accesses
-      response = basecamp_get(project_accesses_url)
+    def fetch_project_members
+      response = basecamp_get(project_members_url)
       response.body.to_json
     end
 

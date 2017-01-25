@@ -58,7 +58,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
       when 'message'
         @reset_lists()
 
-
   hide_everything: ->
     @todo_lists_el.hide()
     @description_el.hide()
@@ -86,10 +85,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
 
   reset_people_list: ->
     @people_list_el.find('option').remove().hide()
-    @append_default_option_on_reset()
-
-  append_default_option_on_reset: ->
-    @people_list_el.find('select').append('<option value="none">Don\'t Assign</option>')
 
   show_title: ->
     @title_el.show()
@@ -110,7 +105,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
 
   populate_people: ->
     @people_list = new SB.Apps.BaseCollection([],
-                                              endpoint: 'project_accesses',
+                                              endpoint: 'project_members',
                                               app: @app,
                                               request_params: {projects_select: @projects_selector.val()})
     @people_list.bind 'reset', @render_people
@@ -123,9 +118,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   render_person: (person)->
     @people_list_selector.append option_tag(person)
 
-
   render_lists: ->
-    console.log 'render_lists', @lists
     @lists.each @render_one_list
     @todo_lists_el.show()
 
@@ -133,7 +126,12 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @todo_lists_selector.append option_tag(list)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    formJSON = @$('form').toJSON()
+
+    assignee_ids = this.$("select[name=assign_to]").parent().dropdown("get value")
+    formJSON["assign_to"] = assignee_ids unless _.isEmpty(assignee_ids)
+
+    @post 'button', formJSON
 )
 
 return Basecamp
