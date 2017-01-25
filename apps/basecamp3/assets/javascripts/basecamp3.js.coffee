@@ -15,7 +15,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     SB.Apps.BaseView.prototype.initialize.call(this)
 
     _.bindAll this, 'render_projects', 'target_changed', 'render_one_project',
-                    'render_lists', 'render_one_list', 'project_changed',
+                    'render_todo_lists', 'render_one_todo_list', 'project_changed',
                     'render_people', 'render_person'
 
     @setup_selectors()
@@ -51,7 +51,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     switch @type
       when 'todo_item'
         @show_todo_lists_selector()
-        @populate_lists()
+        @populate_todo_lists()
         @populate_people()
       when 'todo_list'
         @reset_lists()
@@ -95,13 +95,13 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   show_todo_lists_selector: ->
     @todo_lists_el.show()
 
-  populate_lists: ->
-    @lists = new SB.Apps.BaseCollection([],
+  populate_todo_lists: ->
+    @todo_lists = new SB.Apps.BaseCollection([],
                                         endpoint: 'todo_lists',
                                         app: @app,
                                         request_params: {projects_select: @projects_selector.val()})
-    @lists.bind 'reset', @render_lists
-    @lists.fetch()
+    @todo_lists.bind 'reset', @render_todo_lists
+    @todo_lists.fetch()
 
   populate_people: ->
     @people_list = new SB.Apps.BaseCollection([],
@@ -111,19 +111,18 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @people_list.bind 'reset', @render_people
     @people_list.fetch()
 
+  render_todo_lists: ->
+    @todo_lists.each @render_one_todo_list
+
+  render_one_todo_list: (todo_list) ->
+    @todo_lists_selector.append option_tag(todo_list)
+
   render_people: ->
     @people_list.each @render_person
     @people_list_el.show()
 
   render_person: (person)->
     @people_list_selector.append option_tag(person)
-
-  render_lists: ->
-    @lists.each @render_one_list
-    @todo_lists_el.show()
-
-  render_one_list: (list) ->
-    @todo_lists_selector.append option_tag(list)
 
   submit_form: ->
     formJSON = @$('form').toJSON()

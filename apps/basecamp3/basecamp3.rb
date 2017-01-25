@@ -95,7 +95,7 @@ module Basecamp3
     end
 
     def assignee_ids
-      Array(payload.overlay.assign_to)
+      Array(payload.overlay.assign_to) rescue []
     end
 
     private
