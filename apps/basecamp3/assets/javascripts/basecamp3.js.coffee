@@ -6,30 +6,30 @@ option_tag = (item) ->
 
 Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   events: {
-    'change [name="type"]': 'target_changed',
-    'change [name="projects_select"]': 'project_changed'
+    'change [name="type"]': 'on_type_change',
+    'change [name="projects_select"]': 'on_project_change'
     'click a.submit': 'submit_form'
   }
 
   initialize: ->
     SB.Apps.BaseView.prototype.initialize.call(this)
 
-    _.bindAll this, 'render_projects', 'target_changed', 'render_one_project',
-                    'render_todo_lists', 'render_one_todo_list', 'project_changed',
-                    'render_people', 'render_person'
+    _.bindAll @
 
-    @setup_selectors()
+    @initialize_variables()
     @populate_projects()
 
-  setup_selectors: ->
+  initialize_variables: ->
     @projects_selector = @$("[name='projects_select']")
+    @type_selector = @$("[name='type']")
     @todo_lists_selector = @$("[name='todo_lists']")
     @people_list_selector = @$("[name='assign_to']")
-    @target_type_selector = @$("[name='type']")
+
     @description_field = @$("[name='description']")
+
+    @todo_lists_el = @$(".todo_lists")
     @title_el = @$(".title")
     @description_el = @$(".description")
-    @todo_lists_el = @$(".todo_lists")
     @people_list_el = @$(".assign")
 
   populate_projects: ->
@@ -38,44 +38,38 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @projects.fetch()
 
   render_projects: ->
-    @projects.each @render_one_project
+    @projects.each @render_project
+    @hide_loading_indicator()
 
-  render_one_project: (project) ->
+  render_project: (project) ->
     @projects_selector.append option_tag(project)
 
-  target_changed: ->
-    @type = @target_type_selector.val()
-    @hide_everything()
-    @show_description()
+  on_project_change: ->
+    @type_selector.children().first().attr('selected', 'selected')
+    @hide_and_reset_todo_and_people_lists()
+
+  on_type_change: ->
+    @type = @type_selector.val()
     switch @type
-      when 'todo_item'
-        @show_todo_lists_selector()
-        @populate_todo_lists()
-        @populate_people()
-      when 'todo_list'
-        @reset_lists()
       when 'message'
-        @reset_lists()
+        @hide_and_reset_todo_and_people_lists()
+      when 'todo_list'
+        @hide_and_reset_todo_and_people_lists()
+      when 'todo_item'
+        @show_and_populate_todo_and_people_lists()
 
-  hide_everything: ->
+  hide_and_reset_todo_and_people_lists: ->
     @todo_lists_el.hide()
-    @description_el.hide()
     @people_list_el.hide()
+    @reset_todo_and_people_lists()
 
-  project_changed: ->
-    @hide_everything()
-    @reset_form()
+  show_and_populate_todo_and_people_lists: ->
+    @show_todo_lists()
+    @show_people_list()
+    @populate_todo_lists()
+    @populate_people()
 
-  reset_form: ->
-    @reset_type()
-
-  reset_type: ->
-    @target_type_selector.children().first().attr('selected','selected')
-    @reset_lists()
-    @show_title()
-    @show_description()
-
-  reset_lists: ->
+  reset_todo_and_people_lists: ->
     @reset_todo_lists()
     @reset_people_list()
 
@@ -91,15 +85,19 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   show_description: ->
     @description_el.show()
 
-  show_todo_lists_selector: ->
+  show_todo_lists: ->
     @todo_lists_el.show()
+
+  show_people_list: ->
+    @people_list_el.show()
 
   populate_todo_lists: ->
     @todo_lists = new SB.Apps.BaseCollection([],
                                         endpoint: 'todo_lists',
                                         app: @app,
                                         request_params: {projects_select: @projects_selector.val()})
-    @todo_lists.bind 'reset', @render_todo_lists
+    @todo_lists.bind 'reset', @on_todo_lists_fetch
+    @show_loading_indicator()
     @todo_lists.fetch()
 
   populate_people: ->
@@ -107,21 +105,39 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
                                               endpoint: 'project_members',
                                               app: @app,
                                               request_params: {projects_select: @projects_selector.val()})
-    @people_list.bind 'reset', @render_people
+    @people_list.bind 'reset', @on_people_list_fetch
+    @show_loading_indicator()
     @people_list.fetch()
 
-  render_todo_lists: ->
-    @todo_lists.each @render_one_todo_list
+  on_todo_lists_fetch: ->
+    @todo_lists.each @render_todo_list
+    @todo_lists_fetched = true
 
-  render_one_todo_list: (todo_list) ->
+    if @todo_lists_fetched && @people_list_fetched
+      @hide_loading_indicator()
+      # Reset variables
+      @todo_lists_fetched = @people_list_fetched = false
+
+  render_todo_list: (todo_list) ->
     @todo_lists_selector.append option_tag(todo_list)
 
-  render_people: ->
+  on_people_list_fetch: ->
     @people_list.each @render_person
-    @people_list_el.show()
+    @people_list_fetched = true
+
+    if @todo_lists_fetched && @people_list_fetched
+      @hide_loading_indicator()
+      # Reset variables
+      @todo_lists_fetched = @people_list_fetched = false
 
   render_person: (person)->
     @people_list_selector.append option_tag(person)
+
+  show_loading_indicator: ->
+    @$("form").addClass("loading")
+
+  hide_loading_indicator: ->
+    @$("form").removeClass("loading")
 
   submit_form: ->
     formJSON = @$('form').toJSON()
