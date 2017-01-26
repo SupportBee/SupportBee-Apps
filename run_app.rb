@@ -10,11 +10,19 @@ class RunApp < Sinatra::Base
     enable :show_exceptions
   end
 
+  if PLATFORM_ENV == 'development'
+    # Don't cache static assets (like app icon images) in development env.
+    #
+    # Even with this, if you change an app's icon, you still have to
+    # stop and start the app platform for it to pick up the new app icon.
+    set :static_cache_control, [:"no-cache"]
+  end
+
   before do
     return if PLATFORM_ENV == 'development'
     x_supportbee_key = request.env['HTTP_X_SUPPORTBEE_KEY'] ? request.env['HTTP_X_SUPPORTBEE_KEY'] : ''
     return if x_supportbee_key == SECRET_CONFIG['key']
-    halt 403, {'Content-Type' => 'application/json'}, '{"error" : "Access forbidden"}'
+    halt 403, { 'Content-Type' => 'application/json' }, '{"error" : "Access forbidden"}'
   end
 
   def self.setup(app_class)
@@ -115,5 +123,4 @@ class RunApp < Sinatra::Base
   end
 
   run! if app_file == $0
-
 end
