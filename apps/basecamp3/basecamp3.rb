@@ -8,15 +8,15 @@ module Basecamp3
           case payload.overlay.type
           when 'message'
             response = create_message
-            html = message_html_comment(response.body['id'], response.body['subject']) if response and response.body
+            html = message_html_comment(response.body) if response and response.body
             response
           when 'todo_list'
             response = create_todo_list
-            html = todolist_html_comment(response.body['id'], response.body['name']) if response and response.body
+            html = todolist_html_comment(response.body) if response and response.body
             response
           when 'todo_item'
             response = create_todo_item
-            html = todo_html_comment(response.body['todolist_id'], 'Todo item created') if response and response.body
+            html = todo_html_comment(response.body) if response and response.body
             response
           end
 
@@ -222,16 +222,26 @@ module Basecamp3
       response.body.to_json
     end
 
-    def todolist_html_comment(_todolist_id, _todolist_name)
-      "Basecamp To-do List created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
+    def message_html_comment(message_hash)
+      <<-COMMENT_HTML
+Basecamp message created!
+<br>
+<a href="#{message_hash['app_url']}">#{message_hash['subject']}</a>
+COMMENT_HTML
     end
 
-    def todo_html_comment(_todolist_id, _todolist_name)
-      "Basecamp todo created in the list <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/todolists/#{_todolist_id}'>#{_todolist_name}</a>"
+    def todolist_html_comment(todolist_hash)
+      <<-COMMENT_HTML
+Basecamp To-do List created!
+<br>
+<a href="#{todolist_hash['app_url']}">#{todolist_hash['name']}</a>
+COMMENT_HTML
     end
 
-    def message_html_comment(_message_id, subject)
-      "Basecamp message created!<br/> <a href='https://basecamp.com/#{settings.app_id}/projects/#{project_id}/messages/#{_message_id}'>#{subject}</a>"
+    def todo_html_comment(todo_hash)
+      <<-COMMENT_HTML
+Basecamp todo created in the list <a href="#{todo_hash['app_url']}">#{todo_hash['content']}</a>
+COMMENT_HTML
     end
 
     def comment_on_ticket(ticket, html)
