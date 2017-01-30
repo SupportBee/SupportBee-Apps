@@ -11,8 +11,8 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     'click a.submit': 'submit_form'
   }
 
-  initialize: ->
-    SB.Apps.BaseView.prototype.initialize.call(this)
+  initialize: (options = {}) ->
+    SB.Apps.BaseView.prototype.initialize.call(this, options)
 
     _.bindAll @
 
