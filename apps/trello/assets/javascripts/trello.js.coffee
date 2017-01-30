@@ -15,8 +15,8 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
     'click a.submit': 'submit_form'
   }
 
-  initialize: ->
-    SB.Apps.BaseView.prototype.initialize.call(this)
+  initialize: (options = {}) ->
+    SB.Apps.BaseView.prototype.initialize.call(this, options)
 
     _.bindAll this, 'render_one_board', 'board_changed', 'render_orgs',
                     'render_boards', 'render_lists', 'render_one_list'
