@@ -1,10 +1,10 @@
-Basecamp = {}
-Basecamp.Views = {}
+Basecamp3 = {}
+Basecamp3.Views = {}
 
 option_tag = (item) ->
   "<option value='#{item.get('id')}'>#{item.get('name')}</option>"
 
-Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
+Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
   events: {
     'change [name="type"]': 'on_type_change',
     'change [name="projects_select"]': 'on_project_change'
@@ -156,4 +156,4 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @post 'button', formJSON
 )
 
-return Basecamp
+return Basecamp3
