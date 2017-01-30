@@ -14,7 +14,15 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   initialize: (options = {}) ->
     SB.Apps.BaseView.prototype.initialize.call(this, options)
 
-    _.bindAll @
+    _.bindAll this,
+      'initialize_variables', 'populate_projects', 'render_projects',
+      'render_project', 'on_project_change', 'on_type_change',
+      'hide_and_reset_todo_and_people_lists', 'show_and_populate_todo_and_people_lists',
+      'reset_todo_and_people_lists', 'reset_todo_lists', 'reset_people_list',
+      'show_title', 'show_description', 'show_todo_lists', 'show_people_list',
+      'populate_todo_lists', 'populate_people', 'on_todo_lists_fetch',
+      'render_todo_list', 'on_people_list_fetch', 'render_person',
+      'show_loading_indicator', 'hide_loading_indicator', 'submit_form'
 
     @initialize_variables()
     @populate_projects()
