@@ -55,7 +55,7 @@ module Basecamp3
     string :app_id,
       required: true,
       label: 'Enter App ID',
-      hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
+      hint: 'If your basecamp URL is "https://3.basecamp.com/9999999/" enter "9999999"'
 
     def validate
       # status, projects = fetch_projects
