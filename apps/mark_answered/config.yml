@@ -31,3 +31,4 @@ action:
     - all
     - unassigned
     label: Mark Answered
+    multiple_ticket_selection: true # Let agents select multiple tickets in ticket listings when using the Mark as Answered integration
