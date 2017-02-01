@@ -25,7 +25,7 @@ module Basecamp
         return [200, { message: "Ticket sent to Basecamp" }.to_json]
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         return [500, { message: e.message }.to_json]
       end
     end
@@ -69,7 +69,7 @@ module Basecamp
         response_status: response.status,
         response_body: response.body
       }
-      ErrorReporter.report(e, context)
+      ErrorReporter.report(e, context: context)
       errors[:flash] = response.body
       return false
     end

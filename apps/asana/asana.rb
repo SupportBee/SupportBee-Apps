@@ -9,7 +9,7 @@ module Asana
         comment_on_ticket ticket, comment_html(response)
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         return [500, e.message]
       end
 

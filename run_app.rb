@@ -75,7 +75,8 @@ class RunApp < Sinatra::Base
         status result[0]
         body result[1] if result[1]
       rescue Exception => e
-        ErrorReporter.report(e, {app_slug: app_class.slug, action: action, data: data, payload: payload})
+        context = { app_slug: app_class.slug, action: action, data: data, payload: payload }
+        ErrorReporter.report(e, context: context)
         status 500
       end
     end

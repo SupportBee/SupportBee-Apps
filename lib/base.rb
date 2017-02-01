@@ -277,7 +277,8 @@ module SupportBeeApp
 
         return response
       rescue Exception => e
-        ErrorReporter.report(e, {event: event})
+        context = { event: event }
+        ErrorReporter.report(e, context: context)
         LOGGER.error log_event_message(e.message)
         LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
@@ -294,7 +295,8 @@ module SupportBeeApp
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
-        ErrorReporter.report(e, {action: action})
+        context = { action: action }
+        ErrorReporter.report(e, context: context)
         LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
         result = [500, e.message]
       end
