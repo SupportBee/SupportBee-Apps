@@ -58,11 +58,15 @@ module Basecamp3
       hint: 'If your basecamp URL is "https://3.basecamp.com/9999999/" enter "9999999"'
 
     def validate
-      # status, projects = fetch_projects
-      # errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
-      # errors.empty? ? true : false
-      response = basecamp_get(projects_url)
-      return true if response.status == 200
+      begin
+        response = basecamp_get(projects_url)
+      rescue => e
+        ErrorReporter.report(e)
+        errors[:flash] = "Failed to fetch projects from your basecamp. Please try again after sometime or contact support at support@supportbee.com"
+        return false
+      end
+
+      return true if response.status = 200
 
       e = StandardError.new("Failed to fetch basecamp projects")
       context = {
