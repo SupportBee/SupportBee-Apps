@@ -66,7 +66,7 @@ module Basecamp3
         return false
       end
 
-      return true if response.status = 200
+      return true if response.status == 200
 
       e = StandardError.new("Failed to fetch basecamp projects")
       context = {
