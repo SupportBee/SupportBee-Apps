@@ -52,9 +52,9 @@ module Basecamp3
         scope: "read,write"
       }
 
-    string :app_id,
+    string :account_id,
       required: true,
-      label: 'Enter App ID',
+      label: 'Enter Account ID',
       hint: 'If your basecamp URL is "https://3.basecamp.com/9999999/" enter "9999999"'
 
     def validate
@@ -105,7 +105,7 @@ module Basecamp3
     private
 
     def base_url
-      Pathname.new("https://3.basecampapi.com").join(settings.app_id.to_s)
+      Pathname.new("https://3.basecampapi.com").join(settings.account_id.to_s)
     end
 
     def bucket_url
@@ -148,11 +148,6 @@ module Basecamp3
       todoset = dock.select { |dock_item| dock_item["name"] == "todoset" }.first
       todoset_url = todoset["url"].chomp(".json")
       Pathname.new(todoset_url)
-    end
-
-    def todolist_url
-      todolist_id = 
-      bucket_url.join("todolists", )
     end
 
     def basecamp_post(url, body)
