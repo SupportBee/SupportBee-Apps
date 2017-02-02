@@ -17,7 +17,7 @@ module Magento
         end
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         [500, e.message]
       end
 
@@ -54,13 +54,12 @@ module Magento
     end
 
     def get_session_id(response)
-
       begin
         session_id = response.body[:login_response][:login_return] if response
       rescue Exception => e
-        ErrorReporter.report(e, {response: response})
+        context = { response: response }
+        ErrorReporter.report(e, context: context)
       end
-
     end
 
     def get_order(client, session_id, requester)

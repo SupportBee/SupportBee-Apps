@@ -36,7 +36,9 @@ module SupportBee
       begin
         load_attributes(response.body[self.class.key])
       rescue => e
-        ErrorReporter.report(e, {body: response && response.body})
+        context = {}
+        context[:response_body] = response.body if response && response.body
+        ErrorReporter.report(e, context: context)
         LOGGER.warn "__REFRESH_FAILED__#{e.message}"
         LOGGER.warn "__REFRESH_FAILED__#{e.backtrace}"
         LOGGER.warn "__REFRESH_FAILED__#{response.status}" if response.respond_to?(:status)
