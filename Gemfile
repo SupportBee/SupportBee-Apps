@@ -17,7 +17,6 @@ gem 'htmlentities'
 gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
-gem 'therubyracer'
 gem 'coffee-script'
 # unicorn 4.1.0 fixes a bug that broke unicorn restarts
 # @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
