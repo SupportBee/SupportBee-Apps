@@ -19,7 +19,9 @@ gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
-gem 'unicorn', '=3.7.0'
+# unicorn 4.1.0 fixes a bug that broke unicorn restarts
+# @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
+gem 'unicorn', '>= 4.1.1'
 gem 'newrelic_rpm', :require => false # Monitoring
 
 # App Gems
@@ -37,7 +39,6 @@ gem 'mab'
 
 group :development, :test do
   gem 'pry'
-  gem 'pry-debugger'
   gem 'awesome_print'
 end
 
@@ -57,7 +58,6 @@ end
 
 # Mail Gems
 gem 'rest-client'
-gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
 
 # ErrorReporter
 gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
