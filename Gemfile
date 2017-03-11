@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Core Gems
+# Core gems
 gem 'sinatra'
 gem 'sinatra-initializers'
 gem 'rake'
@@ -19,10 +19,13 @@ gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'therubyracer'
 gem 'coffee-script'
-gem 'unicorn', '=3.7.0'
-gem 'newrelic_rpm', :require => false # Monitoring
+gem 'unicorn', '= 3.7.0'
+# Monitoring
+gem 'newrelic_rpm', :require => false
+# Error reporting
+gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 
-# App Gems
+# App gems
 gem 'tinder'
 gem 'hipchat'
 gem 'evernote-thrift'
@@ -34,6 +37,7 @@ gem 'bigcommerce', "~> 0.8.2"
 gem 'rubyzoho',  "= 0.1.7"
 gem 'restforce'
 gem 'mab'
+gem 'rest-client'
 
 group :development, :test do
   gem 'pry'
@@ -43,6 +47,11 @@ end
 
 group :development do
   gem 'execjs'
+
+  # Deploy gems
+  gem 'capistrano', "= 2.15.5"
+  gem 'capistrano-ext'
+  gem 'rvm-capistrano'
 end
 
 group :test do
@@ -55,9 +64,4 @@ group :test do
   gem 'timecop'
 end
 
-# Mail Gems
-gem 'rest-client'
 gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
-
-# ErrorReporter
-gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
