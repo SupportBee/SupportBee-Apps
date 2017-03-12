@@ -8,7 +8,7 @@ env = "staging"
 
 # See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete
 # documentation.
-worker_processes 2
+worker_processes 8
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
