@@ -22,7 +22,7 @@ gem 'coffee-script'
 # @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
 gem 'unicorn', '>= 4.1.1'
 # Monitoring
-gem 'newrelic_rpm', :require => false # Monitoring
+gem 'newrelic_rpm', :require => false
 # Error reporting
 gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 
