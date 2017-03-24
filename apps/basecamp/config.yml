@@ -30,20 +30,25 @@ To send a ticket to Basecamp, open a ticket and click Apps > Send to Bascamp. Be
 
 category: project-management
 
-tags: 
+tags:
 - project management
 - basecamp
 
-developer:  
+developer:
   name: Bopanna D.C
   email: bops.91@gmail.com
   twitter: "@gagan_bopanna"
   github: bopanna
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Send To Basecamp

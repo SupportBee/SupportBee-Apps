@@ -21,7 +21,7 @@ Using the Insightly app one can send support emails to Insightly as Tasks.
 
 The Insightly app can send a ticket to multiple projects. When you click on 'Apps > Send to Insightly', all your projects would be listed in the 'Select Project' dropdown.
 
-### Attach Opportunities to Tasks 
+### Attach Opportunities to Tasks
 
 You can also attach Opportunities to Tasks you create from SupportBee. All your Insightly Opportunities would be listed in the 'Select Opportunities' dropdown, with the current status of the opportunity listed in brackets.
 
@@ -64,12 +64,12 @@ If you have any app requests or app enhancement requests, please feel free to ad
 
 category: crm
 
-tags: 
+tags:
 - crm
 - insightly
 - project-management
 
-developer: 
+developer:
   name: Pranav Singh
   email: pranav@supportbee.com
   twitter: "pranav7"
@@ -79,12 +79,16 @@ developer:
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]
 # Remove the following section if you do not want to define Action Handlers
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
-    - all
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Send To Insightly

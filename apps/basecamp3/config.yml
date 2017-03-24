@@ -40,4 +40,9 @@ action:
     screens:
     - ticket
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Send To Basecamp 3
