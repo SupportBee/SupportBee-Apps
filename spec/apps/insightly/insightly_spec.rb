@@ -6,6 +6,8 @@ describe Insightly do
 
   describe "create note for customer" do
     it "sends correct data to the expected urls" do
+      pending
+
       VCR.use_cassette 'insightly/api_response' do
         response = post "/insightly/action/button", core_request.to_json
         response.status.should eq 200

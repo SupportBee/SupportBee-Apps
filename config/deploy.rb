@@ -12,7 +12,7 @@ set :use_sudo, false
 set :default_stage, "staging"
 
 set :rvm_type, :system
-set :rvm_ruby_string, '1.9.3-p484'
+set :rvm_ruby_string, '2.2.3'
 
 after "deploy:update_code", "supportbee_app_platform:symlink_config_files",
                             "bundler:bundle_new_release",
@@ -57,7 +57,7 @@ namespace :bundler do
 
   task :bundle_new_release do
     bundler.create_symlink
-    run "cd #{release_path} && bundle install --without test development cucumber --deployment"
+    run "cd #{release_path} && rvm-exec ruby-2.2.3 bundle install --without test development cucumber --deployment"
   end
 
   task :lock do
