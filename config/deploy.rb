@@ -43,7 +43,7 @@ namespace :supportbee_app_platform do
 
   task :move_image_assets_to_public_folder, :roles => :primary_app do
     run <<-CMD
-      cd #{release_path} && rake move_assets RACK_ENV=#{stage} --trace
+      cd #{release_path} && rvm-exec ruby-2.2.3 bundle exec rake move_assets RACK_ENV=#{stage} --trace
     CMD
   end
 end
