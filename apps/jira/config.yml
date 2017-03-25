@@ -57,17 +57,21 @@ tags:
 - jira
 - project management
 
-developer: 
+developer:
   name: Pranav Singh
   email: pranav@supportbee.com
   twitter: "@pranav7"
   github: "pranav7"
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
-    - all
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Send To JIRA
