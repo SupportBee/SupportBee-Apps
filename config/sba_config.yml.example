@@ -6,7 +6,11 @@ development:
     cloudfront_base_url: http://localhost:9292
     redis:
       host: '127.0.0.1'
-      db: 1
+      db: 6
+    sidekiq_redis:
+      host: '127.0.0.1'
+      db: 6
+      # port: 6479
 
 test:
   app_platform:
@@ -16,4 +20,8 @@ test:
     cloudfront_base_url: http://localhost:9292
     redis:
       host: '127.0.0.1'
-      db: 2
+      db: 9
+    sidekiq_redis:
+      host: '127.0.0.1'
+      db: 9
+      # port: 6479

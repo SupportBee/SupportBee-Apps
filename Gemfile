@@ -18,13 +18,14 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'coffee-script'
+# Error reporting
+gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 # unicorn 4.1.0 fixes a bug that broke unicorn restarts
 # @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
 gem 'unicorn', '>= 4.1.1'
+gem "sidekiq-pro", "3.4.5", :path => "vendor/gems/sidekiq-pro-3.4.5"
 # Monitoring
 gem 'newrelic_rpm', :require => false
-# Error reporting
-gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 
 # App gems
 gem 'tinder'
@@ -51,7 +52,7 @@ group :development do
   # Deploy gems
   gem 'capistrano', "= 2.15.5"
   gem 'capistrano-ext'
-  gem 'rvm-capistrano'
+  gem 'rvm-capistrano', :require => false
 end
 
 group :test do

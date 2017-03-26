@@ -58,13 +58,16 @@ class RunApp < Sinatra::Base
     end
 
     post "/#{app_class.slug}/event/:event" do
-      data, payload = parse_request
+      app_slug = app_class.slug
       event = params[:event]
-      if app_class.trigger_event(event, data, payload)
-        status 204
-      else
-        status 500
-      end
+      data, payload = parse_request
+
+      # The webhook app receives a lot of traffic. Process web hook events
+      # in a different queue with lower priority.
+      queue = (app_slug == "webhook") ? "webhook_app_events" : "app_events"
+      Sidekiq::Client.push("class" => TriggerAppEvent, "queue" => queue, "args" => [app_slug, event, data, payload])
+
+      status 204
     end
 
     post "/#{app_class.slug}/action/:action" do

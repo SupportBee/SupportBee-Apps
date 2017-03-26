@@ -234,6 +234,10 @@ module SupportBeeApp
       def setup_for(sinatra_app)
         sinatra_app.setup(self)
       end
+
+      def find_from_slug(app_slug)
+        SupportBeeApp::Base.apps.detect { |app_class| app_class.slug == app_slug }
+      end
     end
 
     self.env ||= PLATFORM_ENV

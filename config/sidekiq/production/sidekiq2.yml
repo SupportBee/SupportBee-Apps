@@ -1,0 +1,4 @@
+:queues:
+  - app_events
+  - webhook_app_events
+:concurrency: 40
