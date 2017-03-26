@@ -59,12 +59,4 @@ namespace :bundler do
     bundler.create_symlink
     run "cd #{release_path} && rvm-exec ruby-2.2.3 bundle install --without test development cucumber --deployment"
   end
-
-  task :lock do
-    run "cd #{current_release} && bundle lock;"
-  end
-
-  task :unlock do
-    run "cd #{current_release} && bundle unlock;"
-  end
 end
