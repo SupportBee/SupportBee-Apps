@@ -61,7 +61,7 @@ namespace :supportbee_app_platform do
 
     task :restart do
       run <<-CMD
-        cd ~ && rvm-exec ruby-1.9.3-p484 eye restart SupportBee
+        cd ~ && rvm-exec ruby-1.9.3-p484 eye restart AppPlatform
       CMD
     end
   end
