@@ -17,16 +17,13 @@ set :rvm_ruby_string, '2.2.3'
 after "deploy:update_code", "supportbee_app_platform:symlink_config_files",
                             "bundler:bundle_new_release",
                             "supportbee_app_platform:move_image_assets_to_public_folder"
-
 after "deploy", "deploy:cleanup"
-
 namespace :deploy do
   task :restart, :roles => :app do
-    run <<-CMD
-      /etc/init.d/unicorn_supportbee_app_platform restart
-    CMD
+    supportbee_app_platform.unicorn.restart
   end
 end
+after "deploy:restart", "supportbee_app_platform:eye:restart"
 
 namespace :supportbee_app_platform do
   task :symlink_config_files do
@@ -45,6 +42,28 @@ namespace :supportbee_app_platform do
     run <<-CMD
       cd #{release_path} && rvm-exec ruby-2.2.3 bundle exec rake move_assets RACK_ENV=#{stage} --trace
     CMD
+  end
+
+  namespace :unicorn do
+    task :restart do
+      run <<-CMD
+        /etc/init.d/unicorn_supportbee_app_platform restart
+      CMD
+    end
+  end
+
+  namespace :eye do
+    task :_load do
+      run <<-CMD
+        cd ~ && rvm-exec ruby-1.9.3-p484 eye load #{current_path}/config/eye/`hostname`.eye
+      CMD
+    end
+
+    task :restart do
+      run <<-CMD
+        cd ~ && rvm-exec ruby-1.9.3-p484 eye restart SupportBee
+      CMD
+    end
   end
 end
 
