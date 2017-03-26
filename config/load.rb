@@ -19,6 +19,7 @@ require 'active_support/core_ext/object/blank'
 Dir["#{PLATFORM_ROOT}/lib/helpers/**/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/lib/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
+Dir["#{PLATFORM_ROOT}/workers/*.rb"].each { |f| require f }
 
 app_config = YAML.load_file("#{PLATFORM_ROOT}/config/sba_config.yml")[PLATFORM_ENV]['app_platform']
 SECRET_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/secret_config.yml")[PLATFORM_ENV]
@@ -39,13 +40,13 @@ log_url = "#{log_dir}/#{log_filename}"
 FileUtils.mkdir(log_dir) unless File.exists?(log_dir)
 LOGGER = Logger.new(log_url)
 
-redis_options = APP_CONFIG['redis']
+REDIS_CONFIG = APP_CONFIG['redis']
 redis = nil
 if PLATFORM_ENV == 'test'
   require 'mock_redis'
-  redis = MockRedis.new(db: redis_options['db'])
+  redis = MockRedis.new(db: REDIS_CONFIG['db'])
 else
-  redis = Redis.new(host: redis_options['host'], db: redis_options['db'])
+  redis = Redis.new(host: REDIS_CONFIG['host'], db: REDIS_CONFIG['db'])
   redis = Redis::Namespace.new(:ap, redis: redis)
 end
 REDIS = redis
@@ -56,3 +57,18 @@ end
 
 require 'error-reporter'
 require "#{PLATFORM_ROOT}/run_app"
+
+#
+# Sidekiq
+#
+
+SIDEKIQ_REDIS_CONFIG = APP_CONFIG['sidekiq_redis']
+default_redis_port = 6379
+port = SIDEKIQ_REDIS_CONFIG['port'] || default_redis_port
+redis_url = URI::Generic.build(scheme: "redis", host: REDIS_CONFIG['host'], port: port, path: "/#{REDIS_CONFIG['db']}").to_s # redis://127.0.0.1:6379/2
+Sidekiq.configure_server do |config|
+  config.redis = { url: redis_url }
+end
+Sidekiq.configure_client do |config|
+  config.redis = { url: redis_url }
+end
