@@ -20,4 +20,3 @@ Eye.application 'AppPlatform' do
     stdall "#{WORKING_DIR}/log/sidekiq.log"
   end
 end
-
