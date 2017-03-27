@@ -18,6 +18,7 @@ gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
 gem 'coffee-script'
+gem 'gyoku'
 # Error reporting
 gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 # unicorn 4.1.0 fixes a bug that broke unicorn restarts

@@ -231,6 +231,7 @@ DEPENDENCIES
   faraday_middleware
   flexmock
   flowdock
+  gyoku
   haml
   hashie
   highrise
