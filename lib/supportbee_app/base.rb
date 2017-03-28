@@ -221,8 +221,6 @@ module SupportBeeApp
       end
     end
 
-    self.env ||= PLATFORM_ENV
-
     attr_reader :data
     attr_reader :payload
     attr_reader :auth
