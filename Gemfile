@@ -25,6 +25,8 @@ gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
 # @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
 gem 'unicorn', '>= 4.1.1'
 gem "sidekiq-pro", "3.4.5", :path => "vendor/gems/sidekiq-pro-3.4.5"
+gem "omniauth"
+gem 'omniauth-google-oauth2'
 # Monitoring
 gem 'newrelic_rpm', :require => false
 
@@ -42,7 +44,7 @@ gem 'restforce'
 gem 'mab'
 gem 'rest-client'
 
-group :development, :test do
+group :development, :test, :staging do
   gem 'pry'
   gem 'awesome_print'
 end
