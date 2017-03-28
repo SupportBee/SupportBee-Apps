@@ -3,10 +3,34 @@ require "addressable/uri"
 module SupportBeeApp
   class Base
     include HttpHelper
+    extend DSL
 
     class << self
+      def inherited(app)
+        app.send(:include, app.event_handler) if app.event_handler
+        app.send(:include, app.action_handler) if app.action_handler
+        SupportBeeApp::Base.apps << app
+        super
+      end
+
+      def event_handler
+        app_module.const_defined?("EventHandler") ? app_module.const_get("EventHandler") : nil
+      end
+
+      def action_handler
+        app_module.const_defined?("ActionHandler") ? app_module.const_get("ActionHandler") : nil
+      end
+
+      attr_writer :current_sha
+
       def env
         @env ||= PLATFORM_ENV
+      end
+
+      %w(development test production staging).each do |m|
+        define_method "#{m}?" do
+          env == m
+        end
       end
 
       def slug
@@ -21,14 +45,6 @@ module SupportBeeApp
         @current_sha ||=
           `cd #{PLATFORM_ROOT}; git rev-parse HEAD 2>/dev/null || echo unknown`.
           chomp.freeze
-      end
-
-      attr_writer :current_sha
-
-      %w(development test production staging).each do |m|
-        define_method "#{m}?" do
-          env == m
-        end
       end
 
       def apps
@@ -120,6 +136,10 @@ module SupportBeeApp
         Dir.glob("#{javascripts_path}/*.js")
       end
 
+      def image_url(filename)
+        Pathname(APP_CONFIG['cloudfront_base_url']).join('images', slug, filename).to_s
+      end
+
       def has_action?(action)
         return unless has_actions?
         action = action.to_s
@@ -174,30 +194,6 @@ module SupportBeeApp
         schema
       end
 
-      def text(name, options={})
-        add_to_schema :text, name, options
-      end
-
-      def string(name, options={})
-        add_to_schema :string, name, options
-      end
-
-      def password(name, options={})
-        add_to_schema :password, name, options
-      end
-
-      def boolean(name, options={})
-        add_to_schema :boolean, name, options
-      end
-
-      def token(name, options={})
-        add_to_schema :token, name, options
-      end
-
-      def oauth(name, options={})
-        add_to_schema :oauth, name, options
-      end
-
       def event_methods
         event_handler ? event_handler.instance_methods : []
       end
@@ -214,21 +210,6 @@ module SupportBeeApp
       def trigger_action(action, data, payload = nil)
         app = new(data,payload)
         app.trigger_action(action)
-      end
-
-      def event_handler
-        app_module.const_defined?("EventHandler") ? app_module.const_get("EventHandler") : nil
-      end
-
-      def action_handler
-        app_module.const_defined?("ActionHandler") ? app_module.const_get("ActionHandler") : nil
-      end
-
-      def inherited(app)
-        app.send(:include, app.event_handler) if app.event_handler
-        app.send(:include, app.action_handler) if app.action_handler
-        SupportBeeApp::Base.apps << app
-        super
       end
 
       def setup_for(sinatra_app)
@@ -257,7 +238,7 @@ module SupportBeeApp
       @settings = @data[:settings] || {}
 
       payload = {} if payload.blank?
-      @payload = pre_process_payload(payload)
+      @payload = preprocess_payload(payload)
 
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
       @errors = {}
@@ -272,7 +253,7 @@ module SupportBeeApp
       @event = event
       method = to_method(event)
       begin
-        response = self.send method if self.respond_to?(method)
+        response = self.send(method) if self.respond_to?(method)
         if response
           LOGGER.info log_event_message
         else
@@ -283,8 +264,6 @@ module SupportBeeApp
       rescue Exception => e
         context = { event: event }
         ErrorReporter.report(e, context: context)
-        LOGGER.error log_event_message(e.message)
-        LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
       end
     end
@@ -313,23 +292,23 @@ module SupportBeeApp
       "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
     end
 
-    def log_event_message(message='')
+    def log_event_message(message = '')
       log_message(@event, message)
     end
 
-    def log_action_message(message='')
+    def log_action_message(message = '')
       log_message(@action, message)
     end
 
     def redis_key_prefix
-      "#{self.class.slug}:#{auth.subdomain}"
+      "#{self.class.slug}:#{company_subdomain}"
+    end
+
+    def company_subdomain
+      auth.subdomain
     end
 
     private
-
-    def self.image_url(filename)
-      Pathname(APP_CONFIG['cloudfront_base_url']).join('images', slug, filename).to_s
-    end
 
     def image_url(filename)
       self.class.image_url(filename)
@@ -359,14 +338,14 @@ module SupportBeeApp
       string
     end
 
-    def pre_process_payload(raw)
+    def preprocess_payload(raw)
       result = Hashie::Mash.new(raw)
       raw = result.delete(:payload)
       return result unless raw
 
       if raw[:tickets]
         result[:tickets] = []
-        raw[:tickets].each {|ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
+        raw[:tickets].each { |ticket| result[:tickets] << SupportBee::Ticket.new(auth, ticket) }
       end
       result[:ticket] = SupportBee::Ticket.new(auth, raw[:ticket]) if raw[:ticket]
       result[:reply] = SupportBee::Reply.new(auth, raw[:reply]) if raw[:reply]
@@ -379,6 +358,7 @@ module SupportBeeApp
       result
     end
 
+    # Convert event name to method name
     def to_method(string)
       return 'all_events' if respond_to?(:all_events)
       string.gsub('.', '_').underscore

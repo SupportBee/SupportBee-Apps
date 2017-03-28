@@ -1,10 +1,5 @@
+# Ruby client for SupportBee's API
 module SupportBee
-   class InvalidAuthToken < ::StandardError; end
-   class InvalidSubDomain < ::StandardError; end
-   class InvalidRequestError < ::StandardError; end
-   class AssignmentError < ::StandardError; end
-   class TicketUpdateError < ::StandardError; end
-
   class Base
     extend HttpHelper
     include HttpHelper
@@ -23,7 +18,7 @@ module SupportBee
       end
 
       def default_headers
-        {'Accept' => 'application/json'}
+        { 'Accept' => 'application/json' }
       end
 
       def api_get(resource_url,auth={},params={})
@@ -136,14 +131,15 @@ module SupportBee
   end
 end
 
-require_relative 'supportbee/company'
+require_relative 'supportbee/errors'
 require_relative 'supportbee/resource'
-require_relative 'supportbee/label'
-require_relative 'supportbee/user'
-require_relative 'supportbee/team'
-require_relative 'supportbee/user_assignment'
-require_relative 'supportbee/team_assignment'
-require_relative 'supportbee/reply'
-require_relative 'supportbee/comment'
-require_relative 'supportbee/ticket'
-require_relative 'supportbee/snippet'
+require_relative 'supportbee/resources/company'
+require_relative 'supportbee/resources/label'
+require_relative 'supportbee/resources/user'
+require_relative 'supportbee/resources/team'
+require_relative 'supportbee/resources/user_assignment'
+require_relative 'supportbee/resources/team_assignment'
+require_relative 'supportbee/resources/reply'
+require_relative 'supportbee/resources/comment'
+require_relative 'supportbee/resources/ticket'
+require_relative 'supportbee/resources/snippet'

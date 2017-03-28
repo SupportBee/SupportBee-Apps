@@ -1,6 +1,6 @@
 module SupportBeeApp
+  # @todo Add examples
   class Store
-
     attr_reader :redis, :redis_key_prefix
 
     def initialize(options={}) 
