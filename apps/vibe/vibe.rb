@@ -1,8 +1,12 @@
+#
+# This integration is retired
+#
+
 module Vibe
   module EventHandler
     def ticket_created
       ticket = payload.ticket
-      return if ticket.trash || ticket.spam
+      return if ticket.spam_or_trash?
 
       params = {
         api_key: settings.api_key,
@@ -26,10 +30,13 @@ module Vibe
   class Base < SupportBeeApp::Base
     string :api_key, :required => true, :label => 'API Key', :hint => 'API Key from http://vibeapp.co/partners/supportbee/'
 
+    private
+
     attr_accessor :user_details
 
     def render_user_profile(user_details)
       self.user_details = user_details
+
       organizations = user_details['organizations']
       social = user_details['social_profiles']
 

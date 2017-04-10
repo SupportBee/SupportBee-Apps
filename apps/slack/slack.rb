@@ -3,33 +3,21 @@ module Slack
    def ticket_created
       return unless settings.notify_ticket_created.to_s == '1'
       post_ticket(payload.ticket)
-      true
     end
 
     def agent_reply_created
       return unless settings.notify_agent_reply_created.to_s == '1'
       post_agent_reply(payload.reply, payload.ticket)
-      true
     end
 
     def customer_reply_created
       return unless settings.notify_customer_reply_created.to_s == '1'
       post_customer_reply(payload.reply, payload.ticket)
-      true
     end
 
     def comment_created
       return unless settings.notify_comment_created.to_s == '1'
       post_comment(payload.comment, payload.ticket)
-      true
-    end
-  end
-end
-
-module Slack
-  module ActionHandler
-    def button
-      [200, "Success"]
     end
   end
 end
@@ -53,22 +41,22 @@ module Slack
                 :post_content
 
     def validate
-      errors[:flash] = ["Please fill in either the Webhook URL or other required settings"] if validate_presense_of_url
-      errors.empty? ? true : false
-    end
+      if settings.url_webhook.blank?
+        show_inline_error :url_webhook, "Please enter your Slack channel's Webhook URL"
+        return false
+      end
 
-    def validate
-      errors[:flash] = ["Webhook URL or other settings incorrect"] unless test_ping.success?
-      errors.empty? ? true : false
+      unless test_api_request.success?
+        show_error_notification "Your Webhook URL seems to be incorrect"
+        return false
+      end
+
+      return true
     end
 
     private
 
-    def validate_presense_of_url
-      not(settings.url_webhook.blank?) or not(settings.token.blank? and settings.channel.blank? and settings.domain.blank?)
-    end
-
-    def test_ping
+    def test_api_request
       if settings.url_webhook.blank?
         response = http_post create_webhook_url do |req|
           body = {
@@ -208,4 +196,3 @@ module Slack
     end
   end
 end
-

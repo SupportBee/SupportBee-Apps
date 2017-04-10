@@ -2,16 +2,12 @@ module Github
   module ActionHandler
     def button
       ticket = payload.tickets.first
-      begin
-        response = create_issue(payload.overlay.title, payload.overlay.description, payload.overlay.projects_select)
-        html = comment_html(response)
-        comment_on_ticket(ticket, html)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
-      end
-      [200, "Ticket sent to Github Issues"]
+
+      response = create_issue(payload.overlay.title, payload.overlay.description, payload.overlay.projects_select)
+      html = comment_html(response)
+      comment_on_ticket(ticket, html)
+
+      show_success_notification "Ticket sent to Github Issues"
     end
   end
 end
@@ -20,13 +16,7 @@ module Github
   require 'json'
 
   class Base < SupportBeeApp::Base
-    oauth  :github, :required => true, :oauth_options => {:scope => "user,repo,gist"}
-
-    def validate
-      #errors[:flash] = ["Please fill in all the required fields"] if settings.owner.blank? or settings.repo.blank?
-      #errors.empty? ? true : false
-      true
-    end
+    oauth :github, :required => true, :oauth_options => { :scope => "user,repo,gist" }
 
     def projects
       [200, fetch_projects]

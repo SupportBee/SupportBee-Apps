@@ -3,7 +3,7 @@ module HighriseCRM
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
-      return if ticket.trash || ticket.spam
+      return if ticket.spam_or_trash?
       requester = ticket.requester
 
       setup_highrise
@@ -34,10 +34,9 @@ module HighriseCRM
       note = Highrise::Note.new(subject_id: subject.id, subject_type: subject_type, body: note_content)
       return false unless note.save
 
-      return true unless settings.associate_reply_with_comment.to_s == '1'
+      return unless settings.associate_reply_with_comment.to_s == '1'
 
       store_note_id(ticket.id, note.id)
-      return true
     end
 
     def agent_reply_created
@@ -71,13 +70,18 @@ module HighriseCRM
     def validate
       setup_highrise
       begin
-        account_info = Highrise::Account.me
-        puts account_info.inspect
+        test_api_request
         true
       rescue ActiveResource::UnauthorizedAccess
-        errors[:flash] = 'Settings Incorrect. Please check Token & Subdomain'
+        show_error_notification "Settings Incorrect. Please check Token & Subdomain"
         false
       end
+    end
+
+    private
+
+    def test_api_request
+      Highrise::Account.me
     end
 
     def find_person(requester)

@@ -5,7 +5,6 @@ module Dummy
 
     def reply_created; end
     def reply_updated; end
-
   end
 end
 
@@ -14,9 +13,6 @@ module Dummy
     def button
      # Handle Action here
      [200, "Success"]
-    end
-
-    def all_actions
     end
   end
 end

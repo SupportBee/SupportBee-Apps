@@ -1,3 +1,7 @@
+#
+# This integration is retired
+#
+
 module Salesforce
   module EventHandler
     def ticket_created
@@ -102,6 +106,5 @@ module Salesforce
       note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
       note
     end
-
   end
 end

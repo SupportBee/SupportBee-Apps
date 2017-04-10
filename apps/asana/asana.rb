@@ -2,19 +2,17 @@ module Asana
   module ActionHandler
     def button
       ticket = payload.tickets.first
+
       http.basic_auth(settings.token, "")
-      begin
-        response = create_task(payload.overlay.title, payload.overlay.notes)
-        return [500, response.body['errors'].first['message']] if response.body['errors'] and not(response.body['errors'].empty?)
-        comment_on_ticket ticket, comment_html(response)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
+      response = create_task(payload.overlay.title, payload.overlay.notes)
+      api_errors = response.body["errors"]
+      if api_errors && !api_errors.empty?
+        show_error_notification api_errors.first['message']
+        return
       end
 
-      [200, "Ticket sent to Asana"]
-
+      comment_on_ticket(ticket, comment_html(response))
+      show_success_notification "Ticket sent to Asana"
     end
 
     def projects
@@ -28,7 +26,6 @@ module Asana
     def workspace_users
       [200, fetch_workspace_users]
     end
-
   end
 end
 
@@ -52,18 +49,13 @@ module Asana
   end
 
   class Base < SupportBeeApp::Base
-    oauth  :asana, :required => true
+    oauth :asana, :required => true
 
     private
-
 
     def fetch_orgs
       response = asana_get(orgs_url)
       JSON.parse(response.body.to_json)['data'].to_json
-    end
-
-    def orgs_url
-      api_url('workspaces')
     end
 
     def fetch_projects
@@ -74,6 +66,16 @@ module Asana
     def fetch_workspace_users
       response = asana_get(users_url(payload.overlay.org))
       JSON.parse(response.body.to_json)['data'].to_json
+    end
+
+    def asana_get(url)
+      response = http.get url do |req|
+       req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
+      end
+    end
+
+    def orgs_url
+      api_url('workspaces')
     end
 
     def users_url(workspace)
@@ -88,12 +90,6 @@ module Asana
       "https://app.asana.com/api/1.0/#{resource}"
     end
 
-    def asana_get(url)
-      response = http.get url do |req|
-       req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-      end
-    end
-
     def create_task(task_name, notes)
       response = http_post api_url('tasks') do |req|
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
@@ -104,15 +100,14 @@ module Asana
       end
     end
 
-    def comment_on_ticket(ticket, html)
-      ticket.comment(:html => html)
-    end
-
     def comment_html(response)
       url = "https://app.asana.com/0/#{payload.overlay.projects_select}/#{response.body['data']['id']}"
       title = response.body['data']['name']
       "Asana task -  <a href='#{url}'>#{title}</a>"
     end
 
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
+    end
   end
 end

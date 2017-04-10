@@ -4,9 +4,7 @@ Basecamp.Views = {}
 option_tag = (item) ->
   "<option value='#{item.get('id')}'>#{item.get('name')}</option>"
 
-
 Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
-
   events: {
     'change [name="type"]': 'target_changed',
     'change [name="projects_select"]': 'project_changed'
@@ -59,7 +57,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
         @reset_lists()
       when 'message'
         @reset_lists()
-
 
   hide_everything: ->
     @todo_lists_el.hide()
@@ -125,7 +122,6 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   render_person: (person)->
     @people_list_selector.append option_tag(person)
 
-
   render_lists: ->
     console.log 'render_lists', @lists
     @lists.each @render_one_list
@@ -134,10 +130,8 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
   render_one_list: (list) ->
     @todo_lists_selector.append option_tag(list)
 
-
   submit_form: ->
     @post 'button', @$('form').toJSON()
-
 )
 
 return Basecamp

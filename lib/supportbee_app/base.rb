@@ -2,7 +2,6 @@ require "addressable/uri"
 
 module SupportBeeApp
   class Base
-    include HttpHelper
     extend DSL
 
     class << self
@@ -221,14 +220,19 @@ module SupportBeeApp
       end
     end
 
+    include HttpHelper
+    include Api
+
     attr_reader :data
     attr_reader :payload
     attr_reader :auth
     attr_reader :settings
     attr_reader :store
-    attr_accessor :errors
-
     attr_writer :ca_file
+
+    attr_accessor :success_notification
+    attr_accessor :error_notification
+    attr_accessor :inline_errors
 
     def initialize(data = {}, payload = {})
       @data = Hashie::Mash.new(data) || {}
@@ -239,71 +243,63 @@ module SupportBeeApp
       @payload = preprocess_payload(payload)
 
       @store = SupportBeeApp::Store.new(redis_key_prefix: redis_key_prefix)
-      @errors = {}
+      @inline_errors = {}
     end
 
     def valid?
       return true unless self.respond_to?(:validate)
-      validate
+
+      begin
+        validate
+      rescue => e
+        report_exception(e)
+
+        show_error_notification e.message
+        return false
+      end
     end
 
     def trigger_event(event)
       @event = event
-      method = to_method(event)
-      begin
-        response = self.send(method) if self.respond_to?(method)
-        if response
-          LOGGER.info log_event_message
-        else
-          LOGGER.warn log_event_message
-        end
+      method = event_to_method_name(@event)
+      return unless method
 
-        return response
-      rescue Exception => e
-        context = { event: event }
-        ErrorReporter.report(e, context: context)
-        return false
+      begin
+        result = self.public_send(method)
+        if result == false
+          LOGGER.warn log_event_message
+        else
+          LOGGER.info log_event_message
+        end
+      rescue => e
+        LOGGER.warn log_event_message
+        report_exception(e)
       end
     end
 
     def trigger_action(action)
       @action = action
-      method = to_method(action)
-      result = []
-      begin
-        result = self.respond_to?(method) ? self.send(method) : [400, 'This app does not support the specified action']
+      method = action_to_method_name(@action)
+      return unknown_action unless method
 
-        all_actions if self.respond_to?(:all_actions)
+      begin
+        result = self.public_send(method)
+        result = [200, success_notification] if success_notification
+        result = [500, error_notification] if error_notification
+
         LOGGER.info log_action_message
-      rescue Exception => e
-        context = { action: action }
-        ErrorReporter.report(e, context: context)
-        LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
+      rescue => e
         result = [500, e.message]
+
+        report_exception(e)
+        LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
       end
 
-      LOGGER.error log_action_message("#{result[1]}") if result[0] == 500
       result
     end
 
-    def log_message(trigger, message='')
-      "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), auth.subdomain, message]
-    end
-
-    def log_event_message(message = '')
-      log_message(@event, message)
-    end
-
-    def log_action_message(message = '')
-      log_message(@action, message)
-    end
-
     def redis_key_prefix
-      "#{self.class.slug}:#{company_subdomain}"
-    end
-
-    def company_subdomain
-      auth.subdomain
+      "#{slug}:#{company_subdomain}"
     end
 
     private
@@ -336,6 +332,19 @@ module SupportBeeApp
       string
     end
 
+    # Convert event name to method nam
+    def event_to_method_name(event)
+      method_name = event.gsub('.', '_').underscore
+      return method_name if respond_to?(method_name)
+      return "all_events" if respond_to?(:all_events)
+      return nil
+    end
+
+    def action_to_method_name(action)
+      return action if respond_to?(action)
+      return nil
+    end
+
     def preprocess_payload(raw)
       result = Hashie::Mash.new(raw)
       raw = result.delete(:payload)
@@ -356,10 +365,40 @@ module SupportBeeApp
       result
     end
 
-    # Convert event name to method name
-    def to_method(string)
-      return 'all_events' if respond_to?(:all_events)
-      string.gsub('.', '_').underscore
+    def unknown_action
+      [400, "This app does not support the specified action"]
+    end
+
+    def error_context
+      context = { payload: @payload[:raw_payload] }
+      context[:action] = @action if @action
+      context[:event] = @event if @event
+
+      context
+    end
+
+    def error_tags
+      [slug, company_subdomain]
+    end
+
+    def slug
+      self.class.slug
+    end
+
+    def company_subdomain
+      auth.subdomain
+    end
+
+    def log_event_message(message = '')
+      log_message(@event, message)
+    end
+
+    def log_action_message(message = '')
+      log_message(@action, message)
+    end
+
+    def log_message(trigger, message='')
+      "[%s] %s/%s %s %s %s" % [Time.now.utc.to_s, self.class.slug, trigger, JSON.generate(log_data), company_subdomain, message]
     end
   end
 end

@@ -5,19 +5,15 @@ module Evernote
     # Handle 'ticket.created' event
     def ticket_created
       post_ticket(payload.ticket)
-      true
     end
 
     def agent_reply_created
       post_reply(payload.reply, payload.ticket)
-      true
     end
 
     def customer_reply_created
       post_reply(payload.reply, payload.ticket)
-      true
     end
-
   end
 end
 
@@ -116,6 +112,5 @@ EOF
       xml
     end
   end
-
 end
 

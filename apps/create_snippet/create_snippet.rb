@@ -1,15 +1,9 @@
 module CreateSnippet
   module ActionHandler
     def button
-     begin
-       create_snippet(name: payload.overlay.name, text: payload.overlay.text, tags: payload.overlay.tags)
-     rescue Exception => e
-       context = { payload: payload }
-       ErrorReporter.report(e, context: context)
-       return [500, e.message]
-     end
+      create_snippet(name: payload.overlay.name, text: payload.overlay.text, tags: payload.overlay.tags)
 
-      [200, "Snippet created! Reload the page to access it."]
+      show_success_notification "Snippet created! Reload the page to access it."
     end
   end
 end
@@ -28,10 +22,9 @@ module CreateSnippet
   end
 
   class Base < SupportBeeApp::Base
-
     private
 
-    def create_snippet(params={})
+    def create_snippet(params = {})
       raise NameCannotBeBlank if params[:name].blank?
       raise TextCannotBeBlank if params[:text].blank?
       snippet = SupportBee::Snippet.create(auth, params)

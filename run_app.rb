@@ -48,17 +48,26 @@ class RunApp < Sinatra::Base
       protected_by :secret_key
 
       data, payload = parse_request
-      response = {}
       app = app_class.new(data, payload)
 
+      content_type :json
       if app.valid?
         status 200
+
+        { errors: {} }.to_json
       else
         status 400
-        response = app.errors
+
+        errors = {}
+        unless app.inline_errors.blank?
+          errors = errors.merge(app.inline_errors)
+        end
+        unless app.error_notification.blank?
+          errors[:flash] = app.error_notification
+        end
+
+        { errors: errors }.to_json
       end
-      content_type :json
-      { errors: response }.to_json
     end
 
     post "/#{app_class.slug}/event/:event" do
@@ -68,8 +77,8 @@ class RunApp < Sinatra::Base
       event = params[:event]
       data, payload = parse_request
 
-      # The webhook app receives a lot of traffic. Process web hook events
-      # in a different queue with lower priority.
+      # The webhook app receives a lot of traffic. Process the traffic in a
+      # different lower priority queue.
       queue = (app_slug == "webhook") ? "webhook_app_events" : "app_events"
       Sidekiq::Client.push("class" => TriggerAppEvent, "queue" => queue, "args" => [app_slug, event, data, payload])
 
@@ -81,14 +90,16 @@ class RunApp < Sinatra::Base
 
       data, payload = parse_request
       action = params[:action]
-      begin
-        result = app_class.trigger_action(action, data, payload)
-        status result[0]
-        body result[1] if result[1]
-      rescue Exception => e
-        context = { app_slug: app_class.slug, action: action, data: data, payload: payload }
-        ErrorReporter.report(e, context: context)
-        status 500
+
+      result = app_class.trigger_action(action, data, payload)
+      status, body = result
+
+      if status == 500
+        status(500)
+        body(body) if body
+      else
+        status(status)
+        body(body)
       end
     end
 

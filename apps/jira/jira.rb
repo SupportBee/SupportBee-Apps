@@ -4,11 +4,13 @@ module Jira
       ticket = payload.tickets.first
 
       issue = create_issue(payload.overlay.title, payload.overlay.description)
-      return [500, "Error: #{issue.body["errors"].to_s}"] if issue.status == 400
+      if issue.status == 400
+        raise StandardError.new("Failed to create a JIRA issue. Here's the response from JIRA: #{issue.body["errors"]}")
+      end
       html = create_issue_html(issue.body, ticket.subject)
       
       comment_on_ticket(ticket, html)
-      [200, "JIRA Issue Created Successfully!"]
+      show_success_notification "JIRA Issue Created Successfully!"
     end
 
     def projects
@@ -34,12 +36,35 @@ module Jira
     string :domain, required: true, label: 'JIRA Domain', hint: 'JIRA OnDemand (Cloud), example: "https://example.atlassian.net". JIRA (Server), example: "http://yourhost:8080/jira"'
 
     def validate
-      if settings.user_name.blank? or settings.password.blank? or settings.domain.blank?
-        errors[:flash] = "Please fill in all required details" 
-      else
-      errors[:flash] = ["We could not reach JIRA. Please check the configuration, and try again"] unless test_ping.success?
+      return false unless required_fields_present?
+
+      unless test_api_request.success?
+        show_error_notification "We could not reach JIRA. Please check the configuration and try again"
+        return false
       end
-      errors.empty? ? true : false
+
+      return true
+    end
+
+    def required_fields_present?
+      are_required_fields_present = true
+
+      if settings.user_name.blank?
+        are_required_fields_present = false
+        show_inline_error :username, "Please enter your JIRA Username"
+      end
+
+      if settings.password.blank?
+        are_required_fields_present = false
+        show_inline_error :password, "Please enter your JIRA password"
+      end
+
+      if settings.domain.blank?
+        are_required_fields_present = false
+        show_inline_error :password, "Please enter your JIRA domain"
+      end
+
+      return are_required_fields_present
     end
 
     def project_key
@@ -56,7 +81,7 @@ module Jira
 
     private
 
-    def test_ping
+    def test_api_request
       jira_get(projects_url)
     end
 
@@ -142,7 +167,6 @@ module Jira
       project = (projects.detect {|project|  project["key"] == project_key})
       project["issuetypes"].to_json
     end
-
 
     def users_url
       "#{domain}/rest/api/2/user/assignable/search"
