@@ -1,4 +1,4 @@
-class URLsCollection
+class URLCollection
   include HttpHelper
 
   attr_accessor :errors

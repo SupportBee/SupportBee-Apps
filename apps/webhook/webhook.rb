@@ -1,7 +1,7 @@
 module Webhook
   module EventHandler
     def all_events
-      urls_collection.post_to_all({ payload: payload.raw_payload }.to_json)
+      url_collection.post_to_all({ payload: payload.raw_payload }.to_json)
     end
   end
 end
@@ -15,10 +15,10 @@ module Webhook
     white_list :urls
 
     def validate
-      if urls_collection.valid?
+      if url_collection.valid?
         true
       else
-        self.inline_errors.merge!(urls_collection.errors)
+        self.inline_errors.merge!(url_collection.errors)
         show_error_notification "Invalid URLs"
         false
       end
@@ -26,8 +26,8 @@ module Webhook
 
     private
 
-    def urls_collection
-      @urls_collection ||= URLsCollection.new(settings.urls)
+    def url_collection
+      @url_collection ||= URLCollection.new(settings.urls)
     end
   end
 end
