@@ -63,7 +63,7 @@ class RunApp < Sinatra::Base
           errors = errors.merge(app.inline_errors)
         end
         unless app.error_notification.blank?
-          errors[:flash] = app.error_notification
+          errors = errors.merge(flash: [app.error_notification])
         end
 
         { errors: errors }.to_json

@@ -18,7 +18,8 @@ module Webhook
       if urls_collection.valid?
         true
       else
-        show_error_notification "The URLs you've entered are invalid"
+        self.inline_errors.merge!(urls_collection.errors)
+        show_error_notification "Invalid URLs"
         false
       end
     end
