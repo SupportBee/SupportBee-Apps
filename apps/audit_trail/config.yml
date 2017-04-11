@@ -1,6 +1,6 @@
 name: Audit Trail
 slug: audit_trail
-access: public
+access: test
 
 description: "An audit trail is a fancy term for having a log that you can look at to know who did what. For example, if you want to find out who trashed a ticket or marked it as spam you would look at the audit trail. Add this app to record information about Archive, Unarchive, Spam, Unspam, Trash and Untrash events. 
 
@@ -17,3 +17,6 @@ developer:
   email: prateek@supportbee.com
   twitter: "prateekdayal"
   github: prateekdayal
+
+retired: true
+temporary_redirect_url: "https://supportbee.com/blog/audit-trail-app-becomes-core-feature/"

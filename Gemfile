@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Core Gems
+# Core gems
 gem 'sinatra'
 gem 'sinatra-initializers'
 gem 'rake'
@@ -17,12 +17,20 @@ gem 'htmlentities'
 gem 'redis'
 gem 'redis-namespace'
 gem 'savon', "~> 2.1.0"
-gem 'therubyracer'
 gem 'coffee-script'
-gem 'unicorn', '=3.7.0'
-gem 'newrelic_rpm', :require => false # Monitoring
+gem 'gyoku'
+# Error reporting
+gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'
+# unicorn 4.1.0 fixes a bug that broke unicorn restarts
+# @see http://mongrel-unicorn.rubyforge.narkive.com/QM9xHegx/ruby-2-0-bad-file-descriptor-errno-ebadf
+gem 'unicorn', '>= 4.1.1'
+gem "sidekiq-pro", "3.4.5", :path => "vendor/gems/sidekiq-pro-3.4.5"
+gem "omniauth"
+gem 'omniauth-google-oauth2'
+# Monitoring
+gem 'newrelic_rpm', :require => false
 
-# App Gems
+# App gems
 gem 'tinder'
 gem 'hipchat'
 gem 'evernote-thrift'
@@ -34,15 +42,20 @@ gem 'bigcommerce', "~> 0.8.2"
 gem 'rubyzoho',  "= 0.1.7"
 gem 'restforce'
 gem 'mab'
+gem 'rest-client'
 
-group :development, :test do
+group :development, :test, :staging do
   gem 'pry'
-  gem 'pry-debugger'
   gem 'awesome_print'
 end
 
 group :development do
   gem 'execjs'
+
+  # Deploy gems
+  gem 'capistrano', "= 2.15.5"
+  gem 'capistrano-ext'
+  gem 'rvm-capistrano', :require => false
 end
 
 group :test do
@@ -54,10 +67,3 @@ group :test do
   gem 'mock_redis'
   gem 'timecop'
 end
-
-# Mail Gems
-gem 'rest-client'
-gem 'multimap', :git => 'https://github.com/SupportBee/multimap.git', :tag => 'v1.1.2'
-
-# ErrorReporter
-gem 'error-reporter', :git => 'https://github.com/SupportBee/ErrorReporter.git'

@@ -1,5 +1,5 @@
 ---
-api_key: 'de6ea413'
+api_key: de6ea413
 report_data: true
 # Disable user feedback forms
 # http://docs.honeybadger.io/lib/ruby.html#configuration

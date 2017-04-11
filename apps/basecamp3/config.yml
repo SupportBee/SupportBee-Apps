@@ -1,0 +1,48 @@
+name: "Basecamp 3"
+slug: basecamp3
+access: public
+
+description: "
+
+The Basecamp 3 Integration turns tickets in your SupportBee into Discussions, To-do Lists or To-do items in your Basecamp 3.
+
+## Adding the Basecamp 3 Integration
+
+To add the Basecamp 3 Integration to your SupportBee, click on the 'Add to My SupportBee' button. You'll be taken to your Basecamp 3 so you can grant access to the Basecamp 3 Integration. Once you allow access to the Basecamp 3 Integration, you'll be shown a Settings screen where you need to fill in a few details.
+
+### Settings
+
+In the Settings screen, enter the Account ID of your Basecamp. If your Basecamp URL is https://3.basecamp.com/9999999 enter 9999999
+
+## Using the Basecamp 3 Integration
+
+To send a ticket to Basecamp 3, open any ticket in your SupportBee and click on Integrations > Send to Basecamp 3.
+
+Before you send the ticket to your Basecamp 3, you’ll be able change the title and description. By default, the integration will create a new message in your Basecamp 3 but you can also select a new to-do list or new to-do from the dropdown.
+
+"
+
+category: project-management
+
+tags:
+- project management
+- basecamp3
+
+developer:
+  name: Nisanth Chunduru
+  email: nisanth074@gmail.com
+  twitter: "@nisanth074"
+  github: nisanth074
+
+action:
+  button:
+    overlay: true
+    screens:
+    - ticket
+    - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
+    label: Send To Basecamp 3

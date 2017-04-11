@@ -29,7 +29,7 @@ end
 module Slack
   module ActionHandler
     def button
-     [200, "Success"]
+      [200, "Success"]
     end
   end
 end
@@ -38,10 +38,7 @@ module Slack
   require 'json'
 
   class Base < SupportBeeApp::Base
-    string :url_webhook, :required => true, :label => 'Webhook URL', :hint => "If you configure this, you can ignore the rest of the settings."
-    string :token, :hint => 'Slack Incoming Webhook Token'
-    string :channel, :label => 'Channel Name', :hint => "If #example is the Channel you want to send messages to, then enter 'example'"
-    string :domain, :label => 'Company Name in Domain', :hint => 'If your base URL is "http://example.slack.com", then enter "example"'
+    string :url_webhook, :required => true, :label => 'Webhook URL'
 
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
     boolean :notify_customer_reply_created, :default => true, :label => "Notify when a customer replied"
@@ -141,20 +138,20 @@ module Slack
 
     def post_customer_reply(reply, ticket)
       if settings.post_content.to_s == '1'
-	      payload = {
-	      	:username => "SupportBee",
-	        :attachments => [
-	          		:fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+        payload = {
+          :username => "SupportBee",
+          :attachments => [
+                :fallback => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
                 :text => "Customer Reply from #{reply.replier.name} in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	          		:color => "danger",
-	          		:fields => [
-	          			:title => "Reply:",
-	          			:value => "#{reply.content.text}"
-	          		]
-	          	]
-	      }
-	  else
-	  	payload = {
+                :color => "danger",
+                :fields => [
+                  :title => "Reply:",
+                  :value => "#{reply.content.text}"
+                ]
+              ]
+        }
+    else
+      payload = {
           :username => "SupportBee",
           :text => "*Customer Reply* from *#{reply.replier.name}* in <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
         }
@@ -163,25 +160,25 @@ module Slack
     end
 
     def post_comment(comment, ticket)
-   	  if settings.post_content.to_s == '1'
-	      payload = {
-	      	:username => "SupportBee",
-	        :attachments => [
-	          		:fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
+      if settings.post_content.to_s == '1'
+        payload = {
+          :username => "SupportBee",
+          :attachments => [
+                :fallback => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
                 :text => "#{comment.commenter.name} commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>",
-	          		:color => "good",
-	          		:fields => [
-	          			:title => "Comment",
-	          			:value => "#{comment.content.text}"
-	          		]
-	          	]
-	      }
-  	  else
-  	  	payload = {
+                :color => "good",
+                :fields => [
+                  :title => "Comment",
+                  :value => "#{comment.content.text}"
+                ]
+              ]
+        }
+      else
+        payload = {
           :username => "SupportBee",
           :text => "*#{comment.commenter.name}* commented on <https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}|#{ticket.subject}>"
         }
-  	  end
+      end
       post_to_slack(payload)
     end
 
@@ -193,7 +190,7 @@ module Slack
         body = {
           "channel" => "##{settings.channel}",
           "username" => "SupportBee",
-          "text" => text 
+          "text" => text
         }
 
         response = http_post create_webhook_url do |req|

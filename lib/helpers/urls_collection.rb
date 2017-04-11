@@ -10,13 +10,13 @@ class URLsCollection
   end
 
   def all
-    @urls.split(/[,;]+/).map { |url| url.strip }
+    @urls.strip.split(/[\s,;]+/).map { |url| url.strip }
   end
 
   def post_to_all(payload)
     raise Exception.new("Cannot post: #{errors}") unless valid?
     all.each do |url|
-      http_post(url, payload, 'Content-Type' => 'application/json')
+      http_post_json(url, payload)
     end
   end
 
@@ -41,7 +41,7 @@ class URLsCollection
   private
 
   def valid_url?(url)
-    url_regex = /(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z0-9]{2,6}(:[0-9]{1,5})?(\/.*)?$)/ix
+    url_regex = /(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z0-9]{2,6}(:[0-9]{1,5})?(\/.*)?$)/i
     url =~ url_regex
   end
 end

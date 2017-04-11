@@ -35,6 +35,9 @@ tags:
 developer: 
   name: Rahul
 
+retired: true
+temporary_redirect_url: "https://supportbee.com/integrations"
+
 # The following config keys are used by Action Handlers
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]

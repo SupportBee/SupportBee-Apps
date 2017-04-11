@@ -24,7 +24,7 @@ module Insightly
 
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         [500, e.message]
       end
       [200, "Contact sent"]
@@ -41,7 +41,7 @@ module Insightly
        ticket.comment(:html => html)
      rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         return [500, e.message]
      end
      [200, "Insightly Task Created!"]
@@ -49,6 +49,10 @@ module Insightly
 
     def projects
       [200, fetch_projects]
+    end
+
+    def opportunities
+      [200, fetch_opportunities]
     end
 
     def users
@@ -62,7 +66,6 @@ module Insightly
   require 'json'
 
   class Base < SupportBeeApp::Base
-
     string  :api_key,
             required: true,
             label: 'Insightly API Key',
@@ -71,15 +74,12 @@ module Insightly
             required: true,
             label: 'Insightly Subdomain',
             hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
-
     string :tagged_name,
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
-
     boolean :tag_contacts,
             label: 'Tag new contacts that are created from within SupportBee with a tag name',
             default: false
-
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
@@ -95,7 +95,13 @@ module Insightly
     end
 
     def project_id
+      return nil if payload.overlay.projects_select == 'none'
       payload.overlay.projects_select
+    end
+
+    def opportunity_id
+      return nil if payload.overlay.opportunities_select == 'none'
+      payload.overlay.opportunities_select
     end
 
     def responsible_user_id
@@ -106,6 +112,14 @@ module Insightly
       payload.overlay.owner_select
     end
 
+    def status
+      payload.overlay.status_select
+    end
+
+    def priority
+      payload.overlay.priority_select.to_i
+    end
+
     private
 
     def test_ping
@@ -113,21 +127,37 @@ module Insightly
     end
 
     def create_task(title, description)
-      response = api_post('tasks', {
+      tasklinks = []
+      request_body = {
         title: title,
         details: description,
-        project_id: project_id,
         completed: false,
         publicly_visible: true,
         responsible_user_id: responsible_user_id,
-        owner_user_id: owner_user_id
-      })
+        owner_user_id: owner_user_id,
+        status: status,
+        priority: priority
+      }
+
+      if project_id
+        request_body[:project_id] = project_id
+        tasklinks << { project_id: project_id }
+      end
+
+      if opportunity_id
+        request_body[:opportunity_id] = opportunity_id
+        tasklinks << { opportunity_id: opportunity_id }
+      end
+
+      request_body[:tasklinks] = tasklinks
+
+      response = api_post('tasks', request_body)
       return response.body if response.status == 201
       raise Exception, "Create task status was #{response.status}. Response #{response.body}"
     end
 
-    def create_note(title, description, email)
-      contact = find_contact(email)
+    def create_note(title, description, requester)
+      contact = find_or_create_contact(requester)
       response = api_post('notes', {
         title: title,
         body: description,
@@ -136,6 +166,12 @@ module Insightly
       })
       return response.body if response.status == 201
       raise Exception, "Create note status was #{response.status}. Response #{response.body}"
+    end
+
+    def find_or_create_contact(requester)
+      ret = find_contact(requester)
+      return ret unless ret.nil?
+      create_contact(requester)
     end
 
     def create_contact(requester)
@@ -174,6 +210,11 @@ module Insightly
 
     def fetch_projects
       response = insightly_get(api_url('projects'))
+      response.body.to_json
+    end
+
+    def fetch_opportunities
+      response = insightly_get(api_url('opportunities'))
       response.body.to_json
     end
 

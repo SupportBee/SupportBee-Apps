@@ -4,7 +4,8 @@ module CreateSnippet
      begin
        create_snippet(name: payload.overlay.name, text: payload.overlay.text, tags: payload.overlay.tags)
      rescue Exception => e
-       ErrorReporter.report(e, {payload: payload})
+       context = { payload: payload }
+       ErrorReporter.report(e, context: context)
        return [500, e.message]
      end
 

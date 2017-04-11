@@ -21,16 +21,6 @@ RSpec.configure do |config|
   end
 end
 
-# Prevent test unit gem from throwing errors when rspec in run
-#
-# Test unit gem tries to autorun tests when ruby exits. This patch
-# disables the autorun behaviour.
-#
-# @see http://www.jonathanleighton.com/articles/2012/stop-test-unit-autorun/
-class Test::Unit::Runner
-  @@stop_auto_run = true
-end
-
 VCR.configure do |c|
   #the directory where your cassettes will be saved
   c.cassette_library_dir = 'spec/vcr'
@@ -59,7 +49,7 @@ end
 
 class ErrorReporter
   def self.report(e, context)
-    puts ">>> [ERROR] Request: #{e.request}"
+    puts ">>> [ERROR] Request: #{e.request}" if e.respond_to?(:request)
     puts ">>> [ERROR] Context: #{context}"
     puts ">>> [ERROR] Backtrace: #{e.backtrace.reject {|line| line =~ /\/gems\//} }"
   end

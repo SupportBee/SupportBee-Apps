@@ -20,13 +20,13 @@ module Basecamp
             response
           end
 
-        return [500, '{"error": "Ticket not sent. Please check the settings of the app"}'] unless result
+        return [500, { error: "Ticket not sent. Please check the settings of the app" }.to_json] unless result
         comment_on_ticket(ticket, html)
-        return [200, '{"message": "Ticket sent to Basecamp"}']
+        return [200, { message: "Ticket sent to Basecamp" }.to_json]
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
-        return [500, {message: e.message}]
+        ErrorReporter.report(e, context: context)
+        return [500, { message: e.message }.to_json]
       end
     end
 
@@ -55,12 +55,23 @@ module Basecamp
     string :app_id,
       required: true,
       label: 'Enter App ID',
-      hint: 'If your base URL is "https://basecamp.com/9999999" enter "9999999"'
+      hint: 'If your basecamp URL is "https://basecamp.com/9999999" enter "9999999"'
 
     def validate
-      status, projects = fetch_projects
-      errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
-      errors.empty? ? true : false
+      # status, projects = fetch_projects
+      # errors[:flash] = ["Could not connect to Basecamp with your App ID, kindly recheck."] unless status == 200
+      # errors.empty? ? true : false
+      response = basecamp_get(projects_url)
+      return true if response.status == 200
+
+      e = StandardError.new("Failed to fetch basecamp projects")
+      context = {
+        response_status: response.status,
+        response_body: response.body
+      }
+      ErrorReporter.report(e, context: context)
+      errors[:flash] = response.body
+      return false
     end
 
     def token
@@ -90,15 +101,11 @@ module Basecamp
     private
 
     def base_url
-      Pathname.new("https://basecamp.com/#{settings.app_id}")
-    end
-
-    def base_api_url
-      base_url.join('api','v1')
+      Pathname.new("https://basecamp.com/#{settings.app_id}").join('api', 'v1')
     end
 
     def projects_url
-      base_api_url.join("projects")
+      base_url.join("projects")
     end
 
     def project_url
@@ -117,7 +124,7 @@ module Basecamp
       project_url.join('todolists')
     end
 
-    def project_todolist_todos_url
+    def todolist_todos_url
       project_todolists_url.join(todolist_id.to_s, 'todos')
     end
 
@@ -141,38 +148,38 @@ module Basecamp
     end
 
     def create_message
-      post_body = {
+      body = {
         subject: title,
         content: description
       }.to_json
 
-      response = basecamp_post(project_messages_url, post_body)
+      response = basecamp_post(project_messages_url, body)
       response.status == 201 ? response : false
     end
 
     def create_todo_list
       _description = description.blank? ? '' : description
 
-      post_body = {
+      body = {
         name: title,
         description: _description
       }.to_json
 
-      response = basecamp_post(project_todolists_url, post_body)
+      response = basecamp_post(project_todolists_url, body)
       response.status == 201 ? response : false
     end
 
     def create_todo_item
-      post_body = {
+      body = {
         content: title
       }
-      post_body[:assignee] = {
+      body[:assignee] = {
         id: assignee_id,
         type: 'Person'
       } if assignee_id and assignee_id != 'none'
-      post_body = post_body.to_json
+      body = body.to_json
 
-      create_todo_item_response = basecamp_post(project_todolist_todos_url, post_body)
+      create_todo_item_response = basecamp_post(todolist_todos_url, body)
       return false if create_todo_item_response.status != 201
       todo_item_id = create_todo_item_response.body['id']
       create_comment_url = todo_item_comments_url(todo_item_id)

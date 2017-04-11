@@ -22,7 +22,7 @@ module Bigcommerce
         ticket.comment(:html => order_html)
       rescue Exception => e
         context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context)
+        ErrorReporter.report(e, context: context)
         [500, e.message]
       end
 

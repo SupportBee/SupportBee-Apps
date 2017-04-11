@@ -15,8 +15,8 @@ Asana.Views.Overlay = SB.Apps.BaseView.extend(
     'click a.submit': 'submit_form'
   }
 
-  initialize: ->
-    SB.Apps.BaseView.prototype.initialize.call(this)
+  initialize: (options = {}) ->
+    SB.Apps.BaseView.prototype.initialize.call(this, options)
 
     _.bindAll this, 'render_one_project', 'project_changed', 'render_orgs', 'render_one_org',
                     'render_projects', 'org_changed', 'render_people', 'render_person'

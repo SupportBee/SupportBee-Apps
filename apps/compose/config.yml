@@ -1,6 +1,6 @@
 name: Compose
 slug: compose
-access: public
+access: test
 
 description: "
 This app is now deprecated. You can send an email to a customer for new tickets without an app. Please see our [blog post announcing this feature](https://blog.supportbee.com/2013/08/28/send-emails-new-tickets/).

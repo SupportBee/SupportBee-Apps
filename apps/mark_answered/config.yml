@@ -1,6 +1,6 @@
 name: Mark As Answered Button
 slug: mark_answered
-access: public
+access: test
 
 description: "Replying to a ticket changes it from Unanswered to Answered. However sometimes you create a ticket or get a ticket and reply to the customer via phone. If you don't want to archive this ticket yet (you are still working on it) but don't want to keep it around as Unanswered, use this app. It adds a 'Mark As Answered' button in the apps. You can access it from the tickets listing or when you open a single ticket.
 
@@ -8,11 +8,11 @@ You can also leave a comment (optional) explaining why the ticket has been marke
 
 category: workflow
 
-tags: 
+tags:
 - workflow
 - answered
 
-developer: 
+developer:
   name: <Your Name>
   email: <Your Email>
   twitter: "<Your Twitter Handle>"
@@ -22,12 +22,17 @@ developer:
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]
 # Remove the following section if you do not want to define Action Handlers
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
-    - all
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Mark Answered
+    multiple_ticket_selection: true # Let agents select multiple tickets in ticket listings when using the Mark as Answered integration

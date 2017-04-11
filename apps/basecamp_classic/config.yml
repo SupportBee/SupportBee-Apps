@@ -6,19 +6,24 @@ description: "Send ticket details to an Basecamp Classic project. The ticket is 
 
 category: project-management
 
-tags: 
+tags:
 - project management
 
-developer: 
-developer: 
+developer:
+developer:
   name: Bopanna D.C
   email: bops.91@gmail.com
   github: bopanna
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
     - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
     label: Send To Basecamp Classic

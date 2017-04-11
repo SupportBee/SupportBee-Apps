@@ -11,7 +11,8 @@ module BasecampClassic
           return [500, "Ticket not sent. Please check the settings of the app"]
         end
       rescue Exception => e
-        ErrorReporter.report(e, {payload: payload})
+        context = { payload: payload }
+        ErrorReporter.report(e, context: context)
         return [500, e.message]
       end
     end

@@ -5,12 +5,11 @@ GIT
     error-reporter (0.1.0)
       honeybadger (= 2.2.0)
 
-GIT
-  remote: https://github.com/SupportBee/multimap.git
-  revision: 74bad36739a76406272203a9de361c02e9357e69
-  tag: v1.1.2
+PATH
+  remote: vendor/gems/sidekiq-pro-3.4.5
   specs:
-    multimap (1.1.2)
+    sidekiq-pro (3.4.5)
+      sidekiq (>= 4.1.5)
 
 GEM
   remote: https://rubygems.org/
@@ -28,28 +27,31 @@ GEM
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
-    awesome_print (1.2.0)
+    awesome_print (1.7.0)
     bigcommerce (0.8.2)
       activesupport
       json
       rest-client
     builder (3.0.3)
-    coderay (1.0.8)
+    capistrano (2.15.5)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
+    capistrano-ext (1.2.1)
+      capistrano (>= 1.0.0)
+    coderay (1.1.1)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
     coffee-script-source (1.3.3)
-    columnize (0.9.0)
+    concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
-    debugger (1.6.8)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.3.5)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.8)
     diff-lcs (1.2.5)
-    eventmachine (1.0.0)
+    eventmachine (1.2.3)
     evernote-thrift (1.22.2)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -57,7 +59,7 @@ GEM
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
-    flexmock (0.9.0)
+    flexmock (2.3.5)
     flowdock (0.3.0)
       httparty (~> 0.7)
       multi_json
@@ -66,6 +68,7 @@ GEM
     haml (3.1.7)
     hashdiff (0.2.3)
     hashie (1.2.0)
+    highline (1.7.8)
     highrise (3.0.3)
       activeresource (~> 3.0)
     hipchat (0.7.0)
@@ -84,42 +87,63 @@ GEM
     i18n (0.6.1)
     jaconda (2.0.2)
       activeresource (>= 2.3.5)
-    json (1.7.5)
-    kgio (2.8.0)
-    libv8 (3.16.14.7)
+    json (1.8.6)
+    jwt (1.5.6)
+    kgio (2.11.0)
     mab (0.0.3)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    method_source (0.8.1)
+    method_source (0.8.2)
     mime-types (1.19)
     mock_redis (0.6.2)
     multi_json (1.3.6)
     multi_xml (0.5.1)
     multipart-post (1.1.5)
-    newrelic_rpm (3.13.0.299)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-sftp (2.1.2)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.9.4)
+    net-ssh-gateway (1.3.0)
+      net-ssh (>= 2.6.5)
+    newrelic_rpm (3.18.1.330)
     nokogiri (1.5.5)
     nori (2.0.4)
     oauth (0.4.7)
+    oauth2 (1.3.1)
+      faraday (>= 0.8, < 0.12)
+      jwt (~> 1.0)
+      multi_json (~> 1.3)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 3)
+    omniauth (1.4.2)
+      hashie (>= 1.2, < 4)
+      rack (>= 1.0, < 3)
+    omniauth-google-oauth2 (0.4.1)
+      jwt (~> 1.5.2)
+      multi_json (~> 1.3)
+      omniauth (>= 1.1.1)
+      omniauth-oauth2 (>= 1.3.1)
+    omniauth-oauth2 (1.4.0)
+      oauth2 (~> 1.0)
+      omniauth (~> 1.2)
     polyglot (0.3.3)
-    pry (0.9.10)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.3.1)
-    pry-debugger (0.2.3)
-      debugger (~> 1.3)
-      pry (>= 0.9.10, < 0.11.0)
-    rack (1.4.1)
-    rack-protection (1.2.0)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    rack (1.6.5)
+    rack-protection (1.5.3)
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
+    raindrops (0.17.0)
     rake (0.9.2.2)
-    redis (3.0.2)
-    redis-namespace (1.2.1)
-      redis (~> 3.0.0)
-    ref (1.0.5)
+    redis (3.3.3)
+    redis-namespace (1.5.3)
+      redis (~> 3.0, >= 3.0.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     restforce (1.4.2)
@@ -152,6 +176,8 @@ GEM
       httmultiparty (>= 0.3.8)
       multipart-post
       roxml (>= 3.3.1)
+    rvm-capistrano (1.5.6)
+      capistrano (~> 2.15.4)
     safe_yaml (1.0.4)
     savon (2.1.0)
       akami (~> 1.2.0)
@@ -161,16 +187,18 @@ GEM
       nokogiri (>= 1.4.0)
       nori (~> 2.0.3)
       wasabi (~> 3.0.0)
+    sidekiq (4.2.10)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (~> 3.2, >= 3.2.1)
     simple_oauth (0.1.9)
     sinatra (1.3.2)
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
     sinatra-initializers (0.1.4)
-    slop (3.3.3)
-    therubyracer (0.12.0)
-      libv8 (~> 3.16.14.0)
-      ref
+    slop (3.6.0)
     thor (0.16.0)
     tilt (1.3.3)
     timecop (0.8.0)
@@ -191,9 +219,9 @@ GEM
       eventmachine (>= 0.12.8)
       http_parser.rb (~> 0.5.1)
       simple_oauth (~> 0.1.4)
-    unicorn (3.7.0)
-      kgio (~> 2.3)
-      rack
+    unicorn (5.2.0)
+      kgio (~> 2.6)
+      raindrops (~> 0.7)
     vcr (3.0.1)
     wasabi (3.0.0)
       httpi (~> 2.0)
@@ -211,6 +239,8 @@ DEPENDENCIES
   addressable
   awesome_print
   bigcommerce (~> 0.8.2)
+  capistrano (= 2.15.5)
+  capistrano-ext
   coffee-script
   error-reporter!
   evernote-thrift
@@ -219,6 +249,7 @@ DEPENDENCIES
   faraday_middleware
   flexmock
   flowdock
+  gyoku
   haml
   hashie
   highrise
@@ -228,11 +259,11 @@ DEPENDENCIES
   mab
   mail
   mock_redis
-  multimap!
   newrelic_rpm
   nokogiri
+  omniauth
+  omniauth-google-oauth2
   pry
-  pry-debugger
   rack-test
   rake
   redis
@@ -242,16 +273,17 @@ DEPENDENCIES
   rspec
   ruby-trello
   rubyzoho (= 0.1.7)
+  rvm-capistrano
   savon (~> 2.1.0)
+  sidekiq-pro (= 3.4.5)!
   sinatra
   sinatra-initializers
-  therubyracer
   thor
   timecop
   tinder
-  unicorn (= 3.7.0)
+  unicorn (>= 4.1.1)
   vcr
   webmock
 
 BUNDLED WITH
-   1.11.2
+   1.14.6

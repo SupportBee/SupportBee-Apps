@@ -11,8 +11,8 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     'click a.submit': 'submit_form'
   }
 
-  initialize: ->
-    SB.Apps.BaseView.prototype.initialize.call(this)
+  initialize: (options = {}) ->
+    SB.Apps.BaseView.prototype.initialize.call(this, options)
 
     _.bindAll this, 'render_projects', 'render_one_project', 'render_memberships', 'render_one_membership', 'project_changed'
 

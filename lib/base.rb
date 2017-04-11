@@ -234,6 +234,10 @@ module SupportBeeApp
       def setup_for(sinatra_app)
         sinatra_app.setup(self)
       end
+
+      def find_from_slug(app_slug)
+        SupportBeeApp::Base.apps.detect { |app_class| app_class.slug == app_slug }
+      end
     end
 
     self.env ||= PLATFORM_ENV
@@ -277,7 +281,8 @@ module SupportBeeApp
 
         return response
       rescue Exception => e
-        ErrorReporter.report(e, {event: event})
+        context = { event: event }
+        ErrorReporter.report(e, context: context)
         LOGGER.error log_event_message(e.message)
         LOGGER.error log_event_message(e.backtrace.join("\n"))
         return false
@@ -294,7 +299,8 @@ module SupportBeeApp
         all_actions if self.respond_to?(:all_actions)
         LOGGER.info log_action_message
       rescue Exception => e
-        ErrorReporter.report(e, {action: action})
+        context = { action: action }
+        ErrorReporter.report(e, context: context)
         LOGGER.error log_action_message("#{e.message} \n #{e.backtrace}")
         result = [500, e.message]
       end
