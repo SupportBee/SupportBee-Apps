@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/SupportBee/ErrorReporter.git
-  revision: 9b6e735925ef8a4bdcb8f900cda25ac85f3a3902
+  revision: ca39e0e1e1b0f25cb08af55d3ecdcbf03370327d
   specs:
     error-reporter (0.1.0)
       honeybadger (= 2.2.0)
