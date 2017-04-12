@@ -7,44 +7,31 @@ module Insightly
       return if ticket.trash || ticket.spam
       requester = ticket.requester
 
-      begin
-        contact = find_contact(requester)
-        html = ''
+      contact = find_contact(requester)
+      html = ''
 
-        if contact
-          html = existing_contact_info(contact)
-        else
-          contact = create_contact(requester)
-          html = created_contact_info(contact)
-        end
-
-        if contact
-          ticket.comment(:html => html)
-        end
-
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
+      if contact
+        html = existing_contact_info(contact)
+      else
+        contact = create_contact(requester)
+        html = created_contact_info(contact)
       end
-      [200, "Contact sent"]
+
+      if contact
+        ticket.comment(:html => html)
+      end
     end
   end
 
   module ActionHandler
     def button
      ticket = payload.tickets.first
-     begin
-       task = create_task(payload.overlay.title, payload.overlay.description)
-       note = create_note(payload.overlay.title, payload.overlay.description, ticket.requester)
-       html = task_created_html(task)
-       ticket.comment(:html => html)
-     rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
-     end
-     [200, "Insightly Task Created!"]
+     task = create_task(payload.overlay.title, payload.overlay.description)
+     note = create_note(payload.overlay.title, payload.overlay.description, ticket.requester)
+     html = task_created_html(task)
+     ticket.comment(:html => html)
+
+     show_success_notification "Insightly Task Created!"
     end
 
     def projects
@@ -85,14 +72,17 @@ module Insightly
             default: true
 
     def validate
-      errors[:flash] = ["Please fill in all the required fields"] if settings.subdomain.blank? or settings.api_key.blank?
-      errors.empty? ? true : false
+      return false unless required_fields_present?
+
+      unless test_api_request.success?
+        show_error_notification "API Key Invalid"
+        return false
+      end
+
+      return true
     end
 
-    def validate
-      errors[:flash] = ["API Key Invalid"] unless test_ping.success?
-      errors.empty? ? true : false
-    end
+    private
 
     def project_id
       return nil if payload.overlay.projects_select == 'none'
@@ -120,9 +110,23 @@ module Insightly
       payload.overlay.priority_select.to_i
     end
 
-    private
+    def required_fields_present?
+      are_required_fields_present = true
 
-    def test_ping
+      if settings.subdomain.blank?
+        are_required_fields_present = false
+        show_inline_error :subdomain, "Please enter your Insightly Subdomain"
+      end
+
+      if settings.api_key.blank?
+        are_required_fields_present = false
+        show_inline_error :subdomain, "Please enter your Insightly API Key"
+      end
+
+      return are_required_fields_present
+    end
+
+    def test_api_request
       insightly_get(api_url('projects'))
     end
 
@@ -138,22 +142,22 @@ module Insightly
         status: status,
         priority: priority
       }
-
       if project_id
         request_body[:project_id] = project_id
         tasklinks << { project_id: project_id }
       end
-
       if opportunity_id
         request_body[:opportunity_id] = opportunity_id
         tasklinks << { opportunity_id: opportunity_id }
       end
-
       request_body[:tasklinks] = tasklinks
 
       response = api_post('tasks', request_body)
-      return response.body if response.status == 201
-      raise Exception, "Create task status was #{response.status}. Response #{response.body}"
+      if response.status == 201
+        return response.body
+      else
+        raise StandardError.new("Failed to create an Insightly task. Here's the response from Insightly: #{response.body}")
+      end
     end
 
     def create_note(title, description, requester)
@@ -164,8 +168,11 @@ module Insightly
         link_subject_type: 'CONTACT',
         link_subject_id: contact["CONTACT_ID"]
       })
-      return response.body if response.status == 201
-      raise Exception, "Create note status was #{response.status}. Response #{response.body}"
+      if response.status == 201
+        return response.body
+      else
+        raise StandardError.new("Failed to create an Insightly note. Here's the response from Insightly: #{response.body}")
+      end
     end
 
     def find_or_create_contact(requester)

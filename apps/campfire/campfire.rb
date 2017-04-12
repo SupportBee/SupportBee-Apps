@@ -1,22 +1,22 @@
 module Campfire
   module EventHandler
     def ticket_created
-      return true unless settings.notify_ticket_created.to_s == '1'
+      return unless settings.notify_ticket_created.to_s == '1'
       notify_ticket(payload.ticket)
     end
 
     def customer_reply_created
-      return true unless settings.notify_customer_reply_created.to_s == '1'
+      return unless settings.notify_customer_reply_created.to_s == '1'
       notify_reply(payload.ticket, payload.reply, "New Customer Reply")
     end
 
     def agent_reply_created
-      return true unless settings.notify_agent_reply_created.to_s == '1'
+      return unless settings.notify_agent_reply_created.to_s == '1'
       notify_reply(payload.ticket, payload.reply)
     end
 
     def comment_created
-      return true unless settings.notify_comment_created.to_s == '1'
+      return unless settings.notify_comment_created.to_s == '1'
       notify_comment(payload.ticket, payload.comment)
     end
   end

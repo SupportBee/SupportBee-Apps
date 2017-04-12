@@ -1,19 +1,13 @@
 module BasecampClassic
   module ActionHandler
     def button
-      http.basic_auth(settings.api_token,"")
+      http.basic_auth(settings.api_token, "")
 
-      begin
-        result = create_message(payload.overlay.title, payload.overlay.description)
-        if result
-          return [200, "Ticket sent to Basecamp Classic"]
-        else
-          return [500, "Ticket not sent. Please check the settings of the app"]
-        end
-      rescue Exception => e
-        context = { payload: payload }
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
+      result = create_message(payload.overlay.title, payload.overlay.description)
+      if result
+        show_success_notification "Ticket sent to Basecamp Classic"
+      else
+        show_error_notification "Ticket not sent. Please check the settings of the app"
       end
     end
   end
@@ -34,6 +28,5 @@ module BasecampClassic
       end
       response.status == 201 ? true : false
     end
-
   end
 end

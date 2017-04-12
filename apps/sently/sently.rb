@@ -1,36 +1,27 @@
 module Sently
   module EventHandler
     def ticket_created
-      return true unless settings.notify_ticket_created.to_s == '1'
+      return unless settings.notify_ticket_created.to_s == '1'
       ticket = payload.ticket
       send_sms("New ticket from #{ticket.requester.name || ticket.requester.email} - #{ticket.subject}")
     end
 
     def customer_reply_created
-      return true unless settings.notify_customer_reply_created.to_s == '1'
+      return unless settings.notify_customer_reply_created.to_s == '1'
       reply = payload.reply
       send_sms("New customer reply from #{reply.replier.name || reply.replier.email} in #{payload.ticket.subject}")
     end
 
     def agent_reply_created
-      return true unless settings.notify_agent_reply_created.to_s == '1'
+      return unless settings.notify_agent_reply_created.to_s == '1'
       reply = payload.reply
       send_sms("New agent reply from #{reply.replier.name || reply.replier.email} in #{payload.ticket.subject}")
     end
 
     def comment_created
-      return true unless settings.notify_comment_created.to_s == '1'
+      return unless settings.notify_comment_created.to_s == '1'
       comment = payload.comment
       send_sms("New comment from #{comment.commenter.name || comment.commenter.email} in #{payload.ticket.subject}")
-    end
-  end
-end
-
-module Sently
-  module ActionHandler
-    def button
-      #Handle button 
-      [200, "Success"]
     end
   end
 end
@@ -55,7 +46,5 @@ module Sently
         req.params[:text]     = message[0...160]
       end
     end
-
   end
 end
-

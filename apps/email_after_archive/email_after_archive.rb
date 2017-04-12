@@ -1,18 +1,20 @@
+#
+# This integration is retired
+#
+
 module EmailAfterArchive
   module EventHandler    
-
     def ticket_archived     
       requester = payload.ticket.requester
       first_name, last_name = requester.name ? requester.name.split : [requester.email, '']
       text = settings.email_body.gsub(/{{FIRST_NAME}}/, first_name).gsub(/{{LAST_NAME}}/, last_name)
 
       RestClient.post "https://api:#{settings.api_key}@api.mailgun.net/v2/#{settings.mailgun_domain}/messages",
-      :from =>  settings.from,
-      :to => requester.email,
-      :subject => settings.subject,
-      :text => text
+        :from =>  settings.from,
+        :to => requester.email,
+        :subject => settings.subject,
+        :text => text
     end
-    
   end
 end
 

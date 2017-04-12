@@ -256,7 +256,11 @@ module SupportBee
     end
 
     def context
-      {ticket_id: id}
+      { ticket_id: id }
+    end
+
+    def spam_or_trash?
+      self.spam || self.trash
     end
 
     private

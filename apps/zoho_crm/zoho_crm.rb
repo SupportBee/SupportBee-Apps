@@ -1,34 +1,26 @@
 module ZohoCrm
   module EventHandler
     def ticket_created
-      begin
-  			ticket = payload.ticket
-        return if ticket.trash || ticket.spam
+			ticket = payload.ticket
+      return if ticket.spam_or_trash?
 
-        setup_zoho
-        requester = ticket.requester
-        contact = find_contact(requester)
+      setup_zoho
+      requester = ticket.requester
+      contact = find_contact(requester)
 
-        unless contact
-          return [200, 'Contact creation disabled'] unless settings.should_create_contact.to_s == '1'
-
-          contact =  create_new_contact(requester)
+      if contact
+        html = contact_info_html(contact)
+      else
+        if settings.should_create_contact.to_s == '1'
+          contact = create_new_contact(requester)
           html = new_contact_info_html(contact)
-
         else
-          html = contact_info_html(contact)
+          return
         end
-
-        send_note(ticket, contact) if contact
-
-        comment_on_ticket(ticket, html)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
       end
 
-      [200, "Ticket sent to Zohocrm"]
+      send_note(ticket, contact) if contact
+      comment_on_ticket(ticket, html)
     end
   end
 end
@@ -46,7 +38,28 @@ module ZohoCrm
       true
     end
 
-    require 'ruby_zoho'
+    private
+
+    def required_fields_present?
+      are_required_fields_present = true
+
+      if settings.api_token.blank?
+        are_required_fields_present = false
+        show_inline_error "Please enter your ZohoCRM Auth Token"
+      end
+
+      return are_required_fields_present
+    end
+
+    def valid_credentials?
+      response = get_admin_users
+      if api_response_has_admin_users?(response)
+        true
+      else
+        show_error_notification "Invalid API Token. Please verify the entered details"
+        false
+      end
+    end
 
     def setup_zoho
       RubyZoho.configure do |config|
@@ -56,11 +69,10 @@ module ZohoCrm
     end
 
     def create_new_contact(requester)
-      contact =  create_contact(requester)
+      contact = create_contact(requester)
     end
 
     def create_contact(requester)
-     return unless settings.should_create_contact.to_s == '1'
      firstname = split_name(requester).first
      lastname = split_name(requester).last
      new_contact = RubyZoho::Crm::Contact.new(
@@ -99,8 +111,8 @@ module ZohoCrm
       html
     end
 
-     def comment_on_ticket(ticket, html)
-        ticket.comment(:html => html)
+    def comment_on_ticket(ticket, html)
+      ticket.comment(:html => html)
     end
 
     def send_note(ticket, contact)
@@ -114,7 +126,6 @@ module ZohoCrm
         req.body = %Q(<Notes><row no="1"><FL val="entityId">#{requestid}</FL><FL val="SMOWNERID">#{ownerid}</FL><FL val="Note Title">New Ticket</FL><FL val="Note Content">#{generate_note_content(ticket)}</FL></row> </Notes>)
         req.params[:xmlData] = req.body
       end
-
     end
 
     def generate_note_content(ticket)
@@ -122,25 +133,6 @@ module ZohoCrm
       note << ticket.summary + "\n"
       note << "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
       note
-    end
-
-    private
-
-    def required_fields_present?
-      if settings.api_token.blank?
-        errors[:flash] = "API Token cannot be blank"
-      end
-      errors.empty? ? true : false
-    end
-
-    def valid_credentials?
-      response = get_admin_users
-      if api_response_has_admin_users?(response)
-        true
-      else
-        errors[:flash] = "Invalid API Token. Please verify the entered details"
-        false
-      end
     end
 
     def get_admin_users
@@ -154,6 +146,5 @@ module ZohoCrm
     def api_response_has_admin_users?(response)
       JSON.parse(response.body).has_key?("users")
     end
-
   end
 end

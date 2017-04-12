@@ -3,30 +3,27 @@ module Basecamp3
     def button
       ticket = payload.tickets.first
       html = ''
-      begin
-        result =
-          case payload.overlay.type
-          when 'message'
-            response = create_message
-            html = message_html_comment(response.body) if response and response.body
-            response
-          when 'todo_list'
-            response = create_todo_list
-            html = todolist_html_comment(response.body) if response and response.body
-            response
-          when 'todo_item'
-            response = create_todo_item
-            html = todo_html_comment(response.body) if response and response.body
-            response
-          end
+      response =
+        case payload.overlay.type
+        when 'message'
+          response = create_message
+          html = message_html_comment(response.body) if response and response.body
+          response
+        when 'todo_list'
+          response = create_todo_list
+          html = todolist_html_comment(response.body) if response and response.body
+          response
+        when 'todo_item'
+          response = create_todo_item
+          html = todo_html_comment(response.body) if response and response.body
+          response
+        end
 
-        return [500, { error: "Ticket not sent. Please check the settings of the app" }.to_json] unless result
+      if response
         comment_on_ticket(ticket, html)
-        return [200, { message: "Ticket sent to Basecamp" }.to_json]
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, { message: e.message}.to_json]
+        show_success_notification "Ticket sent to Basecamp"
+      else
+        show_error_notification "Ticket not sent. Please check the settings of the app"
       end
     end
 
@@ -78,6 +75,8 @@ module Basecamp3
       return false
     end
 
+    private
+
     def token
       settings.oauth_token || settings.token
     end
@@ -101,8 +100,6 @@ module Basecamp3
     def assignee_ids
       Array(payload.overlay.assign_to) rescue []
     end
-
-    private
 
     def base_url
       Pathname.new("https://3.basecampapi.com").join(settings.account_id.to_s)

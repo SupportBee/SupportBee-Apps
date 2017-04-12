@@ -2,19 +2,18 @@ module Bugherd
   module ActionHandler
     def button
       http.basic_auth(settings.token, "")
-      begin
-        ticket = payload.tickets.first
-        task = create_task(ticket, payload.overlay.description)
-        return [500, task['error'].capitalize!] if task['error']
-        html = task_info_html(ticket, task)
-        comment_on_ticket(ticket, html)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
+
+      ticket = payload.tickets.first
+      task = create_task(ticket, payload.overlay.description)
+      if task['error']
+        show_error_notification task['error'].capitalize!
+        return
       end
 
-      [200, "New Task created successfully in BugHerd"]
+      html = task_info_html(ticket, task)
+      comment_on_ticket(ticket, html)
+
+      show_success_notification "New Task created successfully in BugHerd"
     end
   end
 end
@@ -32,9 +31,11 @@ module Bugherd
 
     def validate
       return false unless required_fields_present?
-      return false unless valid_credentials?
+      return false unless valid_api_token?
       true
     end
+
+    private
 
     def create_task(ticket, description)
       project_id = settings.project_id
@@ -81,15 +82,28 @@ module Bugherd
     private
 
     def required_fields_present?
-      field_errors = []
-      error_message = nil
-      field_errors << "API Key cannot be blank" if api_token_blank?
-      field_errors << "Project ID cannot be blank" if project_id_blank?
-      unless field_errors.empty?
-        error_message = field_errors.join(" and ")
-        errors[:flash] = error_message
+      are_required_fields_present = true
+      if api_token_blank?
+        show_inline_error :token, "API Key cannot be blank"
+        are_required_fields_present = false
       end
-      error_message.nil? ? true : false
+      if project_id_blank?
+        show_inline_error :project_id, "Project ID cannot be blank"
+        are_required_fields_present = false
+      end
+
+      are_required_fields_present
+    end
+
+    def valid_api_token?
+      http.basic_auth(settings.token, "x")
+      response = http_get "https://www.bugherd.com/api_v2/projects/#{settings.project_id}.json"
+      if response.status == 200
+        true
+      else
+        show_error_notification "Invalid API Key and/or Project ID. Please verify the entered details"
+        false
+      end
     end
 
     def api_token_blank?
@@ -99,17 +113,5 @@ module Bugherd
     def project_id_blank?
       settings.project_id.blank?
     end
-
-    def valid_credentials?
-      http.basic_auth(settings.token, "x")
-      response = http_get "https://www.bugherd.com/api_v2/projects/#{settings.project_id}.json"
-      if response.status == 200
-        true
-      else
-        errors[:flash] = "Invalid API Key and/or Project ID. Please verify the entered details"
-        false
-      end
-    end
-
   end
 end

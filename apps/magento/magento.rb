@@ -4,25 +4,18 @@ module Magento
       ticket = payload.ticket
       requester = ticket.requester
 
-      begin
-        client = get_client
-        response = perform_client_login(client)
-        session_id = get_session_id(response)
-        if session_id
-	  orders = get_order(client, session_id, requester)
-          html = order_info_html(orders, client, session_id)
-          send_new_comment(client, session_id, ticket, orders)
-        else
-          return response
-        end
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
+      client = get_client
+      response = perform_client_login(client)
+      session_id = get_session_id(response)
+      if session_id
+        orders = get_order(client, session_id, requester)
+        html = order_info_html(orders, client, session_id)
+        send_new_comment(client, session_id, ticket, orders)
+      else
+        return response
       end
 
       comment_on_ticket(ticket, html)
-      [200, "Ticket sent to Magento"]
     end
   end
 end
@@ -33,6 +26,25 @@ module Magento
     string :username, :required => true, :label => 'Enter API User Name', :hint => 'See how to create an api user and key in "http://www.magentocommerce.com/wiki/modules_reference/english/mage_adminhtml/api_user/index"'
     string :api_key, :required => true, :label => 'Enter API Key'
 
+    def validate
+      begin
+        test_api_request
+      rescue Savon::SOAPFault => e
+        report_exception(e)
+
+        show_error_notification "We could not reach Magento. Please check the configuration and try again"
+        return false
+      end
+
+      true
+    end
+
+    private
+
+    def test_api_request
+      client.call(:login) { message(username: username, apiKey: api_key) }
+    end
+
     def get_client
       client = Savon.client(wsdl: "http://#{settings.subdomain}.gostorego.com/api/v2_soap?wsdl=1", ssl_ca_cert_file: "./config/cacert.pem")
     end
@@ -41,25 +53,11 @@ module Magento
       username = settings.username.to_s
       api_key  = settings.api_key.to_s
 
-      begin
-        response = client.call(:login){message(username: username, apiKey: api_key)}
-      rescue Wasabi::Resolver::HTTPError => e
-        ErrorReporter.report(e)
-        return [500, "Request to get the wsdl document failed."]
-      rescue Savon::SOAPFault => e
-        ErrorReporter.report(e)
-        return [500, "Access Denied. Entered API key or user name is invalid"]
-      end
-
+      response = client.call(:login){message(username: username, apiKey: api_key)}
     end
 
     def get_session_id(response)
-      begin
-        session_id = response.body[:login_response][:login_return] if response
-      rescue Exception => e
-        context = { response: response }
-        ErrorReporter.report(e, context: context)
-      end
+      session_id = response.body[:login_response][:login_return] if response
     end
 
     def get_order(client, session_id, requester)

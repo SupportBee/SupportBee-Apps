@@ -3,16 +3,15 @@ module PushOver
     # Handle 'ticket.created' event
     def ticket_created
       push_ticket(payload.ticket)
-      return true
     end
 
     def customer_reply_created
-      return true unless settings.send_customer_replies.to_s == '1'
+      return unless settings.send_customer_replies.to_s == '1'
       push_customer_reply(payload.reply, payload.ticket)
     end
 
     def agent_reply_created
-      return true unless settings.send_agent_replies.to_s == '1'
+      return unless settings.send_agent_replies.to_s == '1'
       push_agent_reply(payload.reply, payload.ticket)
     end
   end
@@ -24,7 +23,6 @@ module PushOver
     string :user_key, :required => true, :label => 'User Key from PushOver', :hint => 'Get your User Key by signing up at http://www.pushover.net/. You can include multiple users too. Add the user keys separated by commas.'
     boolean :send_customer_replies, :default => false, :label => 'Notify replies from Customers?'
     boolean :send_agent_replies, :default => false, :label => 'Notify replies from Agents?'
-
 
     def push_ticket(ticket)
       user_keys = settings.user_key.split(",")
@@ -66,4 +64,3 @@ module PushOver
     end
   end
 end
-
