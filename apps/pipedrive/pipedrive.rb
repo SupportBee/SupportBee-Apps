@@ -47,7 +47,7 @@ module Pipedrive
 
     private
 
-    def test_api_request?
+    def test_api_request
       response = http_get api_url('/activityTypes') do |req|
         req.headers['Accept'] = 'application/json'
         req.params['api_token'] = settings.api_token

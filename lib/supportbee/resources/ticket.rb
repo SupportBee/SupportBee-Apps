@@ -260,7 +260,7 @@ module SupportBee
     end
 
     def spam_or_trash?
-      ticket.spam || ticket.trash
+      self.spam || self.trash
     end
 
     private
