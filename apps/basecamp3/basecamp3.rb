@@ -21,7 +21,7 @@ module Basecamp3
 
       if response
         comment_on_ticket(ticket, html)
-        show_success_notification "Ticket not sent. Please check the settings of the app"
+        show_success_notification "Ticket sent to Basecamp"
       else
         show_error_notification "Ticket not sent. Please check the settings of the app"
       end
