@@ -1,18 +1,18 @@
 module SupportBee
   class Ticket < Resource
     class << self
-      def list(auth={},params={})
+      def list(auth = {}, params = {})
         response = api_get(resource_url,auth,params)
         ticket_array_from_multi_response(response, auth)
       end
 
-      def search(auth={}, params={})
+      def search(auth = {}, params = {})
         return if params[:query].blank?
         response = api_get("#{resource_url}/search",auth,params)
         ticket_array_from_multi_response(response, auth)
       end
 
-      def create(auth={},params={})
+      def create(auth = {}, params = {})
         ticket_attributes = {:content_attributes => {}}
         ticket_attributes[:requester_name] = params.delete(:requester_name)
         ticket_attributes[:requester_email] = params.delete(:requester_email)
@@ -24,8 +24,6 @@ module SupportBee
         response = api_post(resource_url,auth,{body: post_body})
         self.new(auth,response.body['ticket'])
       end
-
-      private
 
       def ticket_array_from_multi_response(response, auth)
         tickets = []
@@ -44,7 +42,7 @@ module SupportBee
       end
     end
 
-    def update(params={})
+    def update(params = {})
       ticket_attributes = {}
       if params[:requester_email]
         ticket_attributes[:requester_email] = params.delete(:requester_email)
@@ -80,7 +78,18 @@ module SupportBee
       refresh
     end
 
+    def assigned_to_a_user?
+      respond_to?(:current_user_assignee) && !current_user_assignee.nil?
+    end
+
+    def assigned_to_user?(user_id)
+      return false unless assigned_to_a_user?
+      current_user_assignee.user.id == user.id
+    end
+
     def assign_to_user(user_id)
+      return if ticket.assigned_to_user?(user_id)
+
       assignment_url = "#{resource_url}/user_assignment"
       post_data = { :user_assignment => { :user_id => user_id }}
       response = api_post(assignment_url, :body => post_data)
@@ -158,7 +167,7 @@ module SupportBee
       refresh
     end
 
-    def replies(refresh=false)
+    def replies(refresh = false)
       refresh = true unless @replies
       if refresh
         replies_url = "#{resource_url}/replies"
@@ -174,7 +183,7 @@ module SupportBee
       SupportBee::Reply.new(@params, response.body['reply'])
     end
 
-    def reply(params={})
+    def reply(params = {})
       post_body = { :reply => {} }
       content_attributes = {}
       content_attributes[:body] = params.delete(:text) if params[:text]
@@ -198,7 +207,7 @@ module SupportBee
       @comments
     end
 
-    def comment(params={})
+    def comment(params = {})
       post_body = { :comment => {} }
       content_attributes = {}
       content_attributes[:body] = params.delete(:text) if params[:text]
@@ -221,7 +230,7 @@ module SupportBee
       raise SupportBee::TicketUpdateError.new("Ticket sender should be #{email} but is #{requester.email}")
     end
 
-    def labels_list(refresh=false)
+    def labels_list(refresh = false)
       refresh = true unless @labels
       unless refresh
         @labels = []
