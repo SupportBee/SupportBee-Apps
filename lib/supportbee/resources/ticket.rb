@@ -84,7 +84,7 @@ module SupportBee
 
     def assigned_to_user?(user_id)
       return false unless assigned_to_a_user?
-      current_user_assignee.user.id == user.id
+      current_user_assignee.user.id == user_id
     end
 
     def assign_to_user(user_id)
