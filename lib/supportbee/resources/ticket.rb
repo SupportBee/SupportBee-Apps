@@ -88,7 +88,7 @@ module SupportBee
     end
 
     def assign_to_user(user_id)
-      return if ticket.assigned_to_user?(user_id)
+      return if assigned_to_user?(user_id)
 
       assignment_url = "#{resource_url}/user_assignment"
       post_data = { :user_assignment => { :user_id => user_id }}
