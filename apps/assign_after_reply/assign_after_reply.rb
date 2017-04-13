@@ -3,10 +3,14 @@ module AssignAfterReply
     def agent_reply_created
       ticket = payload.ticket
 
-      has_user_assignee = ticket.respond_to?(:current_user_assignee) && !ticket.current_user_assignee.nil?
       replier = payload.reply.replier
-      return if has_user_assignee and settings.reassign.to_s != '1'
-      assign_ticket_to_user(ticket, replier)
+      if ticket.assigned_to_a_user?
+        if settings.reassign.to_s == '1'
+          assign_ticket_to_user(ticket, replier)
+        end
+      else
+        assign_ticket_to_user(ticket, replier)
+      end
 
       # Archive the ticket unless asked not to
       return if settings.keep_unanswered.to_s == '1'
