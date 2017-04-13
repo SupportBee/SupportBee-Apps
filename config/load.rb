@@ -57,5 +57,9 @@ end
 Sidekiq.configure_client do |config|
   config.redis = { url: redis_url }
 end
+if PLATFORM_ENV == "development"
+  require 'sidekiq/testing'
+  Sidekiq::Testing.inline!
+end
 
 require "#{PLATFORM_ROOT}/run_app"
