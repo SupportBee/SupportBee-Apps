@@ -129,25 +129,17 @@ module CapsuleCrm
     def required_fields_present?
       are_required_fields_present = true
 
-      if api_token.blank?
+      if settings.api_token.blank?
         are_required_fields_present = false
         show_inline_error :api_token, "API Token cannot be blank"
       end
 
-      if subdomain.blank?
+      if settings.subdomain.blank?
         are_required_fields_present = false
         show_inline_error :subdomain, "Subdomain cannot be blank"
       end
 
       return are_required_fields_present
-    end
-
-    def api_token_blank?
-      settings.api_token.blank?
-    end
-
-    def subdomain_blank?
-      settings.subdomain.blank?
     end
 
     def valid_credentials?

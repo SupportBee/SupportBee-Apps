@@ -83,11 +83,11 @@ module Bugherd
 
     def required_fields_present?
       are_required_fields_present = true
-      if api_token_blank?
+      if settings.api_token_blank?
         show_inline_error :token, "API Key cannot be blank"
         are_required_fields_present = false
       end
-      if project_id_blank?
+      if settings.project_id_blank?
         show_inline_error :project_id, "Project ID cannot be blank"
         are_required_fields_present = false
       end
