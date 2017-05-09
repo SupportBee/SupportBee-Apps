@@ -8,7 +8,7 @@ env = "production"
 
 # See http://unicorn.bogomips.org/Unicorn/Configurator.html for complete
 # documentation.
-worker_processes 80
+worker_processes 60
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
