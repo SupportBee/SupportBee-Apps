@@ -164,6 +164,24 @@ module Basecamp3
       end
     end
 
+    def fetch_paginated_data(path)
+      Enumerator.new do |yielder|
+        page = 1
+
+        loop do
+          response = basecamp_get("#{path}?page=#{page}")
+          results = response.body
+
+          if response.success? && not(results.blank?)
+            results.map { |item| yielder << item }
+            page += 1
+          else
+            raise StopIteration
+          end
+        end
+      end.lazy
+    end
+
     def create_message
       body = {
         subject: title,
@@ -204,8 +222,8 @@ module Basecamp3
     end
 
     def fetch_projects
-      response = basecamp_get(projects_url)
-      [response.status, response.body.to_json]
+      projects = fetch_paginated_data(projects_url)
+      [200, projects.to_json]
     end
 
     def fetch_todo_lists
