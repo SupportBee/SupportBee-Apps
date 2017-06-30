@@ -106,23 +106,23 @@ module Basecamp3
     end
 
     def bucket_url
-      base_url.join("buckets", project_id.to_s + ".json")
+      base_url.join("buckets", project_id.to_s)
     end
 
     def projects_url
-      base_url.join("projects.json")
+      base_url.join("projects")
     end
 
     def project_url
-      projects_url.join(project_id.to_s + ".json")
+      projects_url.join(project_id.to_s)
     end
 
     def project_members_url
-      project_url.join('people.json')
+      project_url.join('people')
     end
 
     def project_messages_url
-      project_message_board_url.join("messages.json")
+      project_message_board_url.join("messages")
     end
 
     def project_message_board_url
@@ -147,8 +147,8 @@ module Basecamp3
       Pathname.new(todoset_url)
     end
 
-    def basecamp_post(url, body)
-      http.post "#{url.to_s}" do |req|
+    def basecamp_post(path, body, params={})
+      http.post build_url(path, params) do |req|
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
         req.headers['Content-Type'] = 'application/json'
@@ -156,8 +156,8 @@ module Basecamp3
       end
     end
 
-    def basecamp_get(url)
-      response = http.get "#{url.to_s}" do |req|
+    def basecamp_get(path, params={})
+      http.get build_url(path, params) do |req|
        req.headers['Authorization'] = 'Bearer ' + token
        req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
        req.headers['Accept'] = 'application/json'
@@ -169,7 +169,7 @@ module Basecamp3
         page = 1
 
         loop do
-          response = basecamp_get("#{path}?page=#{page}")
+          response = basecamp_get(path, page: page)
           results = response.body
 
           if response.success? && not(results.blank?)
@@ -180,6 +180,14 @@ module Basecamp3
           end
         end
       end.lazy
+    end
+
+    def build_url(path, params={})
+      query_params = params.map { |key, value| "#{key}=#{value}" }.join("&") unless params.blank?
+      url = "#{path.to_s}.json"
+      url = url + "?#{query_params}" if query_params
+
+      url
     end
 
     def create_message
