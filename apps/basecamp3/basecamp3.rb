@@ -106,23 +106,23 @@ module Basecamp3
     end
 
     def bucket_url
-      base_url.join("buckets", project_id.to_s)
+      base_url.join("buckets", project_id.to_s + ".json")
     end
 
     def projects_url
-      base_url.join("projects")
+      base_url.join("projects.json")
     end
 
     def project_url
-      projects_url.join(project_id.to_s)
+      projects_url.join(project_id.to_s + ".json")
     end
 
     def project_members_url
-      project_url.join('people')
+      project_url.join('people.json')
     end
 
     def project_messages_url
-      project_message_board_url.join("messages")
+      project_message_board_url.join("messages.json")
     end
 
     def project_message_board_url
@@ -148,7 +148,7 @@ module Basecamp3
     end
 
     def basecamp_post(url, body)
-      http.post "#{url.to_s}.json" do |req|
+      http.post "#{url.to_s}" do |req|
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
         req.headers['Content-Type'] = 'application/json'
@@ -157,7 +157,7 @@ module Basecamp3
     end
 
     def basecamp_get(url)
-      response = http.get "#{url.to_s}.json" do |req|
+      response = http.get "#{url.to_s}" do |req|
        req.headers['Authorization'] = 'Bearer ' + token
        req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
        req.headers['Accept'] = 'application/json'
