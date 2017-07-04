@@ -54,9 +54,11 @@ namespace :supportbee_app_platform do
 
   namespace :eye do
     task :_load do
-      run <<-CMD
-        cd ~ && rvm-exec ruby-1.9.3-p484 eye load #{current_path}/config/eye/#{fetch(:stage)}.eye
-      CMD
+      fetch(:eye_config_dirs) do |eye_config_dir|
+        run <<-CMD
+          cd ~ && rvm-exec ruby-1.9.3-p484 eye load #{eye_config_dir}/`hostname`.eye
+        CMD
+      end
     end
 
     task :restart do
