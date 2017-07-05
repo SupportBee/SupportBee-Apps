@@ -147,8 +147,8 @@ module Basecamp3
       Pathname.new(todoset_url)
     end
 
-    def basecamp_post(url, body)
-      http.post "#{url.to_s}.json" do |req|
+    def basecamp_post(path, body, params={})
+      http.post build_url(path, params) do |req|
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
         req.headers['Content-Type'] = 'application/json'
@@ -156,12 +156,38 @@ module Basecamp3
       end
     end
 
-    def basecamp_get(url)
-      response = http.get "#{url.to_s}.json" do |req|
+    def basecamp_get(path, params={})
+      http.get build_url(path, params) do |req|
        req.headers['Authorization'] = 'Bearer ' + token
        req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
        req.headers['Accept'] = 'application/json'
       end
+    end
+
+    def fetch_paginated_data(path)
+      Enumerator.new do |yielder|
+        page = 1
+
+        loop do
+          response = basecamp_get(path, page: page)
+          results = response.body
+
+          if response.success? && not(results.blank?)
+            results.map { |item| yielder << item }
+            page += 1
+          else
+            raise StopIteration
+          end
+        end
+      end.lazy
+    end
+
+    def build_url(path, params={})
+      query_params = params.map { |key, value| "#{key}=#{value}" }.join("&") unless params.blank?
+      url = "#{path.to_s}.json"
+      url = url + "?#{query_params}" if query_params
+
+      url
     end
 
     def create_message
@@ -204,8 +230,8 @@ module Basecamp3
     end
 
     def fetch_projects
-      response = basecamp_get(projects_url)
-      [response.status, response.body.to_json]
+      projects = fetch_paginated_data(projects_url)
+      [200, projects.to_json]
     end
 
     def fetch_todo_lists

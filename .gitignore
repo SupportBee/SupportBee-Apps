@@ -82,3 +82,5 @@ public/stylesheets/common/tinymce.css
 public/stylesheets/common/tinymce_ui.css
 .ruby-gemset
 .ruby-version
+
+config/honeybadger.yml
