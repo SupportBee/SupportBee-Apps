@@ -26,7 +26,7 @@ module Insightly
   module ActionHandler
     def button
      ticket = payload.tickets.first
-     task = create_task(payload.overlay.title, payload.overlay.description)
+     task = create_task(payload.overlay.title, payload.overlay.description, ticket.requester)
      note = create_note(payload.overlay.title, payload.overlay.description, ticket.requester)
      html = task_created_html(task)
      ticket.comment(:html => html)
@@ -130,7 +130,7 @@ module Insightly
       insightly_get(api_url('projects'))
     end
 
-    def create_task(title, description)
+    def create_task(title, description, requester)
       tasklinks = []
       request_body = {
         title: title,
@@ -149,6 +149,9 @@ module Insightly
       if opportunity_id
         request_body[:opportunity_id] = opportunity_id
         tasklinks << { opportunity_id: opportunity_id }
+      end
+      if contact = find_or_create_contact(requester)
+        tasklinks << { contact_id: contact['CONTACT_ID'] }
       end
       request_body[:tasklinks] = tasklinks
 
