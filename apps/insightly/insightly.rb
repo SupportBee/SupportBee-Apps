@@ -219,13 +219,17 @@ module Insightly
     end
 
     def fetch_projects
-      response = insightly_get(api_url('projects'))
-      response.body.to_json
+      response = insightly_get(api_url('projects?brief=true'))
+      response.body.reject do |project|
+        !["not started", "in progress", "deferred"].include?(project['STATUS'].downcase)
+      end.to_json
     end
 
     def fetch_opportunities
-      response = insightly_get(api_url('opportunities'))
-      response.body.to_json
+      response = insightly_get(api_url('opportunities?brief=true'))
+      response.body.reject do |opportunity|
+        !["open", "suspended"].include?(opportunity['OPPORTUNITY_STATE'].downcase)
+      end.to_json
     end
 
     def fetch_users
@@ -233,8 +237,9 @@ module Insightly
       response.body.to_json
     end
 
-    def api_url(resource="")
-      "https://api.insight.ly/v2.1/#{resource}"
+    def api_url(resource="", options={})
+      version = options.delete(:version) || "2.1"
+      "https://api.insight.ly/v#{version}/#{resource}"
     end
 
     def api_post(resource, body = nil)
