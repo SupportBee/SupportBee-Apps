@@ -24,7 +24,9 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend
               'render_users',
               'render_one_user',
               'render_opportunities',
-              'render_one_opportunity'
+              'render_one_opportunity',
+              'show_loading_indicator',
+              'hide_loading_indicator'
 
     @setup_selectors()
     @populate_projects()
@@ -47,6 +49,7 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend
   render_projects: ->
     @projects_selector.append "<option value='none'>None</option>"
     @projects.each @render_one_project
+    @hide_loading_indicator()
 
   render_one_project: (project) ->
     @projects_selector.append option_tag(project)
@@ -74,6 +77,12 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend
 
   render_one_opportunity: (opportunity) ->
     @opportunities_selector.append opportunity_option_tag(opportunity)
+
+  show_loading_indicator: ->
+    @$("form").addClass("loading")
+
+  hide_loading_indicator: ->
+    @$("form").removeClass("loading")
 
   submit_form: ->
     @post 'button', @$('form').toJSON()
