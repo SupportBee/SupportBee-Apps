@@ -11,7 +11,8 @@ require 'error-reporter'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/object/blank'
 
-Dir["#{PLATFORM_ROOT}/lib/helpers/**/*.rb"].each { |f| require f }
+require "#{PLATFORM_ROOT}/lib/helpers/http.rb"
+require "#{PLATFORM_ROOT}/lib/helpers/url_collection.rb"
 Dir["#{PLATFORM_ROOT}/lib/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/workers/*.rb"].each { |f| require f }
@@ -55,6 +56,10 @@ Sidekiq.configure_server do |config|
 end
 Sidekiq.configure_client do |config|
   config.redis = { url: redis_url }
+end
+if PLATFORM_ENV == "development"
+  require 'sidekiq/testing'
+  Sidekiq::Testing.inline!
 end
 
 require "#{PLATFORM_ROOT}/run_app"

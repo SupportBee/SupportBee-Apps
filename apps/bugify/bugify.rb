@@ -2,22 +2,16 @@ module Bugify
   module ActionHandler
     def button
       ticket = payload.tickets.first
-      begin
-        response = create_issue(payload.overlay.title, payload.overlay.description)
-        html = comment_html(response)
-        comment_on_ticket(ticket, html)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
-      end
-      [200, "Ticket sent to Bugify"]
+      response = create_issue(payload.overlay.title, payload.overlay.description)
+      html = comment_html(response)
+      comment_on_ticket(ticket, html)
+
+      show_success_notification "Ticket sent to Bugify"
     end
 
     def projects
       [200, fetch_projects]
     end
-
   end
 end
 
@@ -29,25 +23,41 @@ module Bugify
     string :api_key, :required => true, :label => 'Bugify API Key'
 
     def validate
+      return false unless required_fields_present?
+
       begin
-        if settings.api_key.blank? or settings.url.blank?
-          errors[:flash] = ["Please fill in all the required fields"]
-        elsif not(test_ping.success?)
-          errors[:flash] = ["URL or API Key Incorrect"] unless test_ping.success?
-        end
-        errors.empty? ? true : false
-      rescue Exception => e
-        ErrorReporter.report(e)
-        errors[:flash] = [e.message]
-        errors[:url] = ["URL looks incorrect"]
-        false
+        test_api_request = http.get api_url('projects')
+      rescue => e
+        report_exception(e)
+
+        show_error_notification "URL looks incorrect"
+        return false
       end
+
+      unless test_api_request.success?
+        show_error_notification "URL or API Key Incorrect"
+        return false
+      end
+
+      true
     end
 
     private
 
-    def test_ping
-      response = http.get api_url('projects')
+    def required_fields_present?
+      are_required_fields_present = true
+
+      if settings.url.blank?
+        show_inline_error :url, "Please enter your Bugify url"
+        are_required_fields_present = false
+      end
+
+      if settings.api_key.blank?
+        show_inline_error :api_key, "Please enter your Bugify API Key"
+        are_required_fields_present = false
+      end
+
+      return are_required_fields_present
     end
 
     def fetch_projects
@@ -80,6 +90,5 @@ module Bugify
     def comment_on_ticket(ticket, html)
       ticket.comment(:html => html)
     end
-
   end
 end

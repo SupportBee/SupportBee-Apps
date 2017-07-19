@@ -1,5 +1,5 @@
 <h3 class="ui dividing header">Send to Insightly</h3>
-<form class="ui app form">
+<form class="ui app loading form">
   {{#each tickets}}
     {{#ticket}}
       <div class="field">
@@ -16,10 +16,7 @@
       </div>
       <div class="description field">
         <label for="description">Description</label>
-        <textarea name="description">{{content.text}}
-
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
+        <textarea name="description" id="rte"></textarea>
       </div>
       <div class="field">
         <label for="responsible_user">Assign To</label>

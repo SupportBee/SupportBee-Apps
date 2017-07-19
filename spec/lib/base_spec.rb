@@ -120,12 +120,6 @@ describe SupportBeeApp::Base do
           dummy.trigger_action('action_button')
         end
 
-        it "should trigger all_actions for any action" do
-          dummy = create_dummy_instance
-          flexmock(dummy).should_receive(:all_actions).once
-          dummy.trigger_action('action_button')
-        end
-
         it "should silently fail if the app does not handle an action" do
           dummy = create_dummy_instance
           lambda{

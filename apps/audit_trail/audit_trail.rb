@@ -1,3 +1,7 @@
+#
+# This integration is retired
+#
+
 module AuditTrail
   module EventHandler
     def ticket_archived
@@ -46,30 +50,12 @@ end
 
 module AuditTrail
   class Base < SupportBeeApp::Base
-    # Define Settings
-    # string :name, :required => true, :hint => 'Tell me your name'
-    # string :username, :required => true, :label => 'User Name'
-    # password :password, :required => true
-    # boolean :notify_me, :default => true, :label => 'Notify Me'
-
-    # White list settings for logging
-    # white_list :name, :username
-
-    # Define public and private methods here which will be available
-    # in the EventHandler and ActionHandler modules
-    def log_string(options={})
+    def log_string(options = {})
       message = options[:message] || "#{options[:action_type]}"
-      puts payload.inspect unless test_env?
       agent = payload.agent
       message << " by #{agent.name} (#{agent.email})" if agent
       message << " at #{Time.now.utc.strftime("%I:%M %P, %D")} UTC"
       payload.ticket.comment :html => message
-    end
-
-    private
-
-    def test_env?
-      ENV['RACK_ENV'] == 'test'
     end
   end
 end

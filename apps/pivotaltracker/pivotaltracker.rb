@@ -3,11 +3,14 @@ module Pivotaltracker
     def button
       ticket = payload.tickets.first
       story = create_story(payload.overlay.title, payload.overlay.description)
-      return [500, "There was an error in sending the story. Please try again!"] unless story
+      unless story
+        show_error_notification "There was an error in sending the story. Please try again!"
+        return false
+      end
       html = story_info_html(story)
 
       comment_on_ticket(ticket, html)
-      [200, "Story sent to your PivotalTracker"]
+      show_success_notification "Story sent to your Pivotal Tracker"
     end
 
     def projects
@@ -27,12 +30,23 @@ module Pivotaltracker
     string :token, required: true, label: 'Token', hint: 'Find the token under Profile (in the user menu) > API Token.'
 
     def validate
-      if validate_presence_of_token
-        errors[:flash] = ["Please fill in the API Token"]
-      elsif not(test_ping.success?)
-        errors[:flash] = ["Invalid API Token"]
+      if settings.token.blank?
+        show_inline_error :token, "Please enter your Pivotal Tracker API Token"
+        return false
       end
-      errors.empty? ? true : false
+
+      unless test_api_request.success?
+        show_error_notification "Invalid API Token"
+        return false
+      end
+
+      return true
+    end
+
+    private
+
+    def test_api_request
+      pivotal_get(projects_url)
     end
 
     def project_id
@@ -46,16 +60,6 @@ module Pivotaltracker
 
     def story_type
       payload.overlay.story_type
-    end
-
-    private
-
-    def test_ping
-      pivotal_get(projects_url)
-    end
-
-    def validate_presence_of_token
-      settings.token.blank?
     end
 
     def create_story(story_name, description)

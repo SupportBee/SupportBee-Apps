@@ -3,7 +3,6 @@ module ArchiveAfterReply
     def agent_reply_created
       ticket = payload.ticket
       ticket.archive unless ticket.archived
-      return true
     end
   end
 end

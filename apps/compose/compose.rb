@@ -7,8 +7,15 @@ module Compose
       mail_body = payload.overlay.body
       ssl = settings.ssl == '1' ? true : false
 
-      return [500, 'Invalid From Address'] unless valid_email?(mail_from)
-      return [500, 'Invalid To Address'] unless valid_email?(payload.overlay.to)
+      unless valid_email?(mail_from)
+        show_error_notification "Invalid From Address"
+        return
+      end
+
+      unless valid_email?(payload.overlay.to)
+        show_error_notification "Invalid To Address"
+        return
+      end
 
       mail = Mail.new do
         from mail_from
@@ -16,7 +23,6 @@ module Compose
         subject mail_subject
         body mail_body
       end
-
       mail.delivery_method(:smtp, {
         address: settings.server,
         port: settings.server_port.to_i,
@@ -25,16 +31,9 @@ module Compose
         enable_starttls_auto: true,
         ssl: ssl
       })
+      mail.deliver
 
-      begin
-        mail.deliver
-      rescue Exception => e
-        context = { payload: payload }
-        ErrorReporter.report(e, context: context)
-        return [500, e.message]
-      end
-
-      [200, "Message sent to #{mail_to}"]
+      show_success_notification "Message sent to #{mail_to}"
     end
   end
 end

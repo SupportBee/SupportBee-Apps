@@ -1,20 +1,18 @@
 module ExtractSenderFromEmail
   module EventHandler
-
     def ticket_created
       if has_email_in_body?
         new_email = get_email_from_body
         ticket.change_sender(new_email)
         comment_that_sender_has_changed(new_email)
       end
-      true
     end
-
   end
 end
 
 module ExtractSenderFromEmail
   class Base < SupportBeeApp::Base
+    private
 
     def has_email_in_body?
       not get_email_from_body.nil?

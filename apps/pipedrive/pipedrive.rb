@@ -2,30 +2,23 @@ module Pipedrive
   module EventHandler
     def ticket_created
       ticket = payload.ticket
-      return if ticket.trash || ticket.spam
+      return if ticket.spam_or_trash?
+
       requester = ticket.requester
+      person = find_person(requester)
 
-      begin
-        person = find_person(requester)
-        html = ''
-
-        if person
-          html = existing_person_info(person)
-        else
-          person = create_person(requester)
-          html = created_person_info(person) if person
-        end
-
-        if person
-          update_note(person, ticket)
-          comment_on_ticket(html, ticket)
-        end
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
+      html = ''
+      if person
+        html = existing_person_info(person)
+      else
+        person = create_person(requester)
+        html = created_person_info(person) if person
       end
-      [200, "Ticket sent"]
+
+      if person
+        update_note(person, ticket)
+        comment_on_ticket(html, ticket)
+      end
     end
   end
 end
@@ -36,16 +29,34 @@ module Pipedrive
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
     boolean :send_ticket_content, :required => false, :label => 'Send Ticket\'s Full Contents to Pipedrive', :default => false
 
-    def api_url(endpoint)
-      "https://api.pipedrive.com/v1#{endpoint}"
-    end
-
     white_list :should_create_person
 
     def validate
-      return false unless required_fields_present?
-      return false unless valid_credentials?
+      if settings.api_token.blank?
+        show_inline_error :api_token, "Please enter your Pipedrive API Token"
+        return false
+      end
+
+      unless test_api_request.success?
+        show_error_notification "Invalid API Token. Please verify the entered details"
+        return false
+      end
+
       true
+    end
+
+    private
+
+    def test_api_request
+      response = http_get api_url('/activityTypes') do |req|
+        req.headers['Accept'] = 'application/json'
+        req.params['api_token'] = settings.api_token
+      end
+      response
+    end
+
+    def api_url(endpoint)
+      "https://api.pipedrive.com/v1#{endpoint}"
     end
 
     def find_person(requester)
@@ -107,28 +118,5 @@ module Pipedrive
       note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
       note
     end
-
-    private
-
-    def required_fields_present?
-      if settings.api_token.blank?
-        errors[:flash] = "API Token cannot be blank"
-      end
-      errors.empty? ? true : false
-    end
-
-    def valid_credentials?
-      response = http_get api_url('/activityTypes') do |req|
-        req.headers['Accept'] = 'application/json'
-        req.params['api_token'] = settings.api_token
-      end
-      if response.success?
-        true
-      else
-        errors[:flash] = "Invalid API Token. Please verify the entered details"
-        false
-      end
-    end
-
   end
 end

@@ -4,7 +4,6 @@ module Hipchat
       return unless settings.notify_ticket_created.to_s == '1'
       ticket = payload.ticket
       send_to_hipchat "<b>New Ticket</b> from #{ticket.requester.name}: <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      #paste_in_hipchat ticket.summary
     end
 
     def agent_reply_created
@@ -12,7 +11,6 @@ module Hipchat
       ticket = payload.ticket
       reply = payload.reply
       send_to_hipchat "<b>Agent Reply</b> from #{reply.replier.name} in <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      #paste_in_hipchat reply.content.text
     end
 
     def customer_reply_created
@@ -20,7 +18,6 @@ module Hipchat
       ticket = payload.ticket
       reply = payload.reply
       send_to_hipchat "<b>Customer Reply</b> from #{reply.replier.name} in <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      #paste_in_hipchat reply.content.text
     end
 
     def comment_created
@@ -28,7 +25,6 @@ module Hipchat
       ticket = payload.ticket
       comment = payload.comment
       send_to_hipchat "<b>Comment</b> from #{comment.commenter.name} on <a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      #paste_in_hipchat comment.content.text
     end
   end
 end
@@ -46,11 +42,18 @@ module Hipchat
     white_list :subdomain, :room, :notify_ticket_created, :notify_agent_reply_created, :notify_customer_reply_created, :notify_comment_created
     
     def validate
+      unless valid_token_length?
+        show_inline_error :token, "We support version 1 of the API. The token you have provided cannot be used with this version. Please follow the instructions below to get the valid API token."
+        return false
+      end
+
       result = validate_api_token
-      return true unless result['error']
-      errors[:flash] = ["#{result['error']['message']}"]
-      errors[:token] = ["We support version 1 of the API. The token you have provided cannot be used with this version. Please follow the instructions below to get the valid API token."] unless valid_token_length?
-      false
+      if result['error']
+        show_error_notification "#{result['error']['message']}"
+        return false
+      end
+
+      true
     end
 
     private 

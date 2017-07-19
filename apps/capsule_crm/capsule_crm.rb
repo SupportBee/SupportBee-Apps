@@ -3,28 +3,25 @@ module CapsuleCrm
     # Handle 'ticket.created' event
     def ticket_created
       ticket = payload.ticket
-      return if ticket.trash || ticket.spam
+      return if ticket.spam_or_trash?
       requester = ticket.requester
       http.basic_auth(settings.api_token, "")
 
-      begin
-        person = find_person(requester)
-        unless person
-          return [200, 'Contact creation disabled'] unless settings.should_create_person.to_s == '1'
+      person = find_person(requester)
+      if person
+        html = person_info_html(person)
+        send_note(ticket, person)
+      else
+        if settings.should_create_person.to_s == '1'
           person =  create_new_person(ticket, requester)
           html = new_person_info_html(person)
         else
-          html = person_info_html(person)
-          send_note(ticket, person)
+          return
         end
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
       end
 
       comment_on_ticket(ticket, html)
-      [200, "Ticket sent to Capsule"]
+      show_success_notification "Ticket sent to Capsule"
     end
   end
 end
@@ -43,6 +40,8 @@ module CapsuleCrm
       return false unless valid_credentials?
       true
     end
+
+    private
 
     def find_person(requester)
       first_name = split_name(requester)
@@ -127,26 +126,20 @@ module CapsuleCrm
       note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
-  private
-
     def required_fields_present?
-      field_errors = []
-      error_message = nil
-      field_errors << "API Token cannot be blank" if api_token_blank?
-      field_errors << "Subdomain cannot be blank" if subdomain_blank?
-      unless field_errors.empty?
-        error_message = field_errors.join(" and ")
-        errors[:flash] = error_message
+      are_required_fields_present = true
+
+      if settings.api_token.blank?
+        are_required_fields_present = false
+        show_inline_error :api_token, "API Token cannot be blank"
       end
-      error_message.nil? ? true : false
-    end
 
-    def api_token_blank?
-      settings.api_token.blank?
-    end
+      if settings.subdomain.blank?
+        are_required_fields_present = false
+        show_inline_error :subdomain, "Subdomain cannot be blank"
+      end
 
-    def subdomain_blank?
-      settings.subdomain.blank?
+      return are_required_fields_present
     end
 
     def valid_credentials?
@@ -154,13 +147,13 @@ module CapsuleCrm
       response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/users" do |req|
         req.headers['Accept'] = 'application/json'
       end
+
       if response.status == 200
         true
       else
-        errors[:flash] = "Invalid subdomain and/or API Token. Please verify the entered details"
+        show_error_notification "Invalid subdomain and/or API Token. Please verify the entered details"
         false
       end
     end
-
   end
- end
+end

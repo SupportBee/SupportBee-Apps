@@ -2,6 +2,7 @@ module Flowdock
   module EventHandler
     def ticket_created
       return unless settings.notify_ticket_created.to_s == '1'
+
       ticket = payload.ticket
       paste_in_flowdock :content => ticket.content.html,
                         :subject => ticket.subject,
@@ -12,6 +13,7 @@ module Flowdock
 
     def agent_reply_created
       return unless settings.notify_agent_reply_created.to_s == '1'
+
       ticket = payload.ticket
       reply = payload.reply
       paste_in_flowdock :content => reply.content.html,
@@ -23,6 +25,7 @@ module Flowdock
 
     def customer_reply_created
       return unless settings.notify_customer_reply_created.to_s == '1'
+
       ticket = payload.ticket
       reply = payload.reply
       paste_in_flowdock :content => reply.content.html,
@@ -34,6 +37,7 @@ module Flowdock
 
     def comment_created
       return unless settings.notify_comment_created.to_s == '1'
+
       ticket = payload.ticket
       comment = payload.comment
       paste_in_flowdock :content => comment.content.html,
@@ -64,14 +68,17 @@ module Flowdock
     def paste_in_flowdock(options)
       puts options.inspect
       get_room(options[:poster]).push_to_team_inbox :subject => options[:subject],
-                                          :content => options[:content],
-                                          :link => options[:link],
-                                          :tags => options[:tags]
+                                                    :content => options[:content],
+                                                    :link => options[:link],
+                                                    :tags => options[:tags]
     end
 
     def get_room(poster)
-      @client = Flowdock::Flow.new(:api_token => settings.token.strip,
-        :source => "SupportBee", :from => {:name => poster.name, :address => poster.email})
+      @client = Flowdock::Flow.new(
+        :api_token => settings.token.strip,
+        :source => "SupportBee",
+        :from => {:name => poster.name, :address => poster.email}
+      )
     end
   end
 end

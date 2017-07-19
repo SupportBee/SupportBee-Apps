@@ -3,30 +3,27 @@ module Basecamp3
     def button
       ticket = payload.tickets.first
       html = ''
-      begin
-        result =
-          case payload.overlay.type
-          when 'message'
-            response = create_message
-            html = message_html_comment(response.body) if response and response.body
-            response
-          when 'todo_list'
-            response = create_todo_list
-            html = todolist_html_comment(response.body) if response and response.body
-            response
-          when 'todo_item'
-            response = create_todo_item
-            html = todo_html_comment(response.body) if response and response.body
-            response
-          end
+      response =
+        case payload.overlay.type
+        when 'message'
+          response = create_message
+          html = message_html_comment(response.body) if response and response.body
+          response
+        when 'todo_list'
+          response = create_todo_list
+          html = todolist_html_comment(response.body) if response and response.body
+          response
+        when 'todo_item'
+          response = create_todo_item
+          html = todo_html_comment(response.body) if response and response.body
+          response
+        end
 
-        return [500, { error: "Ticket not sent. Please check the settings of the app" }.to_json] unless result
+      if response
         comment_on_ticket(ticket, html)
-        return [200, { message: "Ticket sent to Basecamp" }.to_json]
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        return [500, { message: e.message}.to_json]
+        show_success_notification "Ticket sent to Basecamp"
+      else
+        show_error_notification "Ticket not sent. Please check the settings of the app"
       end
     end
 
@@ -78,6 +75,8 @@ module Basecamp3
       return false
     end
 
+    private
+
     def token
       settings.oauth_token || settings.token
     end
@@ -101,8 +100,6 @@ module Basecamp3
     def assignee_ids
       Array(payload.overlay.assign_to) rescue []
     end
-
-    private
 
     def base_url
       Pathname.new("https://3.basecampapi.com").join(settings.account_id.to_s)
@@ -150,8 +147,8 @@ module Basecamp3
       Pathname.new(todoset_url)
     end
 
-    def basecamp_post(url, body)
-      http.post "#{url.to_s}.json" do |req|
+    def basecamp_post(path, body, params={})
+      http.post build_url(path, params) do |req|
         req.headers['Authorization'] = 'Bearer ' + token
         req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
         req.headers['Content-Type'] = 'application/json'
@@ -159,12 +156,38 @@ module Basecamp3
       end
     end
 
-    def basecamp_get(url)
-      response = http.get "#{url.to_s}.json" do |req|
+    def basecamp_get(path, params={})
+      http.get build_url(path, params) do |req|
        req.headers['Authorization'] = 'Bearer ' + token
        req.headers['User-Agent'] = "SupportBee Developers (nisanth@supportbee.com)"
        req.headers['Accept'] = 'application/json'
       end
+    end
+
+    def fetch_paginated_data(path)
+      Enumerator.new do |yielder|
+        page = 1
+
+        loop do
+          response = basecamp_get(path, page: page)
+          results = response.body
+
+          if response.success? && not(results.blank?)
+            results.map { |item| yielder << item }
+            page += 1
+          else
+            raise StopIteration
+          end
+        end
+      end.lazy
+    end
+
+    def build_url(path, params={})
+      query_params = params.map { |key, value| "#{key}=#{value}" }.join("&") unless params.blank?
+      url = "#{path.to_s}.json"
+      url = url + "?#{query_params}" if query_params
+
+      url
     end
 
     def create_message
@@ -207,8 +230,8 @@ module Basecamp3
     end
 
     def fetch_projects
-      response = basecamp_get(projects_url)
-      [response.status, response.body.to_json]
+      projects = fetch_paginated_data(projects_url)
+      [200, projects.to_json]
     end
 
     def fetch_todo_lists

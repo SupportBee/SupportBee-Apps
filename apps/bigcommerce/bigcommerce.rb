@@ -5,28 +5,22 @@ module Bigcommerce
       requester = ticket.requester
       http.basic_auth(settings.username, settings.api_token)
 
-      begin
-        api = connect_to_bigcommerce
+      api = connect_to_bigcommerce
 
-        email = ticket.requester.email
+      email = ticket.requester.email
 
-        customers = get_customers(api, email)
-        return if customers.empty?
+      customers = get_customers(api, email)
+      return if customers.empty?
 
-        customer = customers.first
-        orders = get_orders(api, customer)
-        return if orders.empty?
+      customer = customers.first
+      orders = get_orders(api, customer)
+      return if orders.empty?
 
-        order_html = order_info_html(api, orders)
-        sent_note_to_customer(api, orders)
-        ticket.comment(:html => order_html)
-      rescue Exception => e
-        context = ticket.context.merge(company_subdomain: payload.company.subdomain, app_slug: self.class.slug, payload: payload)
-        ErrorReporter.report(e, context: context)
-        [500, e.message]
-      end
+      order_html = order_info_html(api, orders)
+      sent_note_to_customer(api, orders)
+      ticket.comment(:html => order_html)
 
-      [200, "Ticket sent to Bigcommerce"]
+      show_success_notification "Ticket sent to Bigcommerce"
     end
   end
 end
