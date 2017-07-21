@@ -22,9 +22,18 @@
       </div>
       <div class="field">
         <label for="notes">Notes</label>
-        <textarea name="notes">{{content.text}}
+        <textarea name="notes">
+          {{content.text}}
 
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}</textarea>
+          {{#if content.attachments.length}}
+            Attachments: 
+            {{#each content.attachments}}
+              {{url.original}}
+            {{/each}}
+          {{/if}}
+
+          https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+        </textarea>
       </div>
       <div class="actions">
         <a class="ui submit primary button btn">Send to Asana</a>
