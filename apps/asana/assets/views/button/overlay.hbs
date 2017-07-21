@@ -24,6 +24,15 @@
         <label for="notes">Notes</label>
         <textarea name="notes">
           {{content.text}}
+
+          {{#if content.attachments.length}}
+            \nAttachments:\n
+            
+            {{#each content.attachments}}
+              {{url.original}}\n
+            {{/each}}
+          {{/if}}
+
           https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
         </textarea>
       </div>
