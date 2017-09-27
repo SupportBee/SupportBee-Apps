@@ -370,7 +370,11 @@ module SupportBeeApp
     end
 
     def error_context
-      context = { payload: @payload[:raw_payload] }
+      context = {
+        app_slug: slug,
+        company_subdomain: company_subdomain,
+        payload: @payload[:raw_payload]
+      }
       context[:action] = @action if @action
       context[:event] = @event if @event
 
@@ -378,7 +382,7 @@ module SupportBeeApp
     end
 
     def error_tags
-      [slug, company_subdomain]
+      [slug]
     end
 
     def slug
