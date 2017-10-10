@@ -25,7 +25,11 @@ end
 
 module PipedriveMarketplace
   class Base < SupportBeeApp::Base
-    oauth :pipedrive, required: true
+    oauth :pipedrive, required: true,
+      oauth_options: {
+        expiration: :never
+      }
+
     boolean :should_create_person, :default => true, :required => false, :label => 'Create a New Person in Pipedrive if one does not exist'
     boolean :send_ticket_content, :required => false, :label => 'Send Ticket\'s Full Contents to Pipedrive', :default => false
 
@@ -43,7 +47,7 @@ module PipedriveMarketplace
     private
 
     def test_api_request
-      response = http_get api_url('/activityTypes') do |req|
+      response = http_get api_url('/users/me') do |req|
         req.headers['Accept'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
@@ -51,7 +55,7 @@ module PipedriveMarketplace
     end
 
     def api_url(endpoint)
-      "https://api-proxy.pipedrive.com/#{endpoint}"
+      "https://api-proxy.pipedrive.com#{endpoint}"
     end
 
     def find_person(requester)
