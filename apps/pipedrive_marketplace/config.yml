@@ -1,6 +1,6 @@
 name: Pipedrive
 slug: pipedrive_marketplace
-access: public
+access: private
 
 description: "
 
@@ -35,7 +35,6 @@ Once you add the app, sit back and relax. You don't have to do anything manually
 "
 
 category: crm
-
 video: 'https://vimeo.com/76761853'
 
 tags:
@@ -43,7 +42,7 @@ tags:
 - pipedrive
 
 developer:
-  name: Bopanna D.C
-  email: bops.91@gmail.com
-  twitter: "@gagan_bopanna"
-  github: bopanna
+  name: Pranav Singh
+  email: pranav@supportbee.com
+  twitter: "@pranav7"
+  github: pranav7
