@@ -51,6 +51,7 @@ module PipedriveMarketplace
         req.headers['Accept'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
+
       response
     end
 
@@ -64,17 +65,23 @@ module PipedriveMarketplace
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.params['term'] = requester.email
       end
+
       body = response.body['data']
       body ? body.first : nil
     end
 
     def create_person(requester)
       return unless settings.should_create_person.to_s == '1'
+
       person = http_post api_url('/persons') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-        req.body = {name:name(requester), email:[requester.email]}.to_json
+        req.body = {
+          name: name(requester),
+          email: [requester.email]
+        }.to_json
       end
+
       return person.body['data']
     end
 
@@ -86,7 +93,10 @@ module PipedriveMarketplace
       http_post api_url('/notes') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-        req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
+        req.body = {
+          person_id: person['id'],
+          content: generate_note_content(ticket)
+        }.to_json
       end
     end
 
@@ -114,7 +124,19 @@ module PipedriveMarketplace
 
     def generate_note_content(ticket)
       note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
+
+      if settings.send_ticket_content.to_s == '1'
+        note << "<br/> #{ticket.content.text}"
+
+        unless ticket.content.attachments.blank?
+          note << "<br/><br/><strong>Attachments</strong><br/>"
+          ticket.content.attachments.each do |attachment|
+            note << "<a href='#{attachment.url.original}'>#{attachment.filename}</a>"
+            note << "<br/>"
+          end
+        end
+      end
+
       note
     end
   end
