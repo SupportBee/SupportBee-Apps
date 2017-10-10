@@ -113,7 +113,7 @@ module PipedriveMarketplace
     end
 
     def created_person_info(person)
-      html = "Added <b> #{person['name']} </b> to Pipedrive...<br/> "
+      html = "Added <b>#{person['name']}</b> to Pipedrive.<br/> "
       html << person_link(person)
       html
     end
