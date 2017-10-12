@@ -1,0 +1,46 @@
+name: Pipedrive Marketplace
+slug: pipedrive_marketplace
+access: test
+
+description: "
+
+Pipedrive is a sales pipeline software that helps you get organized. For more details please visit [www.pipedrive.com](http://pipedrive.com)
+
+## Sync Customer Information between Pipedrive & SupportBee
+
+Use SupportBee's Pipedrive app to share information about a customer between Pipedrive and SupportBee - automatically on every new ticket! By installing the app you can
+
+
+*  Fetch a customer's information from Pipedrive and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Pipedrive.
+
+*  Update the customer information in Pipedrive whenever the customer sends a new ticket. Keep your sales team in the loop.
+
+
+## Adding the Pipedrive App
+
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to Pipedrive to allow access to SupportBee. Once SupportBee has access, you can then save the integration and select the following details:
+
+### Create a New Person in Pipedrive if one does not exist
+
+Check this option if you want us to create a new contact in Pipedrive if we can't find one based on the email address of the customer.
+
+### Send Ticket's Full Contents to Pipedrive
+
+If this option is checked, everytime a contact creates a new ticket the contents of the ticket (including attachments) would be added as notes to that contact's profile.
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Pipedrive and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
+"
+
+category: crm
+
+tags:
+- crm
+- pipedrive
+
+developer:
+  name: Pranav Singh
+  email: pranav@supportbee.com
+  twitter: "@pranav7"
+  github: pranav7
