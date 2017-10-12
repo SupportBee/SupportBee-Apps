@@ -18,7 +18,7 @@ Use SupportBee's Pipedrive app to share information about a customer between Pip
 
 ## Adding the Pipedrive App
 
-To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to Pipedrive to allow access to SupportBee. Once you allow access to SupportBee, you'll be taken taken to the settings screens where you can select the following details:
+To add the app, click on the 'Add to My SupportBee'. If this is the first app that you are adding, you will have to enter your subdomain and you will be taken to Pipedrive to allow access to SupportBee. Once SupportBee has access, you can then save the integration and select the following details:
 
 ### Create a New Person in Pipedrive if one does not exist
 
