@@ -18,7 +18,8 @@ module Insightly
       end
 
       if contact
-        ticket.comment(:html => html)
+        update_note(ticket) if settings.send_ticket_content.to_s == "1"
+        ticket.comment(html: html)
       end
     end
   end
@@ -60,7 +61,7 @@ module Insightly
     string  :subdomain,
             required: true,
             label: 'Insightly Subdomain',
-            hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
+            hint: 'Say https:/example.insight.ly is your Insightly domain, enter "example"'
     string :tagged_name,
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
@@ -70,6 +71,10 @@ module Insightly
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
+    boolean :send_ticket_content,
+            label: "Automatically add ticket's full content as a note to Insightly Contact",
+            hint: "This would only work if 'Create Insightly Contact with Customer Information' is checked",
+            default: false
 
     def validate
       return false unless required_fields_present?
@@ -165,17 +170,24 @@ module Insightly
 
     def create_note(title, description, requester)
       contact = find_or_create_contact(requester)
-      response = api_post('notes', {
+      body = {
         title: title,
         body: description,
         link_subject_type: 'CONTACT',
-        link_subject_id: contact["CONTACT_ID"]
-      })
+        link_subject_id: contact["CONTACT_ID"],
+      }
+
+      response = api_post('notes', body)
+
       if response.status == 201
         return response.body
       else
         raise StandardError.new("Failed to create an Insightly note. Here's the response from Insightly: #{response.body}")
       end
+    end
+
+    def update_note(ticket)
+      create_note(ticket.subject, generate_note_content(ticket), ticket.requester)
     end
 
     def find_or_create_contact(requester)
@@ -274,6 +286,21 @@ module Insightly
       html = ""
       html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts.<br/>"
       html << contact_link(contact)
+    end
+
+    def generate_note_content(ticket)
+      note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      note << "<br/> #{ticket.content.text}"
+
+      unless ticket.content.attachments.blank?
+        note << "<br/><br/><strong>Attachments</strong><br/>"
+        ticket.content.attachments.each do |attachment|
+          note << "<a href='#{attachment.url.original}'>#{attachment.filename}</a>"
+          note << "<br/>"
+        end
+      end
+
+      note
     end
   end
 end

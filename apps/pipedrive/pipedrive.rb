@@ -87,7 +87,10 @@ module Pipedrive
       http_post api_url('/notes') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
+        req.body = {
+          person_id: person['id'],
+          content: generate_note_content(ticket)
+        }.to_json
       end
     end
 
