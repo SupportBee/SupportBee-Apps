@@ -73,7 +73,7 @@ module Insightly
             default: true
     boolean :send_ticket_content,
             label: "Automatically add ticket's full content as a note to Insightly Contact",
-            hint: "This would only work if Sync Contact's is enabled",
+            hint: "This would only work if 'Create Insightly Contact with Customer Information' is checked",
             default: false
 
     def validate
@@ -170,15 +170,15 @@ module Insightly
 
     def create_note(title, description, requester)
       contact = find_or_create_contact(requester)
-      response = api_post('notes', {
+      body = {
         title: title,
         body: description,
         link_subject_type: 'CONTACT',
         link_subject_id: contact["CONTACT_ID"],
-        notelinks: [{
-          link_contact_id: contact['CONTACT_ID']
-        }]
-      })
+      }
+
+      response = api_post('notes', body)
+
       if response.status == 201
         return response.body
       else
