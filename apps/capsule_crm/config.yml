@@ -11,7 +11,7 @@ Capsule is the easy online CRM for doing business. Using a CRM like Capsule you 
 Use SupportBee's Capsule app to share information about a customer between CapsuleCRM and SupportBee - automatically on every new ticket! By installing the app you can
 
 
-*  Fetch a customer's information from Capsule and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Capsule.  
+*  Fetch a customer's information from Capsule and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Capsule.
 
 *  Update the customer information in Capsule whenever the customer sends a new ticket. Keep your sales team in the loop.
 
@@ -26,7 +26,7 @@ To get an auth token, login to your Capsule account, go to My Preferences (in th
 
 ### Create a New Person in Capsule if one does not exist
 
-Check this option if you want us to create a new contact in Capsule if we can't find one based on the email address of the customer. 
+Check this option if you want us to create a new contact in Capsule if we can't find one based on the email address of the customer.
 
 ### Subdomain
 
@@ -47,11 +47,11 @@ category: crm
 
 video : 'https://vimeo.com/77032113'
 
-tags: 
+tags:
 - crm
 - capsule
 
-developer: 
+developer:
   name: Bopanna D.C
   email: bops.91@gmail.com
   twitter: "@gagan_bopanna"

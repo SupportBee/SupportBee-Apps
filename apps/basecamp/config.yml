@@ -52,3 +52,9 @@ action:
     - labels
     - search
     label: Send To Basecamp
+
+  testimonial:
+    content: "Mere is a 5 man team with hundreds of clients across the globe. We needed a super easy-to-use, lightweight, effective way of handling a lot of incoming support requests. The interface. It is perfect for our workflow. Basecamp, Slack, and Pipedrive. Basecamp to raise requests to the level of a project, Slack for super-quick visibility on new tickets, and Pipedrive to remind us who belongs to what project!"
+    name: "John Doe"
+    meta: "Mere Agency"
+    avatar: "https://i.imgur.com/IgfQC92.png"
