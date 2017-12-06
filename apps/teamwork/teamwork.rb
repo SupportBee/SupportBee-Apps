@@ -16,6 +16,7 @@ module Teamwork
         end
 
       if response.success?
+        comment_on_ticket(ticket, html)
         show_success_notification "Ticket sent to Teamwork"
       else
         show_error_notification "Ticket not sent. Please check the settings of the app"
