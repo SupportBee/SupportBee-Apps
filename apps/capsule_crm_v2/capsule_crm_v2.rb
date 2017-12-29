@@ -47,7 +47,7 @@ module CapsuleCrmV2
     private
 
     def find_person(requester)
-      response = http_get api_url("/party") do |req|
+      response = http_get api_url("/parties") do |req|
         req.headers['Accept'] = 'application/json'
         req.params['email'] = requester.email
       end
@@ -68,25 +68,28 @@ module CapsuleCrmV2
 
     def create_person(requester)
       first_name = split_name(requester)
-      response = http_post api_url("/person") do |req|
+      response = http_post api_url("/parties") do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {
-          person: {
+          party: {
             firstName: first_name,
-            contacts: {
-              email: {
-                emailAddress: requester.email
+            emailAddresses: [
+              {
+                type: "Work",
+                address: requester.email
               }
-            }
+            ]
           }
         }.to_json
       end
+
       location = response['location']
     end
 
     def send_note(ticket, person)
       person_id = person['id']
-      http_post "https://#{settings.subdomain}.capsulecrm.com/api/party/#{person_id}/history" do |req|
+
+      http_post api_url("/parties/#{person_id}/history") do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
@@ -107,8 +110,9 @@ module CapsuleCrmV2
     def get_person(location)
       response = http_get "#{location}" do |req|
         req.headers['Accept'] = 'application/json'
-        end
-      person = response.body['person']
+      end
+
+      response.body['party']
     end
 
     def person_info_html(person)
@@ -127,7 +131,7 @@ module CapsuleCrmV2
     end
 
     def person_link(person)
-      "<a href='https://#{settings.subdomain}.capsulecrm.com/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
+      "<a href='#{site_url}/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
     end
 
     def comment_on_ticket(ticket, html)
@@ -157,7 +161,6 @@ module CapsuleCrmV2
     end
 
     def valid_credentials?
-      http.basic_auth(settings.api_token, "x")
       response = http_get api_url("/users") do |req|
         req.headers['Accept'] = 'application/json'
       end
@@ -168,6 +171,19 @@ module CapsuleCrmV2
         show_error_notification "Invalid subdomain and/or API Token. Please verify the entered details"
         false
       end
+    end
+
+    def site_url
+      @site ||= get_site
+      @site["site"]["url"]
+    end
+
+    def get_site
+      response = http_get api_url("/site") do |req|
+        req.headers['Accept'] = 'application/json'
+      end
+
+      JSON.parse response.body
     end
 
     def api_url(endpoint)
