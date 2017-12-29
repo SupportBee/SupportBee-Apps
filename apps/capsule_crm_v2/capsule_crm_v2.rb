@@ -49,6 +49,7 @@ module CapsuleCrmV2
     def find_person(requester)
       response = http_get api_url("/parties") do |req|
         req.headers['Accept'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.params['email'] = requester.email
       end
 
@@ -70,6 +71,7 @@ module CapsuleCrmV2
       first_name = split_name(requester)
       response = http_post api_url("/parties") do |req|
         req.headers['Content-Type'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.body = {
           party: {
             firstName: first_name,
@@ -91,6 +93,7 @@ module CapsuleCrmV2
 
       http_post api_url("/parties/#{person_id}/history") do |req|
         req.headers['Content-Type'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
     end
@@ -98,6 +101,8 @@ module CapsuleCrmV2
     def note_to_new_person(location, ticket)
       http_post "#{location}/history" do |req|
         req.headers['Content-Type'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
+
         req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
       end
     end
@@ -110,6 +115,7 @@ module CapsuleCrmV2
     def get_person(location)
       response = http_get "#{location}" do |req|
         req.headers['Accept'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
 
       response.body['party']
@@ -163,6 +169,7 @@ module CapsuleCrmV2
     def valid_credentials?
       response = http_get api_url("/users") do |req|
         req.headers['Accept'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
 
       if response.status == 200
@@ -181,6 +188,7 @@ module CapsuleCrmV2
     def get_site
       response = http_get api_url("/site") do |req|
         req.headers['Accept'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
 
       JSON.parse response.body
