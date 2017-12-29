@@ -28,20 +28,25 @@ end
 
 module CapsuleCrmV2
   class Base < SupportBeeApp::Base
-    oauth :capsule, required: true,
+    oauth :capsule,
+      required: true,
       oauth_options: {
         scope: "read write"
       }
 
-    boolean :should_create_person, default: true, required: false, label: 'Create a New Person in Capsule if one does not exist'
-    boolean :return_ticket_content, required: false, label: 'Send Ticket Content to Capsule (by default the Ticket Summary is sent)'
+    boolean :should_create_person,
+      default: true,
+      required: false,
+      label: 'Create a New Person in Capsule if one does not exist'
+    boolean :return_ticket_content,
+      required: false,
+      label: 'Send Ticket Content to Capsule (by default the Ticket Summary is sent)'
 
-    white_list :should_create_person, :subdomain
+    white_list :should_create_person
 
     def validate
-      return false unless required_fields_present?
       return false unless valid_credentials?
-      true
+      return true
     end
 
     private
@@ -50,6 +55,7 @@ module CapsuleCrmV2
       response = http_get api_url("/parties") do |req|
         req.headers['Accept'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
+
         req.params['email'] = requester.email
       end
 
@@ -150,22 +156,6 @@ module CapsuleCrmV2
       note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
-    def required_fields_present?
-      are_required_fields_present = true
-
-      if settings.api_token.blank?
-        are_required_fields_present = false
-        show_inline_error :api_token, "API Token cannot be blank"
-      end
-
-      if settings.subdomain.blank?
-        are_required_fields_present = false
-        show_inline_error :subdomain, "Subdomain cannot be blank"
-      end
-
-      return are_required_fields_present
-    end
-
     def valid_credentials?
       response = http_get api_url("/users") do |req|
         req.headers['Accept'] = 'application/json'
@@ -175,7 +165,7 @@ module CapsuleCrmV2
       if response.status == 200
         true
       else
-        show_error_notification "Invalid subdomain and/or API Token. Please verify the entered details"
+        show_error_notification "Something doesn't seem right. Can you please try reconnecting?"
         false
       end
     end
