@@ -30,7 +30,7 @@ module CapsuleCrmV2
   class Base < SupportBeeApp::Base
     oauth :capsule, required: true,
       oauth_options: {
-        expiration: :never
+        scope: "read write"
       }
 
     boolean :should_create_person, default: true, required: false, label: 'Create a New Person in Capsule if one does not exist'
