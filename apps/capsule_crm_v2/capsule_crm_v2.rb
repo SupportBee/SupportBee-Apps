@@ -49,7 +49,7 @@ module CapsuleCrmV2
         response = capsule_get(users_url)
       rescue => e
         ErrorReporter.report(e)
-        errors[:flash] = "Validation failed for you Capsule account. Please try again after sometime or contact support at support@supportbee.com"
+        show_error_notification "Validation failed for you Capsule account. Please try again after sometime or contact support at support@supportbee.com"
       end
 
       return true if response.status == 200
@@ -60,7 +60,7 @@ module CapsuleCrmV2
         response_body: response.body
       }
       ErrorReporter.report(e, context: context)
-      errors[:flash] = response.body
+      show_error_notification response.body
       return false
     end
 
