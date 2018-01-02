@@ -197,7 +197,7 @@ module CapsuleCrmV2
     end
 
     def base_url
-      Pathname.new("https://api.capsulecrm.com/api/v2)
+      Pathname.new("https://api.capsulecrm.com/api/v2")
     end
   end
 end
