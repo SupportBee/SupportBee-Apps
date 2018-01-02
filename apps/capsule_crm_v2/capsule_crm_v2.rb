@@ -45,14 +45,29 @@ module CapsuleCrmV2
     white_list :should_create_person
 
     def validate
-      return false unless valid_credentials?
-      return true
+      begin
+        response = capsule_get(users_url)
+      rescue => e
+        ErrorReporter.report(e)
+        errors[:flash] = "Validation failed for you Capsule account. Please try again after sometime or contact support at support@supportbee.com"
+      end
+
+      return true if response.status == 200
+
+      e = StandardError.new("Failed to fetch Capsule Users")
+      context = {
+        response_status: response.status,
+        response_body: response.body
+      }
+      ErrorReporter.report(e, context: context)
+      errors[:flash] = response.body
+      return false
     end
 
     private
 
     def find_person(requester)
-      response = http_get api_url("/parties") do |req|
+      response = http.get api_url("/parties") do |req|
         req.headers['Accept'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
 
@@ -75,7 +90,7 @@ module CapsuleCrmV2
 
     def create_person(requester)
       first_name = split_name(requester)
-      response = http_post api_url("/parties") do |req|
+      response = http.post api_url("/parties") do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
         req.body = {
@@ -119,7 +134,7 @@ module CapsuleCrmV2
     end
 
     def get_person(location)
-      response = http_get "#{location}" do |req|
+      response = http.get "#{location}" do |req|
         req.headers['Accept'] = 'application/json'
         req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
       end
@@ -154,17 +169,6 @@ module CapsuleCrmV2
       note = ""
       note << (settings.return_ticket_content.to_s == '1' ? ticket.content.text : ticket.summary)
       note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
-    end
-
-    def valid_credentials?
-      response = capsule_get(users_url)
-
-      if response.status == 200
-        true
-      else
-        show_error_notification "Something doesn't seem right. Can you please try reconnecting?"
-        false
-      end
     end
 
     def site_url
