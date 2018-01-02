@@ -10,7 +10,7 @@ module CapsuleCrmV2
       person = find_person(requester)
       if person
         html = person_info_html(person)
-        send_note(ticket, person)
+        send_note(person, ticket)
       else
         if settings.should_create_person.to_s == '1'
           person = create_new_person(ticket, requester)
@@ -69,84 +69,66 @@ module CapsuleCrmV2
     private
 
     def find_person(requester)
-      response = http.get api_url("/parties") do |req|
-        req.headers['Accept'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-
-        req.params['email'] = requester.email
-      end
-
+      response = capsule_get(parties_url.join("search"), q: requester.email)
       return nil unless response.status == 200
-      if response.body['parties']['person'].is_a?(Array)
-        response.body['parties']['person'].first
-      else
-        response.body['parties']['person']
-      end
+
+      person = Hashie::Mash.new(response.body['parties'].first)
+      person.blank? ? nil : person
     end
 
     def create_new_person(ticket, requester)
-      location = create_person(requester)
-      note_to_new_person(location, ticket)
-      get_person(location)
+      person = create_person(requester)
+      send_note(person, ticket)
+
+      person
     end
 
     def create_person(requester)
-      first_name = split_name(requester)
-      response = http.post api_url("/parties") do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-        req.body = {
+      first_name, last_name = split_name(requester)
+      body = {
+        party: {
+          type: "person",
+          firstName: first_name,
+          lastName: last_name,
+          emailAddresses: [
+            {
+              type: "Work",
+              address: requester.email
+            }
+          ]
+        }
+      }
+
+      response = capsule_post(parties_url, body)
+      Hashie::Mash.new(response.body['party'].first)
+    end
+
+    def send_note(person, ticket)
+      body = {
+        entry: {
           party: {
-            firstName: first_name,
-            emailAddresses: [
-              {
-                type: "Work",
-                address: requester.email
-              }
-            ]
-          }
-        }.to_json
-      end
+            id: person.id
+          },
+          type: "note",
+          content: generate_note_content(ticket)
+        }
+      }
 
-      location = response['location']
-    end
-
-    def send_note(ticket, person)
-      person_id = person['id']
-
-      http_post api_url("/parties/#{person_id}/history") do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-        req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
-      end
-    end
-
-    def note_to_new_person(location, ticket)
-      http_post "#{location}/history" do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-
-        req.body = {historyItem:{note:generate_note_content(ticket)}}.to_json
-      end
+      capsule_post(entries_url, body)
     end
 
     def split_name(requester)
       first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email, '']
-      return first_name
+      [first_name, last_name]
     end
 
     def get_person(location)
-      response = http.get "#{location}" do |req|
-        req.headers['Accept'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-      end
-
-      response.body['party']
+      capsule_get(location).body['party']
     end
 
     def person_info_html(person)
       html = ""
-      html << "<b> #{person['firstName']} </b><br/>"
+      html << "<b>#{person['firstName']} #{person['lastName']}</b> is already a contact in Capsule.<br/>"
       html << "#{person['title']} " if person['title']
       html << "<br/>"
       html << person_link(person)
@@ -154,13 +136,13 @@ module CapsuleCrmV2
     end
 
     def new_person_info_html(person)
-      html = "Added #{person['firstName']} to Capsule...<br/> "
+      html = "Added #{person['firstName']} to Capsule<br/> "
       html << person_link(person)
       html
     end
 
     def person_link(person)
-      "<a href='#{site_url}/party/#{person['id']}'>View #{person['firstName']}'s profile on capsule</a>"
+      "<a href='#{capsule_account_url}/party/#{person['id']}'>View #{person['firstName']}'s profile on Capsule</a>"
     end
 
     def comment_on_ticket(ticket, html)
@@ -173,21 +155,47 @@ module CapsuleCrmV2
       note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
-    def site_url
+    def capsule_account_url
       @site ||= get_site
       @site["site"]["url"]
     end
 
     def get_site
-      response = capsule_get(site_url)
-      JSON.parse(response.body)
+      capsule_get(site_url).body
     end
 
-    def capsule_get(path, params = {})
-      http.get api_url(path) do |req|
+    def capsule_post(url, body, params = {})
+      http.post url.to_s do |req|
+        req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
+        # req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
+        req.headers['Authorization'] = "Bearer 9/1leuL9A6UF0QHAaWaqAmTiQBJlsNdf9EIysIjqrruG7Dhgs5+Gbiy8KtJJpyfB"
+
+        req.body = body.to_json
       end
+    end
+
+    def capsule_get(url, params = {})
+      http.get url.to_s do |req|
+        req.headers['Accept'] = 'application/json'
+        req.headers['Content-Type'] = 'application/json'
+        # req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
+        req.headers['Authorization'] = "Bearer 9/1leuL9A6UF0QHAaWaqAmTiQBJlsNdf9EIysIjqrruG7Dhgs5+Gbiy8KtJJpyfB"
+
+        unless params.blank?
+          params.each do |key, value|
+            req.params[key] = value
+          end
+        end
+      end
+    end
+
+    def entries_url
+      base_url.join("entries")
+    end
+
+    def parties_url
+      base_url.join("parties")
     end
 
     def site_url
