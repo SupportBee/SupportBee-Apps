@@ -157,10 +157,7 @@ module CapsuleCrmV2
     end
 
     def valid_credentials?
-      response = http_get api_url("/users") do |req|
-        req.headers['Accept'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-      end
+      response = capsule_get(users_url)
 
       if response.status == 200
         true
@@ -176,16 +173,27 @@ module CapsuleCrmV2
     end
 
     def get_site
-      response = http_get api_url("/site") do |req|
-        req.headers['Accept'] = 'application/json'
-        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
-      end
-
-      JSON.parse response.body
+      response = capsule_get(site_url)
+      JSON.parse(response.body)
     end
 
-    def api_url(endpoint)
-      "https://api.capsulecrm.com/api/v2#{endpoint}"
+    def capsule_get(path, params = {})
+      http.get api_url(path) do |req|
+        req.headers['Accept'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
+      end
+    end
+
+    def site_url
+      base_url.join("site")
+    end
+
+    def users_url
+      base_url.join("users")
+    end
+
+    def base_url
+      Pathname.new("https://api.capsulecrm.com/api/v2)
     end
   end
 end
