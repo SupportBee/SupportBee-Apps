@@ -45,6 +45,8 @@ module CapsuleCrmV2
     white_list :should_create_person
 
     def validate
+      response = nil
+
       begin
         response = capsule_get(users_url)
       rescue => e
