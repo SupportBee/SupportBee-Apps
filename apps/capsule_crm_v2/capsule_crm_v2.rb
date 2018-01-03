@@ -120,10 +120,6 @@ module CapsuleCrmV2
       [first_name, last_name]
     end
 
-    def get_person(location)
-      capsule_get(location).body['party']
-    end
-
     def person_info_html(person)
       html = "<strong>#{person.firstName} #{person.lastName}</strong> is already a contact in Capsule"
       html << "<br />"
