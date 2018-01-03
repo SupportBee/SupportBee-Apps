@@ -6,21 +6,19 @@ module CapsuleCrmV2
       return if ticket.spam_or_trash?
 
       requester = ticket.requester
+      comment_content = nil
 
-      person = find_person(requester)
-      if person
-        html = person_info_html(person)
+      if person = find_person(requester)
+        comment_content = person_info_html(person)
         send_note(person, ticket)
       else
-        if settings.should_create_person.to_s == '1'
-          person = create_new_person(ticket, requester)
-          html = new_person_info_html(person)
-        else
-          return
-        end
+        return unless settings.should_create_person.to_s == '1'
+
+        person = create_new_person(ticket, requester)
+        comment_content = new_person_info_html(person)
       end
 
-      comment_on_ticket(ticket, html)
+      comment_on_ticket(ticket, comment_content)
       show_success_notification "Ticket sent to Capsule"
     end
   end
@@ -100,7 +98,7 @@ module CapsuleCrmV2
       }
 
       response = capsule_post(parties_url, body)
-      Hashie::Mash.new(response.body['party'].first)
+      Hashie::Mash.new(response.body['party'])
     end
 
     def send_note(person, ticket)
@@ -127,22 +125,23 @@ module CapsuleCrmV2
     end
 
     def person_info_html(person)
-      html = ""
-      html << "<b>#{person['firstName']} #{person['lastName']}</b> is already a contact in Capsule.<br/>"
-      html << "#{person['title']} " if person['title']
-      html << "<br/>"
+      html = "<strong>#{person.firstName} #{person.lastName}</strong> is already a contact in Capsule"
+      html << "<br />"
+      html << person.title if person.title
+      html << "<br />"
       html << person_link(person)
       html
     end
 
     def new_person_info_html(person)
-      html = "Added #{person['firstName']} to Capsule<br/> "
+      html = "Added <strong>#{person.firstName} #{person.lastName}</strong> to Capsule"
+      html << "<br />"
       html << person_link(person)
       html
     end
 
     def person_link(person)
-      "<a href='#{capsule_account_url}/party/#{person['id']}'>View #{person['firstName']}'s profile on Capsule</a>"
+      "<a href='#{capsule_account_url}/party/#{person.id}'>View #{person.firstName}'s profile on Capsule</a>"
     end
 
     def comment_on_ticket(ticket, html)
@@ -168,8 +167,7 @@ module CapsuleCrmV2
       http.post url.to_s do |req|
         req.headers['Content-Type'] = 'application/json'
         req.headers['Accept'] = 'application/json'
-        # req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
-        req.headers['Authorization'] = "Bearer 9/1leuL9A6UF0QHAaWaqAmTiQBJlsNdf9EIysIjqrruG7Dhgs5+Gbiy8KtJJpyfB"
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
 
         req.body = body.to_json
       end
@@ -179,8 +177,7 @@ module CapsuleCrmV2
       http.get url.to_s do |req|
         req.headers['Accept'] = 'application/json'
         req.headers['Content-Type'] = 'application/json'
-        # req.headers['Authorization'] = "Bearer #{settings.oauth_token}" 
-        req.headers['Authorization'] = "Bearer 9/1leuL9A6UF0QHAaWaqAmTiQBJlsNdf9EIysIjqrruG7Dhgs5+Gbiy8KtJJpyfB"
+        req.headers['Authorization'] = "Bearer #{settings.oauth_token}"
 
         unless params.blank?
           params.each do |key, value|
