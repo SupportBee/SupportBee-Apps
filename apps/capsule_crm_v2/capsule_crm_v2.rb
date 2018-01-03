@@ -149,9 +149,11 @@ module CapsuleCrmV2
     end
 
     def generate_note_content(ticket)
-      note = ""
+      note = "Subject: #{ticket.subject}"
+      note << "\n"
       note << (settings.return_ticket_content.to_s == '1' ? ticket.content.text : ticket.summary)
-      note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
+      note << "\n"
+      note << "Link to SupportBee Ticket: https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
     def capsule_account_url
