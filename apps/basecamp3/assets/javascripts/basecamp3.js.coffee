@@ -146,6 +146,7 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
 
   hide_loading_indicator: ->
     @$("form").removeClass("loading")
+    $(window).resize()
 
   submit_form: ->
     formJSON = @$('form').toJSON()
