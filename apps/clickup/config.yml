@@ -1,0 +1,31 @@
+name: Clickup
+slug: clickup
+access: public
+
+description: "This is to test and a boilerplate app.
+Accepts newline"
+
+category: project-management
+
+tags: 
+- project management
+- basecamp3
+
+developer: 
+  name: Avinasha Sastry
+  email: me@avinasha.com
+  twitter: "@avishastry"
+  github: avinasha
+
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
+    label: Send To Clickup
