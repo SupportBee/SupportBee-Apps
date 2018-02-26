@@ -7,7 +7,7 @@ module Clickup
      name = overlay.title
      content = overlay.description
      priority = overlay.priority_select
-     assignees = [] #[overlay.assignee_select]
+     assignees = [overlay.assignee_select]
 
      response = create_task(name: name, content: content, priority: priority, assignees: assignees)
      show_success_notification "Ticket sent to Clickup"
@@ -92,10 +92,10 @@ module Clickup
 
     def create_task(data)
       http_post tasks_url.to_s do |req|
-        req.body = data
+        req.body = data.to_json
 
         req.headers['Authorization'] = token
-        req.headers['Accept'] = 'application/json'
+        req.headers['Content-Type'] = 'application/json'
       end
     end
 

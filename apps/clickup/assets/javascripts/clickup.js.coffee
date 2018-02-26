@@ -60,7 +60,7 @@ Clickup.Views.Overlay = SB.Apps.BaseView.extend(
   render_teams: ->
     @teams.each @render_team
     @populate_spaces()
-    #@populate_assignees()
+    @populate_assignees()
     @hide_loading_indicator()
 
   render_team: (team) ->
