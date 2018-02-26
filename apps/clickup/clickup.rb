@@ -91,7 +91,6 @@ module Clickup
 
 
     def create_task(data)
-      binding.pry
       http_post tasks_url.to_s do |req|
         req.body = data
 
