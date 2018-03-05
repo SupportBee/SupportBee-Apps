@@ -72,7 +72,11 @@ module Github
 
     def create_issue(issue_title, description, repo)
       response = http_post "https://api.github.com/repos/#{repo}/issues?access_token=#{token}" do |req|
-        req.body = {title: issue_title, body: description, labels: ['supportbee']}.to_json
+        req.body = {
+          title: issue_title,
+          body: description,
+          labels: ['supportbee']
+        }.to_json
       end
     end
 
