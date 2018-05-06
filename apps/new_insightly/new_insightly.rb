@@ -75,7 +75,7 @@ module NewInsightly
     string  :subdomain,
             required: true,
             label: 'Insightly Subdomain',
-            hint: 'Say https:/example.insight.ly is your Insightly domain, enter "example"'
+            hint: 'Say https:/example.insightly.com is your Insightly domain, enter "example"'
     string :tagged_name,
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
@@ -276,20 +276,6 @@ module NewInsightly
       end
     end
 
-    def contact_link(contact)
-      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
-    end
-
-    def task_link(project)
-      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
-    end
-
-    def new_task_html(task)
-      html = ''
-      html << "Insightly Task Created!<br/>"
-      html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
-    end
-
     def existing_contact_html(contact)
       html = ""
       html << "<b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> is already an Insightly Contact.<br/>"
@@ -300,6 +286,11 @@ module NewInsightly
       html = ""
       html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts.<br/>"
       html << contact_link(contact)
+    end
+
+    def contact_link(contact)
+      contact_id = contact['CONTACT_ID']
+      "<a href='https://#{settings.subdomain}.insightly.com/list/contact/?blade=/details/Contacts/#{contact_id}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
     end
 
     def new_note_with_ticket_content_html(ticket)
@@ -315,6 +306,16 @@ module NewInsightly
       end
 
       html
+    end
+
+    def new_task_html(task)
+      html = ''
+      html << "Insightly Task Created!<br/>"
+      html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
+    end
+
+    def task_link(project)
+      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
     end
   end
 end
