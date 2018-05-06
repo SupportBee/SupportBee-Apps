@@ -192,7 +192,6 @@ module NewInsightly
       }
 
       response = api_post('notes', body)
-
       if response.status == 201
         return response.body
       else
@@ -311,7 +310,8 @@ module NewInsightly
     def new_task_html(task)
       html = ''
       html << "Insightly Task Created!<br/>"
-      html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
+      task_id, task_title = task['TASK_ID'], task['Title']
+      html << "<b><a href='https://#{settings.subdomain}.insightly.com/list/task/?blade=/details/Tasks/#{task_id}'>#{task_title}</a></b>"
     end
   end
 end
