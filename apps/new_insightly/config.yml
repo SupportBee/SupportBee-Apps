@@ -1,0 +1,102 @@
+name: Insightly
+slug: new_insightly
+access: public
+
+description: "
+
+Insightly is an easy to use CRM application for managing sales, contacts and more! You can checkout out their complete set of features [here](http://insightly.com/features).
+
+## Sync Customer Information between Insightly & SupportBee
+
+Use the Insightly app to share information about a customer between Insightly and SupportBee. Every time there is a new customer email in SupportBee, the app would automatically check if the customer contact exists in Insightly. If it does, the app would comment on the ticket with a link to the customer’s profile in Insightly.
+
+If the contact does not already exist in Insightly, the app would create a new contact in Insightly. It would also add a comment on the ticket, with a link to the newly created Insightly profile of the customer
+
+
+## Easily create Insightly tasks from Customer emails
+
+Using the Insightly app one can send support emails to Insightly as Tasks.
+
+### Link Tasks to Projects
+
+The Insightly app can send a ticket to multiple projects. When you click on 'Apps > Send to Insightly', all your projects would be listed in the 'Select Project' dropdown.
+
+### Attach Opportunities to Tasks
+
+You can also attach Opportunities to Tasks you create from SupportBee. All your Insightly Opportunities would be listed in the 'Select Opportunities' dropdown, with the current status of the opportunity listed in brackets.
+
+### Select Assignee and Reporter of the Task
+
+You can assign a Task to an Insighttly User, and also add a user responsible for the Task right from SupportBee. All your Insightly Users would be listed in the dropdown.
+
+### Select Status and Priority of the Task
+
+Being able to select the Priority (Low, Medium, High) and the Status of a task from within SupportBee makes the integration even more powerful and handy!
+
+## Adding the Insightly App
+
+To add the app, click on 'Add to My SupportBee'. If this is the first app you are adding, you will have to enter your subdomain and you will be taken to a settings screen. Fill in the following details.
+
+### Insightly API Key
+
+To get the API Key, login to your Insightly account, and go to User Settings.
+
+### Insightly Subdomain
+
+If your Insightly domain looks something like this: ``https://example.insight.ly/``, then ``example`` is your subdomain.
+
+### Create Insightly Contact with Customer Information
+
+Check this option if you want to create a new contact in Insightly if we can't find one based on the email address of the customer.
+
+## Using the App
+
+Once you add the app, sit back and relax. You don't have to do anything manually. Every time a ticket comes in, we will automatically look in Insightly and post a comment on the ticket if we find a contact based on the email address. If we can't find one, we will create a contact if you have the option checked in settings.
+
+However, if you want to send a Ticket as a Task in Insightly. You can select the Ticket, and then go to Apps > Send to Insightly. The pop up would contain all your Insightly Projects, and Users. You can Assign the Task to a User, and also select the Responsible User of the Task.
+
+
+We would love to hear your feedback on this integration!
+
+If you have any app requests or app enhancement requests, please feel free to add them as comments below, or write to us at support@supportbee.com.
+
+"
+
+category: crm
+
+video: 'https://youtu.be/XQfdYvJ2REk'
+
+tags:
+- crm
+- insightly
+- project-management
+
+developer:
+  name: Nisanth Chunduru
+  email: nisanth074@supportbee.com
+  twitter: "nisanth074"
+  github: nisanth074
+
+# The following config keys are used by Action Handlers
+# Set button 'overlay' to true, if you want to have an overlay
+# The valid values for screens are [ticket, all, unassigned, my, groups]
+# Remove the following section if you do not want to define Action Handlers
+
+action:
+  button:
+    overlay: true
+    screens:
+    - ticket
+    - unassigned
+    - my_tickets
+    - my_team_tickets
+    - all
+    - labels
+    - search
+    label: Send To Insightly
+
+testimonial:
+  content: "SupportBee is easy to use and integrates easily to our system. In 1 hour we were up and running with our system. SupportBee is doing all what we need."
+  name: "Hrannar Hafsteinsson"
+  meta: "Harpa"
+  avatar: "https://i.imgur.com/b8RnZ95.jpg" 
