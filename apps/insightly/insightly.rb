@@ -266,10 +266,6 @@ module Insightly
       "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
     end
 
-    def task_link(project)
-      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
-    end
-
     def task_created_html(task)
       html = ''
       html << "Insightly Task Created!<br/>"
