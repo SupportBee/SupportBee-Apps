@@ -323,7 +323,7 @@ module Insightly
     def new_task_html(task)
       html = ''
       html << "Insightly Task Created!<br/>"
-      task_id, task_url = task['TASK_ID'], task_url(task)
+      task_title, task_url = task['Title'], task_url(task)
       html << "<b><a href='#{task_url}'>#{task_title}</a></b>"
     end
 
