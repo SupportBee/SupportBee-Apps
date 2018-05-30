@@ -12,7 +12,7 @@ Eye.application 'AppPlatform' do
   sidekiq_count = Dir[WORKING_DIR + "/config/sidekiq/production/sidekiq*.yml"].count
   (1..sidekiq_count).each do |i|
     process "sidekiq#{i}" do
-      start_command "rvm-exec ruby-2.2.3 bundle exec sidekiq -C #{WORKING_DIR}/config/sidekiq/production/sidekiq#{i}.yml -r #{WORKING_DIR}/config/load.rb"
+      start_command "rvm-exec ruby-2.2.3 bundle exec sidekiq -C #{WORKING_DIR}/config/sidekiq/#{RAILS_ENV}/sidekiq#{i}.yml -r #{WORKING_DIR}/config/load.rb"
       stop_signals [:USR1, 25.seconds, :TERM, 15.seconds] # See https://github.com/mperham/sidekiq/wiki/Signals
 
       env 'RAILS_ENV' => RAILS_ENV
