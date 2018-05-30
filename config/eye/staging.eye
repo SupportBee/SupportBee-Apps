@@ -9,7 +9,7 @@ end
 Eye.application 'AppPlatform' do
   working_dir WORKING_DIR
 
-  sidekiq_count = Dir[WORKING_DIR + "/config/sidekiq/staging/sidekiq*.yml"].count
+  sidekiq_count = Dir[WORKING_DIR + "/config/sidekiq/#{RAILS_ENV}/sidekiq*.yml"].count
   (1..sidekiq_count).each do |i|
     process "sidekiq#{i}" do
       start_command "rvm-exec ruby-2.2.3 bundle exec sidekiq -C #{WORKING_DIR}/config/sidekiq/#{RAILS_ENV}/sidekiq#{i}.yml -r #{WORKING_DIR}/config/load.rb"
