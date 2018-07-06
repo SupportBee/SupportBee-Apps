@@ -27,8 +27,6 @@ gem 'unicorn', '>= 4.1.1'
 gem "sidekiq-pro", "3.4.5", :path => "vendor/gems/sidekiq-pro-3.4.5"
 gem "omniauth"
 gem 'omniauth-google-oauth2'
-# Monitoring
-gem 'newrelic_rpm', :require => false
 
 # App gems
 gem 'tinder'
