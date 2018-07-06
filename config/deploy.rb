@@ -28,9 +28,8 @@ after "deploy:restart", "supportbee_app_platform:eye:restart"
 namespace :supportbee_app_platform do
   task :symlink_config_files do
     source_destination_mapping = Hash.new { |_, source_file| source_file }
-    source_destination_mapping['newrelic.platform.yml'] = 'newrelic.yml'
 
-    %w(sba_config.yml secret_config.yml omniauth.platform.yml newrelic.platform.yml honeybadger.yml assets.yml).each do |source_file|
+    %w(sba_config.yml secret_config.yml omniauth.platform.yml honeybadger.yml assets.yml).each do |source_file|
       destination_file = source_destination_mapping[source_file]
       run <<-CMD
         ln -nfs #{shared_path}/system/#{source_file} #{release_path}/config/#{destination_file}
