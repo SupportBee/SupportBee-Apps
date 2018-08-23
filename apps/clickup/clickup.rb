@@ -94,9 +94,9 @@ module Clickup
       base_url.join("list", list_id, "task")
     end
 
-    def create_task(data)
+    def create_task(task_hash)
       http_post(tasks_url.to_s) do |req|
-        req.body = data.to_json
+        req.body = task_hash.to_json
 
         req.headers['Authorization'] = token
         req.headers['Content-Type'] = 'application/json'
