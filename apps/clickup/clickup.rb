@@ -10,6 +10,16 @@ module Clickup
      assignees = [overlay.assignee_select]
 
      response = create_task(name: name, content: content, priority: priority, assignees: assignees)
+     task_id = response.body["id"]
+     team_id = payload.overlay.team_select
+     space_id = payload.overlay.space_select
+     task_url = "https://app.clickup.com/#{team_id}/#{space_id}/t/#{task_id}"
+     html = <<HTML
+ClickUp Task Created!
+<br />
+<a href='#{task_url}'>#{ticket.subject}</a>
+HTML
+     ticket.comment(html: html)
      show_success_notification "Ticket sent to Clickup"
     end
 
@@ -29,7 +39,6 @@ end
 
 module Clickup
   class Base < SupportBeeApp::Base
-
     oauth :click_up
 
     private
@@ -50,8 +59,6 @@ module Clickup
       payload.overlay.list_select
     end
 
-
-
     def fetch_teams
       response = clickup_get(teams_url)
       response.body.to_json
@@ -66,8 +73,6 @@ module Clickup
       response = clickup_get(projects_url)
       response.body.to_json
     end
-
-
 
     def base_url
       Pathname.new("https://api.clickup.com/api/v1")
@@ -89,10 +94,9 @@ module Clickup
       base_url.join("list", list_id, "task")
     end
 
-
-    def create_task(data)
-      http_post tasks_url.to_s do |req|
-        req.body = data.to_json
+    def create_task(task_hash)
+      http_post(tasks_url.to_s) do |req|
+        req.body = task_hash.to_json
 
         req.headers['Authorization'] = token
         req.headers['Content-Type'] = 'application/json'
@@ -100,11 +104,10 @@ module Clickup
     end
 
     def clickup_get(url)
-      http.get url.to_s do |req|
+      http.get(url.to_s) do |req|
         req.headers['Authorization'] = token
         req.headers['Accept'] = 'application/json'
       end
     end
   end
 end
-
