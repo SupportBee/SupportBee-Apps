@@ -132,7 +132,7 @@ Teamwork.Views.Overlay = SB.Apps.BaseView.extend(
 
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 
 )
 

@@ -85,6 +85,6 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend
     @$("form").removeClass("loading")
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 
 return Insightly

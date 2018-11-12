@@ -107,7 +107,7 @@ Asana.Views.Overlay = SB.Apps.BaseView.extend(
     @workspace_users_list.fetch()
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 
 )
 

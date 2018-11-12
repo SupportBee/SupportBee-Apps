@@ -149,7 +149,7 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
     $(window).resize()
 
   submit_form: ->
-    formJSON = @$('form').toJSON()
+    formJSON = @$('form').serializeJSON()
 
     assignee_ids = this.$("select[name=assign_to]").parent().dropdown("get value")
     formJSON["assign_to"] = assignee_ids unless _.isEmpty(assignee_ids)

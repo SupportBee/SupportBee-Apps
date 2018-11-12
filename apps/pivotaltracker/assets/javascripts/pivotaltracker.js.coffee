@@ -63,7 +63,7 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     @story_owner_selector.append option_tag(member)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 
 )
 

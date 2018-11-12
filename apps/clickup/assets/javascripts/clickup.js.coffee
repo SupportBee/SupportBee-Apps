@@ -180,8 +180,8 @@ Clickup.Views.Overlay = SB.Apps.BaseView.extend(
     $(window).resize()
 
   submit_form: ->
-    console.log 'submit', @$('form').toJSON()
-    @post 'button', @$('form').toJSON()
+    console.log 'submit', @$('form').serializeJSON()
+    @post 'button', @$('form').serializeJSON()
 )
 
 return Clickup

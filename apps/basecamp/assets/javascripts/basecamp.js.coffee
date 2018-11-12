@@ -131,7 +131,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @todo_lists_selector.append option_tag(list)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 )
 
 return Basecamp

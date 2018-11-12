@@ -90,7 +90,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
     @issue_type_selector.append issue_type_option_tag(issue_type)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
 
 )
 
