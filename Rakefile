@@ -19,6 +19,16 @@ Run
 to start the rack server
 INSTRUCTIONS
   end
+
+  task :start do
+    exec "bundle exec rackup --port 9292"
+  end
+
+  namespace :unicorn do
+    task :start do
+      exec "bundle exec unicorn -c config/unicorn/development.rb"
+    end
+  end
 end
 
 desc "Open a rails-like console with all the enviroment loaded"
