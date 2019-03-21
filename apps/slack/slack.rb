@@ -26,6 +26,8 @@ module Slack
   require 'json'
 
   class Base < SupportBeeApp::Base
+    oauth :slack, required: true, oauth_options: { scope: "incoming-webhook" }
+
     string :url_webhook, :required => true, :label => 'Webhook URL'
 
     boolean :notify_ticket_created, :default => true, :label => 'Notify when Ticket is created'
