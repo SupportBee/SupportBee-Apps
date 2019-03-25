@@ -35,9 +35,9 @@ module Bigcommerce
 
     def connect_to_bigcommerce
       api = Bigcommerce::Api.new({
-      :store_url => settings.shop_url,
-      :username  => settings.username,
-      :api_key   => settings.api_token
+        :store_url => settings.shop_url,
+        :username  => settings.username,
+        :api_key   => settings.api_token
       })
     end
 
