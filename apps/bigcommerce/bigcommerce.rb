@@ -87,7 +87,7 @@ module Bigcommerce
     def order_url(order)
       store_url = api.connection.get("/store")["secure_url"]
       order_id = order['id']
-      "https://#{store_url}/admin/index.php?ToDo=viewOrder&orderId=#{order_id}"
+      "#{store_url}/admin/index.php?ToDo=viewOrder&orderId=#{order_id}"
     end
 
     def get_order_items(order)
