@@ -54,7 +54,6 @@ module Bigcommerce
     end
 
     def order_info_html(orders)
-      store_id = api.connection.get("/store")['id']
       order = orders.last
       order_items = get_order_items(order)
       items_html = order_items_html(order_items)
@@ -76,7 +75,7 @@ module Bigcommerce
       html << "</td><td>#{formatted_date}"
       html << "</td></tr>"
       html << "</table>"
-      html << order_info_link(order, store_id) + " &raquo;"
+      html << order_info_link(order) + " &raquo;"
       html
     end
 
