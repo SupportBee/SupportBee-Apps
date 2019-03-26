@@ -12,8 +12,6 @@ module Bigcommerce
       order_html = order_info_html(orders)
       sent_note_to_customer(most_recent_order)
       ticket.comment(:html => order_html)
-
-      show_success_notification "Ticket sent to Bigcommerce"
     end
   end
 end
