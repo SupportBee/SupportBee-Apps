@@ -111,7 +111,7 @@ module Bigcommerce
     end
 
     def ticket_url
-      "https://#{company_subdomain}.supportbee.com/tickets/#{ticket.id}""
+      "https://#{company_subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 
     def ticket
