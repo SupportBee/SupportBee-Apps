@@ -85,8 +85,15 @@ module Bigcommerce
       html
     end
 
-    def order_info_link(order, store_id)
-      "<a href='https://store-#{store_id}.mybigcommerce.com/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
+    def order_info_link(order)
+      order_url = order_url(order)
+      "<a href='#{order_url}'>View Order Info</a>"
+    end
+
+    def order_url(order)
+      store_url = api.connection.get("/store")["secure_url"]
+      order_id = order['id']
+      "https://#{store_url}/admin/index.php?ToDo=viewOrder&orderId=#{order_id}"
     end
 
     def get_order_items(order)
