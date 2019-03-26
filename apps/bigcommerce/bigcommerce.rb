@@ -11,7 +11,7 @@ module Bigcommerce
 
       order_html = order_info_html(orders)
       ticket.comment(:html => order_html)
-      leave_ticket_info_as_note_on_order(most_recent_order)
+      # leave_ticket_info_as_note_on_order(most_recent_order)
     end
   end
 end
