@@ -10,8 +10,8 @@ module Bigcommerce
       most_recent_order = orders.last
 
       order_html = order_info_html(orders)
-      sent_note_to_customer(most_recent_order)
       ticket.comment(:html => order_html)
+      leave_ticket_info_as_note_on_order(most_recent_order)
     end
   end
 end
@@ -47,13 +47,10 @@ module Bigcommerce
       orders = api.get_orders(:customer_id => customer['id'])
     end
 
-    def sent_note_to_customer(most_recent_order)
-      notes = "#{generate_note}\n#{order['staff_notes']}"
+    def leave_ticket_info_as_note_on_order(order)
+      ticket_info = "[SupportBee] #{ticket.subject} - #{ticket_url}"
+      notes = "#{ticket_info}\n#{order['staff_notes']}"
       api.connection.put "/orders/#{order['id']}", staff_notes: notes
-    end
-
-    def generate_note
-      "[SupportBee] #{ticket.subject} - #{ticket_url}"
     end
 
     def order_info_html(orders)
