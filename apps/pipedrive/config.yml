@@ -39,7 +39,7 @@ category: crm
 video: 'https://vimeo.com/76761853'
 
 retired: true
-temporary_redirect_url: "https://supportbee.com/integrations/pipedrive_marketplace"
+redirect_visitors_to: "https://supportbee.com/integrations/pipedrive_marketplace"
 
 tags:
 - crm

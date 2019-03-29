@@ -11,7 +11,7 @@ tags:
 - magento
 
 retired: true
-temporary_redirect_url: "https://supportbee.com/integrations"
+redirect_visitors_to: "https://supportbee.com/integrations"
 developer: 
   name: Bopanna D.C
   email: bops.91@gmail.com
