@@ -45,3 +45,5 @@ action:
     screens: 
     - ticket
     label: Send to Bugify
+
+retired: true

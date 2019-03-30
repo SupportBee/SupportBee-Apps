@@ -38,9 +38,6 @@ category: crm
 
 video: 'https://vimeo.com/76761853'
 
-retired: true
-redirect_visitors_to: "https://supportbee.com/integrations/pipedrive_marketplace"
-
 tags:
 - crm
 - pipedrive
@@ -56,3 +53,6 @@ testimonial:
   name: "Matt Heerema"
   meta: "Mere Agency"
   avatar: "https://i.imgur.com/u1n82c8.jpg"
+
+retired: true
+redirect_visitors_to: "https://supportbee.com/integrations/pipedrive_marketplace"

@@ -10,10 +10,10 @@ tags:
 - ecommerce
 - magento
 
-retired: true
-redirect_visitors_to: "https://supportbee.com/integrations"
 developer: 
   name: Bopanna D.C
   email: bops.91@gmail.com
   github: bopanna
 
+retired: true
+redirect_visitors_to: "https://supportbee.com/integrations"
