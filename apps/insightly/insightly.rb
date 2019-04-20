@@ -216,17 +216,11 @@ module Insightly
           detail: requester.email
         }]
       }
-      body[:first_name] = requester.first_name unless blank?(requester.first_name)
-      body[:last_name] = requester.last_name unless blank?(requester.last_name)
+      body[:first_name] = requester.first_name unless requester.first_name.blank?
+      body[:last_name] = requester.last_name unless requester.last_name.blank?
       body[:tags] = [{ tag_name: get_tag_name }] if settings.tag_contacts.to_s == "1"
       response = api_post('Contacts', body)
       response.body
-    end
-
-    def blank?(object)
-      return true if object.nil?
-      return true if object == ''
-      false
     end
 
     def get_tag_name
