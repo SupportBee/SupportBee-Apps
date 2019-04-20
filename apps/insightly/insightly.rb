@@ -210,17 +210,15 @@ module Insightly
     end
 
     def create_contact(requester)
-      first_name, last_name = requester.name.split(' ', 2)
       body = {
-        first_name: first_name,
-        last_name: last_name,
         contactinfos: [{
           type: 'Email',
           detail: requester.email
         }]
       }
-
-      body[:tags] = [{tag_name: get_tag_name}] if settings.tag_contacts.to_s == "1"
+      body[:first_name] = requester.first_name unless requester.first_name.blank?
+      body[:last_name] = requester.last_name unless requester.last_name.blank?
+      body[:tags] = [{ tag_name: get_tag_name }] if settings.tag_contacts.to_s == "1"
       response = api_post('Contacts', body)
       response.body
     end
