@@ -3,7 +3,6 @@
   <form class="ui app loading form">
     {{#each tickets}}
       {{#ticket}}
-
         <div class="field">
           <label for="team_select">Select Team</label>
           <select name="team_select"></select>
@@ -47,9 +46,8 @@
 
         <div class="actions">
           <a class="ui submit primary button btn">Send to Clickup</a>
-          <a class="ui right floated cancel basic button btn">Cancel</a>
+          <a class="ui cancel basic button btn">Cancel</a>
         </div>
-
       {{/ticket}}
     {{/each}}
   </form>
