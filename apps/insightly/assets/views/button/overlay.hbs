@@ -1,56 +1,58 @@
-<h3 class="ui dividing header">Send to Insightly</h3>
-<form class="ui app loading form">
-  {{#each tickets}}
-    {{#ticket}}
-      <div class="field">
-        <label for="project">Select Project</label>
-        <select name="projects_select"></select>
-      </div>
-      <div class="field">
-        <label for="opportunity">Select Opportunity</label>
-        <select name="opportunities_select"></select>
-      </div>
-      <div class="title field">
-        <label for="title">Title</label>
-        <input name="title" type="text" value="{{subject}}">
-      </div>
-      <div class="description field">
-        <label for="description">Description</label>
-        <textarea name="description" id="rte"></textarea>
-      </div>
-      <div class="field">
-        <label for="responsible_user">Assign To</label>
-        <select name="responsible_select"></select>
-      </div>
-      <div class="field">
-        <label for="owner_user">Responsible User</label>
-        <select name="owner_select"></select>
-      </div>
+<h2 class="ui dividing header">Send to Insightly</h2>
+<div class="content">
+  <form class="ui app loading form">
+    {{#each tickets}}
+      {{#ticket}}
+        <div class="field">
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </div>
+        <div class="field">
+          <label for="opportunity">Select Opportunity</label>
+          <select name="opportunities_select"></select>
+        </div>
+        <div class="title field">
+          <label for="title">Title</label>
+          <input name="title" type="text" value="{{subject}}">
+        </div>
+        <div class="description field">
+          <label for="description">Description</label>
+          <textarea name="description" id="rte"></textarea>
+        </div>
+        <div class="field">
+          <label for="responsible_user">Assign To</label>
+          <select name="responsible_select"></select>
+        </div>
+        <div class="field">
+          <label for="owner_user">Responsible User</label>
+          <select name="owner_select"></select>
+        </div>
 
-      <div class="field">
-        <label for="status">Status</label>
-        <select name="status_select">
-          <option>Not Started</option>
-          <option>In Progress</option>
-          <option>Waiting</option>
-          <option>Deferred</option>
-          <option>Completed</option>
-        </select>
-      </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select name="status_select">
+            <option>Not Started</option>
+            <option>In Progress</option>
+            <option>Waiting</option>
+            <option>Deferred</option>
+            <option>Completed</option>
+          </select>
+        </div>
 
-      <div class="field">
-        <label for="priority">Priority</label>
-        <select name="priority_select">
-          <option value=2>!! Medium</option>
-          <option value=1>! Low</option>
-          <option value=3>!!! High</option>
-        </select>
-      </div>
+        <div class="field">
+          <label for="priority">Priority</label>
+          <select name="priority_select">
+            <option value=2>!! Medium</option>
+            <option value=1>! Low</option>
+            <option value=3>!!! High</option>
+          </select>
+        </div>
 
-      <div class="actions">
-        <a class="ui submit primary button btn">Send to Insightly</a>
-        <a class="ui right floated cancel basic button btn">Cancel</a>
-      </div>
-    {{/ticket}}
-  {{/each}}
-</form>
+        <div class="actions">
+          <a class="ui submit primary button btn">Send to Insightly</a>
+          <a class="ui cancel basic button btn">Cancel</a>
+        </div>
+      {{/ticket}}
+    {{/each}}
+  </form>
+</div>

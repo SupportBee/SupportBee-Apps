@@ -1,40 +1,42 @@
-<h3 class="ui dividing header">Send to Basecamp 3</h3>
-<form class="ui app loading form">
-  {{#each tickets}}
-    {{#ticket}}
-      <div class="field">
-        <label for="project">Select Project</label>
-        <select name="projects_select"></select>
-      </div>
-      <div class="field">
-        <label for="type">Send Ticket as a</label>
-        <select name="type">
-          <option value="message">Message</option>
-          <option value="todo_list">New To-do List</option>
-          <option value="todo_item">To-do Item</option>
-        </select>
-      </div>
-      <div class="todo_lists field" style="display: none;">
-        <label for="todo_lists">Select Todo List</label>
-        <select name="todo_lists"></select>
-      </div>
-      <div class="title field">
-        <label for="title">Title</label>
-        <input name="title" type="text" value="{{subject}}">
-      </div>
-      <div class="description field">
-        <label for="description">Description</label>
-        <textarea name="description" id="rte"></textarea>
-      </div>
-      <div class="assign field" style="display: none;">
-        <label for="assign_to">Assign To</label>
-        <select name="assign_to" class="ui search dropdown" multiple=""></select>
-        <div class="hint" style="margin-top: -0.875rem">Leave this empty if you do not wish to assign the to-do to anyone</div>
-      </div>
-      <div class="actions">
-        <a class="ui submit primary button btn">Send to Basecamp 3</a>
-        <a class="ui right floated cancel basic button btn">Cancel</a>
-      </div>
-    {{/ticket}}
-  {{/each}}
-</form>
+<h2 class="ui dividing header">Send to Basecamp 3</h2>
+<div class="content">
+  <form class="ui app loading form">
+    {{#each tickets}}
+      {{#ticket}}
+        <div class="field">
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </div>
+        <div class="field">
+          <label for="type">Send Ticket as a</label>
+          <select name="type">
+            <option value="message">Message</option>
+            <option value="todo_list">New To-do List</option>
+            <option value="todo_item">To-do Item</option>
+          </select>
+        </div>
+        <div class="todo_lists field" style="display: none;">
+          <label for="todo_lists">Select Todo List</label>
+          <select name="todo_lists"></select>
+        </div>
+        <div class="title field">
+          <label for="title">Title</label>
+          <input name="title" type="text" value="{{subject}}">
+        </div>
+        <div class="description field">
+          <label for="description">Description</label>
+          <textarea name="description" id="rte"></textarea>
+        </div>
+        <div class="assign field" style="display: none;">
+          <label for="assign_to">Assign To</label>
+          <select name="assign_to" class="ui search dropdown" multiple=""></select>
+          <div class="hint" style="margin-top: -0.875rem">Leave this empty if you do not wish to assign the to-do to anyone</div>
+        </div>
+        <div class="actions">
+          <a class="ui submit primary button btn">Send to Basecamp 3</a>
+          <a class="ui cancel basic button btn">Cancel</a>
+        </div>
+      {{/ticket}}
+    {{/each}}
+  </form>
+</div>

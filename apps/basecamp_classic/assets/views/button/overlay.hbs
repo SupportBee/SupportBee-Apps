@@ -1,16 +1,18 @@
-<h3 class="ui dividing header">Edit the Message Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <div class="field">
-      <label for="title">Message Title</label>
-      <input name="title" value="{{subject}}" type="text">
-    </div>
-    <div class="field">
-      <label for="description">Message Body</label>
-      <textarea name="description">{{content.text}}
+<h2 class="ui dividing header">Edit the Message Details</h2>
+<div class="content">
+  {{#each tickets}}
+    {{#ticket}}
+      <div class="field">
+        <label for="title">Message Title</label>
+        <input name="title" value="{{subject}}" type="text">
+      </div>
+      <div class="field">
+        <label for="description">Message Body</label>
+        <textarea name="description">{{content.text}}
 
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-      </textarea>
-    </div>
-  {{/ticket}}
-{{/each}}
+        </textarea>
+      </div>
+    {{/ticket}}
+  {{/each}}
+</div>
