@@ -1,37 +1,39 @@
-<h3 class="ui dividing header">Send to JIRA<span class="hint">Edit Issue Details</span></h3>
-<form class="ui app form">
-  {{#each tickets}}
-    {{#ticket}}
-      <div class="field">
-        <label for="project">Select Project</label>
-        <select name="projects_select"></select>
-      </div>
-      <div class="field">
-        <label for="title">Issue Summary</label>
-        <input name="title" type="text" value="{{subject}}">
-      </div>
-      <div class="field">
-        <label for="description">Issue Description</label>
-        <textarea name="description">{{content.text}}
+<h2 class="ui dividing header">Send to JIRA<span class="hint">Edit Issue Details</span></h2>
+<div class="content">
+  <form class="ui app form">
+    {{#each tickets}}
+      {{#ticket}}
+        <div class="field">
+          <label for="project">Select Project</label>
+          <select name="projects_select"></select>
+        </div>
+        <div class="field">
+          <label for="title">Issue Summary</label>
+          <input name="title" type="text" value="{{subject}}">
+        </div>
+        <div class="field">
+          <label for="description">Issue Description</label>
+          <textarea name="description">{{content.text}}
 
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </div>
-      <div class="field">
-        <label for="user">Select User</label>
-        <select name="users_select">
-          <option value="none">No Assignee</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="issue_type">Issue Type</label>
-        <select name="issue_type_select">
-        </select>
-      </div>
-      <div class="actions">
-        <a class="ui submit primary button btn">Send to JIRA</a>
-        <a class="ui right floated cancel basic button btn">Cancel</a>
-      </div>
-    {{/ticket}}
-  {{/each}}
-</form>
+          </textarea>
+        </div>
+        <div class="field">
+          <label for="user">Select User</label>
+          <select name="users_select">
+            <option value="none">No Assignee</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="issue_type">Issue Type</label>
+          <select name="issue_type_select">
+          </select>
+        </div>
+        <div class="actions">
+          <a class="ui submit primary button btn">Send to JIRA</a>
+          <a class="ui right floated cancel basic button btn">Cancel</a>
+        </div>
+      {{/ticket}}
+    {{/each}}
+  </form>
+</div>
