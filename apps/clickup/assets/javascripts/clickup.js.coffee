@@ -14,6 +14,7 @@ Clickup.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="space_select"]': 'on_space_select',
     'change [name="project_select"]': 'on_project_select',
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -182,6 +183,9 @@ Clickup.Views.Overlay = SB.Apps.BaseView.extend(
   submit_form: ->
     console.log 'submit', @$('form').serializeJSON()
     @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 )
 
 return Clickup

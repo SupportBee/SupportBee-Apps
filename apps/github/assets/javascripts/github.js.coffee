@@ -13,6 +13,7 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="org_select"]': 'org_changed',
     'change [name="projects_select"]': 'project_changed'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -86,6 +87,8 @@ Github.Views.Overlay = SB.Apps.BaseView.extend(
   submit_form: ->
     @post 'button', @$('form').serializeJSON()
 
+  cancel: ->
+    @onClose()
 )
 
 return Github

@@ -15,6 +15,7 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
   events: {
     'change [name="projects_select"]': 'project_changed'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -92,6 +93,8 @@ Jira.Views.Overlay = SB.Apps.BaseView.extend(
   submit_form: ->
     @post 'button', @$('form').serializeJSON()
 
+  cancel: ->
+    @onClose()
 )
 
 return Jira

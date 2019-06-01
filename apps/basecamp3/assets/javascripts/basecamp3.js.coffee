@@ -9,6 +9,7 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="type"]': 'on_type_change',
     'change [name="projects_select"]': 'on_project_change'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -155,6 +156,9 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
     formJSON["assign_to"] = assignee_ids unless _.isEmpty(assignee_ids)
 
     @post 'button', formJSON
+
+  cancel: ->
+    @onClose()
 )
 
 return Basecamp3

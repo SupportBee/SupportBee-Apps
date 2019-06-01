@@ -13,6 +13,7 @@ users_option_tag = (item) ->
 Insightly.Views.Overlay = SB.Apps.BaseView.extend
   events: {
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -86,5 +87,8 @@ Insightly.Views.Overlay = SB.Apps.BaseView.extend
 
   submit_form: ->
     @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 
 return Insightly

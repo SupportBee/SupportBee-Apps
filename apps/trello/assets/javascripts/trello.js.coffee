@@ -13,6 +13,7 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="org_select"]': 'org_changed',
     'change [name="boards_select"]': 'board_changed'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -92,6 +93,9 @@ Trello.Views.Overlay = SB.Apps.BaseView.extend(
 
   submit_form: ->
     @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 
 )
 
