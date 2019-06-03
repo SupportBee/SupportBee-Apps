@@ -1,16 +1,18 @@
-<h3 class="ui dividing header">Edit the Task Details</h3>
-{{#each tickets}}
-  {{#ticket}}
-    <div class="field">
-      <label for="title">Task Title</label>
-      <input name="title" type="text" value="{{subject}}">
-    </div>
-    <div class="field">
-      <label for="description">Task Description</label>
-      <textarea name="description">{{content.text}}
+<h2 class="ui dividing header">Edit the Task Details</h2>
+<div class="content">
+  {{#each tickets}}
+    {{#ticket}}
+      <div class="field">
+        <label for="title">Task Title</label>
+        <input name="title" type="text" value="{{subject}}">
+      </div>
+      <div class="field">
+        <label for="description">Task Description</label>
+        <textarea name="description">{{content.text}}
 
 https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-      </textarea>
-    </div>
-  {{/ticket}}
-{{/each}}
+        </textarea>
+      </div>
+    {{/ticket}}
+  {{/each}}
+</div>
