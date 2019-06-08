@@ -56,3 +56,5 @@ developer:
   email: bops.91@gmail.com
   twitter: "@gagan_bopanna"
   github: gagan-bopanna
+
+retired: true # This integration is retired as Capsule has deprecated their v1 API https://capsulecrm.com/blog/api-v2-release/
