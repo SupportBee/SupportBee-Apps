@@ -6,10 +6,10 @@ description: 'Allows agents to create snippets from the web app. When adding thi
 
 category: workflow
 
-tags: 
+tags:
 - workflow
 
-developer: 
+developer:
   name: Avinasha Shastry
   email: me@avinasha.com
   twitter: "@AviShastry"
@@ -19,10 +19,12 @@ developer:
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]
 # Remove the following section if you do not want to define Action Handlers
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
     label: Create a Snippet
+
+retired: true
