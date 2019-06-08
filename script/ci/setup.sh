@@ -10,7 +10,9 @@ source ~/.rvm/scripts/rvm
 rvm use 2.2.10 --install
 
 # Install bundler
-gem install bundler
+gem install bundler -v 1.17.3 # Install bundler 1.17.3 as the latest version of bundler doesn't support ruby 2.2.3
+
+# Install gems
 bundle install
 
 # Create config files
