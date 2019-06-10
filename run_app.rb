@@ -18,7 +18,7 @@ class RunApp < Sinatra::Base
     set :static_cache_control, [:"no-cache"]
   end
 
-  def self.setup(app_class)
+  def self.setup_routes_for_app(app_class)
     get "/#{app_class.slug}" do
       protected_by :secret_key
 
@@ -116,8 +116,8 @@ class RunApp < Sinatra::Base
     end
   end
 
-  SupportBeeApp::Base.apps.each do |app|
-    app.setup_for(self)
+  SupportBeeApp::Base.apps.each do |app_class|
+    setup_routes_for_app(app_class)
   end
 
   get "/" do
@@ -136,11 +136,20 @@ class RunApp < Sinatra::Base
   get "/system_status/pingdom" do
     protected_by :http_basic_auth
 
+    status = "OK"
+
     pending_jobs_count = Sidekiq::Stats.new.enqueued
     if pending_jobs_count > 500
       status = "CHOCKED - TOO MANY PENDING JOBS IN SIDEKIQ"
-    else
-      status = "OK"
+    end
+    
+    SupportBeeApp::Base.apps.each do |app_class|
+      begin
+        app_class.api_hash
+      rescue Exception
+        status = "Unable to load #{app_class.name} integration"
+        break
+      end
     end
 
     content_type :xml
