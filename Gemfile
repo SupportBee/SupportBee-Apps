@@ -51,7 +51,7 @@ group :development do
   gem 'execjs'
 
   # Deploy gems
-  gem 'capistrano', "= 2.15.5"
+  gem 'capistrano', "= 2.15.9"
   gem 'capistrano-ext'
   gem 'rvm-capistrano', :require => false
 end
