@@ -18,12 +18,17 @@ def current_git_branch
   `git symbolic-ref HEAD 2> /dev/null`.strip.gsub(/^refs\/heads\//, '')
 end
 
-if ENV['REFERENCE'] == current_git_branch
-  branch = ENV['REFERENCE']
-  set :branch, ENV['REFERENCE']
-  puts "Deploying branch #{red(branch)}"
+if ENV['REFERENCE']
+  if ENV['REFERENCE'] == current_git_branch
+    branch = ENV['REFERENCE']
+    set :branch, ENV['REFERENCE']
+    puts "Deploying branch #{red(branch)}"
+  else
+    commit = ENV['REFERENCE']
+    set :revision, commit
+    puts "Deploying commit #{red(commit)}"
+  end
 else
-  commit = ENV['REFERENCE']
-  set :revision, commit
-  puts "Deploying commit #{red(commit)}"
+  set :branch, current_git_branch
+  puts "Deploying branch #{red(branch)}"
 end
