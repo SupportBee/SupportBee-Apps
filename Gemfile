@@ -42,6 +42,8 @@ gem 'restforce'
 gem 'mab'
 gem 'rest-client'
 
+gem 'scout_apm'
+
 group :development, :test, :staging do
   gem 'pry'
   gem 'awesome_print'

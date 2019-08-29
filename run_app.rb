@@ -161,6 +161,12 @@ class RunApp < Sinatra::Base
     })
   end
 
+  get "/ping" do
+    ScoutApm::Rack.transaction("get /ping", request.env) do
+      "pong"
+    end
+  end
+
   run! if app_file == $0
 
   private

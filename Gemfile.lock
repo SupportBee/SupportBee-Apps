@@ -186,6 +186,7 @@ GEM
       nokogiri (>= 1.4.0)
       nori (~> 2.0.3)
       wasabi (~> 3.0.0)
+    scout_apm (2.5.2)
     sidekiq (4.2.10)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -273,6 +274,7 @@ DEPENDENCIES
   rubyzoho (= 0.1.7)
   rvm-capistrano
   savon (~> 2.1.0)
+  scout_apm
   sidekiq-pro (= 3.4.5)!
   sinatra
   sinatra-initializers

@@ -1,4 +1,5 @@
-PLATFORM_ENV = ENV["RACK_ENV"] ||= "development"
+ENV["RACK_ENV"] ||= "development"
+PLATFORM_ENV = RACK_ENV = ENV["RACK_ENV"]
 PLATFORM_ROOT = File.expand_path '../../', __FILE__
 
 require 'bundler'

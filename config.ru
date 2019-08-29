@@ -7,4 +7,8 @@ require "sidekiq/web"
 if ["staging", "production"].include?(PLATFORM_ENV)
   SidekiqWebGoogleLogin.use
 end
+
+require 'scout_apm'
+ScoutApm::Rack.install!
+
 run Rack::URLMap.new('/' => RunApp, '/sidekiq' => Sidekiq::Web)
