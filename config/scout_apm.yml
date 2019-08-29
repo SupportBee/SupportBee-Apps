@@ -19,6 +19,7 @@ common: &defaults
   # - Default: none
   # - Valid Options: true, false
   monitor: true
+  log_level: debug
 
 production:
   <<: *defaults
