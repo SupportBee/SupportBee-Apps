@@ -42,7 +42,7 @@ module Magento
     private
 
     def test_api_request
-      client.call(:login) { message(username: username, apiKey: api_key) }
+      get_client.call(:login) { message(username: username, apiKey: api_key) }
     end
 
     def get_client
@@ -53,7 +53,7 @@ module Magento
       username = settings.username.to_s
       api_key  = settings.api_key.to_s
 
-      response = client.call(:login){message(username: username, apiKey: api_key)}
+      response = client.call(:login) { message(username: username, apiKey: api_key) }
     end
 
     def get_session_id(response)

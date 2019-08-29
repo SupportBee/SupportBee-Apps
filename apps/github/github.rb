@@ -16,7 +16,7 @@ module Github
   require 'json'
 
   class Base < SupportBeeApp::Base
-    oauth :github, :required => true, :oauth_options => { :scope => "user,repo,gist" }
+    oauth :github, required: true, oauth_options: { scope: "user,repo,gist" }
 
     def projects
       [200, fetch_projects]
@@ -72,7 +72,11 @@ module Github
 
     def create_issue(issue_title, description, repo)
       response = http_post "https://api.github.com/repos/#{repo}/issues?access_token=#{token}" do |req|
-        req.body = {:title => issue_title, :body => description, :labels => ['supportbee']}.to_json
+        req.body = {
+          title: issue_title,
+          body: description,
+          labels: ['supportbee']
+        }.to_json
       end
     end
 
@@ -81,7 +85,7 @@ module Github
     end
 
     def comment_on_ticket(ticket, html)
-      ticket.comment(:html => html)
+      ticket.comment(html: html)
     end
 
     def default_api_params

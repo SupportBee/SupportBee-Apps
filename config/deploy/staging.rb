@@ -13,10 +13,22 @@ set :eye_config_dirs, [
 def red(str)
   "\e[31m#{str}\e[0m"
 end
-def current_git_branch
-  branch = `git symbolic-ref HEAD 2> /dev/null`.strip.gsub(/^refs\/heads\//, '')
-  puts "Deploying branch #{red branch}"
-  branch
-end
-set :branch, current_git_branch
 
+def current_git_branch
+  `git symbolic-ref HEAD 2> /dev/null`.strip.gsub(/^refs\/heads\//, '')
+end
+
+if ENV['REFERENCE']
+  if ENV['REFERENCE'] == current_git_branch
+    branch = ENV['REFERENCE']
+    set :branch, ENV['REFERENCE']
+    puts "Deploying branch #{red(branch)}"
+  else
+    commit = ENV['REFERENCE']
+    set :revision, commit
+    puts "Deploying commit #{red(commit)}"
+  end
+else
+  set :branch, current_git_branch
+  puts "Deploying branch #{red(branch)}"
+end

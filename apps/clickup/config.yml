@@ -1,0 +1,42 @@
+name: ClickUp
+slug: clickup
+access: public
+
+description: "
+
+The [ClickUp Integration](https://clickup.com/) turns tickets in your SupportBee into Tasks in your ClickUp.
+
+## Adding the ClickUp Integration
+
+To add the ClickUp Integration to your SupportBee, click on the 'Add to My SupportBee' button. You'll be taken to ClickUp so you can grant access. You can choose the Teams you want to grant access to SupportBee. Once you have selected the Teams, you will be redirected to ClickUp integration's settings page on SupportBee.
+
+### Settings
+
+Click on 'Add Integration' to finish adding ClickUp to SupportBee.
+
+## Using the ClickUp Integration
+
+To send a ticket to ClickUp, open any ticket in your SupportBee and click on Integrations > Send to ClickUp.
+
+Before you send the ticket to ClickUp, you’ll be able to change the title and description. You will be able to choose the Team, Space, Project, and List. The integration will create a new Task in the selected List.
+
+"
+
+category: project-management
+
+tags: 
+- project management
+- clickup
+
+developer: 
+  name: Avinasha Sastry
+  email: me@avinasha.com
+  twitter: "@avishastry"
+  github: avinasha
+
+action:
+  button:
+    overlay: true
+    screens: 
+    - ticket
+    label: Send To ClickUp

@@ -211,10 +211,6 @@ module SupportBeeApp
         app.trigger_action(action)
       end
 
-      def setup_for(sinatra_app)
-        sinatra_app.setup(self)
-      end
-
       def find_from_slug(app_slug)
         SupportBeeApp::Base.apps.detect { |app_class| app_class.slug == app_slug }
       end
@@ -370,7 +366,11 @@ module SupportBeeApp
     end
 
     def error_context
-      context = { payload: @payload[:raw_payload] }
+      context = {
+        app_slug: slug,
+        company_subdomain: company_subdomain,
+        payload: @payload[:raw_payload]
+      }
       context[:action] = @action if @action
       context[:event] = @event if @event
 
@@ -378,7 +378,7 @@ module SupportBeeApp
     end
 
     def error_tags
-      [slug, company_subdomain]
+      [slug]
     end
 
     def slug

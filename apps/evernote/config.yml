@@ -6,13 +6,13 @@ description: "Sends your tickets and replies to a notebook in evernote"
 
 category: Organizer
 
-tags: 
+tags:
 - evernote
 - sync
 
 video: https://vimeo.com/77774676
 
-developer: 
+developer:
   name: Prateek Dayal
   email: prateek@supportbee.com
   twitter: "prateekdayal"
@@ -22,3 +22,5 @@ developer:
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]
 # Remove the following section if you do not want to define Action Handlers
+
+retired: true

@@ -59,19 +59,19 @@ module Basecamp3
         response = basecamp_get(projects_url)
       rescue => e
         ErrorReporter.report(e)
-        errors[:flash] = "Failed to fetch projects from your basecamp. Please try again after sometime or contact support at support@supportbee.com"
+        show_error_notification("Failed to fetch projects from your basecamp. Please try again after sometime or contact support at support@supportbee.com")
         return false
       end
 
       return true if response.status == 200
 
-      e = StandardError.new("Failed to fetch basecamp projects")
+      e = StandardError.new("Failed to fetch projects from your basecamp. Please try again after sometime or contact support at support@supportbee.com")
       context = {
         response_status: response.status,
         response_body: response.body
       }
       ErrorReporter.report(e, context: context)
-      errors[:flash] = response.body
+      show_error_notification(response.body)
       return false
     end
 

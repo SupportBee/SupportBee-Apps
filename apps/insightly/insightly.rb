@@ -2,24 +2,39 @@ module Insightly
   module EventHandler
     def ticket_created
       return unless settings.sync_contacts.to_s == '1'
-
-      ticket = payload.ticket
-      return if ticket.trash || ticket.spam
-      requester = ticket.requester
+      return if spam_or_trash_ticket?
 
       contact = find_contact(requester)
       html = ''
 
       if contact
-        html = existing_contact_info(contact)
+        html = existing_contact_html(contact)
       else
         contact = create_contact(requester)
-        html = created_contact_info(contact)
+        html = new_contact_html(contact)
       end
+      return unless contact
 
-      if contact
-        ticket.comment(:html => html)
-      end
+      create_note_with_ticket_content(ticket) if create_note_with_ticket_content?
+      ticket.comment(html: html)
+    end
+
+    private
+
+    def spam_or_trash_ticket?
+      ticket.trash || ticket.spam
+    end
+
+    def requester
+      ticket.requester
+    end
+
+    def ticket
+      @ticket ||= payload.ticket
+    end
+
+    def create_note_with_ticket_content?
+      settings.send_ticket_content.to_s == "1"
     end
   end
 
@@ -28,7 +43,7 @@ module Insightly
      ticket = payload.tickets.first
      task = create_task(payload.overlay.title, payload.overlay.description, ticket.requester)
      note = create_note(payload.overlay.title, payload.overlay.description, ticket.requester)
-     html = task_created_html(task)
+     html = new_task_html(task)
      ticket.comment(:html => html)
 
      show_success_notification "Insightly Task Created!"
@@ -60,7 +75,7 @@ module Insightly
     string  :subdomain,
             required: true,
             label: 'Insightly Subdomain',
-            hint: 'Say https://bfkdlz.insight.ly is your Insightly domain, enter "bfkdlz"'
+            hint: 'Say https:/example.insight.ly is your Insightly domain, enter "example"'
     string :tagged_name,
             label: 'Tag Name',
             hint: 'The tag name will be used to identify new Insightly contacts created from within SupportBee. If unspecified, default tag name used would be "supportbee". The tagging happens only if the tag new contacts checkbox below is ticked.'
@@ -70,6 +85,10 @@ module Insightly
     boolean :sync_contacts,
             label: 'Create Insightly Contact with Customer Information',
             default: true
+    boolean :send_ticket_content,
+            label: "Automatically add ticket's full content as a note to Insightly Contact",
+            hint: "This would only work if 'Create Insightly Contact with Customer Information' is checked",
+            default: false
 
     def validate
       return false unless required_fields_present?
@@ -165,12 +184,14 @@ module Insightly
 
     def create_note(title, description, requester)
       contact = find_or_create_contact(requester)
-      response = api_post('notes', {
+      body = {
         title: title,
         body: description,
         link_subject_type: 'CONTACT',
-        link_subject_id: contact["CONTACT_ID"]
-      })
+        link_subject_id: contact["CONTACT_ID"],
+      }
+
+      response = api_post('notes', body)
       if response.status == 201
         return response.body
       else
@@ -178,24 +199,26 @@ module Insightly
       end
     end
 
+    def create_note_with_ticket_content(ticket)
+      create_note(ticket.subject, new_note_with_ticket_content_html(ticket), ticket.requester)
+    end
+
     def find_or_create_contact(requester)
-      ret = find_contact(requester)
-      return ret unless ret.nil?
+      contact = find_contact(requester)
+      return contact unless contact.nil?
       create_contact(requester)
     end
 
     def create_contact(requester)
-      name = requester.name.split(' ', 2)
       body = {
-        first_name: name[0],
-        last_name: name[1],
         contactinfos: [{
           type: 'Email',
           detail: requester.email
         }]
       }
-
-      body[:tags] = [{tag_name: get_tag_name}] if settings.tag_contacts.to_s == "1"
+      body[:first_name] = requester.first_name unless requester.first_name.blank?
+      body[:last_name] = requester.last_name unless requester.last_name.blank?
+      body[:tags] = [{ tag_name: get_tag_name }] if settings.tag_contacts.to_s == "1"
       response = api_post('Contacts', body)
       response.body
     end
@@ -237,7 +260,7 @@ module Insightly
       response.body.to_json
     end
 
-    def api_url(resource="", options={})
+    def api_url(resource = "", options = {})
       version = options.delete(:version) || "2.1"
       "https://api.insight.ly/v#{version}/#{resource}"
     end
@@ -250,30 +273,69 @@ module Insightly
       end
     end
 
+    def existing_contact_html(contact)
+      contact_first_name, contact_last_name = contact['FIRST_NAME'], contact['LAST_NAME']
+
+      html = ""
+      html << "<b>#{contact_first_name} #{contact_last_name}</b> is already an Insightly Contact.<br/>"
+      html << contact_link(contact)
+    end
+
+    def new_contact_html(contact)
+      contact_first_name, contact_last_name = contact['FIRST_NAME'], contact['LAST_NAME']
+
+      html = ""
+      html << "Added <b>#{contact_first_name} #{contact_last_name}</b> to Insightly Contacts.<br/>"
+      html << contact_link(contact)
+    end
+
     def contact_link(contact)
-      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
+      contact_url, contact_first_name = contact_url(contact), contact['FIRST_NAME']
+      "<a href='#{contact_url}'>View #{contact_first_name}'s profile on Insightly.</a>"
     end
 
-    def task_link(project)
-      "<a href='https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact['CONTACT_ID']}'>View #{contact['FIRST_NAME']}'s profile on Insightly.</a>"
+    def contact_url(contact)
+      contact_id = contact['CONTACT_ID']
+      if company_uses_insightly_new_design?
+        "https://#{settings.subdomain}.insightly.com/list/contact/?blade=/details/Contacts/#{contact_id}"
+      else
+        "https://#{settings.subdomain}.insight.ly/Contacts/Details/#{contact_id}"
+      end
     end
 
-    def task_created_html(task)
+    def new_note_with_ticket_content_html(ticket)
+      html = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
+      html << "<br/> #{ticket.content.text}"
+
+      unless ticket.content.attachments.blank?
+        html << "<br/><br/><strong>Attachments</strong><br/>"
+        ticket.content.attachments.each do |attachment|
+          html << "<a href='#{attachment.url.original}'>#{attachment.filename}</a>"
+          html << "<br/>"
+        end
+      end
+
+      html
+    end
+
+    def new_task_html(task)
       html = ''
       html << "Insightly Task Created!<br/>"
-      html << "<b><a href='https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task['TASK_ID']}'>#{task['Title']}</a></b>"
+      task_title, task_url = task['Title'], task_url(task)
+      html << "<b><a href='#{task_url}'>#{task_title}</a></b>"
     end
 
-    def existing_contact_info(contact)
-      html = ""
-      html << "<b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> is already an Insightly Contact.<br/>"
-      html << contact_link(contact)
+    def task_url(task)
+      task_id = task['TASK_ID']
+      if company_uses_insightly_new_design?
+        "https://#{settings.subdomain}.insightly.com/list/task/?blade=/details/Tasks/#{task_id}"
+      else
+        "https://#{settings.subdomain}.insight.ly/Tasks/TaskDetails/#{task_id}"
+      end
     end
 
-    def created_contact_info(contact)
-      html = ""
-      html << "Added <b>#{contact['FIRST_NAME']} #{contact['LAST_NAME']}</b> to Insightly Contacts.<br/>"
-      html << contact_link(contact)
+    def company_uses_insightly_new_design?
+      settings.subdomain == "crm.na1"
     end
   end
 end

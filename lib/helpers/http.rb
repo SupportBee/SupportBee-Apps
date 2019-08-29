@@ -112,7 +112,7 @@ module HttpHelper
   def http_method(method, url = nil, body = nil, headers = nil)
     block = Proc.new if block_given?
 
-    check_ssl do
+    rescue_ssl_error do
       http.send(method) do |req|
         req.url(url)                if url
         req.headers.update(headers) if headers
@@ -145,12 +145,11 @@ module HttpHelper
     end
   end
 
-  # Public: Checks for an SSL error, and re-raises a Services configuration error.
+  # Public: Rescues ssl error
   #
   # Returns nothing.
-  def check_ssl
+  def rescue_ssl_error
     yield
   rescue OpenSSL::SSL::SSLError => e
-    #raise_config_error "Invalid SSL cert"
   end
 end

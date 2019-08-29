@@ -1,30 +1,32 @@
-<h3 class="ui dividing header">Send to Trello</h3>
-<form class="ui app form">
-  {{#each tickets}}
-    {{#ticket}}
-      <div class="field">
-        <label for="board">Select Board</label>
-        <select name="boards_select"></select>
-      </div>
-      <div class="field">
-        <label for="list">Select List</label>
-        <select name="lists_select"></select>
-      </div>
-      <div class="field">
-        <label for="title">Issue Title</label>
-        <input name="title" type="text" value="{{subject}}">
-      </div>
-      <div class="field">
-        <label for="description">Issue Description</label>
-        <textarea name="description">{{content.text}}
+<h2 class="ui dividing header">Send to Trello</h2>
+<div class="content">
+  <form class="ui app form">
+    {{#each tickets}}
+      {{#ticket}}
+        <div class="field">
+          <label for="board">Select Board</label>
+          <select name="boards_select"></select>
+        </div>
+        <div class="field">
+          <label for="list">Select List</label>
+          <select name="lists_select"></select>
+        </div>
+        <div class="field">
+          <label for="title">Issue Title</label>
+          <input name="title" type="text" value="{{subject}}">
+        </div>
+        <div class="field">
+          <label for="description">Issue Description</label>
+          <textarea name="description">{{content.text}}
 
-https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
-        </textarea>
-      </div>
-      <div class="actions">
-        <a class="ui submit primary button btn">Send to Trello</a>
-        <a class="ui right floated cancel basic button btn">Cancel</a>
-      </div>
-    {{/ticket}}
-  {{/each}}
-</form>
+  https://{{../../company.subdomain}}.supportbee.com/tickets/{{id}}
+          </textarea>
+        </div>
+        <div class="actions">
+          <a class="ui submit primary button btn">Send to Trello</a>
+          <a class="ui cancel basic button btn">Cancel</a>
+        </div>
+      {{/ticket}}
+    {{/each}}
+  </form>
+</div>

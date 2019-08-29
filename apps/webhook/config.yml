@@ -45,9 +45,9 @@ Writing an app or integration that does something on every new ticket or reply? 
 - Comment Created
 
 
-You can use a service like [RequestBin](http://requestb.in/) to test these webhooks.
+You can use a service like [Pipedream's Requestbin](https://requestbin.com/) to test these webhooks.
 
-[Read Webhooks Documentation to learn more &rarr;](https://supportbee.com/docs/using-web-hooks)
+[Read Webhooks Documentation to learn more &rarr;](https://support.supportbee.com/7-help-docs/24-webhooks/33-using-web-hooks)
 "
 
 category: notification

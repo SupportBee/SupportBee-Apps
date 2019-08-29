@@ -13,6 +13,7 @@ Asana.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="org_select"]': 'org_changed',
     'change [name="projects_select"]': 'project_changed'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -107,7 +108,10 @@ Asana.Views.Overlay = SB.Apps.BaseView.extend(
     @workspace_users_list.fetch()
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 
 )
 

@@ -4,7 +4,7 @@ access: public
 
 description: "
 
-Teamwork Projects is an online project management software that helps teams work together more productively online. It is designed to help users manage their day to day projects either in a company or personal setting.
+[Teamwork Projects](https://www.teamwork.com/project-management-software) is an online project management software that helps teams work together more productively online. It is designed to help users manage their day to day projects either in a company or personal setting.
 
 ## Send a Ticket to Teamwork Projects as a Task List or a Task in an Existing List
 
@@ -30,10 +30,10 @@ To send a ticket to Teamwork Projects, open a ticket and click Apps > Send to Te
 
 category: project-management
 
-tags: 
+tags:
 - project management
 
-developer: 
+developer:
   name: Prateek Dayal
   email: prateek@supportbee.com
   twitter: "@prateekdayal"
@@ -43,10 +43,10 @@ developer:
 # Set button 'overlay' to true, if you want to have an overlay
 # The valid values for screens are [ticket, all, unassigned, my, groups]
 # Remove the following section if you do not want to define Action Handlers
- 
+
 action:
   button:
     overlay: true
-    screens: 
+    screens:
     - ticket
     label: Send To Teamwork Projects

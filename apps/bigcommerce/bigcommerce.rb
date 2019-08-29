@@ -1,26 +1,17 @@
 module Bigcommerce
   module EventHandler
     def ticket_created
-      ticket = payload.ticket
-      requester = ticket.requester
-      http.basic_auth(settings.username, settings.api_token)
-
-      api = connect_to_bigcommerce
-
-      email = ticket.requester.email
-
-      customers = get_customers(api, email)
+      customers = get_customers_whose_email_is(ticket.requester.email)
       return if customers.empty?
-
       customer = customers.first
-      orders = get_orders(api, customer)
+
+      orders = get_customer_orders(customer)
       return if orders.empty?
+      most_recent_order = orders.last
 
-      order_html = order_info_html(api, orders)
-      sent_note_to_customer(api, orders)
+      order_html = order_info_html(orders)
       ticket.comment(:html => order_html)
-
-      show_success_notification "Ticket sent to Bigcommerce"
+      leave_ticket_info_as_note_on_order(most_recent_order)
     end
   end
 end
@@ -33,17 +24,17 @@ module Bigcommerce
 
     white_list :subdomain
 
-    def connect_to_bigcommerce
-      api = Bigcommerce::Api.new({
-      :store_url => settings.shop_url,
-      :username  => settings.username,
-      :api_key   => settings.api_token
-      })
+    def api
+      @api ||= Bigcommerce::Api.new(
+        :store_url => settings.shop_url,
+        :username  => settings.username,
+        :api_key   => settings.api_token
+      )
     end
 
-    def get_customers(api, email)
+    def get_customers_whose_email_is(email)
       begin
-        api.get_customers :email => email
+        api.get_customers(:email => email)
       rescue
         # Somehow the API throws
         # Failed to parse Bigcommerce response: A JSON text must at least contain two octets!
@@ -52,24 +43,19 @@ module Bigcommerce
       end
     end
 
-    def get_orders(api, customer)
-      orders = api.get_orders :customer_id => customer['id']
+    def get_customer_orders(customer)
+      orders = api.get_orders(:customer_id => customer['id'])
     end
 
-    def sent_note_to_customer(api, orders)
-      order = orders.last
-      notes = "#{generate_note}\n#{order['staff_notes']}"
+    def leave_ticket_info_as_note_on_order(order)
+      ticket_info = "[SupportBee] #{ticket.subject} - #{ticket_url}"
+      notes = "#{ticket_info}\n#{order['staff_notes']}"
       api.connection.put "/orders/#{order['id']}", staff_notes: notes
     end
 
-    def generate_note
-      "[SupportBee] #{payload.ticket.subject} - https://#{auth.subdomain}.supportbee.com/tickets/#{payload.ticket.id}"
-    end
-
-    def order_info_html(api, orders)
-      store_id = api.connection.get("/store")['id']
+    def order_info_html(orders)
       order = orders.last
-      order_items = get_ordered_items(order)
+      order_items = get_order_items(order)
       items_html = order_items_html(order_items)
       date = DateTime.parse(order['date_created'])
       formatted_date = date.strftime('%a %b %d %H:%M:%S')
@@ -89,17 +75,25 @@ module Bigcommerce
       html << "</td><td>#{formatted_date}"
       html << "</td></tr>"
       html << "</table>"
-      html << order_info_link(order, store_id) + " &raquo;"
+      html << order_info_link(order) + " &raquo;"
       html
     end
 
-    def order_info_link(order, store_id)
-      "<a href='https://store-#{store_id}.mybigcommerce.com/admin/index.php?ToDo=viewOrder&orderId=#{order['id']}'>View Order Info</a>"
+    def order_info_link(order)
+      order_url = order_url(order)
+      "<a href='#{order_url}'>View Order Info</a>"
     end
 
-    def get_ordered_items(order)
+    def order_url(order)
+      store_url = api.connection.get("/store")["secure_url"]
+      order_id = order['id']
+      "#{store_url}/admin/index.php?ToDo=viewOrders&orderId=#{order_id}"
+    end
+
+    def get_order_items(order)
       url = order['products']['url']
-      response = http.get "#{url}" do |req|
+      http.basic_auth(settings.username, settings.api_token)
+      response = http.get("#{url}") do |req|
         req.params['Accept'] = "application/json"
       end
       order_items = response.body if response
@@ -115,8 +109,16 @@ module Bigcommerce
       return html
     end
 
-    def comment_on_ticket(ticket, html)
-      ticket.comment(:html => html)
+    def ticket_url
+      "https://#{company_subdomain}.supportbee.com/tickets/#{ticket.id}"
+    end
+
+    def ticket
+      payload.ticket
+    end
+
+    def company_subdomain
+      auth.subdomain
     end
   end
 end

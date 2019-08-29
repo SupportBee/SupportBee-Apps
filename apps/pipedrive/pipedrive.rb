@@ -87,7 +87,10 @@ module Pipedrive
       http_post api_url('/notes') do |req|
         req.headers['Content-Type'] = 'application/json'
         req.params['api_token'] = settings.api_token
-        req.body = {person_id:person['id'],content:generate_note_content(ticket)}.to_json
+        req.body = {
+          person_id: person['id'],
+          content: generate_note_content(ticket)
+        }.to_json
       end
     end
 
@@ -115,7 +118,19 @@ module Pipedrive
 
     def generate_note_content(ticket)
       note = "<a href='https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}'>#{ticket.subject}</a>"
-      note << "<br/> #{ticket.content.text}" if settings.send_ticket_content.to_s == '1'
+
+      if settings.send_ticket_content.to_s == '1'
+        note << "<br/> #{ticket.content.text}"
+
+        unless ticket.content.attachments.blank?
+          note << "<br/><br/><strong>Attachments</strong><br/>"
+          ticket.content.attachments.each do |attachment|
+            note << "<a href='#{attachment.url.original}'>#{attachment.filename}</a>"
+            note << "<br/>"
+          end
+        end
+      end
+
       note
     end
   end

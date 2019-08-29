@@ -1,4 +1,4 @@
-config/secret_config.yml
+ionfig/secret_config.yml
 .sass-cache/
 .bundle
 vendor/bundle/
@@ -81,6 +81,5 @@ config/sb_config.yml
 public/stylesheets/common/tinymce.css
 public/stylesheets/common/tinymce_ui.css
 .ruby-gemset
-.ruby-version
 
 config/honeybadger.yml

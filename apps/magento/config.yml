@@ -15,3 +15,5 @@ developer:
   email: bops.91@gmail.com
   github: bopanna
 
+retired: true
+redirect_visitors_to: "https://supportbee.com/integrations"

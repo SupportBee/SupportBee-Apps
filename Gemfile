@@ -27,8 +27,6 @@ gem 'unicorn', '>= 4.1.1'
 gem "sidekiq-pro", "3.4.5", :path => "vendor/gems/sidekiq-pro-3.4.5"
 gem "omniauth"
 gem 'omniauth-google-oauth2'
-# Monitoring
-gem 'newrelic_rpm', :require => false
 
 # App gems
 gem 'tinder'
@@ -53,7 +51,7 @@ group :development do
   gem 'execjs'
 
   # Deploy gems
-  gem 'capistrano', "= 2.15.5"
+  gem 'capistrano', "= 2.15.9"
   gem 'capistrano-ext'
   gem 'rvm-capistrano', :require => false
 end

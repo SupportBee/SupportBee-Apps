@@ -5,6 +5,32 @@ task :help do
   system("bundle exec rake -T")
 end
 
+namespace :dev do
+  task :setup do
+    system("cp config/sba_config.example.yml config/sba_config.yml")
+    system("cp config/omniauth.platform.example.yml config/omniauth.platform.yml")
+    system("cp config/honeybadger.example.yml config/honeybadger.yml")
+
+    puts <<INSTRUCTIONS
+Run
+
+  bundle exec rackup
+
+to start the rack server
+INSTRUCTIONS
+  end
+
+  task :start do
+    exec "bundle exec rackup --port 9292"
+  end
+
+  namespace :unicorn do
+    task :start do
+      exec "bundle exec unicorn -c config/unicorn/development.rb"
+    end
+  end
+end
+
 desc "Open a rails-like console with all the enviroment loaded"
 task :console do
   puts "Loading console..."

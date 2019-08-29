@@ -9,6 +9,7 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
   events: {
     'change [name="projects_select"]': 'project_changed',
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -63,7 +64,10 @@ Pivotaltracker.Views.Overlay = SB.Apps.BaseView.extend(
     @story_owner_selector.append option_tag(member)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 
 )
 

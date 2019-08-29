@@ -9,6 +9,7 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="type"]': 'on_type_change',
     'change [name="projects_select"]': 'on_project_change'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -146,14 +147,18 @@ Basecamp3.Views.Overlay = SB.Apps.BaseView.extend(
 
   hide_loading_indicator: ->
     @$("form").removeClass("loading")
+    $(window).resize()
 
   submit_form: ->
-    formJSON = @$('form').toJSON()
+    formJSON = @$('form').serializeJSON()
 
     assignee_ids = this.$("select[name=assign_to]").parent().dropdown("get value")
     formJSON["assign_to"] = assignee_ids unless _.isEmpty(assignee_ids)
 
     @post 'button', formJSON
+
+  cancel: ->
+    @onClose()
 )
 
 return Basecamp3

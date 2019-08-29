@@ -8,6 +8,7 @@ Bugify.Views.Overlay = SB.Apps.BaseView.extend(
 
   events: {
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -86,7 +87,6 @@ Bugify.Views.Overlay = SB.Apps.BaseView.extend(
 
   render_person: (person)->
     @people_list_selector.append option_tag(person)
-    
 
   render_lists: ->
     @lists.each @render_one_list
@@ -96,9 +96,11 @@ Bugify.Views.Overlay = SB.Apps.BaseView.extend(
   render_one_list: (list) ->
     @todo_lists_selector.append option_tag(list)
 
-
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 
 )
 

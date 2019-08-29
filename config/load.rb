@@ -17,11 +17,6 @@ Dir["#{PLATFORM_ROOT}/lib/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/apps/*/*.rb"].each { |f| require f }
 Dir["#{PLATFORM_ROOT}/workers/*.rb"].each { |f| require f }
 
-# Setup newrelic monitoring
-if ['staging', 'production'].include?(PLATFORM_ENV)
-  require 'newrelic_rpm'
-end
-
 APP_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/sba_config.yml")[PLATFORM_ENV]['app_platform']
 SECRET_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/secret_config.yml")[PLATFORM_ENV]
 OMNIAUTH_CONFIG = YAML.load_file("#{PLATFORM_ROOT}/config/omniauth.platform.yml")[PLATFORM_ENV]

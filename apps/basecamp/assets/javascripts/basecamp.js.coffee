@@ -9,6 +9,7 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     'change [name="type"]': 'target_changed',
     'change [name="projects_select"]': 'project_changed'
     'click a.submit': 'submit_form'
+    'click a.cancel': 'cancel'
   }
 
   initialize: (options = {}) ->
@@ -131,7 +132,10 @@ Basecamp.Views.Overlay = SB.Apps.BaseView.extend(
     @todo_lists_selector.append option_tag(list)
 
   submit_form: ->
-    @post 'button', @$('form').toJSON()
+    @post 'button', @$('form').serializeJSON()
+
+  cancel: ->
+    @onClose()
 )
 
 return Basecamp

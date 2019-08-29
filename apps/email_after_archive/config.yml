@@ -18,4 +18,4 @@ developer:
   github: rajat-chowdhary
 
 retired: true
-temporary_redirect_url: "https://supportbee.com/blog/email-after-archive/"
+redirect_visitors_to: "https://supportbee.com/blog/email-after-archive/"

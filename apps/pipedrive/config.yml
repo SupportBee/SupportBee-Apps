@@ -11,7 +11,7 @@ Pipedrive is a sales pipeline software that helps you get organized. For more de
 Use SupportBee's Pipedrive app to share information about a customer between Pipedrive and SupportBee - automatically on every new ticket! By installing the app you can
 
 
-*  Fetch a customer's information from Pipedrive and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Pipedrive.  
+*  Fetch a customer's information from Pipedrive and show it as a comment on the ticket. The comment also contains a link to the customer's profile in Pipedrive.
 
 *  Update the customer information in Pipedrive whenever the customer sends a new ticket. Keep your sales team in the loop.
 
@@ -22,11 +22,11 @@ To add the app, click on the 'Add to My SupportBee'. If this is the first app th
 
 ### Pipdrive Auth Token
 
-To get an auth token, login to your Pipedrive account, go to Settings (on the home page under your account)  > API 
+To get an auth token, login to your Pipedrive account, go to Settings (on the home page under your account)  > API
 
 ### Create a New Person in Pipedrive if one does not exist
 
-Check this option if you want us to create a new contact in Pipedrive if we can't find one based on the email address of the customer. 
+Check this option if you want us to create a new contact in Pipedrive if we can't find one based on the email address of the customer.
 
 ## Using the App
 
@@ -38,12 +38,21 @@ category: crm
 
 video: 'https://vimeo.com/76761853'
 
-tags: 
+tags:
 - crm
 - pipedrive
 
-developer: 
+developer:
   name: Bopanna D.C
   email: bops.91@gmail.com
   twitter: "@gagan_bopanna"
   github: bopanna
+
+testimonial:
+  content: "Mere is a 5 man team with hundreds of clients across the globe. We needed a super easy-to-use, lightweight, effective way of handling a lot of incoming support requests, and SupportBee is perfect for our workflow. We use Pipedrive, Basecamp, and Slack. Basecamp to raise requests to the level of a project, Slack for super-quick visibility on new tickets, and Pipedrive to remind us who belongs to what project!"
+  name: "Matt Heerema"
+  meta: "Mere Agency"
+  avatar: "https://i.imgur.com/u1n82c8.jpg"
+
+retired: true
+redirect_visitors_to: "https://supportbee.com/integrations/pipedrive_marketplace"

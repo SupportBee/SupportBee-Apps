@@ -25,3 +25,4 @@ action:
     - ticket
     label: Send To Bugherd
 
+retired: true

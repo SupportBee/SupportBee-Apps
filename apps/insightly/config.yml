@@ -64,6 +64,8 @@ If you have any app requests or app enhancement requests, please feel free to ad
 
 category: crm
 
+video: 'https://youtu.be/XQfdYvJ2REk'
+
 tags:
 - crm
 - insightly
@@ -92,3 +94,9 @@ action:
     - labels
     - search
     label: Send To Insightly
+
+testimonial:
+  content: "SupportBee is easy to use and integrates easily to our system. In 1 hour we were up and running with our system. SupportBee is doing all what we need."
+  name: "Hrannar Hafsteinsson"
+  meta: "Harpa"
+  avatar: "https://i.imgur.com/b8RnZ95.jpg" 

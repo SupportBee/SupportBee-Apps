@@ -4,8 +4,9 @@ module CapsuleCrm
     def ticket_created
       ticket = payload.ticket
       return if ticket.spam_or_trash?
-      requester = ticket.requester
+
       http.basic_auth(settings.api_token, "")
+      requester = ticket.requester
 
       person = find_person(requester)
       if person
@@ -13,7 +14,7 @@ module CapsuleCrm
         send_note(ticket, person)
       else
         if settings.should_create_person.to_s == '1'
-          person =  create_new_person(ticket, requester)
+          person = create_new_person(ticket, requester)
           html = new_person_info_html(person)
         else
           return
@@ -44,14 +45,17 @@ module CapsuleCrm
     private
 
     def find_person(requester)
-      first_name = split_name(requester)
       response = http_get "https://#{settings.subdomain}.capsulecrm.com/api/party" do |req|
         req.headers['Accept'] = 'application/json'
         req.params['email'] = requester.email
       end
-      body = response.body if response.status == 200
-      person = body['parties']['person'] if body
-      person ? person : nil
+
+      return nil unless response.status == 200
+      if response.body['parties']['person'].is_a?(Array)
+        response.body['parties']['person'].first
+      else
+        response.body['parties']['person']
+      end
     end
 
     def create_new_person(ticket, requester)
@@ -61,11 +65,19 @@ module CapsuleCrm
     end
 
     def create_person(requester)
-      return unless settings.should_create_person.to_s == '1'
       first_name = split_name(requester)
       response = http_post "https://#{settings.subdomain}.capsulecrm.com/api/person" do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.body = {person:{firstName:first_name, contacts:{email:{emailAddress:requester.email}}}}.to_json
+        req.body = {
+          person: {
+            firstName: first_name,
+            contacts: { 
+              email: {
+                emailAddress: requester.email
+              }
+            }
+          }
+        }.to_json
       end
       location = response['location']
     end
@@ -86,7 +98,7 @@ module CapsuleCrm
     end
 
     def split_name(requester)
-      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email,'']
+      first_name, last_name = requester.name ? requester.name.split(' ') : [requester.email, '']
       return first_name
     end
 
@@ -117,12 +129,12 @@ module CapsuleCrm
     end
 
     def comment_on_ticket(ticket, html)
-        ticket.comment(:html => html)
+      ticket.comment(:html => html)
     end
 
     def generate_note_content(ticket)
       note = ""
-      settings.return_ticket_content.to_s == '1' ? note << ticket.content.text : note << ticket.summary
+      note << (settings.return_ticket_content.to_s == '1' ? ticket.content.text : ticket.summary)
       note << "\n" + "https://#{auth.subdomain}.supportbee.com/tickets/#{ticket.id}"
     end
 

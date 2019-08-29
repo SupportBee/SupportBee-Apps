@@ -4,12 +4,12 @@ access: public
 
 description: "
 
-Trello is used to manage projects in a very easy-to-follow task completion flow, usually with three lists; \"To Do\", \"Doing\", and \"Done\".  
+Trello is used to manage projects in a very easy-to-follow task completion flow, usually with three lists; \"To Do\", \"Doing\", and \"Done\".
 Within SupportBee, you can send specific tickets to Trello lists as a card.  If you wish to know more, please head over to [ Trello. ](https://trello.com/)
 
 "
 
-category: project-management 
+category: project-management
 
 tags:
 - trello
@@ -26,3 +26,8 @@ action:
     screens:
     - ticket
     label: Send To Trello
+
+testimonial:
+  content: '"We are a small group of 3 people doing web development for office of the Provost at the University of Minnesota. We needed a better way to field website requests rather than individually. SupportBee is a good way to both weed out unnecessary requests and be more visible with a centralized point of contact."'
+  name: "[Umnprovost](https://provost.umn.edu/)"
+  avatar: "https://i.imgur.com/b8RnZ95.jpg"

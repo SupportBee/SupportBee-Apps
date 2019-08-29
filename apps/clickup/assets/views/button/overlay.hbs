@@ -1,0 +1,54 @@
+<h2 class="ui dividing header">Send to Clickup</h2>
+<div class="content">
+  <form class="ui app loading form">
+    {{#each tickets}}
+      {{#ticket}}
+        <div class="field">
+          <label for="team_select">Select Team</label>
+          <select name="team_select"></select>
+        </div>
+
+        <div class="field">
+          <label for="space_select">Select Space</label>
+          <select name="space_select"></select>
+        </div>
+
+        <div class="field">
+          <label for="project_select">Select Project</label>
+          <select name="project_select"></select>
+        </div>
+
+        <div class="field">
+          <label for="list_select">Select List</label>
+          <select name="list_select"></select>
+        </div>
+
+        <div class="title field">
+          <label for="title">Title</label>
+          <input name="title" type="text" value="{{subject}}">
+        </div>
+
+        <div class="description field">
+          <label for="description">Description</label>
+          <textarea name="description">{{description.text}}</textarea>
+        </div>
+
+        <div class="field">
+          <label for="assignee_select">Assign To</label>
+          <select name="assignee_select"></select>
+          <div class="hint" style="margin-top: -0.875rem">Leave this empty if you do not wish to assign the task to anyone</div>
+        </div>
+
+        <div class="field">
+          <label for="priority_select">Priority</label>
+          <select name="priority_select"></select>
+        </div>
+
+        <div class="actions">
+          <a class="ui submit primary button btn">Send to Clickup</a>
+          <a class="ui cancel basic button btn">Cancel</a>
+        </div>
+      {{/ticket}}
+    {{/each}}
+  </form>
+</div>
