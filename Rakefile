@@ -7,11 +7,17 @@ end
 
 namespace :dev do
   task :setup do
-    system("cp config/sba_config.example.yml config/sba_config.yml")
-    system("cp config/omniauth.platform.example.yml config/omniauth.platform.yml")
-    system("cp config/honeybadger.example.yml config/honeybadger.yml")
+    puts
+
+    %w(sba_config.example.yml omniauth.platform.example.yml honeybadger.example.yml).each do |example_config_file_name|
+      config_file_name = example_config_file_name.sub(".example.yml", ".yml")
+
+      puts "Creating config file config/#{config_file_name}"
+      system("cp config/#{example_config_file_name} config/#{config_file_name}")
+    end
 
     puts <<INSTRUCTIONS
+
 Run
 
   bundle exec rackup
